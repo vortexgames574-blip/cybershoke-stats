@@ -1,3 +1,18 @@
+// --- ВСТАВЬ СЮДА СВОЙ КОНФИГ ИЗ FIREBASE ---
+const firebaseConfig = {
+  apiKey: "AIzaSyCsl2sA5Ov-VqjxXa5117cYrUfHG7JE6dA",
+  authDomain: "cs2-d-87119.firebaseapp.com",
+  projectId: "cs2-d-87119",
+  storageBucket: "cs2-d-87119.firebasestorage.app",
+  messagingSenderId: "356498058908",
+  appId: "1:356498058908:web:d6b45c98faa9f2e07d8759",
+  measurementId: "G-PEQFMZGK3M"
+};
+
+// Инициализация Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 window.onerror = function(message, source, lineno) {
   const meta = document.getElementById('meta-info');
   if (meta) meta.innerHTML = `<span style="color: #ef4444;">Ошибка: ${message} (строка ${lineno})</span>`;
@@ -15,14 +30,12 @@ let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 let bracketState = null;
 
-let peer = null;
-let isHost = false;
-let hostConn = null;
-let clients = [];
-let onlineRoomState = null;
+// Переменные для онлайн драфта
+let currentRoomCode = null;
 let myNickname = "";
+let onlineRoomState = null;
+let roomListener = null;
 
-// ============ ИНИЦИАЛИЗАЦИЯ ТАБОВ ============
 function initTabs() {
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = document.querySelectorAll('.tab-content');
@@ -309,7 +322,6 @@ window.onclick = function(event) {
   if (event.target == document.getElementById('balancer-modal')) closeBalancer();
 }
 
-// ============ БАЛАНСИРОВЩИК ============
 function getSavedKey() { return `savedTeams_${document.getElementById('tournament-select').value}`; }
 function initBalancer() {
   const openBtn = document.getElementById('open-balancer-btn');
@@ -416,7 +428,6 @@ function initBalancer() {
   }
 }
 
-// ============ СЕТКА ТУРНИРА ============
 function seedOrder(n) {
   if (n === 1) return [1];
   if (n === 2) return [1, 2];
@@ -585,12 +596,12 @@ function simulateBracket() {
   renderBracket();
 }
 
-// ============ ОНЛАЙН ДРАФТ (WebRTC) ============
+// ============ ОНЛАЙН ДРАФТ (Firebase) ============
 function initOnlineDraftTab() {
   const lobbyScreen = document.getElementById('draft-lobby-screen');
   const roomScreen = document.getElementById('draft-room-screen');
   
-  if (!peer) {
+  if (!currentRoomCode) {
     lobbyScreen.style.display = 'block';
     roomScreen.style.display = 'none';
     
@@ -598,10 +609,18 @@ function initOnlineDraftTab() {
       const nick = document.getElementById('draft-nickname').value.trim();
       if (!nick) return alert('Введите ник');
       myNickname = nick;
-      isHost = true;
-      document.getElementById('create-room-btn').innerText = 'Создание...';
-      document.getElementById('create-room-btn').disabled = true;
-      createPeer(true);
+      const code = generateRoomCode();
+      db.ref('rooms/' + code).set({
+        host: nick,
+        status: 'lobby',
+        players: [{ name: nick, isCaptain: false, team: null }],
+        captains: [],
+        pickOrder: [],
+        turnIndex: 0,
+        pool: []
+      }).then(() => {
+        joinRoom(code);
+      });
     };
 
     document.getElementById('join-room-btn').onclick = () => {
@@ -610,131 +629,24 @@ function initOnlineDraftTab() {
       if (!nick) return alert('Введите ник');
       if (!code) return alert('Введите код комнаты');
       myNickname = nick;
-      isHost = false;
-      document.getElementById('join-room-btn').innerText = 'Подключение...';
-      document.getElementById('join-room-btn').disabled = true;
-      createPeer(false, code);
+      
+      // Проверяем, существует ли комната
+      db.ref('rooms/' + code).once('value').then(snapshot => {
+        if (!snapshot.exists()) return alert('Комната не найдена');
+        const room = snapshot.val();
+        if (room.status !== 'lobby') return alert('Драфт уже начался');
+        if (room.players.find(p => p.name === nick)) return alert('Этот ник уже занят');
+        
+        room.players.push({ name: nick, isCaptain: false, team: null });
+        db.ref('rooms/' + code + '/players').set(room.players).then(() => {
+          joinRoom(code);
+        });
+      });
     };
   } else {
     lobbyScreen.style.display = 'none';
     roomScreen.style.display = 'block';
     renderOnlineRoom();
-  }
-}
-
-function createPeer(host, joinCode) {
-  if (peer) peer.destroy();
-  
-  console.log('Инициализация PeerJS...');
-  
-  try {
-    const peerId = host ? generateRoomCode() : undefined;
-    // Используем альтернативный публичный сервер
-    peer = new Peer(peerId, { 
-      debug: 0,
-      host: 'peerjs-server.herokuapp.com',
-      secure: true,
-      port: 443
-    });
-  } catch (e) {
-    console.error('Ошибка инициализации PeerJS:', e);
-    alert('Ошибка инициализации. Проверьте консоль (F12).');
-    return;
-  }
-  
-  peer.on('error', (err) => {
-    console.error('PeerJS Error:', err);
-    let msg = 'Ошибка соединения: ' + err.type;
-    if (err.type === 'network') msg = 'Нет соединения с сигнальным сервером PeerJS. Проверьте интернет или VPN.';
-    if (err.type === 'peer-unavailable') msg = 'Комната не найдена. Проверьте код.';
-    if (err.type === 'unavailable-id') msg = 'Этот код комнаты уже занят.';
-    alert(msg);
-    
-    document.getElementById('create-room-btn').innerText = 'Создать комнату';
-    document.getElementById('create-room-btn').disabled = false;
-    document.getElementById('join-room-btn').innerText = 'Войти в комнату';
-    document.getElementById('join-room-btn').disabled = false;
-  });
-  
-  peer.on('open', (id) => {
-    console.log('PeerJS подключен. ID:', id);
-    
-    if (host) {
-      onlineRoomState = {
-        status: 'lobby',
-        hostId: id,
-        players: [{ id: id, name: myNickname, isCaptain: false, team: null }],
-        captains: [],
-        turnIndex: 0,
-        pickOrder: [],
-        pool: []
-      };
-      document.getElementById('draft-room-id').innerText = id;
-      document.getElementById('draft-connection-status').innerText = 'Вы хост. Ждем подключений...';
-      showRoomScreen();
-    } else {
-      console.log('Подключаемся к комнате:', joinCode);
-      hostConn = peer.connect(joinCode, { metadata: { name: myNickname } });
-      
-      hostConn.on('open', () => {
-        console.log('Соединение установлено');
-        document.getElementById('draft-room-id').innerText = joinCode;
-        document.getElementById('draft-connection-status').innerText = 'Подключено. Ждем данных...';
-        hostConn.send({ type: 'JOIN', name: myNickname });
-        showRoomScreen();
-      });
-      
-      hostConn.on('data', (data) => {
-        if (data.type === 'STATE') {
-          onlineRoomState = data.state;
-          renderOnlineRoom();
-        }
-      });
-      
-      hostConn.on('close', () => {
-        alert('Соединение с хостом потеряно.');
-        location.reload();
-      });
-    }
-  });
-
-  if (host) {
-    peer.on('connection', (conn) => {
-      clients.push(conn);
-      
-      conn.on('data', (data) => {
-        if (data.type === 'JOIN') {
-          if (!onlineRoomState.players.find(p => p.id === conn.peer)) {
-            onlineRoomState.players.push({ id: conn.peer, name: data.name, isCaptain: false, team: null });
-            broadcastState();
-          }
-        } else if (data.type === 'MAKE_CAPTAIN') {
-          const p = onlineRoomState.players.find(x => x.id === data.playerId);
-          if (p) { p.isCaptain = true; broadcastState(); }
-        } else if (data.type === 'REMOVE_CAPTAIN') {
-          const p = onlineRoomState.players.find(x => x.id === data.playerId);
-          if (p) { p.isCaptain = false; broadcastState(); }
-        } else if (data.type === 'START_DRAFT') {
-          startOnlineDraftLogic();
-        } else if (data.type === 'PICK') {
-          if (onlineRoomState.status === 'picking') {
-            const currentCaptainId = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
-            if (data.captainId === currentCaptainId) {
-              executePickLogic(data.playerId);
-            }
-          }
-        }
-      });
-      
-      conn.on('close', () => {
-        clients = clients.filter(c => c !== conn);
-        onlineRoomState.players = onlineRoomState.players.filter(p => p.id !== conn.peer);
-        onlineRoomState.captains = onlineRoomState.captains.filter(id => id !== conn.peer);
-        if (onlineRoomState.status === 'lobby') {
-           broadcastState();
-        }
-      });
-    });
   }
 }
 
@@ -745,22 +657,35 @@ function generateRoomCode() {
   return code;
 }
 
+function joinRoom(code) {
+  currentRoomCode = code;
+  document.getElementById('draft-room-id').innerText = code;
+  document.getElementById('draft-connection-status').innerText = 'Подключено к комнате';
+  
+  if (roomListener) db.ref('rooms/' + currentRoomCode).off('value', roomListener);
+  
+  roomListener = db.ref('rooms/' + currentRoomCode).on('value', (snapshot) => {
+    if (!snapshot.exists()) {
+      alert('Комната была закрыта хостом');
+      location.reload();
+      return;
+    }
+    onlineRoomState = snapshot.val();
+    renderOnlineRoom();
+  });
+  
+  showRoomScreen();
+}
+
 function showRoomScreen() {
   document.getElementById('draft-lobby-screen').style.display = 'none';
   document.getElementById('draft-room-screen').style.display = 'block';
   renderOnlineRoom();
 }
 
-function broadcastState() {
-  if (!isHost) return;
-  clients.forEach(conn => {
-    if (conn.open) conn.send({ type: 'STATE', state: onlineRoomState });
-  });
-  renderOnlineRoom();
-}
-
 function renderOnlineRoom() {
   if (!onlineRoomState) return;
+  const isHost = onlineRoomState.host === myNickname;
   
   if (onlineRoomState.status === 'lobby') {
     document.getElementById('draft-phase-lobby').style.display = 'block';
@@ -769,19 +694,19 @@ function renderOnlineRoom() {
     const container = document.getElementById('draft-lobby-players');
     container.innerHTML = onlineRoomState.players.map(p => {
       const isCap = p.isCaptain;
-      const isMe = p.id === peer?.id;
+      const isMe = p.name === myNickname;
       const canToggle = isHost;
       const btnText = isCap ? 'Снять' : 'Капитан';
       return `<div class="draft-lobby-card ${isCap ? 'captain' : ''}">
         <span>${p.name} ${isMe ? '(Вы)' : ''}</span>
-        ${canToggle ? `<button class="btn-outline" style="font-size: 0.7rem; padding: 4px 8px;" onclick="toggleCaptain('${p.id}')">${btnText}</button>` : (isCap ? '<span style="color:#ffd700; font-size:0.8rem;">Капитан</span>' : '')}
+        ${canToggle ? `<button class="btn-outline" style="font-size: 0.7rem; padding: 4px 8px;" onclick="toggleCaptain('${p.name}')">${btnText}</button>` : (isCap ? '<span style="color:#ffd700; font-size:0.8rem;">Капитан</span>' : '')}
       </div>`;
     }).join('');
     
     const startBtn = document.getElementById('start-online-draft-btn');
     if (isHost) {
       startBtn.style.display = 'block';
-      startBtn.disabled = onlineRoomState.captains.length !== 4 || onlineRoomState.players.length < 10;
+      startBtn.disabled = onlineRoomState.players.filter(p => p.isCaptain).length !== 4 || onlineRoomState.players.length < 10;
       startBtn.onclick = () => { if (isHost) startOnlineDraftLogic(); };
     } else {
       startBtn.style.display = 'none';
@@ -790,26 +715,28 @@ function renderOnlineRoom() {
     document.getElementById('draft-phase-lobby').style.display = 'none';
     document.getElementById('draft-phase-picking').style.display = 'block';
     
-    const turnCapId = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
-    const turnPlayer = onlineRoomState.players.find(p => p.id === turnCapId);
-    const isMyTurn = peer?.id === turnCapId;
+    const turnCapName = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
+    const isMyTurn = turnCapName === myNickname;
     
     document.getElementById('draft-online-turn').innerHTML = isMyTurn 
       ? `<span style="color:#ffd700;">Ваш ход! Выбирайте игрока.</span>` 
-      : `Сейчас выбирает: <strong>${turnPlayer ? turnPlayer.name : '...'}</strong>`;
+      : `Сейчас выбирает: <strong>${turnCapName || '...'}</strong>`;
     
     for (let i = 0; i < 4; i++) {
-      const capId = onlineRoomState.pickOrder[i];
-      const cap = onlineRoomState.players.find(p => p.id === capId);
+      const capName = onlineRoomState.pickOrder[i];
       const col = document.getElementById(`team-col-${i}`);
-      const isTurn = onlineRoomState.pickOrder[onlineRoomState.turnIndex] === capId;
+      const isTurn = onlineRoomState.pickOrder[onlineRoomState.turnIndex] === capName;
       
-      if (cap) {
-        const teamPlayers = onlineRoomState.players.filter(p => p.team === capId);
+      if (capName) {
+        const teamPlayers = onlineRoomState.players.filter(p => p.team === capName);
         col.className = `draft-team-col ${isTurn ? 'active-turn' : ''}`;
         col.innerHTML = `
-          <h4>${cap.name}</h4>
-          <ul>${teamPlayers.map(tp => `<li><img src="${tp.avatar || 'https://ui-avatars.com/api/?name='+encodeURIComponent(tp.name)+'&background=4d6bfe&color=fff'}">${tp.name}</li>`).join('')}</ul>
+          <h4>${capName}</h4>
+          <ul>${teamPlayers.map(tp => {
+            const stat = currentStats.players.find(x => x.name === tp.name);
+            const ava = stat ? stat.avatar : `https://ui-avatars.com/api/?name=${encodeURIComponent(tp.name)}&background=4d6bfe&color=fff`;
+            return `<li><img src="${ava}">${tp.name}</li>`;
+          }).join('')}</ul>
         `;
       }
     }
@@ -817,8 +744,10 @@ function renderOnlineRoom() {
     const poolEl = document.getElementById('draft-online-pool');
     poolEl.innerHTML = onlineRoomState.pool.map(p => {
       const canPick = isMyTurn && onlineRoomState.status === 'picking';
-      return `<div class="draft-pool-card ${!canPick ? 'picked' : ''}" onclick="${canPick ? `submitOnlinePick('${p.id}')` : ''}">
-        <img src="${p.avatar || 'https://ui-avatars.com/api/?name='+encodeURIComponent(p.name)+'&background=4d6bfe&color=fff'}">
+      const stat = currentStats.players.find(x => x.name === p.name);
+      const ava = stat ? stat.avatar : `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
+      return `<div class="draft-pool-card ${!canPick ? 'picked' : ''}" onclick="${canPick ? `submitOnlinePick('${p.name}')` : ''}">
+        <img src="${ava}">
         <span>${p.name}</span>
         <span style="margin-left:auto;color:var(--accent);">${p.rating || ''}</span>
       </div>`;
@@ -831,94 +760,82 @@ function renderOnlineRoom() {
 }
 
 function startOnlineDraftLogic() {
+  const isHost = onlineRoomState.host === myNickname;
   if (!isHost) return;
-  const captainIds = onlineRoomState.players.filter(p => p.isCaptain).map(p => p.id);
-  if (captainIds.length !== 4) return alert('Нужно ровно 4 капитана');
   
-  const getRating = (id) => {
-    const player = onlineRoomState.players.find(x => x.id === id);
-    const stat = currentStats.players.find(p => p.name === player.name);
+  const captains = onlineRoomState.players.filter(p => p.isCaptain);
+  if (captains.length !== 4) return alert('Нужно ровно 4 капитана');
+  
+  const getRating = (name) => {
+    const stat = currentStats.players.find(p => p.name === name);
     return stat ? (stat.avgRating ?? 0) : 0;
   };
-  captainIds.sort((a,b) => getRating(a) - getRating(b));
   
-  onlineRoomState.status = 'picking';
-  onlineRoomState.pickOrder = captainIds;
+  // Сортируем капитанов по рейтингу (слабейший пикает первым, чтобы было честно)
+  captains.sort((a, b) => getRating(a.name) - getRating(b.name));
+  const pickOrder = captains.map(c => c.name);
   
-  onlineRoomState.players.forEach(p => {
-    if (p.isCaptain) {
-      p.team = p.id;
+  // Формируем пул
+  const pool = onlineRoomState.players
+    .filter(p => !p.isCaptain)
+    .map(p => {
       const stat = currentStats.players.find(x => x.name === p.name);
-      p.avatar = stat ? stat.avatar : '';
-      p.rating = stat ? stat.avgRating : 0;
-    }
+      return { ...p, rating: stat ? stat.avgRating : 0 };
+    })
+    .sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    
+  // Обновляем базу
+  db.ref('rooms/' + currentRoomCode).update({
+    status: 'picking',
+    pickOrder: pickOrder,
+    pool: pool,
+    turnIndex: 0
   });
-  
-  onlineRoomState.pool = onlineRoomState.players.filter(p => !p.isCaptain).map(p => {
-    const stat = currentStats.players.find(x => x.name === p.name);
-    return { ...p, avatar: stat ? stat.avatar : '', rating: stat ? stat.avgRating : 0 };
-  });
-  
-  onlineRoomState.pool.sort((a,b) => (b.rating || 0) - (a.rating || 0));
-  
-  onlineRoomState.turnIndex = 0;
-  broadcastState();
 }
 
-function executePickLogic(playerId) {
+window.toggleCaptain = function(name) {
+  const isHost = onlineRoomState.host === myNickname;
   if (!isHost) return;
+  
+  const updatedPlayers = onlineRoomState.players.map(p => {
+    if (p.name === name) return { ...p, isCaptain: !p.isCaptain };
+    return p;
+  });
+  
+  db.ref('rooms/' + currentRoomCode + '/players').set(updatedPlayers);
+};
+
+window.submitOnlinePick = function(playerName) {
+  const turnCapName = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
+  if (myNickname !== turnCapName) return;
   if (onlineRoomState.status !== 'picking') return;
   
-  const poolIdx = onlineRoomState.pool.findIndex(p => p.id === playerId);
+  // Находим игрока в пуле
+  const poolIdx = onlineRoomState.pool.findIndex(p => p.name === playerName);
   if (poolIdx === -1) return;
   
-  const player = onlineRoomState.pool[poolIdx];
-  const turnCapId = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
+  // Обновляем его команду
+  const updatedPlayers = onlineRoomState.players.map(p => {
+    if (p.name === playerName) return { ...p, team: myNickname };
+    return p;
+  });
   
-  player.team = turnCapId;
-  onlineRoomState.pool.splice(poolIdx, 1);
+  // Убираем из пула
+  const newPool = [...onlineRoomState.pool];
+  newPool.splice(poolIdx, 1);
   
-  onlineRoomState.turnIndex++;
+  // Следующий индекс (змейка)
+  const nextIdx = onlineRoomState.turnIndex + 1;
+  let nextStatus = 'picking';
+  if (nextIdx >= 16 || newPool.length === 0) nextStatus = 'finished';
   
-  if (onlineRoomState.turnIndex >= 16 || onlineRoomState.pool.length === 0) {
-    onlineRoomState.status = 'finished';
-  }
-  
-  broadcastState();
-}
-
-window.toggleCaptain = function(id) {
-  if (!isHost) return;
-  const p = onlineRoomState.players.find(x => x.id === id);
-  if (p) {
-    p.isCaptain = !p.isCaptain;
-    onlineRoomState.captains = onlineRoomState.players.filter(x => x.isCaptain).map(x => x.id);
-    broadcastState();
-  }
+  db.ref('rooms/' + currentRoomCode).update({
+    players: updatedPlayers,
+    pool: newPool,
+    turnIndex: nextIdx,
+    status: nextStatus
+  });
 };
-
-window.submitOnlinePick = function(id) {
-  if (!peer) return;
-  if (isHost) {
-    const currentCap = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
-    if (currentCap === peer.id) executePickLogic(id);
-  } else {
-    hostConn.send({ type: 'PICK', captainId: peer.id, playerId: id });
-  }
-};
-
-// ============ РЕЖИМ НОВИЧКА ============
-function initBeginnerMode() {
-  const btn = document.getElementById('beginner-toggle');
-  if (!btn) return;
-  const isActive = localStorage.getItem('beginnerMode') === '1';
-  if (isActive) { document.body.classList.add('beginner-mode'); btn.classList.add('active'); }
-  btn.onclick = () => {
-    const active = document.body.classList.toggle('beginner-mode');
-    localStorage.setItem('beginnerMode', active ? '1' : '0');
-    btn.classList.toggle('active', active);
-  };
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   if (window.AOS) AOS.init({ duration: 600, once: true });
