@@ -1,17 +1,4 @@
-// --- ВСТАВЬ СЮДА СВОЙ КОНФИГ ИЗ FIREBASE ---
-const firebaseConfig = {
-  apiKey: "ТВОЙ_API_KEY",
-  authDomain: "ТВОЙ_PROJECT.firebaseapp.com",
-  databaseURL: "https://ТВОЙ_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "ТВОЙ_PROJECT",
-  storageBucket: "ТВОЙ_PROJECT.appspot.com",
-  messagingSenderId: "ТВОЙ_SENDER_ID",
-  appId: "ТВОЙ_APP_ID"
-};
-
-// Инициализация Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+// БЕЗ FIREBASE. Всё работает локально.
 
 window.onerror = function(message, source, lineno) {
   const meta = document.getElementById('meta-info');
@@ -31,12 +18,6 @@ let currentMapSort = { key: 'matches', dir: 'desc' };
 let bracketState = null;
 let bracketMode = 'solo';
 
-// Переменные для онлайн драфта
-let currentRoomCode = null;
-let myNickname = "";
-let onlineRoomState = null;
-let roomListener = null;
-
 function initTabs() {
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = document.querySelectorAll('.tab-content');
@@ -50,8 +31,6 @@ function initTabs() {
       document.getElementById(`tab-${target}`).classList.add('active');
       
       if (target === 'bracket') renderBracket();
-      if (target === 'draft') initOnlineDraftTab();
-      
       if (window.lucide) lucide.createIcons();
     });
   });
@@ -76,11 +55,11 @@ async function loadData() {
       selectedPlayers = [];
       bracketState = null;
       renderAll();
+      initDraft();
     });
 
     renderAll();
-    // Проверяем сохраненную сессию драфта при загрузке
-    initOnlineDraftTab();
+    initDraft();
   } catch (err) {
     document.getElementById('meta-info').innerHTML = `<span style="color: #ef4444;">${err.message}</span>`;
     console.error(err);
@@ -109,6 +88,89 @@ function renderAll() {
   }
 }
 
+// ============ ДРАФТ ============
+function initDraft() {
+  const c1 = document.getElementById('cap-1');
+  const c2 = document.getElementById('cap-2');
+  const c3 = document.getElementById('cap-3');
+  const c4 = document.getElementById('cap-4');
+  if (!c1) return;
+
+  const opts = currentStats.players
+    .slice()
+    .sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0))
+    .map(p => `<option value="${p.id}">${p.displayName || p.name} (${p.avgRating ?? p.kd})</option>`)
+    .join('');
+  
+  [c1, c2, c3, c4].forEach((sel, i) => {
+    sel.innerHTML = `<option value="">— выберите —</option>` + opts;
+    if (currentStats.players.length > i) {
+      sel.selectedIndex = i + 1;
+    }
+  });
+
+  const buildBtn = document.getElementById('build-teams-btn');
+  const resetBtn = document.getElementById('reset-teams-btn');
+  const resultDiv = document.getElementById('draft-result');
+
+  buildBtn.onclick = () => {
+    const capIds = [c1.value, c2.value, c3.value, c4.value].filter(Boolean);
+    if (capIds.length !== 4) return alert('Выберите 4 капитана');
+    if (new Set(capIds).size !== 4) return alert('Капитаны не должны повторяться');
+
+    const captains = capIds.map(id => currentStats.players.find(p => p.id === id)).filter(Boolean);
+    const allPlayers = currentStats.players.filter(p => !capIds.includes(p.id));
+    const sorted = allPlayers.slice().sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0));
+
+    // Сколько нужно на команду всего (5). Уже есть капитан (1). Добираем 4.
+    const perTeam = 4;
+    const totalNeeded = perTeam * 4; // 16
+    const pool = sorted.slice(0, totalNeeded);
+
+    const teams = captains.map(c => ({
+      captain: c,
+      players: [],
+      sumRating: c.avgRating ?? 0
+    }));
+
+    // Snake order: 0,1,2,3, 3,2,1,0, 0,1,2,3, 3,2,1,0
+    const order = [0,1,2,3, 3,2,1,0, 0,1,2,3, 3,2,1,0];
+    let idx = 0;
+    for (const t of order) {
+      if (idx >= pool.length) break;
+      const player = pool[idx++];
+      teams[t].players.push(player);
+      teams[t].sumRating += player.avgRating ?? 0;
+    }
+
+    resultDiv.style.display = 'grid';
+    resultDiv.innerHTML = teams.map((team, i) => {
+      const avg = (team.sumRating / (team.players.length + 1)).toFixed(2);
+      const capAva = team.captain.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(team.captain.name)}&background=ffd700&color=000`;
+      return `
+        <div class="draft-team-result">
+          <h3>Команда ${i + 1} <span class="draft-team-avg">Σ ${team.sumRating.toFixed(2)} · Avg ${avg}</span></h3>
+          <ul>
+            <li><img src="${capAva}"> <b>${team.captain.displayName || team.captain.name}</b> <span style="color:#ffd700;font-size:0.7rem;margin-left:auto;">К</span></li>
+            ${team.players.map(p => {
+              const ava = p.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
+              return `<li><img src="${ava}"> ${p.displayName || p.name} <span style="margin-left:auto;color:var(--text-muted);font-size:0.75rem;">${(p.avgRating ?? 0).toFixed(2)}</span></li>`;
+            }).join('')}
+          </ul>
+        </div>
+      `;
+    }).join('');
+
+    resetBtn.style.display = 'block';
+    resetBtn.onclick = () => {
+      resultDiv.style.display = 'none';
+      resultDiv.innerHTML = '';
+      resetBtn.style.display = 'none';
+    };
+  };
+}
+
+// ============ ПЬЕДЕСТАЛ ============
 function renderPodium() {
   const container = document.getElementById('podium-container');
   if (!container || !currentStats.players) return;
@@ -432,7 +494,7 @@ function initBalancer() {
   }
 }
 
-// ============ СЕТКА (ИНДИВИДУАЛЬНАЯ И КОМАНДНАЯ) ============
+// ============ СЕТКА ============
 function seedOrder(n) {
   if (n === 1) return [1];
   if (n === 2) return [1, 2];
@@ -491,28 +553,21 @@ function generateSoloBracket() {
 }
 
 function generateTeamBracket(teams) {
-  if (teams.length !== 4) {
-    alert('Для командной сетки нужно ровно 4 команды');
-    return;
-  }
-  
+  if (teams.length !== 4) { alert('Для командной сетки нужно ровно 4 команды'); return; }
   const round0 = [
     { t1: teams[0], t2: teams[1], winner: null },
     { t1: teams[2], t2: teams[3], winner: null }
   ];
   const round1 = [{ t1: null, t2: null, winner: null }];
-  
   bracketState = { mode: 'team', teams, rounds: [round0, round1], champion: null, completed: false };
   processBracket(bracketState);
   saveBracket();
-  
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = document.querySelectorAll('.tab-content');
   tabs.forEach(t => t.classList.remove('active'));
   contents.forEach(c => c.classList.remove('active'));
   document.querySelector('[data-tab="bracket"]').classList.add('active');
   document.getElementById('tab-bracket').classList.add('active');
-  
   renderBracket();
 }
 
@@ -576,7 +631,7 @@ function renderBracket() {
   html += '</div>';
   
   if (bracketState.champion) {
-    const champName = bracketState.mode === 'team' ? bracketState.champion.name : bracketState.champion.name;
+    const champName = bracketState.champion.name;
     html += `<div class="bracket-champion">Победитель турнира: ${champName}</div>`;
   }
   container.innerHTML = html;
@@ -585,14 +640,11 @@ function renderBracket() {
 function renderMatchCard(r, m, match) {
   const t1Class = match.winner === 1 ? 'winner' : (match.winner === 2 ? 'loser' : '');
   const t2Class = match.winner === 2 ? 'winner' : (match.winner === 1 ? 'loser' : '');
-  
   const t1Name = match.t1 ? match.t1.name : '—';
   const t2Name = match.t2 ? match.t2.name : '—';
-  
   const canClick = match.t1 && match.t2 && match.winner === null;
   const t1Click = canClick ? `onclick="setBracketWinner(${r},${m},1)"` : '';
   const t2Click = canClick ? `onclick="setBracketWinner(${r},${m},2)"` : '';
-  
   return `<div class="bracket-match ${match.winner ? 'completed' : ''}">
     <div class="bracket-team ${t1Class}" ${t1Click}><span>${t1Name}</span>${match.winner === 1 ? '<span class="bracket-score">✓</span>' : ''}</div>
     <div class="bracket-team ${t2Class}" ${t2Click}><span>${t2Name}</span>${match.winner === 2 ? '<span class="bracket-score">✓</span>' : ''}</div>
@@ -644,320 +696,6 @@ function simulateBracket() {
   }
 }
 
-// ============ ОНЛАЙН ДРАФТ ============
-function initOnlineDraftTab() {
-  const lobbyScreen = document.getElementById('draft-lobby-screen');
-  const roomScreen = document.getElementById('draft-room-screen');
-  
-  const savedRoom = localStorage.getItem('activeDraftRoom');
-  const savedNick = localStorage.getItem('activeDraftNick');
-  
-  if (!currentRoomCode && savedRoom && savedNick) {
-    db.ref('rooms/' + savedRoom).once('value').then(snapshot => {
-      if (snapshot.exists()) {
-        const room = snapshot.val();
-        if (room.players.find(p => p.name === savedNick)) {
-          document.getElementById('draft-resume-session').style.display = 'block';
-          document.getElementById('resume-code').innerText = savedRoom;
-          document.getElementById('resume-nick').innerText = savedNick;
-          document.getElementById('draft-create-join').style.display = 'none';
-          
-          document.getElementById('resume-room-btn').onclick = () => {
-            myNickname = savedNick;
-            joinRoom(savedRoom);
-          };
-          document.getElementById('leave-room-btn').onclick = () => {
-            localStorage.removeItem('activeDraftRoom');
-            localStorage.removeItem('activeDraftNick');
-            location.reload();
-          };
-          return;
-        }
-      }
-      localStorage.removeItem('activeDraftRoom');
-      localStorage.removeItem('activeDraftNick');
-      showLobbyCreateJoin();
-    });
-  } else if (!currentRoomCode) {
-    showLobbyCreateJoin();
-  } else {
-    lobbyScreen.style.display = 'none';
-    roomScreen.style.display = 'block';
-    renderOnlineRoom();
-  }
-  
-  function showLobbyCreateJoin() {
-    document.getElementById('draft-resume-session').style.display = 'none';
-    document.getElementById('draft-create-join').style.display = 'block';
-    
-    document.getElementById('create-room-btn').onclick = () => {
-      const nick = document.getElementById('draft-nickname').value.trim();
-      if (!nick) return alert('Введите ник');
-      myNickname = nick;
-      const code = generateRoomCode();
-      db.ref('rooms/' + code).set({
-        host: nick,
-        status: 'lobby',
-        players: [{ name: nick, isCaptain: false, team: null }],
-        captains: [],
-        pickOrder: [],
-        turnIndex: 0,
-        pool: []
-      }).then(() => {
-        localStorage.setItem('activeDraftNick', nick);
-        joinRoom(code);
-      });
-    };
-
-    document.getElementById('join-room-btn').onclick = () => {
-      const nick = document.getElementById('draft-nickname').value.trim();
-      const code = document.getElementById('join-room-code').value.trim().toUpperCase();
-      if (!nick) return alert('Введите ник');
-      if (!code) return alert('Введите код комнаты');
-      myNickname = nick;
-      
-      db.ref('rooms/' + code).once('value').then(snapshot => {
-        if (!snapshot.exists()) return alert('Комната не найдена');
-        const room = snapshot.val();
-        if (room.status !== 'lobby') return alert('Драфт уже начался');
-        if (room.players.find(p => p.name === nick)) return alert('Этот ник уже занят');
-        
-        room.players.push({ name: nick, isCaptain: false, team: null });
-        db.ref('rooms/' + code + '/players').set(room.players).then(() => {
-          localStorage.setItem('activeDraftNick', nick);
-          joinRoom(code);
-        });
-      });
-    };
-  }
-}
-
-function generateRoomCode() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code = '';
-  for (let i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
-  return code;
-}
-
-function joinRoom(code) {
-  currentRoomCode = code;
-  localStorage.setItem('activeDraftRoom', code);
-  localStorage.setItem('activeDraftNick', myNickname);
-  
-  document.getElementById('draft-room-id').innerText = code;
-  
-  if (roomListener) db.ref('rooms/' + currentRoomCode).off('value', roomListener);
-  
-  roomListener = db.ref('rooms/' + currentRoomCode).on('value', (snapshot) => {
-    if (!snapshot.exists()) {
-      alert('Комната была закрыта хостом');
-      localStorage.removeItem('activeDraftRoom');
-      location.reload();
-      return;
-    }
-    onlineRoomState = snapshot.val();
-    renderOnlineRoom();
-  });
-  
-  showRoomScreen();
-}
-
-function showRoomScreen() {
-  document.getElementById('draft-lobby-screen').style.display = 'none';
-  document.getElementById('draft-room-screen').style.display = 'block';
-  renderOnlineRoom();
-}
-
-function renderOnlineRoom() {
-  if (!onlineRoomState) return;
-  const isHost = onlineRoomState.host === myNickname;
-  
-  if (onlineRoomState.status === 'lobby') {
-    document.getElementById('draft-phase-lobby').style.display = 'block';
-    document.getElementById('draft-phase-picking').style.display = 'none';
-    document.getElementById('draft-phase-finished').style.display = 'none';
-    
-    const container = document.getElementById('draft-lobby-players');
-    container.innerHTML = onlineRoomState.players.map(p => {
-      const isCap = p.isCaptain;
-      const isMe = p.name === myNickname;
-      const canToggle = isHost;
-      const btnText = isCap ? 'Снять' : 'Капитан';
-      return `<div class="draft-lobby-card ${isCap ? 'captain' : ''}">
-        <span>${p.name} ${isMe ? '(Вы)' : ''}</span>
-        ${canToggle ? `<button class="btn-outline" style="font-size: 0.7rem; padding: 4px 8px;" onclick="toggleCaptain('${p.name}')">${btnText}</button>` : (isCap ? '<span style="color:#ffd700; font-size:0.8rem;">Капитан</span>' : '')}
-      </div>`;
-    }).join('');
-    
-    const startBtn = document.getElementById('start-online-draft-btn');
-    if (isHost) {
-      startBtn.style.display = 'block';
-      const capsCount = onlineRoomState.players.filter(p => p.isCaptain).length;
-      const totalCount = onlineRoomState.players.length;
-      
-      let ready = true;
-      let hint = 'Начать драфт';
-      if (capsCount !== 4) { ready = false; hint = `Нужно 4 капитана (${capsCount}/4)`; }
-      else if (totalCount < 10) { ready = false; hint = `Нужно минимум 10 игроков (${totalCount}/10)`; }
-      
-      startBtn.disabled = !ready;
-      startBtn.innerText = hint;
-      startBtn.onclick = () => { if (isHost) startOnlineDraftLogic(); };
-    } else {
-      startBtn.style.display = 'none';
-    }
-    
-  } else if (onlineRoomState.status === 'picking') {
-    document.getElementById('draft-phase-lobby').style.display = 'none';
-    document.getElementById('draft-phase-picking').style.display = 'block';
-    document.getElementById('draft-phase-finished').style.display = 'none';
-    
-    const turnCapName = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
-    const isMyTurn = turnCapName === myNickname;
-    
-    document.getElementById('draft-online-turn').innerHTML = isMyTurn 
-      ? `<span style="color:#ffd700;">Ваш ход! Выбирайте игрока.</span>` 
-      : `Сейчас выбирает: <strong>${turnCapName || '...'}</strong>`;
-    
-    for (let i = 0; i < 4; i++) {
-      const capName = onlineRoomState.pickOrder[i];
-      const col = document.getElementById(`team-col-${i}`);
-      const isTurn = onlineRoomState.pickOrder[onlineRoomState.turnIndex] === capName;
-      
-      if (capName) {
-        const teamPlayers = onlineRoomState.players.filter(p => p.team === capName);
-        col.className = `draft-team-col ${isTurn ? 'active-turn' : ''}`;
-        col.innerHTML = `
-          <h4>${capName}</h4>
-          <ul>${teamPlayers.map(tp => {
-            const stat = currentStats.players.find(x => x.name === tp.name);
-            const ava = stat ? stat.avatar : `https://ui-avatars.com/api/?name=${encodeURIComponent(tp.name)}&background=4d6bfe&color=fff`;
-            return `<li><img src="${ava}">${tp.name}</li>`;
-          }).join('')}</ul>
-        `;
-      }
-    }
-    
-    const poolEl = document.getElementById('draft-online-pool');
-    poolEl.innerHTML = onlineRoomState.pool.map(p => {
-      const canPick = isMyTurn && onlineRoomState.status === 'picking';
-      const stat = currentStats.players.find(x => x.name === p.name);
-      const ava = stat ? stat.avatar : `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
-      return `<div class="draft-pool-card ${!canPick ? 'picked' : ''}" onclick="${canPick ? `submitOnlinePick('${p.name}')` : ''}">
-        <img src="${ava}">
-        <span>${p.name}</span>
-        <span style="margin-left:auto;color:var(--accent);">${p.rating || ''}</span>
-      </div>`;
-    }).join('');
-    
-    if (onlineRoomState.pool.length === 0) {
-      poolEl.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">Пул пуст</p>';
-    }
-    
-  } else if (onlineRoomState.status === 'finished') {
-    document.getElementById('draft-phase-lobby').style.display = 'none';
-    document.getElementById('draft-phase-picking').style.display = 'none';
-    document.getElementById('draft-phase-finished').style.display = 'block';
-    
-    document.getElementById('go-to-bracket-btn').onclick = () => {
-      const teams = onlineRoomState.pickOrder.map(capName => {
-        const teamPlayers = onlineRoomState.players.filter(p => p.team === capName).map(p => {
-          const stat = currentStats.players.find(x => x.name === p.name);
-          return { ...p, avgRating: stat ? stat.avgRating : 0 };
-        });
-        const avgRating = teamPlayers.length > 0 ? teamPlayers.reduce((s, p) => s + (p.avgRating || 0), 0) / teamPlayers.length : 0;
-        return { name: capName, players: teamPlayers, avgRating: avgRating };
-      });
-      generateTeamBracket(teams);
-    };
-  }
-}
-
-function startOnlineDraftLogic() {
-  const isHost = onlineRoomState.host === myNickname;
-  if (!isHost) return;
-  
-  const captains = onlineRoomState.players.filter(p => p.isCaptain);
-  if (captains.length !== 4) return alert('Нужно ровно 4 капитана');
-  
-  const getRating = (name) => {
-    const stat = currentStats.players.find(p => p.name === name);
-    return stat ? (stat.avgRating ?? 0) : 0;
-  };
-  
-  captains.sort((a, b) => getRating(a.name) - getRating(b.name));
-  const pickOrder = captains.map(c => c.name);
-  
-  const pool = onlineRoomState.players
-    .filter(p => !p.isCaptain)
-    .map(p => {
-      const stat = currentStats.players.find(x => x.name === p.name);
-      return { ...p, rating: stat ? stat.avgRating : 0 };
-    })
-    .sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    
-  db.ref('rooms/' + currentRoomCode).update({
-    status: 'picking',
-    pickOrder: pickOrder,
-    pool: pool,
-    turnIndex: 0
-  });
-}
-
-window.toggleCaptain = function(name) {
-  if (!onlineRoomState) return;
-  const isHost = onlineRoomState.host === myNickname;
-  if (!isHost) return;
-  
-  const updatedPlayers = onlineRoomState.players.map(p => {
-    if (p.name === name) return { ...p, isCaptain: !p.isCaptain };
-    return p;
-  });
-  
-  db.ref('rooms/' + currentRoomCode + '/players').set(updatedPlayers);
-};
-
-window.submitOnlinePick = function(playerName) {
-  if (!onlineRoomState) return;
-  const turnCapName = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
-  if (myNickname !== turnCapName) return;
-  if (onlineRoomState.status !== 'picking') return;
-  
-  const poolIdx = onlineRoomState.pool.findIndex(p => p.name === playerName);
-  if (poolIdx === -1) return;
-  
-  const updatedPlayers = onlineRoomState.players.map(p => {
-    if (p.name === playerName) return { ...p, team: myNickname };
-    return p;
-  });
-  
-  const newPool = [...onlineRoomState.pool];
-  newPool.splice(poolIdx, 1);
-  
-  const nextIdx = onlineRoomState.turnIndex + 1;
-  let nextStatus = 'picking';
-  if (nextIdx >= 16 || newPool.length === 0) nextStatus = 'finished';
-  
-  db.ref('rooms/' + currentRoomCode).update({
-    players: updatedPlayers,
-    pool: newPool,
-    turnIndex: nextIdx,
-    status: nextStatus
-  });
-};
-
-document.getElementById('leave-active-room-btn').onclick = () => {
-  localStorage.removeItem('activeDraftRoom');
-  localStorage.removeItem('activeDraftNick');
-  if (onlineRoomState && onlineRoomState.host === myNickname) {
-    db.ref('rooms/' + currentRoomCode).remove();
-  } else {
-    const updatedPlayers = onlineRoomState.players.filter(p => p.name !== myNickname);
-    db.ref('rooms/' + currentRoomCode + '/players').set(updatedPlayers);
-  }
-  location.reload();
-};
-
 // ============ ОБРАТНАЯ СВЯЗЬ ============
 document.getElementById('feedback-btn').onclick = () => {
   document.getElementById('feedback-modal').style.display = 'block';
@@ -969,16 +707,17 @@ document.getElementById('send-feedback-btn').onclick = () => {
   const text = document.getElementById('feedback-text').value.trim();
   if (!text) return alert('Введите текст');
   
-  db.ref('feedback').push({
-    text: text,
-    date: new Date().toISOString()
-  }).then(() => {
-    alert('Спасибо! Отзыв отправлен анонимно.');
+  // Сохраняем в localStorage (без Firebase)
+  try {
+    const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+    feedbacks.push({ text, date: new Date().toISOString() });
+    localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+    alert('Спасибо! Отзыв сохранен.');
     document.getElementById('feedback-text').value = '';
     closeFeedback();
-  }).catch(err => {
-    alert('Ошибка при отправке: ' + err.message);
-  });
+  } catch (e) {
+    alert('Ошибка при сохранении');
+  }
 };
 
 // ============ РЕЖИМ НОВИЧКА ============
