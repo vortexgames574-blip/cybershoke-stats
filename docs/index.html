@@ -10,7 +10,6 @@
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
   
@@ -28,6 +27,9 @@
       <div class="header-controls">
         <select id="tournament-select" class="select-tournament"></select>
         <div id="meta-info" class="meta-info">Загрузка...</div>
+        <button id="feedback-btn" class="btn-outline" title="Обратная связь">
+          <i data-lucide="message-square" style="width:16px; height:16px;"></i> Связь
+        </button>
         <button id="beginner-toggle" class="btn-outline" title="Гид">
           <i data-lucide="help-circle" style="width:16px; height:16px;"></i> Гид
         </button>
@@ -166,12 +168,12 @@
           <div class="card-header">
             <h2>Сетка турнира</h2>
             <div class="controls">
-              <button id="generate-bracket-btn" class="btn-outline">Сгенерировать</button>
+              <button id="generate-bracket-btn" class="btn-outline">Сгенерировать (1х1)</button>
               <button id="simulate-bracket-btn" class="btn-outline">Симулировать</button>
               <button id="reset-bracket-btn" class="btn-outline">Сброс</button>
             </div>
           </div>
-          <p class="text-muted mb-10">Автопосев по рейтингу.</p>
+          <p class="text-muted mb-10">Автопосев по рейтингу. Кликай на победителя.</p>
           <div id="bracket-container" class="bracket-container"></div>
         </section>
       </div>
@@ -181,19 +183,29 @@
         <div id="draft-lobby-screen">
           <section class="glass-card interactive-card" style="max-width: 500px; margin: 0 auto;">
             <div class="card-header"><h2>Онлайн Драфт</h2></div>
-            <div class="input-group">
-              <label>Ваш ник:</label>
-              <input type="text" id="draft-nickname" class="input-search" placeholder="Введите ваш ник из CS2">
+            
+            <!-- Если есть сохраненная сессия -->
+            <div id="draft-resume-session" style="display: none; margin-bottom: 20px; padding: 15px; background: rgba(77, 107, 254, 0.1); border: 1px solid var(--accent); border-radius: 8px;">
+              <p style="margin-bottom: 10px; font-size: 0.9rem;">Вы уже находитесь в комнате <b id="resume-code"></b> как <b id="resume-nick"></b>.</p>
+              <button id="resume-room-btn" class="btn-primary" style="margin-bottom: 10px;">Вернуться в комнату</button>
+              <button id="leave-room-btn" class="btn-outline" style="width: 100%;">Выйти из комнаты</button>
             </div>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-              <button id="create-room-btn" class="btn-primary" style="flex: 1;">Создать комнату</button>
+
+            <div id="draft-create-join">
+              <div class="input-group">
+                <label>Ваш ник:</label>
+                <input type="text" id="draft-nickname" class="input-search" placeholder="Введите ваш ник из CS2">
+              </div>
+              <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button id="create-room-btn" class="btn-primary" style="flex: 1;">Создать комнату</button>
+              </div>
+              <div style="text-align: center; margin: 15px 0; color: var(--text-muted);">— ИЛИ —</div>
+              <div class="input-group">
+                <label>Код комнаты:</label>
+                <input type="text" id="join-room-code" class="input-search" placeholder="Например: A1B2C3">
+              </div>
+              <button id="join-room-btn" class="btn-primary" style="margin-top: 15px;">Войти в комнату</button>
             </div>
-            <div style="text-align: center; margin: 15px 0; color: var(--text-muted);">— ИЛИ —</div>
-            <div class="input-group">
-              <label>Код комнаты:</label>
-              <input type="text" id="join-room-code" class="input-search" placeholder="Например: A1B2C3">
-            </div>
-            <button id="join-room-btn" class="btn-primary" style="margin-top: 15px;">Войти в комнату</button>
           </section>
         </div>
 
@@ -201,7 +213,10 @@
           <section class="glass-card interactive-card">
             <div class="card-header">
               <h2>Драфт: <span id="draft-room-id" style="color: var(--accent);"></span></h2>
-              <div id="draft-connection-status" style="font-size: 0.85rem; color: var(--text-muted);"></div>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <button id="leave-active-room-btn" class="btn-outline" style="font-size: 0.75rem; padding: 4px 10px;">Выйти</button>
+                <div id="draft-connection-status" style="font-size: 0.85rem; color: var(--text-muted);"></div>
+              </div>
             </div>
             
             <div id="draft-phase-lobby">
@@ -222,6 +237,11 @@
                 <div class="draft-team-col" id="team-col-2"></div>
                 <div class="draft-team-col" id="team-col-3"></div>
               </div>
+            </div>
+
+            <div id="draft-phase-finished" style="display: none; text-align: center; padding: 20px;">
+              <h3 style="color: #10b981; margin-bottom: 15px;">Драфт завершен!</h3>
+              <button id="go-to-bracket-btn" class="btn-primary" style="max-width: 300px; margin: 0 auto;">Перейти к сетке турнира</button>
             </div>
           </section>
         </div>
@@ -258,6 +278,7 @@
     </div>
   </div>
 
+  <!-- МОДАЛКА КАРТЫ -->
   <div id="map-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeMapDetails()">&times;</span>
@@ -273,6 +294,7 @@
     </div>
   </div>
 
+  <!-- МОДАЛКА БАЛАНСИРОВЩИКА -->
   <div id="balancer-modal" class="modal">
     <div class="modal-content glass-card balancer-modal-content">
       <span class="close-btn" onclick="closeBalancer()">&times;</span>
@@ -300,6 +322,17 @@
         </div>
         <div id="saved-teams-content"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛКА ОБРАТНОЙ СВЯЗИ -->
+  <div id="feedback-modal" class="modal">
+    <div class="modal-content glass-card" style="max-width: 500px;">
+      <span class="close-btn" onclick="closeFeedback()">&times;</span>
+      <div class="card-header"><h2>Обратная связь</h2></div>
+      <p class="text-muted mb-10">Напишите, что можно улучшить или что сломалось. Отзыв уйдет анонимно.</p>
+      <textarea id="feedback-text" class="input-search" style="width: 100%; height: 120px; resize: vertical;" placeholder="Ваш отзыв..."></textarea>
+      <button id="send-feedback-btn" class="btn-primary mt-20">Отправить</button>
     </div>
   </div>
 

@@ -1,12 +1,12 @@
 // --- ВСТАВЬ СЮДА СВОЙ КОНФИГ ИЗ FIREBASE ---
 const firebaseConfig = {
-  apiKey: "AIzaSyCsl2sA5Ov-VqjxXa5117cYrUfHG7JE6dA",
-  authDomain: "cs2-d-87119.firebaseapp.com",
-  projectId: "cs2-d-87119",
-  storageBucket: "cs2-d-87119.firebasestorage.app",
-  messagingSenderId: "356498058908",
-  appId: "1:356498058908:web:d6b45c98faa9f2e07d8759",
-  measurementId: "G-PEQFMZGK3M"
+  apiKey: "ТВОЙ_API_KEY",
+  authDomain: "ТВОЙ_PROJECT.firebaseapp.com",
+  databaseURL: "https://ТВОЙ_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "ТВОЙ_PROJECT",
+  storageBucket: "ТВОЙ_PROJECT.appspot.com",
+  messagingSenderId: "ТВОЙ_SENDER_ID",
+  appId: "ТВОЙ_APP_ID"
 };
 
 // Инициализация Firebase
@@ -29,6 +29,7 @@ let profChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 let bracketState = null;
+let bracketMode = 'solo'; // 'solo' или 'team'
 
 // Переменные для онлайн драфта
 let currentRoomCode = null;
@@ -320,6 +321,7 @@ window.onclick = function(event) {
   if (event.target == document.getElementById('profile-modal')) closeProfile();
   if (event.target == document.getElementById('map-modal')) closeMapDetails();
   if (event.target == document.getElementById('balancer-modal')) closeBalancer();
+  if (event.target == document.getElementById('feedback-modal')) closeFeedback();
 }
 
 function getSavedKey() { return `savedTeams_${document.getElementById('tournament-select').value}`; }
@@ -428,6 +430,7 @@ function initBalancer() {
   }
 }
 
+// ============ СЕТКА (ИНДИВИДУАЛЬНАЯ И КОМАНДНАЯ) ============
 function seedOrder(n) {
   if (n === 1) return [1];
   if (n === 2) return [1, 2];
@@ -442,18 +445,21 @@ function initBracketTab() {
   const simBtn = document.getElementById('simulate-bracket-btn');
   const resetBtn = document.getElementById('reset-bracket-btn');
   if (!genBtn) return;
-  genBtn.onclick = () => generateBracket();
+  genBtn.onclick = () => { bracketMode = 'solo'; generateSoloBracket(); };
   simBtn.onclick = () => simulateBracket();
   resetBtn.onclick = () => { bracketState = null; saveBracket(); renderBracket(); };
   
   try {
     const raw = localStorage.getItem(`bracket_${document.getElementById('tournament-select').value}`);
-    if (raw) bracketState = JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.mode) { bracketState = parsed; bracketMode = parsed.mode; }
+    }
   } catch(e){}
   renderBracket();
 }
 
-function generateBracket() {
+function generateSoloBracket() {
   const players = currentStats.players.slice().sort((a, b) => (b.avgRating ?? b.kd ?? 0) - (a.avgRating ?? a.kd ?? 0));
   const n = players.length;
   if (n < 2) { alert('Нужно минимум 2 игрока'); return; }
@@ -476,9 +482,37 @@ function generateBracket() {
     rounds.push(round);
     curSize /= 2;
   }
-  bracketState = { size, participants: players.length, rounds, champion: null, completed: false };
+  bracketState = { mode: 'solo', size, participants: players.length, rounds, champion: null, completed: false };
   processBracket(bracketState);
   saveBracket();
+  renderBracket();
+}
+
+function generateTeamBracket(teams) {
+  // Для 4 команд: полуфиналы и финал
+  if (teams.length !== 4) {
+    alert('Для командной сетки нужно ровно 4 команды');
+    return;
+  }
+  
+  const round0 = [
+    { t1: teams[0], t2: teams[1], winner: null },
+    { t1: teams[2], t2: teams[3], winner: null }
+  ];
+  const round1 = [{ t1: null, t2: null, winner: null }];
+  
+  bracketState = { mode: 'team', teams, rounds: [round0, round1], champion: null, completed: false };
+  processBracket(bracketState);
+  saveBracket();
+  
+  // Переключаем таб на сетку
+  const tabs = document.querySelectorAll('.tab-btn');
+  const contents = document.querySelectorAll('.tab-content');
+  tabs.forEach(t => t.classList.remove('active'));
+  contents.forEach(c => c.classList.remove('active'));
+  document.querySelector('[data-tab="bracket"]').classList.add('active');
+  document.getElementById('tab-bracket').classList.add('active');
+  
   renderBracket();
 }
 
@@ -518,6 +552,7 @@ function renderBracket() {
   const container = document.getElementById('bracket-container');
   if (!container) return;
   if (!bracketState) { container.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding: 40px;">Нажмите "Сгенерировать", чтобы создать сетку</p>'; return; }
+  
   const rounds = bracketState.rounds;
   const roundNames = [];
   const totalRounds = rounds.length;
@@ -539,18 +574,25 @@ function renderBracket() {
     html += `</div>`;
   }
   html += '</div>';
-  if (bracketState.champion) html += `<div class="bracket-champion">Победитель турнира: ${bracketState.champion.name}</div>`;
+  
+  if (bracketState.champion) {
+    const champName = bracketState.mode === 'team' ? bracketState.champion.name : bracketState.champion.name;
+    html += `<div class="bracket-champion">Победитель турнира: ${champName}</div>`;
+  }
   container.innerHTML = html;
 }
 
 function renderMatchCard(r, m, match) {
   const t1Class = match.winner === 1 ? 'winner' : (match.winner === 2 ? 'loser' : '');
   const t2Class = match.winner === 2 ? 'winner' : (match.winner === 1 ? 'loser' : '');
+  
   const t1Name = match.t1 ? match.t1.name : '—';
   const t2Name = match.t2 ? match.t2.name : '—';
+  
   const canClick = match.t1 && match.t2 && match.winner === null;
   const t1Click = canClick ? `onclick="setBracketWinner(${r},${m},1)"` : '';
   const t2Click = canClick ? `onclick="setBracketWinner(${r},${m},2)"` : '';
+  
   return `<div class="bracket-match ${match.winner ? 'completed' : ''}">
     <div class="bracket-team ${t1Class}" ${t1Click}><span>${t1Name}</span>${match.winner === 1 ? '<span class="bracket-score">✓</span>' : ''}</div>
     <div class="bracket-team ${t2Class}" ${t2Click}><span>${t2Name}</span>${match.winner === 2 ? '<span class="bracket-score">✓</span>' : ''}</div>
@@ -578,32 +620,81 @@ function simulateBracket() {
   if (!bracketState) return;
   const rounds = bracketState.rounds;
   for (const round of rounds) for (const m of round) { m.winner = null; }
-  bracketState = null;
-  generateBracket();
-  for (let r = 0; r < rounds.length; r++) {
-    for (let m = 0; m < rounds[r].length; m++) {
-      const match = rounds[r][m];
-      if (match.winner !== null) continue;
-      if (!match.t1 || !match.t2) continue;
-      const r1 = match.t1.rating ?? 0, r2 = match.t2.rating ?? 0;
-      const t1Better = r1 >= r2;
-      const rnd = Math.random();
-      match.winner = (rnd < 0.8) ? (t1Better ? 1 : 2) : (t1Better ? 2 : 1);
-    }
+  
+  if (bracketState.mode === 'solo') {
+    bracketState = null;
+    generateSoloBracket();
+  } else {
+    // Для команд симулируем на основе среднего рейтинга игроков в команде
+    // Это уже в bracketState.teams
     processBracket(bracketState);
+    for (let r = 0; r < rounds.length; r++) {
+      for (let m = 0; m < rounds[r].length; m++) {
+        const match = rounds[r][m];
+        if (match.winner !== null) continue;
+        if (!match.t1 || !match.t2) continue;
+        // Считаем средний рейтинг команд
+        const avg1 = match.t1.avgRating ?? 0;
+        const avg2 = match.t2.avgRating ?? 0;
+        const t1Better = avg1 >= avg2;
+        const rnd = Math.random();
+        match.winner = (rnd < 0.8) ? (t1Better ? 1 : 2) : (t1Better ? 2 : 1);
+      }
+      processBracket(bracketState);
+    }
+    saveBracket();
+    renderBracket();
   }
-  saveBracket();
-  renderBracket();
 }
 
-// ============ ОНЛАЙН ДРАФТ (Firebase) ============
+// ============ ОНЛАЙН ДРАФТ ============
 function initOnlineDraftTab() {
   const lobbyScreen = document.getElementById('draft-lobby-screen');
   const roomScreen = document.getElementById('draft-room-screen');
   
-  if (!currentRoomCode) {
-    lobbyScreen.style.display = 'block';
-    roomScreen.style.display = 'none';
+  const savedRoom = localStorage.getItem('activeDraftRoom');
+  const savedNick = localStorage.getItem('activeDraftNick');
+  
+  if (!currentRoomCode && savedRoom && savedNick) {
+    // Пытаемся восстановить сессию
+    db.ref('rooms/' + savedRoom).once('value').then(snapshot => {
+      if (snapshot.exists()) {
+        const room = snapshot.val();
+        if (room.players.find(p => p.name === savedNick)) {
+          // Комната существует и мы в ней
+          document.getElementById('draft-resume-session').style.display = 'block';
+          document.getElementById('resume-code').innerText = savedRoom;
+          document.getElementById('resume-nick').innerText = savedNick;
+          document.getElementById('draft-create-join').style.display = 'none';
+          
+          document.getElementById('resume-room-btn').onclick = () => {
+            myNickname = savedNick;
+            joinRoom(savedRoom);
+          };
+          document.getElementById('leave-room-btn').onclick = () => {
+            localStorage.removeItem('activeDraftRoom');
+            localStorage.removeItem('activeDraftNick');
+            location.reload();
+          };
+          return;
+        }
+      }
+      // Если комнаты нет или нас нет в ней, чистим
+      localStorage.removeItem('activeDraftRoom');
+      localStorage.removeItem('activeDraftNick');
+      showLobbyCreateJoin();
+    });
+  } else if (!currentRoomCode) {
+    showLobbyCreateJoin();
+  } else {
+    lobbyScreen.style.display = 'none';
+    roomScreen.style.display = 'block';
+    renderOnlineRoom();
+  }
+  
+  function showLobbyCreateJoin() {
+    document.getElementById('draft-resume-session').style.display = 'none';
+    document.getElementById('draft-create-join').style.display = 'block';
     
     document.getElementById('create-room-btn').onclick = () => {
       const nick = document.getElementById('draft-nickname').value.trim();
@@ -619,6 +710,7 @@ function initOnlineDraftTab() {
         turnIndex: 0,
         pool: []
       }).then(() => {
+        localStorage.setItem('activeDraftNick', nick);
         joinRoom(code);
       });
     };
@@ -630,7 +722,6 @@ function initOnlineDraftTab() {
       if (!code) return alert('Введите код комнаты');
       myNickname = nick;
       
-      // Проверяем, существует ли комната
       db.ref('rooms/' + code).once('value').then(snapshot => {
         if (!snapshot.exists()) return alert('Комната не найдена');
         const room = snapshot.val();
@@ -639,14 +730,11 @@ function initOnlineDraftTab() {
         
         room.players.push({ name: nick, isCaptain: false, team: null });
         db.ref('rooms/' + code + '/players').set(room.players).then(() => {
+          localStorage.setItem('activeDraftNick', nick);
           joinRoom(code);
         });
       });
     };
-  } else {
-    lobbyScreen.style.display = 'none';
-    roomScreen.style.display = 'block';
-    renderOnlineRoom();
   }
 }
 
@@ -659,14 +747,17 @@ function generateRoomCode() {
 
 function joinRoom(code) {
   currentRoomCode = code;
+  localStorage.setItem('activeDraftRoom', code);
+  localStorage.setItem('activeDraftNick', myNickname);
+  
   document.getElementById('draft-room-id').innerText = code;
-  document.getElementById('draft-connection-status').innerText = 'Подключено к комнате';
   
   if (roomListener) db.ref('rooms/' + currentRoomCode).off('value', roomListener);
   
   roomListener = db.ref('rooms/' + currentRoomCode).on('value', (snapshot) => {
     if (!snapshot.exists()) {
       alert('Комната была закрыта хостом');
+      localStorage.removeItem('activeDraftRoom');
       location.reload();
       return;
     }
@@ -690,6 +781,7 @@ function renderOnlineRoom() {
   if (onlineRoomState.status === 'lobby') {
     document.getElementById('draft-phase-lobby').style.display = 'block';
     document.getElementById('draft-phase-picking').style.display = 'none';
+    document.getElementById('draft-phase-finished').style.display = 'none';
     
     const container = document.getElementById('draft-lobby-players');
     container.innerHTML = onlineRoomState.players.map(p => {
@@ -706,14 +798,25 @@ function renderOnlineRoom() {
     const startBtn = document.getElementById('start-online-draft-btn');
     if (isHost) {
       startBtn.style.display = 'block';
-      startBtn.disabled = onlineRoomState.players.filter(p => p.isCaptain).length !== 4 || onlineRoomState.players.length < 10;
+      const capsCount = onlineRoomState.players.filter(p => p.isCaptain).length;
+      const totalCount = onlineRoomState.players.length;
+      
+      let ready = true;
+      let hint = 'Начать драфт';
+      if (capsCount !== 4) { ready = false; hint = `Нужно 4 капитана (${capsCount}/4)`; }
+      else if (totalCount < 10) { ready = false; hint = `Нужно минимум 10 игроков (${totalCount}/10)`; }
+      
+      startBtn.disabled = !ready;
+      startBtn.innerText = hint;
       startBtn.onclick = () => { if (isHost) startOnlineDraftLogic(); };
     } else {
       startBtn.style.display = 'none';
     }
+    
   } else if (onlineRoomState.status === 'picking') {
     document.getElementById('draft-phase-lobby').style.display = 'none';
     document.getElementById('draft-phase-picking').style.display = 'block';
+    document.getElementById('draft-phase-finished').style.display = 'none';
     
     const turnCapName = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
     const isMyTurn = turnCapName === myNickname;
@@ -756,6 +859,24 @@ function renderOnlineRoom() {
     if (onlineRoomState.pool.length === 0) {
       poolEl.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">Пул пуст</p>';
     }
+    
+  } else if (onlineRoomState.status === 'finished') {
+    document.getElementById('draft-phase-lobby').style.display = 'none';
+    document.getElementById('draft-phase-picking').style.display = 'none';
+    document.getElementById('draft-phase-finished').style.display = 'block';
+    
+    document.getElementById('go-to-bracket-btn').onclick = () => {
+      // Собираем команды
+      const teams = onlineRoomState.pickOrder.map(capName => {
+        const teamPlayers = onlineRoomState.players.filter(p => p.team === capName).map(p => {
+          const stat = currentStats.players.find(x => x.name === p.name);
+          return { ...p, avgRating: stat ? stat.avgRating : 0 };
+        });
+        const avgRating = teamPlayers.length > 0 ? teamPlayers.reduce((s, p) => s + (p.avgRating || 0), 0) / teamPlayers.length : 0;
+        return { name: capName, players: teamPlayers, avgRating: avgRating };
+      });
+      generateTeamBracket(teams);
+    };
   }
 }
 
@@ -771,11 +892,9 @@ function startOnlineDraftLogic() {
     return stat ? (stat.avgRating ?? 0) : 0;
   };
   
-  // Сортируем капитанов по рейтингу (слабейший пикает первым, чтобы было честно)
   captains.sort((a, b) => getRating(a.name) - getRating(b.name));
   const pickOrder = captains.map(c => c.name);
   
-  // Формируем пул
   const pool = onlineRoomState.players
     .filter(p => !p.isCaptain)
     .map(p => {
@@ -784,7 +903,6 @@ function startOnlineDraftLogic() {
     })
     .sort((a, b) => (b.rating || 0) - (a.rating || 0));
     
-  // Обновляем базу
   db.ref('rooms/' + currentRoomCode).update({
     status: 'picking',
     pickOrder: pickOrder,
@@ -794,6 +912,7 @@ function startOnlineDraftLogic() {
 }
 
 window.toggleCaptain = function(name) {
+  if (!onlineRoomState) return;
   const isHost = onlineRoomState.host === myNickname;
   if (!isHost) return;
   
@@ -806,25 +925,22 @@ window.toggleCaptain = function(name) {
 };
 
 window.submitOnlinePick = function(playerName) {
+  if (!onlineRoomState) return;
   const turnCapName = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
   if (myNickname !== turnCapName) return;
   if (onlineRoomState.status !== 'picking') return;
   
-  // Находим игрока в пуле
   const poolIdx = onlineRoomState.pool.findIndex(p => p.name === playerName);
   if (poolIdx === -1) return;
   
-  // Обновляем его команду
   const updatedPlayers = onlineRoomState.players.map(p => {
     if (p.name === playerName) return { ...p, team: myNickname };
     return p;
   });
   
-  // Убираем из пула
   const newPool = [...onlineRoomState.pool];
   newPool.splice(poolIdx, 1);
   
-  // Следующий индекс (змейка)
   const nextIdx = onlineRoomState.turnIndex + 1;
   let nextStatus = 'picking';
   if (nextIdx >= 16 || newPool.length === 0) nextStatus = 'finished';
@@ -836,6 +952,55 @@ window.submitOnlinePick = function(playerName) {
     status: nextStatus
   });
 };
+
+// Кнопка выйти из комнаты
+document.getElementById('leave-active-room-btn').onclick = () => {
+  localStorage.removeItem('activeDraftRoom');
+  localStorage.removeItem('activeDraftNick');
+  if (onlineRoomState && onlineRoomState.host === myNickname) {
+    db.ref('rooms/' + currentRoomCode).remove();
+  } else {
+    const updatedPlayers = onlineRoomState.players.filter(p => p.name !== myNickname);
+    db.ref('rooms/' + currentRoomCode + '/players').set(updatedPlayers);
+  }
+  location.reload();
+};
+
+// ============ ОБРАТНАЯ СВЯЗЬ ============
+document.getElementById('feedback-btn').onclick = () => {
+  document.getElementById('feedback-modal').style.display = 'block';
+};
+window.closeFeedback = () => {
+  document.getElementById('feedback-modal').style.display = 'none';
+};
+document.getElementById('send-feedback-btn').onclick = () => {
+  const text = document.getElementById('feedback-text').value.trim();
+  if (!text) return alert('Введите текст');
+  
+  db.ref('feedback').push({
+    text: text,
+    date: new Date().toISOString()
+  }).then(() => {
+    alert('Спасибо! Отзыв отправлен анонимно.');
+    document.getElementById('feedback-text').value = '';
+    closeFeedback();
+  }).catch(err => {
+    alert('Ошибка при отправке: ' + err.message);
+  });
+};
+
+// ============ РЕЖИМ НОВИЧКА ============
+function initBeginnerMode() {
+  const btn = document.getElementById('beginner-toggle');
+  if (!btn) return;
+  const isActive = localStorage.getItem('beginnerMode') === '1';
+  if (isActive) { document.body.classList.add('beginner-mode'); btn.classList.add('active'); }
+  btn.onclick = () => {
+    const active = document.body.classList.toggle('beginner-mode');
+    localStorage.setItem('beginnerMode', active ? '1' : '0');
+    btn.classList.toggle('active', active);
+  };
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   if (window.AOS) AOS.init({ duration: 600, once: true });
