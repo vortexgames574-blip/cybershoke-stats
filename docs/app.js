@@ -29,7 +29,7 @@ let profChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 let bracketState = null;
-let bracketMode = 'solo'; // 'solo' или 'team'
+let bracketMode = 'solo';
 
 // Переменные для онлайн драфта
 let currentRoomCode = null;
@@ -79,6 +79,8 @@ async function loadData() {
     });
 
     renderAll();
+    // Проверяем сохраненную сессию драфта при загрузке
+    initOnlineDraftTab();
   } catch (err) {
     document.getElementById('meta-info').innerHTML = `<span style="color: #ef4444;">${err.message}</span>`;
     console.error(err);
@@ -489,7 +491,6 @@ function generateSoloBracket() {
 }
 
 function generateTeamBracket(teams) {
-  // Для 4 команд: полуфиналы и финал
   if (teams.length !== 4) {
     alert('Для командной сетки нужно ровно 4 команды');
     return;
@@ -505,7 +506,6 @@ function generateTeamBracket(teams) {
   processBracket(bracketState);
   saveBracket();
   
-  // Переключаем таб на сетку
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = document.querySelectorAll('.tab-content');
   tabs.forEach(t => t.classList.remove('active'));
@@ -625,15 +625,12 @@ function simulateBracket() {
     bracketState = null;
     generateSoloBracket();
   } else {
-    // Для команд симулируем на основе среднего рейтинга игроков в команде
-    // Это уже в bracketState.teams
     processBracket(bracketState);
     for (let r = 0; r < rounds.length; r++) {
       for (let m = 0; m < rounds[r].length; m++) {
         const match = rounds[r][m];
         if (match.winner !== null) continue;
         if (!match.t1 || !match.t2) continue;
-        // Считаем средний рейтинг команд
         const avg1 = match.t1.avgRating ?? 0;
         const avg2 = match.t2.avgRating ?? 0;
         const t1Better = avg1 >= avg2;
@@ -656,12 +653,10 @@ function initOnlineDraftTab() {
   const savedNick = localStorage.getItem('activeDraftNick');
   
   if (!currentRoomCode && savedRoom && savedNick) {
-    // Пытаемся восстановить сессию
     db.ref('rooms/' + savedRoom).once('value').then(snapshot => {
       if (snapshot.exists()) {
         const room = snapshot.val();
         if (room.players.find(p => p.name === savedNick)) {
-          // Комната существует и мы в ней
           document.getElementById('draft-resume-session').style.display = 'block';
           document.getElementById('resume-code').innerText = savedRoom;
           document.getElementById('resume-nick').innerText = savedNick;
@@ -679,7 +674,6 @@ function initOnlineDraftTab() {
           return;
         }
       }
-      // Если комнаты нет или нас нет в ней, чистим
       localStorage.removeItem('activeDraftRoom');
       localStorage.removeItem('activeDraftNick');
       showLobbyCreateJoin();
@@ -866,7 +860,6 @@ function renderOnlineRoom() {
     document.getElementById('draft-phase-finished').style.display = 'block';
     
     document.getElementById('go-to-bracket-btn').onclick = () => {
-      // Собираем команды
       const teams = onlineRoomState.pickOrder.map(capName => {
         const teamPlayers = onlineRoomState.players.filter(p => p.team === capName).map(p => {
           const stat = currentStats.players.find(x => x.name === p.name);
@@ -953,7 +946,6 @@ window.submitOnlinePick = function(playerName) {
   });
 };
 
-// Кнопка выйти из комнаты
 document.getElementById('leave-active-room-btn').onclick = () => {
   localStorage.removeItem('activeDraftRoom');
   localStorage.removeItem('activeDraftNick');

@@ -49,17 +49,87 @@
     </section>
 
     <nav class="tabs-nav">
-      <button class="tab-btn active" data-tab="overview"><i data-lucide="layout-dashboard"></i> Обзор</button>
+      <!-- ТУРНИР ТЕПЕРЬ ПЕРВЫЙ -->
+      <button class="tab-btn active" data-tab="draft"><i data-lucide="trophy"></i> Турнир</button>
+      <button class="tab-btn" data-tab="overview"><i data-lucide="layout-dashboard"></i> Обзор</button>
       <button class="tab-btn" data-tab="players"><i data-lucide="users"></i> Игроки</button>
       <button class="tab-btn" data-tab="maps"><i data-lucide="map"></i> Карты</button>
       <button class="tab-btn" data-tab="balancer"><i data-lucide="git-merge"></i> Балансировщик</button>
       <button class="tab-btn" data-tab="bracket"><i data-lucide="trophy"></i> Сетка</button>
-      <button class="tab-btn" data-tab="draft"><i data-lucide="users"></i> Онлайн Драфт</button>
     </nav>
 
     <main class="main-content">
+      <!-- ТУРНИР (БЫВШИЙ ОНЛАЙН ДРАФТ) -->
+      <div class="tab-content active" id="tab-draft">
+        <div id="draft-lobby-screen">
+          <section class="glass-card interactive-card" style="max-width: 500px; margin: 0 auto;">
+            <div class="card-header"><h2>Турнир</h2></div>
+            
+            <!-- Если есть сохраненная сессия -->
+            <div id="draft-resume-session" style="display: none; margin-bottom: 20px; padding: 15px; background: rgba(77, 107, 254, 0.1); border: 1px solid var(--accent); border-radius: 8px;">
+              <p style="margin-bottom: 10px; font-size: 0.9rem;">Вы уже находитесь в комнате <b id="resume-code"></b> как <b id="resume-nick"></b>.</p>
+              <button id="resume-room-btn" class="btn-primary" style="margin-bottom: 10px;">Вернуться в комнату</button>
+              <button id="leave-room-btn" class="btn-outline" style="width: 100%;">Выйти из комнаты</button>
+            </div>
+
+            <div id="draft-create-join">
+              <p class="text-muted mb-10">Создайте комнату, отправьте код друзьям, и начните драфт.</p>
+              <div class="input-group">
+                <label>Ваш ник:</label>
+                <input type="text" id="draft-nickname" class="input-search" placeholder="Введите ваш ник из CS2">
+              </div>
+              <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button id="create-room-btn" class="btn-primary" style="flex: 1;">Создать комнату</button>
+              </div>
+              <div style="text-align: center; margin: 15px 0; color: var(--text-muted);">— ИЛИ —</div>
+              <div class="input-group">
+                <label>Код комнаты:</label>
+                <input type="text" id="join-room-code" class="input-search" placeholder="Например: A1B2C3">
+              </div>
+              <button id="join-room-btn" class="btn-primary" style="margin-top: 15px;">Войти в комнату</button>
+            </div>
+          </section>
+        </div>
+
+        <div id="draft-room-screen" style="display: none;">
+          <section class="glass-card interactive-card">
+            <div class="card-header">
+              <h2>Турнир: <span id="draft-room-id" style="color: var(--accent);"></span></h2>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <button id="leave-active-room-btn" class="btn-outline" style="font-size: 0.75rem; padding: 4px 10px;">Выйти</button>
+              </div>
+            </div>
+            
+            <div id="draft-phase-lobby">
+              <p class="text-muted mb-10">Ожидание игроков. Назначьте 4 капитанов.</p>
+              <div id="draft-lobby-players" class="draft-lobby-grid"></div>
+              <button id="start-online-draft-btn" class="btn-primary mt-20" disabled>Начать драфт</button>
+            </div>
+
+            <div id="draft-phase-picking" style="display: none;">
+              <div class="draft-turn-indicator" id="draft-online-turn"></div>
+              <div class="draft-4teams-grid">
+                <div class="draft-team-col" id="team-col-0"></div>
+                <div class="draft-team-col" id="team-col-1"></div>
+                <div class="draft-pool-col">
+                  <h3>Доступные игроки</h3>
+                  <div id="draft-online-pool" class="draft-pool-list"></div>
+                </div>
+                <div class="draft-team-col" id="team-col-2"></div>
+                <div class="draft-team-col" id="team-col-3"></div>
+              </div>
+            </div>
+
+            <div id="draft-phase-finished" style="display: none; text-align: center; padding: 20px;">
+              <h3 style="color: #10b981; margin-bottom: 15px;">Драфт завершен!</h3>
+              <button id="go-to-bracket-btn" class="btn-primary" style="max-width: 300px; margin: 0 auto;">Перейти к сетке турнира</button>
+            </div>
+          </section>
+        </div>
+      </div>
+
       <!-- ОБЗОР -->
-      <div class="tab-content active" id="tab-overview">
+      <div class="tab-content" id="tab-overview">
         <div class="grid-2col">
           <div class="col-left">
             <section class="glass-card interactive-card" data-aos="fade-up">
@@ -176,75 +246,6 @@
           <p class="text-muted mb-10">Автопосев по рейтингу. Кликай на победителя.</p>
           <div id="bracket-container" class="bracket-container"></div>
         </section>
-      </div>
-
-      <!-- ОНЛАЙН ДРАФТ -->
-      <div class="tab-content" id="tab-draft">
-        <div id="draft-lobby-screen">
-          <section class="glass-card interactive-card" style="max-width: 500px; margin: 0 auto;">
-            <div class="card-header"><h2>Онлайн Драфт</h2></div>
-            
-            <!-- Если есть сохраненная сессия -->
-            <div id="draft-resume-session" style="display: none; margin-bottom: 20px; padding: 15px; background: rgba(77, 107, 254, 0.1); border: 1px solid var(--accent); border-radius: 8px;">
-              <p style="margin-bottom: 10px; font-size: 0.9rem;">Вы уже находитесь в комнате <b id="resume-code"></b> как <b id="resume-nick"></b>.</p>
-              <button id="resume-room-btn" class="btn-primary" style="margin-bottom: 10px;">Вернуться в комнату</button>
-              <button id="leave-room-btn" class="btn-outline" style="width: 100%;">Выйти из комнаты</button>
-            </div>
-
-            <div id="draft-create-join">
-              <div class="input-group">
-                <label>Ваш ник:</label>
-                <input type="text" id="draft-nickname" class="input-search" placeholder="Введите ваш ник из CS2">
-              </div>
-              <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button id="create-room-btn" class="btn-primary" style="flex: 1;">Создать комнату</button>
-              </div>
-              <div style="text-align: center; margin: 15px 0; color: var(--text-muted);">— ИЛИ —</div>
-              <div class="input-group">
-                <label>Код комнаты:</label>
-                <input type="text" id="join-room-code" class="input-search" placeholder="Например: A1B2C3">
-              </div>
-              <button id="join-room-btn" class="btn-primary" style="margin-top: 15px;">Войти в комнату</button>
-            </div>
-          </section>
-        </div>
-
-        <div id="draft-room-screen" style="display: none;">
-          <section class="glass-card interactive-card">
-            <div class="card-header">
-              <h2>Драфт: <span id="draft-room-id" style="color: var(--accent);"></span></h2>
-              <div style="display: flex; gap: 10px; align-items: center;">
-                <button id="leave-active-room-btn" class="btn-outline" style="font-size: 0.75rem; padding: 4px 10px;">Выйти</button>
-                <div id="draft-connection-status" style="font-size: 0.85rem; color: var(--text-muted);"></div>
-              </div>
-            </div>
-            
-            <div id="draft-phase-lobby">
-              <p class="text-muted mb-10">Ожидание игроков. Назначьте 4 капитанов.</p>
-              <div id="draft-lobby-players" class="draft-lobby-grid"></div>
-              <button id="start-online-draft-btn" class="btn-primary mt-20" disabled>Начать драфт</button>
-            </div>
-
-            <div id="draft-phase-picking" style="display: none;">
-              <div class="draft-turn-indicator" id="draft-online-turn"></div>
-              <div class="draft-4teams-grid">
-                <div class="draft-team-col" id="team-col-0"></div>
-                <div class="draft-team-col" id="team-col-1"></div>
-                <div class="draft-pool-col">
-                  <h3>Доступные игроки</h3>
-                  <div id="draft-online-pool" class="draft-pool-list"></div>
-                </div>
-                <div class="draft-team-col" id="team-col-2"></div>
-                <div class="draft-team-col" id="team-col-3"></div>
-              </div>
-            </div>
-
-            <div id="draft-phase-finished" style="display: none; text-align: center; padding: 20px;">
-              <h3 style="color: #10b981; margin-bottom: 15px;">Драфт завершен!</h3>
-              <button id="go-to-bracket-btn" class="btn-primary" style="max-width: 300px; margin: 0 auto;">Перейти к сетке турнира</button>
-            </div>
-          </section>
-        </div>
       </div>
     </main>
   </div>
