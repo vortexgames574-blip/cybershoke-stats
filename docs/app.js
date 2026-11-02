@@ -61,7 +61,6 @@ function renderAll() {
   }
 }
 
-// ============ ПЬЕДЕСТАЛ ============
 function renderPodium() {
   const container = document.getElementById('podium-container');
   if (!container || !currentStats.players) return;
@@ -86,7 +85,6 @@ function renderPodium() {
   }).join('');
 }
 
-// ============ ИНТЕРЕСНЫЕ ФАКТЫ ============
 function renderFunFacts() {
   const container = document.getElementById('fun-facts-container');
   if (!container) return;
@@ -114,7 +112,6 @@ function renderFunFacts() {
   `).join('');
 }
 
-// ============ РЕКОРДЫ ============
 function renderRecords() {
   if (!currentStats.records) return;
   const r = currentStats.records;
@@ -137,7 +134,6 @@ function renderRecords() {
   adrCard.onclick = adrRec ? () => openMapDetails(adrRec.map) : null;
 }
 
-// ============ ТАБЛИЦА ИГРОКОВ ============
 function renderPlayersTable() {
   const tbody = document.querySelector('#players-table tbody');
   const filterInput = document.getElementById('filter-name');
@@ -181,7 +177,6 @@ function renderPlayersTable() {
   draw();
 }
 
-// ============ КАРТЫ (СОРТИРУЕМЫЕ) ============
 function renderMapStats() {
   const tbody = document.querySelector('#maps-table tbody');
   if (!tbody || !currentStats.mapStats) return;
@@ -206,7 +201,6 @@ function renderMapStats() {
     `).join('');
   }
 
-  // Слушатели на сортировку (вешаем один раз)
   document.querySelectorAll('#maps-table .sortable').forEach(th => {
     if (th.dataset.listenerAttached) return;
     th.dataset.listenerAttached = 'true';
@@ -218,7 +212,6 @@ function renderMapStats() {
         currentMapSort.key = key;
         currentMapSort.dir = 'desc';
       }
-      // Обновить стрелки
       document.querySelectorAll('#maps-table .sortable').forEach(t => {
         t.classList.remove('asc', 'desc');
         t.querySelector('.sort-arrow').textContent = '⬍';
@@ -232,7 +225,6 @@ function renderMapStats() {
   draw();
 }
 
-// ============ МОДАЛКА КАРТЫ ============
 function openMapDetails(mapName) {
   const mapData = currentStats.mapStats.find(m => m.map === mapName);
   if (!mapData) return;
@@ -258,7 +250,6 @@ function openMapDetails(mapName) {
 
 function closeMapDetails() { document.getElementById('map-modal').style.display = 'none'; }
 
-// ============ ДУЭЛИ ============
 function initDuel() {
   const p1Select = document.getElementById('duel-p1');
   const p2Select = document.getElementById('duel-p2');
@@ -291,7 +282,6 @@ function initDuel() {
   };
 }
 
-// ============ ПРОФИЛЬ ============
 function openProfile(playerId) {
   const p = currentStats.players.find(pl => pl.id === playerId);
   if (!p) return;
@@ -346,7 +336,6 @@ window.onclick = function(event) {
   if (event.target == document.getElementById('balancer-modal')) closeBalancer();
 }
 
-// ============ БАЛАНСИРОВЩИК ============
 function getSavedKey() { return `savedTeams_${document.getElementById('tournament-select').value}`; }
 
 function initBalancer() {
@@ -432,20 +421,18 @@ function initBalancer() {
 
   balanceBtn.onclick = () => {
     if (selectedPlayers.length !== 10) return;
-    const prepared = selectedPlayers.map(p => ({ name: p.displayName || p.name, rating: p.avgRating ?? 0, avatar: p.avatar })).sort((a, b) => b.rating - a.rating);
-    const teamA = [], teamB = [];
-    let sumA = 0, sumB = 0;
-    prepared.forEach(p => { if (sumA <= sumB) { teamA.push(p); sumA += p.rating; } else { teamB.push(p); sumB += p.rating; } });
+    // Используем полный перебор для гарантированно лучшего баланса
+    const { teamA, teamB, sumA, sumB } = findBestTeams(selectedPlayers.map(p => ({ ...p, rating: p.avgRating ?? 0 })));
     resultDiv.innerHTML = `
-      <div class="team-box"><h3>Команда А <span>Σ ${sumA.toFixed(1)}</span></h3><ul>${teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(1)}</span></li>`).join('')}</ul></div>
-      <div class="team-box"><h3>Команда Б <span>Σ ${sumB.toFixed(1)}</span></h3><ul>${teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(1)}</span></li>`).join('')}</ul></div>
+      <div class="team-box"><h3>Команда А <span>Σ ${sumA.toFixed(1)}</span></h3><ul>${teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.rating.toFixed(1)}</span></li>`).join('')}</ul></div>
+      <div class="team-box"><h3>Команда Б <span>Σ ${sumB.toFixed(1)}</span></h3><ul>${teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.rating.toFixed(1)}</span></li>`).join('')}</ul></div>
     `;
     resultDiv.classList.add('show');
     savedSection.classList.remove('show');
     try {
       localStorage.setItem(getSavedKey(), JSON.stringify({
-        teamA: teamA.map(p => ({ name: p.name, rating: p.rating, avatar: p.avatar })),
-        teamB: teamB.map(p => ({ name: p.name, rating: p.rating, avatar: p.avatar })),
+        teamA: teamA.map(p => ({ name: p.displayName || p.name, rating: p.rating, avatar: p.avatar })),
+        teamB: teamB.map(p => ({ name: p.displayName || p.name, rating: p.rating, avatar: p.avatar })),
         savedAt: new Date().toISOString()
       }));
     } catch (e) {}
@@ -459,21 +446,72 @@ function initBalancer() {
 
   document.getElementById('balanced-map-btn').onclick = () => {
     let best = null, bestDiff = Infinity, bestD = null;
+    
+    // Перебираем все карты
     for (const ms of currentStats.mapStats) {
-      const rs = selectedPlayers.map(p => { const tp = ms.topPlayers.find(t => t.id === p.id); return tp ? { r: tp.avgRating, ok: true } : { ok: false }; });
-      if (rs.some(r => !r.ok)) continue;
-      const sorted = [...rs].sort((a, b) => b.r - a.r);
-      let sA = 0, sB = 0;
-      sorted.forEach(r => { if (sA <= sB) sA += r.r; else sB += r.r; });
-      const diff = Math.abs(sA - sB);
-      if (diff < bestDiff) { bestDiff = diff; best = ms.map; bestD = { diff, sA, sB }; }
+      // Проверяем, играли ли ВСЕ выбранные игроки эту карту
+      const ratings = selectedPlayers.map(p => {
+        const tp = ms.topPlayers.find(t => t.id === p.id);
+        return tp ? { rating: tp.avgRating } : null;
+      });
+
+      if (ratings.some(r => r === null)) continue; // Если хотя бы один не играл — скипаем карту
+
+      // Для этой карты ищем идеальное разделение
+      const { sumA, sumB } = findBestTeams(ratings.map((r, i) => ({ id: selectedPlayers[i].id, rating: r.rating })));
+      const diff = Math.abs(sumA - sumB);
+
+      if (diff < bestDiff) {
+        bestDiff = diff;
+        best = ms.map;
+        bestD = { diff, sumA, sumB };
+      }
     }
+
     if (!best) {
       mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color:#ef4444;"><p style="color:#ef4444;">Нет карты, на которой играли все 10 игроков</p></div>`;
       return;
     }
-    mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color: #10b981;"><p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">⚖️ Балансная карта</p><h2 style="color: #10b981; font-size: 1.8rem; margin: 0;">${best}</h2><p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Разница: <b style="color:#10b981;">${bestD.diff.toFixed(1)}</b> (${bestD.sA.toFixed(1)} vs ${bestD.sB.toFixed(1)})</p></div>`;
+    mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color: #10b981;"><p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">⚖️ Балансная карта</p><h2 style="color: #10b981; font-size: 1.8rem; margin: 0;">${best}</h2><p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Разница: <b style="color:#10b981;">${bestD.diff.toFixed(1)}</b> (${bestD.sumA.toFixed(1)} vs ${bestD.sumB.toFixed(1)})</p></div>`;
   };
+
+  // НОВЫЙ АЛГОРИТМ ПОЛНОГО ПЕРЕБОРА (для 10 игроков это всего 252 комбинации)
+  function findBestTeams(players) {
+    const n = players.length;
+    const half = n / 2;
+    let bestDiff = Infinity;
+    let bestTeamA = [], bestTeamB = [];
+    let bestSumA = 0, bestSumB = 0;
+
+    // Генерируем все возможные комбинации для команды A
+    const combinations = (arr, k) => {
+      if (k === 0) return [[]];
+      if (arr.length === 0) return [];
+      const [first, ...rest] = arr;
+      const withFirst = combinations(rest, k - 1).map(comb => [first, ...comb]);
+      const withoutFirst = combinations(rest, k);
+      return [...withFirst, ...withoutFirst];
+    };
+
+    const allCombinations = combinations(players, half);
+
+    for (const teamA of allCombinations) {
+      const teamB = players.filter(p => !teamA.includes(p));
+      const sumA = teamA.reduce((s, p) => s + p.rating, 0);
+      const sumB = teamB.reduce((s, p) => s + p.rating, 0);
+      const diff = Math.abs(sumA - sumB);
+
+      if (diff < bestDiff) {
+        bestDiff = diff;
+        bestTeamA = teamA;
+        bestTeamB = teamB;
+        bestSumA = sumA;
+        bestSumB = sumB;
+      }
+    }
+
+    return { teamA: bestTeamA, teamB: bestTeamB, sumA: bestSumA, sumB: bestSumB };
+  }
 
   document.getElementById('clear-saved-btn').onclick = () => {
     localStorage.removeItem(getSavedKey());
@@ -499,7 +537,6 @@ function initBalancer() {
   }
 }
 
-// ============ CSV ЭКСПОРТ ============
 function initCSV() {
   const btn = document.getElementById('export-csv-btn');
   if (!btn) return;
@@ -520,7 +557,6 @@ function initCSV() {
   };
 }
 
-// ============ РЕЖИМ НОВИЧКА ============
 function initBeginnerMode() {
   const btn = document.getElementById('beginner-toggle');
   if (!btn) return;
