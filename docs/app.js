@@ -15,15 +15,13 @@ let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 let bracketState = null;
 
-// --- ПЕРЕМЕННЫЕ ДЛЯ ОНЛАЙН ДРАФТА ---
 let peer = null;
 let isHost = false;
-let hostConn = null; // Соединение с хостом (если мы клиент)
-let clients = []; // Соединения с клиентами (если мы хост)
-let onlineRoomState = null; // Текущее состояние драфта
+let hostConn = null;
+let clients = [];
+let onlineRoomState = null;
 let myNickname = "";
 
-// ============ ИНИЦИАЛИЗАЦИЯ ТАБОВ ============
 function initTabs() {
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = document.querySelectorAll('.tab-content');
@@ -94,7 +92,6 @@ function renderAll() {
   }
 }
 
-// ============ ПЬЕДЕСТАЛ ============
 function renderPodium() {
   const container = document.getElementById('podium-container');
   if (!container || !currentStats.players) return;
@@ -115,7 +112,6 @@ function renderPodium() {
   }).join('');
 }
 
-// ============ ПОСЛЕДНИЕ МАТЧИ ============
 function renderRecentMatches() {
   const container = document.getElementById('recent-matches-container');
   if (!container || !currentStats.recentMatches) return;
@@ -129,7 +125,6 @@ function renderRecentMatches() {
   }).join('');
 }
 
-// ============ ФАКТЫ ============
 function renderFunFacts() {
   const container = document.getElementById('fun-facts-container');
   if (!container) return;
@@ -146,7 +141,6 @@ function renderFunFacts() {
   container.innerHTML = items.map(i => `<div class="fun-fact-item"><div class="fact-title">${i.title}</div><div class="fact-player">${i.player}</div><div class="fact-desc">${i.desc}</div></div>`).join('');
 }
 
-// ============ РЕКОРДЫ ============
 function renderRecords() {
   if (!currentStats.records) return;
   const r = currentStats.records;
@@ -164,7 +158,6 @@ function renderRecords() {
   document.getElementById('card-rec-adr').onclick = adrRec ? () => openMapDetails(adrRec.map) : null;
 }
 
-// ============ ТАБЛИЦА ИГРОКОВ ============
 function renderPlayersTable() {
   const tbody = document.querySelector('#players-table tbody');
   const filterInput = document.getElementById('filter-name');
@@ -195,7 +188,6 @@ function renderPlayersTable() {
   draw();
 }
 
-// ============ КАРТЫ ============
 function renderMapStats() {
   const tbody = document.querySelector('#maps-table tbody');
   if (!tbody || !currentStats.mapStats) return;
@@ -232,7 +224,6 @@ function openMapDetails(mapName) {
 }
 function closeMapDetails() { document.getElementById('map-modal').style.display = 'none'; }
 
-// ============ ДУЭЛИ ============
 function initDuel() {
   const p1Select = document.getElementById('duel-p1');
   const p2Select = document.getElementById('duel-p2');
@@ -263,7 +254,6 @@ function initDuel() {
   };
 }
 
-// ============ ПРОФИЛЬ ============
 function openProfile(playerId) {
   const p = currentStats.players.find(pl => pl.id === playerId);
   if (!p) return;
@@ -318,7 +308,6 @@ window.onclick = function(event) {
   if (event.target == document.getElementById('balancer-modal')) closeBalancer();
 }
 
-// ============ БАЛАНСИРОВЩИК ============
 function getSavedKey() { return `savedTeams_${document.getElementById('tournament-select').value}`; }
 function initBalancer() {
   const openBtn = document.getElementById('open-balancer-btn');
@@ -425,7 +414,6 @@ function initBalancer() {
   }
 }
 
-// ============ СЕТКА ТУРНИРА ============
 function seedOrder(n) {
   if (n === 1) return [1];
   if (n === 2) return [1, 2];
@@ -600,7 +588,6 @@ function initOnlineDraftTab() {
   const roomScreen = document.getElementById('draft-room-screen');
   
   if (!peer) {
-    // Если еще не подключились
     lobbyScreen.style.display = 'block';
     roomScreen.style.display = 'none';
     
@@ -609,6 +596,8 @@ function initOnlineDraftTab() {
       if (!nick) return alert('Введите ник');
       myNickname = nick;
       isHost = true;
+      document.getElementById('create-room-btn').innerText = 'Создание...';
+      document.getElementById('create-room-btn').disabled = true;
       createPeer(true);
     };
 
@@ -619,10 +608,11 @@ function initOnlineDraftTab() {
       if (!code) return alert('Введите код комнаты');
       myNickname = nick;
       isHost = false;
+      document.getElementById('join-room-btn').innerText = 'Подключение...';
+      document.getElementById('join-room-btn').disabled = true;
       createPeer(false, code);
     };
   } else {
-    // Если уже в комнате
     lobbyScreen.style.display = 'none';
     roomScreen.style.display = 'block';
     renderOnlineRoom();
@@ -632,16 +622,40 @@ function initOnlineDraftTab() {
 function createPeer(host, joinCode) {
   if (peer) peer.destroy();
   
-  peer = new Peer(host ? undefined : undefined, { debug: 0 });
+  console.log('Инициализация PeerJS...');
+  
+  try {
+    const peerId = host ? generateRoomCode() : undefined;
+    peer = new Peer(peerId, { debug: 0 });
+  } catch (e) {
+    console.error('Ошибка инициализации PeerJS:', e);
+    alert('Ошибка инициализации. Проверьте консоль (F12).');
+    return;
+  }
+  
+  peer.on('error', (err) => {
+    console.error('PeerJS Error:', err);
+    let msg = 'Ошибка соединения: ' + err.type;
+    if (err.type === 'network') msg = 'Нет соединения с сигнальным сервером PeerJS. Проверьте интернет или VPN.';
+    if (err.type === 'peer-unavailable') msg = 'Комната не найдена. Проверьте код.';
+    if (err.type === 'unavailable-id') msg = 'Этот код комнаты уже занят.';
+    alert(msg);
+    
+    document.getElementById('create-room-btn').innerText = 'Создать комнату';
+    document.getElementById('create-room-btn').disabled = false;
+    document.getElementById('join-room-btn').innerText = 'Войти в комнату';
+    document.getElementById('join-room-btn').disabled = false;
+  });
   
   peer.on('open', (id) => {
+    console.log('PeerJS подключен. ID:', id);
+    
     if (host) {
-      // Мы хост. ID = код комнаты.
       onlineRoomState = {
         status: 'lobby',
         hostId: id,
         players: [{ id: id, name: myNickname, isCaptain: false, team: null }],
-        captains: [], // массив id
+        captains: [],
         turnIndex: 0,
         pickOrder: [],
         pool: []
@@ -650,22 +664,32 @@ function createPeer(host, joinCode) {
       document.getElementById('draft-connection-status').innerText = 'Вы хост. Ждем подключений...';
       showRoomScreen();
     } else {
-      // Мы клиент. Подключаемся к хасту.
+      console.log('Подключаемся к комнате:', joinCode);
       hostConn = peer.connect(joinCode, { metadata: { name: myNickname } });
+      
       hostConn.on('open', () => {
+        console.log('Соединение установлено');
         document.getElementById('draft-room-id').innerText = joinCode;
-        document.getElementById('draft-connection-status').innerText = 'Подключено к комнате. Ожидание данных...';
+        document.getElementById('draft-connection-status').innerText = 'Подключено. Ждем данных...';
+        hostConn.send({ type: 'JOIN', name: myNickname });
         showRoomScreen();
       });
+      
       hostConn.on('data', (data) => {
         if (data.type === 'STATE') {
           onlineRoomState = data.state;
           renderOnlineRoom();
         }
       });
+      
       hostConn.on('close', () => {
         alert('Соединение с хостом потеряно.');
         location.reload();
+      });
+      
+      hostConn.on('error', (err) => {
+        console.error('Ошибка соединения:', err);
+        alert('Не удалось подключиться к комнате. Возможно, код неверный или хост офлайн.');
       });
     }
   });
@@ -673,11 +697,13 @@ function createPeer(host, joinCode) {
   if (host) {
     peer.on('connection', (conn) => {
       clients.push(conn);
+      
       conn.on('data', (data) => {
         if (data.type === 'JOIN') {
-          // Добавляем игрока
-          onlineRoomState.players.push({ id: conn.peer, name: data.name, isCaptain: false, team: null });
-          broadcastState();
+          if (!onlineRoomState.players.find(p => p.id === conn.peer)) {
+            onlineRoomState.players.push({ id: conn.peer, name: data.name, isCaptain: false, team: null });
+            broadcastState();
+          }
         } else if (data.type === 'MAKE_CAPTAIN') {
           const p = onlineRoomState.players.find(x => x.id === data.playerId);
           if (p) { p.isCaptain = true; broadcastState(); }
@@ -695,9 +721,9 @@ function createPeer(host, joinCode) {
           }
         }
       });
+      
       conn.on('close', () => {
         clients = clients.filter(c => c !== conn);
-        // Удаляем игрока
         onlineRoomState.players = onlineRoomState.players.filter(p => p.id !== conn.peer);
         onlineRoomState.captains = onlineRoomState.captains.filter(id => id !== conn.peer);
         if (onlineRoomState.status === 'lobby') {
@@ -706,6 +732,13 @@ function createPeer(host, joinCode) {
       });
     });
   }
+}
+
+function generateRoomCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+  return code;
 }
 
 function showRoomScreen() {
@@ -733,8 +766,8 @@ function renderOnlineRoom() {
     container.innerHTML = onlineRoomState.players.map(p => {
       const isCap = p.isCaptain;
       const isMe = p.id === peer?.id;
-      const canToggle = isHost; // Только хост может назначать капитанов
-      const btnText = isCap ? 'Снять' : 'Сделать капитаном';
+      const canToggle = isHost;
+      const btnText = isCap ? 'Снять' : 'Капитан';
       return `<div class="draft-lobby-card ${isCap ? 'captain' : ''}">
         <span>${p.name} ${isMe ? '(Вы)' : ''}</span>
         ${canToggle ? `<button class="btn-outline" style="font-size: 0.7rem; padding: 4px 8px;" onclick="toggleCaptain('${p.id}')">${btnText}</button>` : (isCap ? '<span style="color:#ffd700; font-size:0.8rem;">Капитан</span>' : '')}
@@ -745,10 +778,7 @@ function renderOnlineRoom() {
     if (isHost) {
       startBtn.style.display = 'block';
       startBtn.disabled = onlineRoomState.captains.length !== 4 || onlineRoomState.players.length < 10;
-      startBtn.onclick = () => {
-        if (!isHost) return;
-        startOnlineDraftLogic();
-      };
+      startBtn.onclick = () => { if (isHost) startOnlineDraftLogic(); };
     } else {
       startBtn.style.display = 'none';
     }
@@ -764,9 +794,8 @@ function renderOnlineRoom() {
       ? `<span style="color:#ffd700;">Ваш ход! Выбирайте игрока.</span>` 
       : `Сейчас выбирает: <strong>${turnPlayer ? turnPlayer.name : '...'}</strong>`;
     
-    // Рендер 4 команд
     for (let i = 0; i < 4; i++) {
-      const capId = onlineRoomState.pickOrder[i]; // Капитаны в порядке пиков
+      const capId = onlineRoomState.pickOrder[i];
       const cap = onlineRoomState.players.find(p => p.id === capId);
       const col = document.getElementById(`team-col-${i}`);
       const isTurn = onlineRoomState.pickOrder[onlineRoomState.turnIndex] === capId;
@@ -781,7 +810,6 @@ function renderOnlineRoom() {
       }
     }
     
-    // Рендер пула
     const poolEl = document.getElementById('draft-online-pool');
     poolEl.innerHTML = onlineRoomState.pool.map(p => {
       const canPick = isMyTurn && onlineRoomState.status === 'picking';
@@ -798,34 +826,35 @@ function renderOnlineRoom() {
   }
 }
 
-// === ЛОГИКА ДРАФТА (Выполняется на хосте) ===
 function startOnlineDraftLogic() {
   if (!isHost) return;
   const captainIds = onlineRoomState.players.filter(p => p.isCaptain).map(p => p.id);
   if (captainIds.length !== 4) return alert('Нужно ровно 4 капитана');
   
-  // Сортируем капитанов по рейтингу, чтобы дать лучший пик слабейшему (опционально)
   const getRating = (id) => {
-    const stat = currentStats.players.find(p => p.name === onlineRoomState.players.find(x=>x.id===id).name);
+    const player = onlineRoomState.players.find(x => x.id === id);
+    const stat = currentStats.players.find(p => p.name === player.name);
     return stat ? (stat.avgRating ?? 0) : 0;
   };
-  captainIds.sort((a,b) => getRating(a) - getRating(b)); // Слабейший получает пик первым
+  captainIds.sort((a,b) => getRating(a) - getRating(b));
   
   onlineRoomState.status = 'picking';
-  onlineRoomState.pickOrder = captainIds; // В каком порядке они ходят (1-2-3-4)
+  onlineRoomState.pickOrder = captainIds;
   
-  // Ставим капитанов в их команды
   onlineRoomState.players.forEach(p => {
-    if (p.isCaptain) p.team = p.id;
+    if (p.isCaptain) {
+      p.team = p.id;
+      const stat = currentStats.players.find(x => x.name === p.name);
+      p.avatar = stat ? stat.avatar : '';
+      p.rating = stat ? stat.avgRating : 0;
+    }
   });
   
-  // Остальные в пул
   onlineRoomState.pool = onlineRoomState.players.filter(p => !p.isCaptain).map(p => {
     const stat = currentStats.players.find(x => x.name === p.name);
     return { ...p, avatar: stat ? stat.avatar : '', rating: stat ? stat.avgRating : 0 };
   });
   
-  // Сортируем пул по рейтингу (сильные сверху, чтобы капитаны дрались за них)
   onlineRoomState.pool.sort((a,b) => (b.rating || 0) - (a.rating || 0));
   
   onlineRoomState.turnIndex = 0;
@@ -842,25 +871,8 @@ function executePickLogic(playerId) {
   const player = onlineRoomState.pool[poolIdx];
   const turnCapId = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
   
-  // Добавляем в команду
   player.team = turnCapId;
-  // Убираем из пула
   onlineRoomState.pool.splice(poolIdx, 1);
-  
-  // Определяем следующего (Змейка)
-  // 0-1-2-3-3-2-1-0-0-1-2-3-3-2-1-0
-  const round = Math.floor(onlineRoomState.turnIndex / 4);
-  const nextIdx = (onlineRoomState.turnIndex + 1) % 16; // Всего 16 пиков (по 4 на каждого)
-  
-  // Формула змейки: если четный круг -> 1,2,3,4, если нечетный -> 4,3,2,1
-  const step = nextIdx % 4;
-  const currentRound = Math.floor(nextIdx / 4);
-  let nextCaptainIndex;
-  if (currentRound % 2 === 0) {
-    nextCaptainIndex = step;
-  } else {
-    nextCaptainIndex = 3 - step;
-  }
   
   onlineRoomState.turnIndex++;
   
@@ -876,6 +888,7 @@ window.toggleCaptain = function(id) {
   const p = onlineRoomState.players.find(x => x.id === id);
   if (p) {
     p.isCaptain = !p.isCaptain;
+    onlineRoomState.captains = onlineRoomState.players.filter(x => x.isCaptain).map(x => x.id);
     broadcastState();
   }
 };

@@ -10,8 +10,7 @@
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Подключаем PeerJS для P2P соединения -->
-  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   
@@ -176,7 +175,6 @@
 
       <!-- ОНЛАЙН ДРАФТ -->
       <div class="tab-content" id="tab-draft">
-        <!-- Экран лобби (до создания/входа) -->
         <div id="draft-lobby-screen">
           <section class="glass-card interactive-card" style="max-width: 500px; margin: 0 auto;">
             <div class="card-header"><h2>Онлайн Драфт</h2></div>
@@ -196,7 +194,6 @@
           </section>
         </div>
 
-        <!-- Экран драфта (когда в комнате) -->
         <div id="draft-room-screen" style="display: none;">
           <section class="glass-card interactive-card">
             <div class="card-header">
@@ -204,14 +201,12 @@
               <div id="draft-connection-status" style="font-size: 0.85rem; color: var(--text-muted);"></div>
             </div>
             
-            <!-- Фаза 1: Лобби (набор игроков) -->
             <div id="draft-phase-lobby">
               <p class="text-muted mb-10">Ожидание игроков. Назначьте 4 капитанов.</p>
               <div id="draft-lobby-players" class="draft-lobby-grid"></div>
               <button id="start-online-draft-btn" class="btn-primary mt-20" disabled>Начать драфт</button>
             </div>
 
-            <!-- Фаза 2: Пики -->
             <div id="draft-phase-picking" style="display: none;">
               <div class="draft-turn-indicator" id="draft-online-turn"></div>
               <div class="draft-4teams-grid">
