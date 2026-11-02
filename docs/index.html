@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CS2 Stats | Cybershoke</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4d6bfe">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -38,13 +40,7 @@
           <div class="table-container">
             <table class="stats-table" id="players-table">
               <thead>
-                <tr>
-                  <th>Игрок</th>
-                  <th>Форма</th>
-                  <th>Карты</th>
-                  <th>K/D</th>
-                  <th>Рейтинг</th>
-                </tr>
+                <tr><th>Игрок</th><th>Форма</th><th>Карты</th><th>K/D</th><th>Рейтинг</th></tr>
               </thead>
               <tbody></tbody>
             </table>
@@ -82,7 +78,6 @@
           <div id="duel-result" class="duel-result"></div>
         </section>
 
-        <!-- Кнопка вызова балансировщика -->
         <section class="glass-card mt-20">
           <div class="card-header"><h2>Балансировщик 5х5</h2></div>
           <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Соберите ровно 10 бойцов и разделите их на две равные команды.</p>
@@ -102,7 +97,7 @@
     </main>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО ПРОФИЛЯ -->
+  <!-- МОДАЛКА ПРОФИЛЯ -->
   <div id="profile-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeProfile()">&times;</span>
@@ -117,6 +112,7 @@
         <div class="p-stat"><span>ADR</span><strong id="prof-adr">0</strong></div>
         <div class="p-stat"><span>KAST</span><strong id="prof-kast">0</strong></div>
       </div>
+      <button id="share-btn" class="btn-primary btn-telegram">Поделиться в Telegram</button>
       <div class="profile-chart-container"><canvas id="prof-chart"></canvas></div>
       <div class="profile-history">
         <h3>История матчей</h3>
@@ -127,7 +123,7 @@
     </div>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО КАРТЫ -->
+  <!-- МОДАЛКА КАРТЫ -->
   <div id="map-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeMapDetails()">&times;</span>
@@ -143,29 +139,43 @@
     </div>
   </div>
 
-  <!-- 🚀 НОВОЕ МОДАЛЬНОЕ ОКНО БАЛАНСИРОВЩИКА (TAB MENU) -->
+  <!-- МОДАЛКА БАЛАНСИРОВЩИКА -->
   <div id="balancer-modal" class="modal">
     <div class="modal-content glass-card balancer-modal-content">
       <span class="close-btn" onclick="closeBalancer()">&times;</span>
-      
       <div class="card-header" style="margin-bottom: 15px;">
         <h2>Балансировщик 5х5</h2>
         <span id="selected-count" class="balance-counter">0 / 10</span>
       </div>
-      
       <div class="balancer-tools">
         <input type="text" id="player-search" class="input-search" style="flex:1;" placeholder="Найти игрока...">
-        <button id="random-btn" class="btn-icon" title="Выбрать случайных 10">🎲</button>
-        <button id="clear-btn" class="btn-icon" title="Очистить выбор">✖</button>
+        <button id="random-btn" class="btn-icon" title="Случайные 10">🎲</button>
+        <button id="clear-btn" class="btn-icon" title="Очистить">✖</button>
       </div>
 
-      <!-- Сетка игроков -->
       <div id="players-grid" class="players-grid"></div>
-
       <button id="balance-btn" class="btn-primary mt-20" disabled>Разделить на команды</button>
-      
-      <!-- Результат разделения (Табло) -->
+
+      <!-- РЕЗУЛЬТАТ РАЗДЕЛЕНИЯ -->
       <div id="balance-result" class="balance-result-modal"></div>
+
+      <!-- КНОПКИ ВЫБОРА КАРТЫ -->
+      <div id="map-actions" class="map-actions">
+        <button id="random-map-btn" class="btn-primary" style="background: #4d6bfe;">🎲 Случайная карта</button>
+        <button id="balanced-map-btn" class="btn-primary" style="background: #10b981;">⚖️ Балансная карта</button>
+      </div>
+
+      <!-- РЕЗУЛЬТАТ ВЫБОРА КАРТЫ -->
+      <div id="map-result" class="map-result-box"></div>
+
+      <!-- СОХРАНЁННЫЕ СОСТАВЫ -->
+      <div id="saved-teams-section" class="saved-teams-section">
+        <div class="saved-header">
+          <h3>💾 Сохранённые составы</h3>
+          <button id="clear-saved-btn" class="btn-icon" style="font-size: 0.8rem; padding: 4px 10px; min-width: auto;">Удалить</button>
+        </div>
+        <div id="saved-teams-content"></div>
+      </div>
     </div>
   </div>
 

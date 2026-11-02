@@ -2,13 +2,13 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fetch from 'node-fetch'; // нужно установить: npm install node-fetch
+import fetch from 'node-fetch'; 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MATCHES_DIR = path.join(__dirname, 'data', 'matches');
 const OUTPUT_FILE = path.join(__dirname, 'docs', 'data', 'stats.json');
 
-// 🔑 ВСТАВЬ СВОЙ КЛЮЧ STEAM API СЮДА
+// ⚠️ ВСТАВЬ СВОЙ КЛЮЧ STEAM API СЮДА
 const STEAM_API_KEY = 'ТВОЙ_КЛЮЧ_ЗДЕСЬ';
 
 function num(val) {
@@ -24,7 +24,6 @@ async function fetchSteamAvatars(steamIds) {
     return avatars;
   }
 
-  // Steam API принимает до 100 ID за раз
   const chunks = [];
   for (let i = 0; i < steamIds.length; i += 100) {
     chunks.push(steamIds.slice(i, i + 100));
@@ -41,7 +40,7 @@ async function fetchSteamAvatars(steamIds) {
       
       if (data.response && data.response.players) {
         for (const player of data.response.players) {
-          avatars.set(player.steamid, player.avatarmedium); // или avatarfull
+          avatars.set(player.steamid, player.avatarmedium); 
         }
       }
     } catch (err) {
@@ -117,8 +116,9 @@ function calculateStats(matches, steamAvatars) {
 
         if (ratingVal !== null) { mapStatsRaw[mapName].ratingSum += ratingVal; mapStatsRaw[mapName].ratingCount += 1; }
 
+        // ВОТ ЗДЕСЬ ДОБАВЛЕН ID, ЧТОБЫ БАЛАНСИРОВЩИК МОГ СОПОСТАВИТЬ ИГРОКОВ
         if (!mapStatsRaw[mapName].playersMap.has(pid)) {
-            mapStatsRaw[mapName].playersMap.set(pid, { name: p.name, avatar: '', matches: 0, kills: 0, deaths: 0, ratingSum: 0 });
+            mapStatsRaw[mapName].playersMap.set(pid, { id: pid, name: p.name, avatar: '', matches: 0, kills: 0, deaths: 0, ratingSum: 0 });
         }
         let mp = mapStatsRaw[mapName].playersMap.get(pid);
         mp.matches += 1; mp.kills += k; mp.deaths += d;
@@ -133,12 +133,9 @@ function calculateStats(matches, steamAvatars) {
     }
   }
 
-  // Используем реальные аватарки из Steam API, если они есть
   const getAvatar = (id, name) => {
       const steamAvatar = steamAvatars.get(String(id));
       if (steamAvatar) return steamAvatar;
-      
-      // Заглушка, если аватарка не найдена
       return `https://ui-avatars.com/api/?name=${encodeURIComponent(name || '?')}&background=4d6bfe&color=fff&size=128&bold=true&rounded=true`;
   };
 
@@ -183,7 +180,7 @@ function calculateStats(matches, steamAvatars) {
         .map(pl => ({ ...pl, kd: pl.deaths > 0 ? +(pl.kills / pl.deaths).toFixed(2) : pl.kills, avgRating: pl.matches > 0 ? +(pl.ratingSum / pl.matches).toFixed(2) : 0 }))
         .sort((a,b) => b.avgRating - a.avgRating);
       const updatedTop = topPlayers.map(tp => {
-          const found = players.find(p => p.name === tp.name);
+          const found = players.find(p => p.id === tp.id);
           return { ...tp, avatar: found ? found.avatar : '' };
       });
       return { map, matches: data.matches, avgKd: data.totalDeaths > 0 ? +(data.totalKills / data.totalDeaths).toFixed(2) : data.totalKills, avgRating: data.ratingCount > 0 ? +(data.ratingSum / data.ratingCount).toFixed(2) : 0, topPlayers: updatedTop };
@@ -209,7 +206,6 @@ async function main() {
     if (!tournamentsMap.has(tName)) tournamentsMap.set(tName, []);
     tournamentsMap.get(tName).push(match);
 
-    // Собираем все Steam ID для запроса аватарок
     for (const map of match.maps || []) {
         for (const p of map.players || []) {
             if (p.id && !p.id.startsWith('name_')) {
@@ -219,7 +215,6 @@ async function main() {
     }
   }
 
-  // Получаем аватарки из Steam API
   console.log(`Запрос аватарок для ${allSteamIds.size} игроков...`);
   const steamAvatars = await fetchSteamAvatars([...allSteamIds]);
 
