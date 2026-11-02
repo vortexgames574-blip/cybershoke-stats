@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS2 Stats | Dad's Edition</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">CS2</span>
+        <span class="logo-text">DAD'S<span>HUB</span></span>
+      </div>
+      <div id="meta-info" class="meta-info">Загрузка...</div>
+    </header>
+
+    <main class="main-grid">
+      <div class="left-col">
+        <!-- PLAYERS TABLE -->
+        <section class="glass-card">
+          <div class="card-header">
+            <h2>Наши легенды <span style="font-size:0.7rem;color:var(--text-muted);font-weight:400;">(нажми на ник)</span></h2>
+            <div class="controls">
+              <input type="text" id="filter-name" class="input-search" placeholder="Поиск...">
+              <select id="sort-by" class="select-sort">
+                <option value="rating">По рейтингу</option>
+                <option value="kd">По K/D</option>
+                <option value="deaths">По смертям</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="stats-table" id="players-table">
+              <thead>
+                <tr>
+                  <th>Игрок</th>
+                  <th>Карты</th>
+                  <th>K/D</th>
+                  <th>Рейтинг</th>
+                  <th>Титул</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- МЕМНАЯ СТАТИСТИКА -->
+        <section class="glass-card mt-20">
+          <div class="card-header">
+            <h2>Мир глазами статистики</h2>
+          </div>
+          <div class="fun-stats-grid">
+            <div class="fun-stat-box">
+              <span class="fun-icon">🔫</span>
+              <div class="fun-val" id="stat-kills">0</div>
+              <div class="fun-desc">Всего убийств. Это население небольшой деревни.</div>
+            </div>
+            <div class="fun-stat-box">
+              <span class="fun-icon">💀</span>
+              <div class="fun-val" id="stat-deaths">0</div>
+              <div class="fun-desc">Раз смертей. Хватит, чтобы завалить всё поле боя.</div>
+            </div>
+            <div class="fun-stat-box">
+              <span class="fun-icon">⏳</span>
+              <div class="fun-val" id="stat-hours">0</div>
+              <div class="fun-desc">Часов в игре. Можно было посмотреть "Властелина Колец".</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="right-col">
+        <!-- ДУЭЛИ -->
+        <section class="glass-card" style="border-color: #ef4444;">
+          <div class="card-header"><h2 style="color: #ef4444;">Дуэль (Кто днище?)</h2></div>
+          <div class="duel-selects">
+            <select id="duel-p1" class="select-sort" style="width: 100%;"></select>
+            <div class="vs-text">VS</div>
+            <select id="duel-p2" class="select-sort" style="width: 100%;"></select>
+          </div>
+          <button id="duel-btn" class="btn-primary" style="background:#ef4444;">Столкнуть лбами</button>
+          <div id="duel-result" class="duel-result"></div>
+        </section>
+
+        <!-- СТАТИСТИКА КАРТ -->
+        <section class="glass-card mt-20">
+          <div class="card-header"><h2>Статистика карт</h2></div>
+          <div class="table-container" style="max-height: 250px; overflow-y: auto;">
+            <table class="stats-table" id="maps-table">
+              <thead>
+                <tr><th>Карта</th><th>Игр</th><th>Ср. K/D</th><th>Ср. Рейтинг</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="glass-card mt-20">
+          <div class="card-header"><h2>Собрать тиму</h2></div>
+          <div id="balancer-players" class="player-checks"></div>
+          <button id="balance-btn" class="btn-primary">Разделить 5х5</button>
+          <div id="balance-result" class="balance-result"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО ПРОФИЛЯ -->
+  <div id="profile-modal" class="modal">
+    <div class="modal-content glass-card">
+      <span class="close-btn" onclick="closeProfile()">&times;</span>
+      <div class="profile-header">
+        <img id="prof-avatar" class="prof-avatar" src="" alt="Avatar">
+        <div class="prof-info">
+          <h2 id="prof-name">Name</h2>
+          <span id="prof-title" class="prof-title">Title</span>
+        </div>
+      </div>
+      <div class="profile-stats-grid">
+        <div class="p-stat"><span>Карты</span><strong id="prof-matches">0</strong></div>
+        <div class="p-stat"><span>K/D</span><strong id="prof-kd">0</strong></div>
+        <div class="p-stat"><span>Рейтинг</span><strong id="prof-rating">0</strong></div>
+        <div class="p-stat"><span>ADR</span><strong id="prof-adr">0</strong></div>
+        <div class="p-stat"><span>KAST</span><strong id="prof-kast">0</strong></div>
+      </div>
+      <div class="profile-chart-container"><canvas id="prof-chart"></canvas></div>
+      <div class="profile-history">
+        <h3>История матчей</h3>
+        <div class="table-container" style="max-height: 300px; overflow-y: auto;">
+          <table class="stats-table">
+            <thead><tr><th>Дата</th><th>Карта</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Рейтинг</th></tr></thead>
+            <tbody id="prof-match-history"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

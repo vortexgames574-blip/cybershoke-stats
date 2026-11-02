@@ -1,0 +1,112 @@
+{
+  "matchId": "13358986",
+  "url": "https://cybershoke.net/ru/match/13358986",
+  "date": "2026-11-02T18:36:33.732Z",
+  "maps": [
+    {
+      "map": "de_mirage",
+      "players": [
+        {
+          "id": "76561198872139873",
+          "name": "1lpk",
+          "kills": 17,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 129,
+          "kast": 94,
+          "rating": 1.79
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "kills": 18,
+          "deaths": 9,
+          "assists": 0,
+          "adr": 100,
+          "kast": 81,
+          "rating": 1.66
+        },
+        {
+          "id": "76561199210250164",
+          "name": "s1slw",
+          "kills": 13,
+          "deaths": 8,
+          "assists": 0,
+          "adr": 66,
+          "kast": 81,
+          "rating": 1.32
+        },
+        {
+          "id": "76561198283381727",
+          "name": "St1gmat",
+          "kills": 13,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 92,
+          "kast": 69,
+          "rating": 1.25
+        },
+        {
+          "id": "76561198210127765",
+          "name": "blackpolosa",
+          "kills": 13,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 92,
+          "kast": 81,
+          "rating": 1.25
+        },
+        {
+          "id": "76561198015424675",
+          "name": "tolya800x600",
+          "kills": 13,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 105,
+          "kast": 75,
+          "rating": 1.21
+        },
+        {
+          "id": "76561198128494347",
+          "name": "Игрок",
+          "kills": 9,
+          "deaths": 8,
+          "assists": 0,
+          "adr": 63,
+          "kast": 75,
+          "rating": 1.05
+        },
+        {
+          "id": "76561198272167310",
+          "name": "Изумительные Брючки.",
+          "kills": 9,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 77,
+          "kast": 56,
+          "rating": 0.72
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "kills": 4,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 37,
+          "kast": 56,
+          "rating": 0.35
+        },
+        {
+          "id": "76561198818222401",
+          "name": "Kyo  Ilonmax8",
+          "kills": 5,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 42,
+          "kast": 38,
+          "rating": 0.26
+        }
+      ]
+    }
+  ]
+}

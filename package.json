@@ -1,0 +1,16 @@
+{
+  "name": "cybershoke-stats",
+  "version": "1.0.0",
+  "description": "Статистика матчей Cybershoke",
+  "main": "build.js",
+  "type": "module",
+  "scripts": {
+    "collect": "node collect.js",
+    "build": "node build.js",
+    "update": "npm run collect && npm run build"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0",
+    "fs-extra": "^11.1.1"
+  }
+}

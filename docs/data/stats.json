@@ -1,0 +1,2050 @@
+{
+  "generatedAt": "2026-11-02T18:43:57.458Z",
+  "matchesCount": 9,
+  "players": [
+    {
+      "id": "76561199542530681",
+      "name": "AuraTeam",
+      "lastPlayed": "2026-11-02T18:32:59.782Z",
+      "matches": 5,
+      "kills": 98,
+      "deaths": 66,
+      "assists": 0,
+      "adrSum": 555,
+      "adrCount": 5,
+      "kastSum": 406,
+      "kastCount": 5,
+      "ratingSum": 7.71,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "rating": 1.82
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "rating": 1.65
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 1.25
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 1.57
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "rating": 1.42
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "map": "de_inferno",
+          "kills": 21,
+          "deaths": 12,
+          "assists": 0,
+          "adr": 127,
+          "kast": 88,
+          "rating": 1.82
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "map": "de_nuke",
+          "kills": 17,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 119,
+          "kast": 81,
+          "rating": 1.65
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_anubis",
+          "kills": 20,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 95,
+          "kast": 63,
+          "rating": 1.25
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_inferno",
+          "kills": 18,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 103,
+          "kast": 90,
+          "rating": 1.57
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "map": "de_ancient",
+          "kills": 22,
+          "deaths": 19,
+          "assists": 0,
+          "adr": 111,
+          "kast": 84,
+          "rating": 1.42
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561199542530681_medium.jpg",
+      "kd": 1.48,
+      "avgRating": 1.54,
+      "avgAdr": 111,
+      "avgKast": 81.2,
+      "displayName": "AuraTeam",
+      "title": "Киберспортсмен 🏆"
+    },
+    {
+      "id": "76561198053530322",
+      "name": "ZAZA_",
+      "lastPlayed": "2026-11-02T18:36:33.732Z",
+      "matches": 5,
+      "kills": 91,
+      "deaths": 57,
+      "assists": 0,
+      "adrSum": 495,
+      "adrCount": 5,
+      "kastSum": 413,
+      "kastCount": 5,
+      "ratingSum": 7.619999999999999,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "rating": 1.66
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "rating": 2.31
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "rating": 1.5
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "rating": 0.75
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "rating": 1.4
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "map": "de_mirage",
+          "kills": 18,
+          "deaths": 9,
+          "assists": 0,
+          "adr": 100,
+          "kast": 81,
+          "rating": 1.66
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "map": "de_dust2",
+          "kills": 29,
+          "deaths": 9,
+          "assists": 0,
+          "adr": 148,
+          "kast": 95,
+          "rating": 2.31
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "map": "de_cache",
+          "kills": 21,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 94,
+          "kast": 86,
+          "rating": 1.5
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "map": "de_nuke",
+          "kills": 7,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 72,
+          "kast": 75,
+          "rating": 0.75
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "map": "de_inferno",
+          "kills": 16,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 81,
+          "kast": 76,
+          "rating": 1.4
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198053530322_medium.jpg",
+      "kd": 1.6,
+      "avgRating": 1.52,
+      "avgAdr": 99,
+      "avgKast": 82.6,
+      "displayName": "ZAZA_",
+      "title": "Киберспортсмен 🏆"
+    },
+    {
+      "id": "76561198872139873",
+      "name": "1lpk",
+      "lastPlayed": "2026-11-02T18:36:33.732Z",
+      "matches": 5,
+      "kills": 88,
+      "deaths": 56,
+      "assists": 0,
+      "adrSum": 523,
+      "adrCount": 5,
+      "kastSum": 407,
+      "kastCount": 5,
+      "ratingSum": 7.569999999999999,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "rating": 1.79
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "rating": 1.52
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "rating": 1.74
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "rating": 1.09
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "rating": 1.43
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "map": "de_mirage",
+          "kills": 17,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 129,
+          "kast": 94,
+          "rating": 1.79
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "map": "de_dust2",
+          "kills": 18,
+          "deaths": 9,
+          "assists": 0,
+          "adr": 93,
+          "kast": 79,
+          "rating": 1.52
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "map": "de_cache",
+          "kills": 27,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 112,
+          "kast": 77,
+          "rating": 1.74
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "map": "de_nuke",
+          "kills": 12,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 87,
+          "kast": 75,
+          "rating": 1.09
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "map": "de_inferno",
+          "kills": 14,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 102,
+          "kast": 82,
+          "rating": 1.43
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198872139873_medium.jpg",
+      "kd": 1.57,
+      "avgRating": 1.51,
+      "avgAdr": 104.6,
+      "avgKast": 81.4,
+      "displayName": "1lpk",
+      "title": "Ветеран 🎖️"
+    },
+    {
+      "id": "76561198054507577",
+      "name": "kvsmstr",
+      "lastPlayed": "2026-11-02T18:32:59.782Z",
+      "matches": 5,
+      "kills": 85,
+      "deaths": 62,
+      "assists": 0,
+      "adrSum": 504,
+      "adrCount": 5,
+      "kastSum": 430,
+      "kastCount": 5,
+      "ratingSum": 7.300000000000001,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "rating": 1.38
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "rating": 1.84
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 1.19
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 1.61
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "rating": 1.28
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "map": "de_inferno",
+          "kills": 13,
+          "deaths": 9,
+          "assists": 0,
+          "adr": 85,
+          "kast": 88,
+          "rating": 1.38
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "map": "de_nuke",
+          "kills": 17,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 132,
+          "kast": 100,
+          "rating": 1.84
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_anubis",
+          "kills": 18,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 89,
+          "kast": 67,
+          "rating": 1.19
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_inferno",
+          "kills": 17,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 103,
+          "kast": 95,
+          "rating": 1.61
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "map": "de_ancient",
+          "kills": 20,
+          "deaths": 19,
+          "assists": 0,
+          "adr": 95,
+          "kast": 80,
+          "rating": 1.28
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198054507577_medium.jpg",
+      "kd": 1.37,
+      "avgRating": 1.46,
+      "avgAdr": 100.8,
+      "avgKast": 86,
+      "displayName": "kvsmstr",
+      "title": "Киберспортсмен 🏆"
+    },
+    {
+      "id": "76561199417613918",
+      "name": "ЯнаЦист",
+      "lastPlayed": "2026-11-02T18:32:59.782Z",
+      "matches": 5,
+      "kills": 88,
+      "deaths": 54,
+      "assists": 0,
+      "adrSum": 458,
+      "adrCount": 5,
+      "kastSum": 403,
+      "kastCount": 5,
+      "ratingSum": 7.16,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "rating": 1.56
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "rating": 1.32
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 1.56
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 1.56
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "rating": 1.16
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "map": "de_inferno",
+          "kills": 15,
+          "deaths": 6,
+          "assists": 0,
+          "adr": 81,
+          "kast": 88,
+          "rating": 1.56
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "map": "de_nuke",
+          "kills": 12,
+          "deaths": 8,
+          "assists": 0,
+          "adr": 88,
+          "kast": 81,
+          "rating": 1.32
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_anubis",
+          "kills": 23,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 103,
+          "kast": 83,
+          "rating": 1.56
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_inferno",
+          "kills": 20,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 105,
+          "kast": 75,
+          "rating": 1.56
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "map": "de_ancient",
+          "kills": 18,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 81,
+          "kast": 76,
+          "rating": 1.16
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561199417613918_medium.jpg",
+      "kd": 1.63,
+      "avgRating": 1.43,
+      "avgAdr": 91.6,
+      "avgKast": 80.6,
+      "displayName": "ЯнаЦист",
+      "title": "Киберспортсмен 🏆"
+    },
+    {
+      "id": "76561199467682493",
+      "name": "Господин Босс",
+      "lastPlayed": "2026-11-02T18:32:59.782Z",
+      "matches": 5,
+      "kills": 79,
+      "deaths": 59,
+      "assists": 0,
+      "adrSum": 403,
+      "adrCount": 5,
+      "kastSum": 371,
+      "kastCount": 5,
+      "ratingSum": 6.300000000000001,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "rating": 1.43
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "rating": 1.59
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 0.97
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 1.31
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "rating": 1
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "map": "de_inferno",
+          "kills": 16,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 94,
+          "kast": 76,
+          "rating": 1.43
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "map": "de_nuke",
+          "kills": 17,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 112,
+          "kast": 81,
+          "rating": 1.59
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_anubis",
+          "kills": 15,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 65,
+          "kast": 67,
+          "rating": 0.97
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_inferno",
+          "kills": 15,
+          "deaths": 8,
+          "assists": 0,
+          "adr": 77,
+          "kast": 75,
+          "rating": 1.31
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "map": "de_ancient",
+          "kills": 16,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 55,
+          "kast": 72,
+          "rating": 1
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561199467682493_medium.jpg",
+      "kd": 1.34,
+      "avgRating": 1.26,
+      "avgAdr": 80.6,
+      "avgKast": 74.2,
+      "displayName": "Господин Босс",
+      "title": "Киберспортсмен 🏆"
+    },
+    {
+      "id": "76561198283381727",
+      "name": "St1gmat",
+      "lastPlayed": "2026-11-02T18:36:33.732Z",
+      "matches": 5,
+      "kills": 70,
+      "deaths": 64,
+      "assists": 0,
+      "adrSum": 463,
+      "adrCount": 5,
+      "kastSum": 367,
+      "kastCount": 5,
+      "ratingSum": 6.1,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "rating": 1.25
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "rating": 1.13
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "rating": 1.07
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "rating": 1.17
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "rating": 1.48
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "map": "de_mirage",
+          "kills": 13,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 92,
+          "kast": 69,
+          "rating": 1.25
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "map": "de_dust2",
+          "kills": 13,
+          "deaths": 12,
+          "assists": 0,
+          "adr": 81,
+          "kast": 74,
+          "rating": 1.13
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "map": "de_cache",
+          "kills": 15,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 71,
+          "kast": 73,
+          "rating": 1.07
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "map": "de_nuke",
+          "kills": 14,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 98,
+          "kast": 75,
+          "rating": 1.17
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "map": "de_inferno",
+          "kills": 15,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 121,
+          "kast": 76,
+          "rating": 1.48
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198283381727_medium.jpg",
+      "kd": 1.09,
+      "avgRating": 1.22,
+      "avgAdr": 92.6,
+      "avgKast": 73.4,
+      "displayName": "St1gmat",
+      "title": "Боец 🥊"
+    },
+    {
+      "id": "76561199109745015",
+      "name": "BB-00",
+      "lastPlayed": "2026-11-01T23:41:29.968Z",
+      "matches": 5,
+      "kills": 89,
+      "deaths": 79,
+      "assists": 0,
+      "adrSum": 483,
+      "adrCount": 5,
+      "kastSum": 331,
+      "kastCount": 5,
+      "ratingSum": 5.85,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 1.54
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 0.64
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "rating": 1.08
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "rating": 1.36
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "rating": 1.23
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_anubis",
+          "kills": 27,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 103,
+          "kast": 67,
+          "rating": 1.54
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_inferno",
+          "kills": 7,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 73,
+          "kast": 65,
+          "rating": 0.64
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "map": "de_inferno",
+          "kills": 14,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 95,
+          "kast": 59,
+          "rating": 1.08
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "map": "de_ancient",
+          "kills": 22,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 121,
+          "kast": 68,
+          "rating": 1.36
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "map": "de_anubis",
+          "kills": 19,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 91,
+          "kast": 72,
+          "rating": 1.23
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561199109745015_medium.jpg",
+      "kd": 1.13,
+      "avgRating": 1.17,
+      "avgAdr": 96.6,
+      "avgKast": 66.2,
+      "displayName": "BB-00 (5015)",
+      "title": "Боец 🥊"
+    },
+    {
+      "id": "76561199022192304",
+      "name": "Pizdets_tip",
+      "lastPlayed": "2026-11-01T23:41:29.968Z",
+      "matches": 5,
+      "kills": 80,
+      "deaths": 84,
+      "assists": 0,
+      "adrSum": 404,
+      "adrCount": 5,
+      "kastSum": 360,
+      "kastCount": 5,
+      "ratingSum": 5.51,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 1.15
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 0.84
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "rating": 1.49
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "rating": 0.87
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "rating": 1.16
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_anubis",
+          "kills": 16,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 91,
+          "kast": 79,
+          "rating": 1.15
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_inferno",
+          "kills": 13,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 63,
+          "kast": 65,
+          "rating": 0.84
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "map": "de_inferno",
+          "kills": 19,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 100,
+          "kast": 76,
+          "rating": 1.49
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "map": "de_ancient",
+          "kills": 16,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 61,
+          "kast": 60,
+          "rating": 0.87
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "map": "de_anubis",
+          "kills": 16,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 89,
+          "kast": 80,
+          "rating": 1.16
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561199022192304_medium.jpg",
+      "kd": 0.95,
+      "avgRating": 1.1,
+      "avgAdr": 80.8,
+      "avgKast": 72,
+      "displayName": "Pizdets_tip",
+      "title": "Боец 🥊"
+    },
+    {
+      "id": "76561198210127765",
+      "name": "blackpolosa",
+      "lastPlayed": "2026-11-02T18:36:33.732Z",
+      "matches": 5,
+      "kills": 70,
+      "deaths": 77,
+      "assists": 0,
+      "adrSum": 405,
+      "adrCount": 5,
+      "kastSum": 351,
+      "kastCount": 5,
+      "ratingSum": 5.28,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "rating": 1.25
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "rating": 1.17
+        },
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "rating": 0.89
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "rating": 1.06
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "rating": 0.91
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "map": "de_mirage",
+          "kills": 13,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 92,
+          "kast": 81,
+          "rating": 1.25
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "map": "de_dust2",
+          "kills": 16,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 93,
+          "kast": 63,
+          "rating": 1.17
+        },
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "map": "de_inferno",
+          "kills": 10,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 69,
+          "kast": 71,
+          "rating": 0.89
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "map": "de_cache",
+          "kills": 16,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 91,
+          "kast": 68,
+          "rating": 1.06
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "map": "de_anubis",
+          "kills": 15,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 60,
+          "kast": 68,
+          "rating": 0.91
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198210127765_medium.jpg",
+      "kd": 0.91,
+      "avgRating": 1.06,
+      "avgAdr": 81,
+      "avgKast": 70.2,
+      "displayName": "blackpolosa",
+      "title": "Боец 🥊"
+    },
+    {
+      "id": "76561198128494347",
+      "name": "Игрок",
+      "lastPlayed": "2026-11-02T18:36:33.732Z",
+      "matches": 5,
+      "kills": 54,
+      "deaths": 57,
+      "assists": 0,
+      "adrSum": 326,
+      "adrCount": 5,
+      "kastSum": 357,
+      "kastCount": 5,
+      "ratingSum": 4.92,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "rating": 1.05
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "rating": 1.02
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "rating": 1.17
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "rating": 0.34
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "rating": 1.34
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "map": "de_mirage",
+          "kills": 9,
+          "deaths": 8,
+          "assists": 0,
+          "adr": 63,
+          "kast": 75,
+          "rating": 1.05
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "map": "de_dust2",
+          "kills": 11,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 59,
+          "kast": 74,
+          "rating": 1.02
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "map": "de_cache",
+          "kills": 15,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 88,
+          "kast": 82,
+          "rating": 1.17
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "map": "de_nuke",
+          "kills": 5,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 41,
+          "kast": 50,
+          "rating": 0.34
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "map": "de_inferno",
+          "kills": 14,
+          "deaths": 8,
+          "assists": 0,
+          "adr": 75,
+          "kast": 76,
+          "rating": 1.34
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198128494347_medium.jpg",
+      "kd": 0.95,
+      "avgRating": 0.98,
+      "avgAdr": 65.2,
+      "avgKast": 71.4,
+      "displayName": "Игрок",
+      "title": "Боец 🥊"
+    },
+    {
+      "id": "76561198090688036",
+      "name": "Kara7evich",
+      "lastPlayed": "2026-11-01T23:41:29.968Z",
+      "matches": 5,
+      "kills": 74,
+      "deaths": 82,
+      "assists": 0,
+      "adrSum": 374,
+      "adrCount": 5,
+      "kastSum": 329,
+      "kastCount": 5,
+      "ratingSum": 4.83,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 0.8
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 0.84
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "rating": 0.71
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "rating": 0.88
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "rating": 1.6
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_anubis",
+          "kills": 11,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 66,
+          "kast": 71,
+          "rating": 0.8
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_inferno",
+          "kills": 14,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 75,
+          "kast": 55,
+          "rating": 0.84
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "map": "de_inferno",
+          "kills": 9,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 57,
+          "kast": 59,
+          "rating": 0.71
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "map": "de_ancient",
+          "kills": 13,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 82,
+          "kast": 60,
+          "rating": 0.88
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "map": "de_anubis",
+          "kills": 27,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 94,
+          "kast": 84,
+          "rating": 1.6
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198090688036_medium.jpg",
+      "kd": 0.9,
+      "avgRating": 0.97,
+      "avgAdr": 74.8,
+      "avgKast": 65.8,
+      "displayName": "Kara7evich",
+      "title": "Боец 🥊"
+    },
+    {
+      "id": "76561199210250164",
+      "name": "s1slw",
+      "lastPlayed": "2026-11-02T18:36:33.732Z",
+      "matches": 5,
+      "kills": 49,
+      "deaths": 62,
+      "assists": 0,
+      "adrSum": 284,
+      "adrCount": 5,
+      "kastSum": 343,
+      "kastCount": 5,
+      "ratingSum": 4.34,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "rating": 1.32
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "rating": 0.7
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "rating": 1.02
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "rating": 0.49
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "rating": 0.81
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "map": "de_mirage",
+          "kills": 13,
+          "deaths": 8,
+          "assists": 0,
+          "adr": 66,
+          "kast": 81,
+          "rating": 1.32
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "map": "de_dust2",
+          "kills": 7,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 51,
+          "kast": 68,
+          "rating": 0.7
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "map": "de_cache",
+          "kills": 13,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 74,
+          "kast": 73,
+          "rating": 1.02
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "map": "de_nuke",
+          "kills": 7,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 52,
+          "kast": 56,
+          "rating": 0.49
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "map": "de_inferno",
+          "kills": 9,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 41,
+          "kast": 65,
+          "rating": 0.81
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561199210250164_medium.jpg",
+      "kd": 0.79,
+      "avgRating": 0.87,
+      "avgAdr": 56.8,
+      "avgKast": 68.6,
+      "displayName": "s1slw",
+      "title": "Боец 🥊"
+    },
+    {
+      "id": "76561198015424675",
+      "name": "tolya800x600",
+      "lastPlayed": "2026-11-02T18:36:33.732Z",
+      "matches": 5,
+      "kills": 61,
+      "deaths": 87,
+      "assists": 0,
+      "adrSum": 372,
+      "adrCount": 5,
+      "kastSum": 305,
+      "kastCount": 5,
+      "ratingSum": 4.15,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "rating": 1.21
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "rating": 0.56
+        },
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "rating": 0.82
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "rating": 0.53
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "rating": 1.03
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "map": "de_mirage",
+          "kills": 13,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 105,
+          "kast": 75,
+          "rating": 1.21
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "map": "de_dust2",
+          "kills": 9,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 46,
+          "kast": 53,
+          "rating": 0.56
+        },
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "map": "de_inferno",
+          "kills": 11,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 78,
+          "kast": 59,
+          "rating": 0.82
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "map": "de_cache",
+          "kills": 10,
+          "deaths": 20,
+          "assists": 0,
+          "adr": 56,
+          "kast": 50,
+          "rating": 0.53
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "map": "de_anubis",
+          "kills": 18,
+          "deaths": 21,
+          "assists": 0,
+          "adr": 87,
+          "kast": 68,
+          "rating": 1.03
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198015424675_medium.jpg",
+      "kd": 0.7,
+      "avgRating": 0.83,
+      "avgAdr": 74.4,
+      "avgKast": 61,
+      "displayName": "tolya800x600",
+      "title": "Магнит для пуль 🎯"
+    },
+    {
+      "id": "76561198681103731",
+      "name": "Анальный бур",
+      "lastPlayed": "2026-11-02T18:32:59.782Z",
+      "matches": 5,
+      "kills": 42,
+      "deaths": 66,
+      "assists": 0,
+      "adrSum": 235,
+      "adrCount": 5,
+      "kastSum": 385,
+      "kastCount": 5,
+      "ratingSum": 4.16,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "rating": 1.02
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "rating": 0.95
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 0.43
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 1.12
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "rating": 0.64
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "map": "de_inferno",
+          "kills": 9,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 63,
+          "kast": 82,
+          "rating": 1.02
+        },
+        {
+          "date": "2026-11-02T18:32:51.414Z",
+          "map": "de_nuke",
+          "kills": 8,
+          "deaths": 9,
+          "assists": 0,
+          "adr": 31,
+          "kast": 88,
+          "rating": 0.95
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_anubis",
+          "kills": 5,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 35,
+          "kast": 63,
+          "rating": 0.43
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_inferno",
+          "kills": 12,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 61,
+          "kast": 80,
+          "rating": 1.12
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "map": "de_ancient",
+          "kills": 8,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 45,
+          "kast": 72,
+          "rating": 0.64
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198681103731_medium.jpg",
+      "kd": 0.64,
+      "avgRating": 0.83,
+      "avgAdr": 47,
+      "avgKast": 77,
+      "displayName": "Анальный бур",
+      "title": "Боец 🥊"
+    },
+    {
+      "id": "76561198042805941",
+      "name": "PRADA_CODE",
+      "lastPlayed": "2026-11-02T18:36:33.732Z",
+      "matches": 5,
+      "kills": 61,
+      "deaths": 78,
+      "assists": 0,
+      "adrSum": 317,
+      "adrCount": 5,
+      "kastSum": 325,
+      "kastCount": 5,
+      "ratingSum": 4.119999999999999,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "rating": 0.35
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "rating": 0.44
+        },
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "rating": 0.72
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "rating": 1.21
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "rating": 1.4
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "map": "de_mirage",
+          "kills": 4,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 37,
+          "kast": 56,
+          "rating": 0.35
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "map": "de_dust2",
+          "kills": 7,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 40,
+          "kast": 47,
+          "rating": 0.44
+        },
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "map": "de_inferno",
+          "kills": 8,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 61,
+          "kast": 65,
+          "rating": 0.72
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "map": "de_cache",
+          "kills": 19,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 82,
+          "kast": 77,
+          "rating": 1.21
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "map": "de_anubis",
+          "kills": 23,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 97,
+          "kast": 80,
+          "rating": 1.4
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198042805941_medium.jpg",
+      "kd": 0.78,
+      "avgRating": 0.82,
+      "avgAdr": 63.4,
+      "avgKast": 65,
+      "displayName": "PRADA_CODE",
+      "title": "Боец 🥊"
+    },
+    {
+      "id": "76561198272167310",
+      "name": "Изумительные Брючки.",
+      "lastPlayed": "2026-11-02T18:36:33.732Z",
+      "matches": 5,
+      "kills": 58,
+      "deaths": 80,
+      "assists": 0,
+      "adrSum": 337,
+      "adrCount": 5,
+      "kastSum": 285,
+      "kastCount": 5,
+      "ratingSum": 3.88,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "rating": 0.72
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "rating": 1.05
+        },
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "rating": 0.77
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "rating": 0.27
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "rating": 1.07
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "map": "de_mirage",
+          "kills": 9,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 77,
+          "kast": 56,
+          "rating": 0.72
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "map": "de_dust2",
+          "kills": 15,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 83,
+          "kast": 63,
+          "rating": 1.05
+        },
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "map": "de_inferno",
+          "kills": 11,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 60,
+          "kast": 53,
+          "rating": 0.77
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "map": "de_cache",
+          "kills": 6,
+          "deaths": 21,
+          "assists": 0,
+          "adr": 43,
+          "kast": 45,
+          "rating": 0.27
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "map": "de_anubis",
+          "kills": 17,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 74,
+          "kast": 68,
+          "rating": 1.07
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198272167310_medium.jpg",
+      "kd": 0.72,
+      "avgRating": 0.78,
+      "avgAdr": 67.4,
+      "avgKast": 57,
+      "displayName": "Изумительные Брючки.",
+      "title": "Боец 🥊"
+    },
+    {
+      "id": "76561198728309900",
+      "name": "BB-00",
+      "lastPlayed": "2026-11-01T23:41:29.968Z",
+      "matches": 5,
+      "kills": 58,
+      "deaths": 87,
+      "assists": 0,
+      "adrSum": 317,
+      "adrCount": 5,
+      "kastSum": 321,
+      "kastCount": 5,
+      "ratingSum": 3.8499999999999996,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 0.7
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 0.41
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "rating": 0.57
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "rating": 1.19
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "rating": 0.98
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_anubis",
+          "kills": 11,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 64,
+          "kast": 54,
+          "rating": 0.7
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_inferno",
+          "kills": 7,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 45,
+          "kast": 50,
+          "rating": 0.41
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "map": "de_inferno",
+          "kills": 5,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 50,
+          "kast": 65,
+          "rating": 0.57
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "map": "de_ancient",
+          "kills": 22,
+          "deaths": 21,
+          "assists": 0,
+          "adr": 84,
+          "kast": 72,
+          "rating": 1.19
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "map": "de_anubis",
+          "kills": 13,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 74,
+          "kast": 80,
+          "rating": 0.98
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198728309900_medium.jpg",
+      "kd": 0.67,
+      "avgRating": 0.77,
+      "avgAdr": 63.4,
+      "avgKast": 64.2,
+      "displayName": "BB-00 (9900)",
+      "title": "Боец 🥊"
+    },
+    {
+      "id": "76561198818222401",
+      "name": "Kyo  Ilonmax8",
+      "lastPlayed": "2026-11-02T18:36:33.732Z",
+      "matches": 5,
+      "kills": 49,
+      "deaths": 82,
+      "assists": 0,
+      "adrSum": 275,
+      "adrCount": 5,
+      "kastSum": 266,
+      "kastCount": 5,
+      "ratingSum": 3.02,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "rating": 0.26
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "rating": 0.21
+        },
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "rating": 0.56
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "rating": 1.24
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "rating": 0.75
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-02T18:36:33.732Z",
+          "map": "de_mirage",
+          "kills": 5,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 42,
+          "kast": 38,
+          "rating": 0.26
+        },
+        {
+          "date": "2026-11-02T18:33:04.006Z",
+          "map": "de_dust2",
+          "kills": 6,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 42,
+          "kast": 32,
+          "rating": 0.21
+        },
+        {
+          "date": "2026-11-02T18:32:59.782Z",
+          "map": "de_inferno",
+          "kills": 8,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 47,
+          "kast": 59,
+          "rating": 0.56
+        },
+        {
+          "date": "2026-11-02T18:32:55.590Z",
+          "map": "de_cache",
+          "kills": 19,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 88,
+          "kast": 73,
+          "rating": 1.24
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "map": "de_anubis",
+          "kills": 11,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 56,
+          "kast": 64,
+          "rating": 0.75
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561198818222401_medium.jpg",
+      "kd": 0.6,
+      "avgRating": 0.6,
+      "avgAdr": 55,
+      "avgKast": 53.2,
+      "displayName": "Kyo  Ilonmax8",
+      "title": "Боец 🥊"
+    },
+    {
+      "id": "76561199482946683",
+      "name": "Oleg123",
+      "lastPlayed": "2026-11-01T23:41:29.968Z",
+      "matches": 5,
+      "kills": 33,
+      "deaths": 87,
+      "assists": 0,
+      "adrSum": 220,
+      "adrCount": 5,
+      "kastSum": 282,
+      "kastCount": 5,
+      "ratingSum": 2.3,
+      "ratingCount": 5,
+      "history": [
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 0.32
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "rating": 0.37
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "rating": 0.21
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "rating": 0.87
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "rating": 0.53
+        }
+      ],
+      "matchHistory": [
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_anubis",
+          "kills": 5,
+          "deaths": 19,
+          "assists": 0,
+          "adr": 38,
+          "kast": 50,
+          "rating": 0.32
+        },
+        {
+          "date": "2026-11-01T23:41:29.968Z",
+          "map": "de_inferno",
+          "kills": 5,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 43,
+          "kast": 55,
+          "rating": 0.37
+        },
+        {
+          "date": "2026-11-01T23:41:22.668Z",
+          "map": "de_inferno",
+          "kills": 2,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 45,
+          "kast": 41,
+          "rating": 0.21
+        },
+        {
+          "date": "2026-11-01T23:41:18.457Z",
+          "map": "de_ancient",
+          "kills": 14,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 49,
+          "kast": 72,
+          "rating": 0.87
+        },
+        {
+          "date": "2026-11-01T23:41:14.265Z",
+          "map": "de_anubis",
+          "kills": 7,
+          "deaths": 19,
+          "assists": 0,
+          "adr": 45,
+          "kast": 64,
+          "rating": 0.53
+        }
+      ],
+      "avatar": "https://avatars.steamstatic.com/76561199482946683_medium.jpg",
+      "kd": 0.38,
+      "avgRating": 0.46,
+      "avgAdr": 44,
+      "avgKast": 56.4,
+      "displayName": "Oleg123",
+      "title": "Пацифист 🕊️"
+    }
+  ],
+  "mapStats": [
+    {
+      "map": "de_inferno",
+      "matches": 3,
+      "avgKd": 0.97,
+      "avgRating": 1.06
+    },
+    {
+      "map": "de_anubis",
+      "matches": 2,
+      "avgKd": 0.95,
+      "avgRating": 1.03
+    },
+    {
+      "map": "de_mirage",
+      "matches": 1,
+      "avgKd": 0.98,
+      "avgRating": 1.09
+    },
+    {
+      "map": "de_dust2",
+      "matches": 1,
+      "avgKd": 1,
+      "avgRating": 1.01
+    },
+    {
+      "map": "de_cache",
+      "matches": 1,
+      "avgKd": 0.97,
+      "avgRating": 1.08
+    },
+    {
+      "map": "de_nuke",
+      "matches": 1,
+      "avgKd": 0.94,
+      "avgRating": 1.12
+    },
+    {
+      "map": "de_ancient",
+      "matches": 1,
+      "avgKd": 0.96,
+      "avgRating": 1.07
+    }
+  ],
+  "recentMatches": [
+    {
+      "matchId": "13358986",
+      "url": "https://cybershoke.net/ru/match/13358986",
+      "date": "2026-11-02T18:36:33.732Z",
+      "maps": [
+        "de_mirage"
+      ]
+    },
+    {
+      "matchId": "13357260",
+      "url": "https://cybershoke.net/ru/match/13357260",
+      "date": "2026-11-02T18:33:04.006Z",
+      "maps": [
+        "de_dust2"
+      ]
+    },
+    {
+      "matchId": "13354626",
+      "url": "https://cybershoke.net/ru/match/13354626",
+      "date": "2026-11-02T18:32:59.782Z",
+      "maps": [
+        "de_inferno"
+      ]
+    },
+    {
+      "matchId": "13352007",
+      "url": "https://cybershoke.net/ru/match/13352007",
+      "date": "2026-11-02T18:32:55.590Z",
+      "maps": [
+        "de_cache"
+      ]
+    },
+    {
+      "matchId": "13350180",
+      "url": "https://cybershoke.net/ru/match/13350180",
+      "date": "2026-11-02T18:32:51.414Z",
+      "maps": [
+        "de_nuke"
+      ]
+    },
+    {
+      "matchId": "13357312",
+      "url": "https://cybershoke.net/ru/match/13357312",
+      "date": "2026-11-01T23:41:29.968Z",
+      "maps": [
+        "de_anubis",
+        "de_inferno"
+      ]
+    },
+    {
+      "matchId": "13354491",
+      "url": "https://cybershoke.net/ru/match/13354491",
+      "date": "2026-11-01T23:41:22.668Z",
+      "maps": [
+        "de_inferno"
+      ]
+    },
+    {
+      "matchId": "13352013",
+      "url": "https://cybershoke.net/ru/match/13352013",
+      "date": "2026-11-01T23:41:18.457Z",
+      "maps": [
+        "de_ancient"
+      ]
+    },
+    {
+      "matchId": "13349605",
+      "url": "https://cybershoke.net/ru/match/13349605",
+      "date": "2026-11-01T23:41:14.265Z",
+      "maps": [
+        "de_anubis"
+      ]
+    }
+  ],
+  "funStats": {
+    "totalHours": 7,
+    "totalKills": 1377,
+    "totalDeaths": 1426
+  }
+}
