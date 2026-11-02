@@ -22,6 +22,7 @@ let clients = [];
 let onlineRoomState = null;
 let myNickname = "";
 
+// ============ ИНИЦИАЛИЗАЦИЯ ТАБОВ ============
 function initTabs() {
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = document.querySelectorAll('.tab-content');
@@ -308,6 +309,7 @@ window.onclick = function(event) {
   if (event.target == document.getElementById('balancer-modal')) closeBalancer();
 }
 
+// ============ БАЛАНСИРОВЩИК ============
 function getSavedKey() { return `savedTeams_${document.getElementById('tournament-select').value}`; }
 function initBalancer() {
   const openBtn = document.getElementById('open-balancer-btn');
@@ -414,6 +416,7 @@ function initBalancer() {
   }
 }
 
+// ============ СЕТКА ТУРНИРА ============
 function seedOrder(n) {
   if (n === 1) return [1];
   if (n === 2) return [1, 2];
@@ -626,7 +629,13 @@ function createPeer(host, joinCode) {
   
   try {
     const peerId = host ? generateRoomCode() : undefined;
-    peer = new Peer(peerId, { debug: 0 });
+    // Используем альтернативный публичный сервер
+    peer = new Peer(peerId, { 
+      debug: 0,
+      host: 'peerjs-server.herokuapp.com',
+      secure: true,
+      port: 443
+    });
   } catch (e) {
     console.error('Ошибка инициализации PeerJS:', e);
     alert('Ошибка инициализации. Проверьте консоль (F12).');
@@ -685,11 +694,6 @@ function createPeer(host, joinCode) {
       hostConn.on('close', () => {
         alert('Соединение с хостом потеряно.');
         location.reload();
-      });
-      
-      hostConn.on('error', (err) => {
-        console.error('Ошибка соединения:', err);
-        alert('Не удалось подключиться к комнате. Возможно, код неверный или хост офлайн.');
       });
     }
   });
@@ -902,6 +906,19 @@ window.submitOnlinePick = function(id) {
     hostConn.send({ type: 'PICK', captainId: peer.id, playerId: id });
   }
 };
+
+// ============ РЕЖИМ НОВИЧКА ============
+function initBeginnerMode() {
+  const btn = document.getElementById('beginner-toggle');
+  if (!btn) return;
+  const isActive = localStorage.getItem('beginnerMode') === '1';
+  if (isActive) { document.body.classList.add('beginner-mode'); btn.classList.add('active'); }
+  btn.onclick = () => {
+    const active = document.body.classList.toggle('beginner-mode');
+    localStorage.setItem('beginnerMode', active ? '1' : '0');
+    btn.classList.toggle('active', active);
+  };
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   if (window.AOS) AOS.init({ duration: 600, once: true });
