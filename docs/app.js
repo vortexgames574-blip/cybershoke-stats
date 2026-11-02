@@ -1,31 +1,78 @@
+// ГЛОБАЛЬНЫЙ ПЕРЕХВАТЧИК ОШИБОК
+window.onerror = function(message, source, lineno, colno, error) {
+  const meta = document.getElementById('meta-info');
+  if (meta) meta.innerHTML = `<span style="color: #ef4444;">Ошибка: ${message} (строка ${lineno})</span>`;
+  console.error(message, error);
+};
+
 let statsData = null;
+let currentStats = null;
 let myChart = null;
 let profChart = null;
+let selectedPlayers = [];
 
 async function loadData() {
   try {
     const res = await fetch('data/stats.json');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    statsData = await res.json();
+    if (!res.ok) throw new Error(`Файл stats.json не найден (HTTP ${res.status})`);
+    
+    const text = await res.text();
+    if (!text) throw new Error('Файл stats.json пустой (запустите npm run build)');
+    
+    statsData = JSON.parse(text);
+    
+    if (!statsData.tournaments) throw new Error('В stats.json нет поля tournaments (сборка сломана)');
+
+    const select = document.getElementById('tournament-select');
+    select.innerHTML = Object.keys(statsData.tournaments).map(t => `<option value="${t}">${t}</option>`).join('');
+    
+    currentStats = statsData.tournaments["Все матчи"];
+
+    select.addEventListener('change', (e) => {
+        currentStats = statsData.tournaments[e.target.value];
+        selectedPlayers = [];
+        renderAll();
+    });
+
     renderAll();
   } catch (err) {
-    document.getElementById('meta-info').textContent = 'Ошибка загрузки данных.';
+    document.getElementById('meta-info').innerHTML = `<span style="color: #ef4444;">${err.message}</span>`;
+    console.error(err);
   }
 }
 
 function renderAll() {
-  document.getElementById('meta-info').innerHTML = `Матчей: <b>${statsData.matchesCount}</b> | Игроков: <b>${statsData.players.length}</b>`;
-  
-  if (statsData.funStats) {
-    document.getElementById('stat-kills').innerText = statsData.funStats.totalKills;
-    document.getElementById('stat-deaths').innerText = statsData.funStats.totalDeaths;
-    document.getElementById('stat-hours').innerText = statsData.funStats.totalHours + " ч.";
-  }
+  try {
+    document.getElementById('meta-info').innerHTML = `Матчей: <b>${currentStats.recentMatches ? currentStats.recentMatches.length : 0}</b>`;
+    
+    if (currentStats.funStats) {
+      document.getElementById('stat-kills').innerText = currentStats.funStats.totalKills || 0;
+      document.getElementById('stat-deaths').innerText = currentStats.funStats.totalDeaths || 0;
+      document.getElementById('stat-hours').innerText = (currentStats.funStats.totalHours || 0) + " ч.";
+    }
 
-  renderPlayersTable();
-  renderMapStats();
-  initDuel();
-  renderBalancer();
+    renderRecords();
+    renderPlayersTable();
+    renderMapStats();
+    initDuel();
+  } catch (e) {
+    document.getElementById('meta-info').innerHTML = `<span style="color: #ef4444;">Ошибка рендера: ${e.message}</span>`;
+    console.error(e);
+  }
+}
+
+function renderRecords() {
+  if (!currentStats.records) return;
+  const r = currentStats.records;
+
+  document.getElementById('rec-max-kills').innerText = r.maxKills?.value || 0;
+  document.getElementById('rec-max-kills-desc').innerHTML = `<b>${r.maxKills?.player || '—'}</b> (${r.maxKills?.map || '—'})`;
+  
+  document.getElementById('rec-max-deaths').innerText = r.maxDeaths?.value || 0;
+  document.getElementById('rec-max-deaths-desc').innerHTML = `<b>${r.maxDeaths?.player || '—'}</b> (${r.maxDeaths?.map || '—'})`;
+
+  document.getElementById('rec-max-adr').innerText = r.maxAdr?.value || 0;
+  document.getElementById('rec-max-adr-desc').innerHTML = `<b>${r.maxAdr?.player || '—'}</b> (${r.maxAdr?.map || '—'})`;
 }
 
 function renderPlayersTable() {
@@ -37,29 +84,36 @@ function renderPlayersTable() {
     const filter = filterInput.value.toLowerCase();
     const sortKey = sortSelect.value;
 
-    let players = [...statsData.players].filter(p => (p.displayName || p.name).toLowerCase().includes(filter));
+    let players = [...currentStats.players].filter(p => (p.displayName || p.name).toLowerCase().includes(filter));
     players.sort((a, b) => {
       if (sortKey === 'deaths') return b.deaths - a.deaths;
       if (sortKey === 'kd') return b.kd - a.kd;
       return (b.avgRating ?? 0) - (a.avgRating ?? 0);
     });
 
-    tbody.innerHTML = players.map((p) => `
+    tbody.innerHTML = players.map((p) => {
+      let formText = '';
+      if (p.form === 'hot') formText = '<span style="color: #10b981; font-weight: 600;">В форме</span>';
+      else if (p.form === 'cold') formText = '<span style="color: #ef4444; font-weight: 600;">Спад</span>';
+      else if (p.form === 'new') formText = '<span style="color: #f59e0b;">Мало данных</span>';
+      else formText = '<span style="color: #8b96a5;">Стабильно</span>';
+
+      return `
       <tr>
         <td>
           <div class="player-cell">
-            <img src="${p.avatar}" class="player-avatar" onerror="this.src='https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg'">
+            <img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
             <div>
               <strong class="player-link" onclick="openProfile('${p.id}')">${p.displayName || p.name}</strong>
             </div>
           </div>
         </td>
+        <td>${formText}</td>
         <td>${p.matches}</td>
         <td><strong>${p.kd}</strong></td>
         <td style="color: var(--accent); font-weight: 600;">${p.avgRating ?? '—'}</td>
-        <td><span class="player-title">${p.title || ''}</span></td>
       </tr>
-    `).join('');
+    `}).join('');
   }
 
   filterInput.addEventListener('input', draw);
@@ -69,10 +123,10 @@ function renderPlayersTable() {
 
 function renderMapStats() {
   const tbody = document.querySelector('#maps-table tbody');
-  if (!tbody || !statsData.mapStats) return;
+  if (!tbody || !currentStats.mapStats) return;
 
-  tbody.innerHTML = statsData.mapStats.map(m => `
-    <tr>
+  tbody.innerHTML = currentStats.mapStats.map(m => `
+    <tr class="map-row" onclick="openMapDetails('${m.map}')">
       <td><strong>${m.map}</strong></td>
       <td>${m.matches}</td>
       <td>${m.avgKd}</td>
@@ -81,19 +135,47 @@ function renderMapStats() {
   `).join('');
 }
 
+function openMapDetails(mapName) {
+  const mapData = currentStats.mapStats.find(m => m.map === mapName);
+  if (!mapData) return;
+
+  document.getElementById('map-modal-title').innerText = mapName;
+  const tbody = document.getElementById('map-players-list');
+
+  tbody.innerHTML = mapData.topPlayers.map((p) => `
+    <tr>
+      <td>
+        <div class="player-cell">
+          <img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
+          <strong>${p.name}</strong>
+        </div>
+      </td>
+      <td>${p.matches}</td>
+      <td>${p.kills}</td>
+      <td>${p.deaths}</td>
+      <td>${p.kd}</td>
+      <td style="color: var(--accent); font-weight: 600;">${p.avgRating}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('map-modal').style.display = 'block';
+}
+
+function closeMapDetails() { document.getElementById('map-modal').style.display = 'none'; }
+
 function initDuel() {
   const p1Select = document.getElementById('duel-p1');
   const p2Select = document.getElementById('duel-p2');
   const btn = document.getElementById('duel-btn');
   const resultDiv = document.getElementById('duel-result');
 
-  const options = statsData.players.map(p => `<option value="${p.id}">${p.displayName || p.name}</option>`).join('');
+  const options = currentStats.players.map(p => `<option value="${p.id}">${p.displayName || p.name}</option>`).join('');
   p1Select.innerHTML = options;
   p2Select.innerHTML = options;
 
-  btn.addEventListener('click', () => {
-    const p1 = statsData.players.find(p => p.id === p1Select.value);
-    const p2 = statsData.players.find(p => p.id === p2Select.value);
+  btn.onclick = () => {
+    const p1 = currentStats.players.find(p => p.id === p1Select.value);
+    const p2 = currentStats.players.find(p => p.id === p2Select.value);
     
     if (!p1 || !p2) return;
     if (p1.id === p2.id) return alert('Выбери двух разных людей!');
@@ -109,52 +191,31 @@ function initDuel() {
     const [classAdr1, classAdr2] = compare(p1.avgAdr ?? 0, p2.avgAdr ?? 0);
     const [classKast1, classKast2] = compare(p1.avgKast ?? 0, p2.avgKast ?? 0);
     
-    // Определяем победителя по Рейтингу (если он есть), иначе по K/D
     const p1Score = p1.avgRating ?? p1.kd;
     const p2Score = p2.avgRating ?? p2.kd;
     const winnerName = p1Score > p2Score ? (p1.displayName || p1.name) : (p2.displayName || p2.name);
 
     resultDiv.style.display = 'block';
     resultDiv.innerHTML = `
-      <div class="duel-row">
-        <span class="${classKd1}">${p1.kd} K/D</span>
-        <span style="font-weight:bold;color:var(--text-muted);">K/D</span>
-        <span class="${classKd2}">${p2.kd} K/D</span>
-      </div>
-      <div class="duel-row">
-        <span class="${classRat1}">${p1.avgRating ?? '—'} Рейтинг</span>
-        <span style="font-weight:bold;color:var(--text-muted);">RATING</span>
-        <span class="${classRat2}">${p2.avgRating ?? '—'} Рейтинг</span>
-      </div>
-      <div class="duel-row">
-        <span class="${classAdr1}">${p1.avgAdr ?? '—'} ADR</span>
-        <span style="font-weight:bold;color:var(--text-muted);">ADR</span>
-        <span class="${classAdr2}">${p2.avgAdr ?? '—'} ADR</span>
-      </div>
-      <div class="duel-row">
-        <span class="${classKast1}">${p1.avgKast ?? '—'} KAST</span>
-        <span style="font-weight:bold;color:var(--text-muted);">KAST</span>
-        <span class="${classKast2}">${p2.avgKast ?? '—'} KAST</span>
-      </div>
-      <div class="duel-row">
-        <span>${p1.matches} карт</span>
-        <span style="font-weight:bold;color:var(--text-muted);">ОПЫТ</span>
-        <span>${p2.matches} карт</span>
-      </div>
-      <div style="text-align:center; margin-top:15px; font-weight:bold; font-size:1.2rem; color:#fff;">
-        Победитель: <span style="color:#10b981;">${winnerName}</span> 🏆
-      </div>
+      <div class="duel-row"><span class="${classKd1}">${p1.kd} K/D</span><span style="font-weight:bold;color:var(--text-muted);">K/D</span><span class="${classKd2}">${p2.kd} K/D</span></div>
+      <div class="duel-row"><span class="${classRat1}">${p1.avgRating ?? '—'} Рейтинг</span><span style="font-weight:bold;color:var(--text-muted);">RATING</span><span class="${classRat2}">${p2.avgRating ?? '—'} Рейтинг</span></div>
+      <div class="duel-row"><span class="${classAdr1}">${p1.avgAdr ?? '—'} ADR</span><span style="font-weight:bold;color:var(--text-muted);">ADR</span><span class="${classAdr2}">${p2.avgAdr ?? '—'} ADR</span></div>
+      <div class="duel-row"><span class="${classKast1}">${p1.avgKast ?? '—'} KAST</span><span style="font-weight:bold;color:var(--text-muted);">KAST</span><span class="${classKast2}">${p2.avgKast ?? '—'} KAST</span></div>
+      <div style="text-align:center; margin-top:15px; font-weight:bold; font-size:1.2rem; color:#fff;">Победитель: <span style="color:#10b981;">${winnerName}</span></div>
     `;
-  });
+  };
 }
 
 function openProfile(playerId) {
-  const p = statsData.players.find(pl => pl.id === playerId);
+  const p = currentStats.players.find(pl => pl.id === playerId);
   if (!p) return;
 
-  document.getElementById('prof-avatar').src = p.avatar;
+  const img = document.getElementById('prof-avatar');
+  img.src = p.avatar;
+  img.onerror = function() { this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true&size=128`; };
+  
   document.getElementById('prof-name').innerText = p.displayName || p.name;
-  document.getElementById('prof-title').innerText = p.title || '';
+  
   document.getElementById('prof-matches').innerText = p.matches;
   document.getElementById('prof-kd').innerText = p.kd;
   document.getElementById('prof-rating').innerText = p.avgRating ?? '—';
@@ -175,10 +236,7 @@ function openProfile(playerId) {
     const sortedHist = [...p.history].sort((a,b) => new Date(a.date) - new Date(b.date));
     profChart = new Chart(canvas, {
       type: 'line',
-      data: {
-        labels: sortedHist.map(h => new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })),
-        datasets: [{ label: 'Рейтинг', data: sortedHist.map(h => h.rating), borderColor: '#4d6bfe', backgroundColor: 'rgba(77, 107, 254, 0.1)', fill: true, tension: 0.3 }]
-      },
+      data: { labels: sortedHist.map(h => new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })), datasets: [{ label: 'Рейтинг', data: sortedHist.map(h => h.rating), borderColor: '#4d6bfe', backgroundColor: 'rgba(77, 107, 254, 0.1)', fill: true, tension: 0.3 }] },
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#8b96a5' } }, y: { grid: { color: '#262f40' }, ticks: { color: '#8b96a5' } } } }
     });
   }
@@ -187,30 +245,147 @@ function openProfile(playerId) {
 }
 
 function closeProfile() { document.getElementById('profile-modal').style.display = 'none'; }
-window.onclick = function(event) { if (event.target == document.getElementById('profile-modal')) closeProfile(); }
 
-function renderBalancer() {
-  const container = document.getElementById('balancer-players');
-  const btn = document.getElementById('balance-btn');
-  const result = document.getElementById('balance-result');
-
-  container.innerHTML = statsData.players.map(p => `
-    <label>
-      <input type="checkbox" value="${p.id}" data-name="${p.displayName || p.name}" data-rating="${p.avgRating ?? 0}">
-      <span>${p.displayName || p.name}</span>
-    </label>
-  `).join('');
-
-  btn.addEventListener('click', () => {
-    const checked = Array.from(container.querySelectorAll('input:checked'));
-    if (checked.length !== 10) return alert('Выберите ровно 10 игроков.');
-    const selected = checked.map(cb => ({ name: cb.dataset.name, rating: parseFloat(cb.dataset.rating) || 0 }));
-    selected.sort((a, b) => b.rating - a.rating);
-    const teamA = [], teamB = [];
-    let sumA = 0, sumB = 0;
-    selected.forEach(p => { if (sumA <= sumB) { teamA.push(p); sumA += p.rating; } else { teamB.push(p); sumB += p.rating; } });
-    result.innerHTML = `<div class="balance-team"><h4>Команда А</h4><ul>${teamA.map(p => `<li>${p.name}</li>`).join('')}</ul></div><div class="balance-team"><h4>Команда Б</h4><ul>${teamB.map(p => `<li>${p.name}</li>`).join('')}</ul></div>`;
-  });
+window.onclick = function(event) { 
+  if (event.target == document.getElementById('profile-modal')) closeProfile(); 
+  if (event.target == document.getElementById('map-modal')) closeMapDetails();
+  if (event.target == document.getElementById('balancer-modal')) closeBalancer();
 }
 
-loadData();
+function initBalancer() {
+  const openBtn = document.getElementById('open-balancer-btn');
+  const modal = document.getElementById('balancer-modal');
+  const searchInput = document.getElementById('player-search');
+  const grid = document.getElementById('players-grid');
+  const countLabel = document.getElementById('selected-count');
+  const balanceBtn = document.getElementById('balance-btn');
+  const randomBtn = document.getElementById('random-btn');
+  const clearBtn = document.getElementById('clear-btn');
+  const resultDiv = document.getElementById('balance-result');
+
+  if (!openBtn) return;
+
+  openBtn.onclick = () => {
+    modal.style.display = 'block';
+    selectedPlayers = [];
+    searchInput.value = '';
+    resultDiv.classList.remove('show');
+    resultDiv.innerHTML = '';
+    updateUI();
+    drawGrid();
+  };
+
+  window.closeBalancer = () => { modal.style.display = 'none'; };
+
+  function drawGrid() {
+    const query = searchInput.value.toLowerCase();
+    const filtered = currentStats.players.filter(p => 
+      (p.displayName || p.name).toLowerCase().includes(query)
+    );
+
+    grid.innerHTML = filtered.map(p => {
+      const isSelected = selectedPlayers.find(sp => sp.id === p.id);
+      return `
+        <div class="player-card ${isSelected ? 'selected' : ''}" onclick="togglePlayer('${p.id}')">
+          <img src="${p.avatar}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
+          <div class="card-name">${p.displayName || p.name}</div>
+          <div class="card-rating">${p.avgRating ?? p.kd}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  window.togglePlayer = (id) => {
+    const idx = selectedPlayers.findIndex(p => p.id === id);
+    if (idx > -1) {
+      selectedPlayers.splice(idx, 1);
+    } else {
+      if (selectedPlayers.length >= 10) {
+        countLabel.style.background = 'rgba(239, 68, 68, 0.2)';
+        countLabel.style.color = '#ef4444';
+        setTimeout(() => {
+          countLabel.style.background = 'rgba(77, 107, 254, 0.1)';
+          countLabel.style.color = 'var(--accent)';
+        }, 500);
+        return;
+      }
+      const player = currentStats.players.find(p => p.id === id);
+      if (player) selectedPlayers.push(player);
+    }
+    updateUI();
+    drawGrid();
+  };
+
+  function updateUI() {
+    countLabel.innerText = `${selectedPlayers.length} / 10`;
+    balanceBtn.disabled = selectedPlayers.length !== 10;
+    if (selectedPlayers.length !== 10) {
+      resultDiv.classList.remove('show');
+    }
+  }
+
+  searchInput.addEventListener('input', drawGrid);
+
+  randomBtn.onclick = () => {
+    selectedPlayers = [];
+    const shuffled = [...currentStats.players].sort(() => Math.random() - 0.5);
+    selectedPlayers = shuffled.slice(0, Math.min(10, shuffled.length));
+    updateUI();
+    drawGrid();
+  };
+
+  clearBtn.onclick = () => {
+    selectedPlayers = [];
+    updateUI();
+    drawGrid();
+  };
+
+  balanceBtn.onclick = () => {
+    if (selectedPlayers.length !== 10) return;
+
+    const selected = [...selectedPlayers].map(p => ({ name: p.displayName || p.name, rating: p.avgRating ?? 0, avatar: p.avatar }));
+    selected.sort((a, b) => b.rating - a.rating);
+    
+    const teamA = [], teamB = [];
+    let sumA = 0, sumB = 0;
+    
+    selected.forEach(p => { 
+      if (sumA <= sumB) { teamA.push(p); sumA += p.rating; } 
+      else { teamB.push(p); sumB += p.rating; } 
+    });
+
+    resultDiv.innerHTML = `
+      <div class="team-box">
+        <h3>Команда А <span>Σ ${sumA.toFixed(1)}</span></h3>
+        <ul>${teamA.map(p => `
+          <li>
+            <div class="t-player">
+              <img src="${p.avatar}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
+              ${p.name}
+            </div>
+            <span>${p.rating.toFixed(1)}</span>
+          </li>
+        `).join('')}</ul>
+      </div>
+      <div class="team-box">
+        <h3>Команда Б <span>Σ ${sumB.toFixed(1)}</span></h3>
+        <ul>${teamB.map(p => `
+          <li>
+            <div class="t-player">
+              <img src="${p.avatar}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
+              ${p.name}
+            </div>
+            <span>${p.rating.toFixed(1)}</span>
+          </li>
+        `).join('')}</ul>
+      </div>
+    `;
+    resultDiv.classList.add('show');
+  };
+}
+
+// Ждем загрузки DOM, чтобы все ID существовали
+document.addEventListener('DOMContentLoaded', () => {
+  loadData();
+  initBalancer();
+});

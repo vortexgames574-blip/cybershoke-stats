@@ -1,4 +1,4 @@
-// collect.js — СТРОГИЙ ОТБОР 5х5 (Игнорирует лобби с 19 людьми)
+// collect.js — ИСПРАВЛЕННЫЙ (С защитой от несыгранных карт в Bo3)
 import { chromium } from 'playwright';
 import fs from 'fs-extra';
 import path from 'path';
@@ -13,19 +13,29 @@ async function main() {
   const lines = (await fs.readFile(MATCHES_FILE, 'utf-8')).split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#'));
 
   if (lines.length === 0) return console.log('Нет ссылок.');
-  console.log(`Найдено ${lines.length} ссылок.`);
+  console.log(`Найдено ${lines.length} строк.`);
 
   const browser = await chromium.launch({ channel: 'chrome', headless: false, args: ['--start-maximized'] });
   const context = await browser.newContext({ viewport: null });
   const page = await context.newPage();
 
   for (let i = 0; i < lines.length; i++) {
-    const url = lines[i];
+    const line = lines[i];
+    let tournamentName = 'Без турнира';
+    let url = line;
+    
+    if (line.includes('|')) {
+        const parts = line.split('|');
+        tournamentName = parts[0].trim();
+        url = parts[1].trim();
+    }
+
     const matchId = extractMatchId(url);
     if (!matchId) continue;
 
     const outFile = path.join(MATCHES_DIR, `${matchId}.json`);
     
+    // Проверка: если уже скачано — пропускаем
     if (await fs.pathExists(outFile)) {
       try {
         const existing = await fs.readJson(outFile);
@@ -36,7 +46,7 @@ async function main() {
       } catch (e) {}
     }
 
-    console.log(`[${i + 1}/${lines.length}] Открываем ${url} ...`);
+    console.log(`[${i + 1}/${lines.length}] Открываем ${url} (Турнир: ${tournamentName}) ...`);
     const collectedMaps = new Map();
 
     try {
@@ -65,7 +75,6 @@ async function main() {
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
       await page.waitForTimeout(4000); 
 
-      // 1. Автозагрузка (обычно первая карта)
       let initialCaptured = await page.evaluate(() => window.__CAPTURED_API || []);
       if (initialCaptured.length > 0) {
           for (const raw of initialCaptured) {
@@ -88,9 +97,8 @@ async function main() {
         return matches ? [...new Set(matches)] : [];
       });
 
-      console.log(`  Найдены карты: ${mapNames.join(', ')}`);
+      let previousSignature = ''; // <--- ЗАЩИТА ОТ НЕСЫГРАННЫХ КАРТ
 
-      // 2. Кликаем по остальным картам
       for (const mapName of mapNames) {
         if (collectedMaps.has(mapName)) continue;
 
@@ -105,7 +113,7 @@ async function main() {
         }, mapName);
 
         if (clicked) {
-          console.log(`  Клик по [${mapName}], ждем 3 сек...`);
+          console.log(`  Клик по [${mapName}], ждем...`);
           await page.waitForTimeout(3000); 
           
           const capturedData = await page.evaluate(() => window.__CAPTURED_API);
@@ -117,7 +125,17 @@ async function main() {
               const players = extractPlayersStrict(parsed);
               
               if (players.length > 0) {
+                // ГЕНЕРИРУЕМ УНИКАЛЬНЫЙ ОТПЕЧАТОК (ID + K + D всех игроков)
+                const currentSignature = players.map(p => `${p.id}_${p.kills}_${p.deaths}`).sort().join('|');
+
+                // Если отпечаток совпадает с предыдущей картой — это фейк (несыгранная карта)
+                if (currentSignature === previousSignature) {
+                    console.log(`    [${mapName}] ПРОПУЩЕНО (карта не игралась, данные идентичны).`);
+                    continue;
+                }
+
                 collectedMaps.set(mapName, { map: mapName, players });
+                previousSignature = currentSignature; // Запоминаем отпечаток
                 console.log(`    [${mapName}] УСПЕХ! Игроков: ${players.length}`);
               }
             } catch (e) {}
@@ -129,7 +147,7 @@ async function main() {
 
       if (collectedMaps.size > 0) {
         const uniqueMaps = Array.from(collectedMaps.values());
-        await fs.writeJson(outFile, { matchId, url, date: new Date().toISOString(), maps: uniqueMaps }, { spaces: 2 });
+        await fs.writeJson(outFile, { matchId, url, tournament: tournamentName, date: new Date().toISOString(), maps: uniqueMaps }, { spaces: 2 });
         console.log(`  Файл сохранен: ${matchId}.json (карт: ${uniqueMaps.length})`);
       }
     } catch (err) {
@@ -141,28 +159,14 @@ async function main() {
   console.log('Сбор завершен!');
 }
 
-// ---------- ГЛАВНОЕ ИСПРАВЛЕНИЕ: Ищем строго 10 игроков ----------
 function extractPlayersStrict(obj) {
   let bestPlayers = [];
-  
   function traverse(node) {
     if (!node || typeof node !== 'object') return;
-    
     if (Array.isArray(node)) {
       const valid = node.filter(isPlayerObject);
-      
-      // Если нашли массив ровно из 10 человек — это то, что нужно (5х5)!
-      if (valid.length === 10) {
-        bestPlayers = valid;
-        return; // Останавливаем поиск
-      }
-      
-      // Если массив меньше 10, но больше предыдущего — запоминаем (на случай если кто-то ливнул)
-      if (valid.length > bestPlayers.length && valid.length < 10) {
-        bestPlayers = valid;
-      }
-      
-      // Если в массиве 19 человек — это лобби, мы его ИГНОРИРУЕМ
+      if (valid.length === 10) { bestPlayers = valid; return; }
+      if (valid.length > bestPlayers.length && valid.length < 10) bestPlayers = valid;
       node.forEach(traverse);
     } else {
       Object.values(node).forEach(traverse);
@@ -190,7 +194,6 @@ function extractStrictMaps(obj) {
   function traverse(current, depth = 0) {
     if (!current || typeof current !== 'object' || depth > 10) return;
     if (current.map || current.mapName) {
-      // ИСПОЛЬЗУЕМ УМНЫЙ ПАРСЕР ВМЕСТО ТУПОГО
       const players = extractPlayersStrict(current); 
       if (players && players.length > 0) {
         let mName = current.map?.name || current.map || current.mapName;
