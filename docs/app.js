@@ -49,6 +49,8 @@ function renderAll() {
       document.getElementById('stat-deaths').innerText = currentStats.funStats.totalDeaths || 0;
       document.getElementById('stat-hours').innerText = (currentStats.funStats.totalHours || 0) + " ч.";
     }
+    renderPodium();
+    renderFunFacts();
     renderRecords();
     renderPlayersTable();
     renderMapStats();
@@ -59,6 +61,57 @@ function renderAll() {
   }
 }
 
+// ============ ПЬЕДЕСТАЛ (без эмодзи) ============
+function renderPodium() {
+  const container = document.getElementById('podium-container');
+  if (!container || !currentStats.players) return;
+  const top3 = currentStats.players.slice(0, 3);
+  if (top3.length === 0) { container.innerHTML = '<p style="color:var(--text-muted);">Нет игроков</p>'; return; }
+
+  const order = [1, 0, 2];
+  const classes = ['podium-2', 'podium-1', 'podium-3'];
+  const ranks = ['2 место', '1 место', '3 место'];
+
+  container.innerHTML = order.map((idx, i) => {
+    const p = top3[idx];
+    if (!p) return '';
+    return `
+      <div class="podium-card ${classes[i]}" onclick="openProfile('${p.id}')">
+        <div class="podium-rank">${ranks[i]}</div>
+        <img src="${p.avatar}" class="podium-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
+        <div class="podium-name">${p.displayName || p.name}</div>
+        <div class="podium-rating">${p.avgRating ?? p.kd}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============ ИНТЕРЕСНЫЕ ФАКТЫ (без эмодзи) ============
+function renderFunFacts() {
+  const container = document.getElementById('fun-facts-container');
+  if (!container) return;
+  const ff = currentStats.funFacts;
+  if (!ff || (!ff.mostStable && !ff.highestPeak && !ff.favoriteMap)) {
+    container.innerHTML = '<p style="color:var(--text-muted);">Недостаточно данных для интересных фактов</p>';
+    return;
+  }
+
+  const items = [];
+  if (ff.mostStable) items.push({ title: 'Самый стабильный', player: ff.mostStable.player, desc: `Разброс рейтинга ±${ff.mostStable.stdDev}` });
+  if (ff.highestPeak) items.push({ title: 'Пиковый рейтинг', player: ff.highestPeak.player, desc: `${ff.highestPeak.rating.toFixed(2)} на ${ff.highestPeak.map}` });
+  if (ff.lowestRating) items.push({ title: 'Худший матч', player: ff.lowestRating.player, desc: `${ff.lowestRating.rating.toFixed(2)} на ${ff.lowestRating.map}` });
+  if (ff.favoriteMap) items.push({ title: 'Любимая карта', player: ff.favoriteMap.map, desc: `${ff.favoriteMap.matches} игр` });
+
+  container.innerHTML = items.map(i => `
+    <div class="fun-fact-item">
+      <div class="fact-title">${i.title}</div>
+      <div class="fact-player">${i.player}</div>
+      <div class="fact-desc">${i.desc}</div>
+    </div>
+  `).join('');
+}
+
+// ============ РЕКОРДЫ (кликабельные) ============
 function renderRecords() {
   if (!currentStats.records) return;
   const r = currentStats.records;
@@ -482,8 +535,21 @@ function initCSV() {
   };
 }
 
+function initBeginnerMode() {
+  const btn = document.getElementById('beginner-toggle');
+  if (!btn) return;
+  const isActive = localStorage.getItem('beginnerMode') === '1';
+  if (isActive) { document.body.classList.add('beginner-mode'); btn.classList.add('active'); }
+  btn.onclick = () => {
+    const active = document.body.classList.toggle('beginner-mode');
+    localStorage.setItem('beginnerMode', active ? '1' : '0');
+    btn.classList.toggle('active', active);
+  };
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   loadData();
   initBalancer();
+  initBeginnerMode();
   initCSV();
 });

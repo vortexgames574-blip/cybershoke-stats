@@ -8,9 +8,11 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#151a25">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="bg-animation"></div>
+
   <div class="app-container">
     <header class="header">
       <div class="logo">
@@ -19,14 +21,34 @@
       <div class="header-controls">
         <select id="tournament-select" class="select-tournament"></select>
         <div id="meta-info" class="meta-info">Загрузка...</div>
-        <button id="export-csv-btn" class="btn-outline" title="Экспорт в CSV">Экспорт CSV</button>
+        <button id="beginner-toggle" class="btn-outline" title="Показать/скрыть объяснение метрик">Гид</button>
+        <button id="export-csv-btn" class="btn-outline" title="Экспорт в CSV">CSV</button>
       </div>
     </header>
 
+    <!-- БЛОК ДЛЯ НОВИЧКОВ -->
+    <section class="metric-explanation" id="beginner-block">
+      <h3>Что значит каждая метрика?</h3>
+      <div class="metric-grid">
+        <div class="metric-item"><b>K/D</b><br>Отношение убийств к смертям. 1.0 — средний, выше — лучше.</div>
+        <div class="metric-item"><b>Рейтинг</b><br>Оценка (как на HLTV). 1.0 — средний, 1.2+ — сильный.</div>
+        <div class="metric-item"><b>ADR</b><br>Средний урон за раунд. 60 — мало, 80 — норма, 100+ — отлично.</div>
+        <div class="metric-item"><b>KAST</b><br>% раундов, где ты убил, помог или выжил. 70%+ — хорошо.</div>
+        <div class="metric-item"><b>Форма</b><br>Тренд последних 3 матчей: в форме, стабильно или спад.</div>
+        <div class="metric-item"><b>Карты</b><br>Сколько карт сыграно. Одна карта может быть частью матча.</div>
+      </div>
+    </section>
+
     <main class="main-grid">
       <div class="left-col">
+        <!-- ПЬЕДЕСТАЛ -->
+        <section class="glass-card interactive-card">
+          <div class="card-header"><h2>Пьедестал</h2><span class="header-hint">Топ-3 по рейтингу</span></div>
+          <div class="podium-grid" id="podium-container"></div>
+        </section>
+
         <!-- ТАБЛИЦА ИГРОКОВ -->
-        <section class="glass-card">
+        <section class="glass-card mt-20 interactive-card">
           <div class="card-header">
             <h2>Сводная статистика игроков</h2>
             <div class="controls">
@@ -43,10 +65,10 @@
               <thead>
                 <tr>
                   <th>Игрок</th>
-                  <th>Форма</th>
-                  <th>Карты</th>
-                  <th>K/D</th>
-                  <th>Рейтинг</th>
+                  <th data-tooltip="Форма: в форме / спад / стабильно (по последним 3 матчам)">Форма</th>
+                  <th data-tooltip="Сколько карт сыграно">Карты</th>
+                  <th data-tooltip="Убийства / Смерти. Чем выше, тем лучше">K/D</th>
+                  <th data-tooltip="Средний рейтинг (как на HLTV)">Рейтинг</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -55,33 +77,40 @@
         </section>
 
         <!-- РЕКОРДЫ -->
-        <section class="glass-card mt-20">
+        <section class="glass-card mt-20 interactive-card">
           <div class="card-header">
-            <h2>Абсолютные рекорды</h2>
+            <h2>Рекорды за карту</h2>
+            <span class="header-hint">Нажми на карточку, чтобы увидеть все рекорды карты</span>
           </div>
           <div class="fun-stats-grid">
-            <div class="fun-stat-box record-card" id="card-rec-kills">
+            <div class="fun-stat-box record-card interactive-box" id="card-rec-kills">
               <div class="fun-val" id="rec-max-kills">—</div>
               <div class="fun-desc" id="rec-max-kills-desc">Нет данных</div>
-              <div class="record-hint">Макс. убийств за карту</div>
+              <div class="record-hint">Максимум убийств за карту</div>
             </div>
-            <div class="fun-stat-box record-card" id="card-rec-deaths">
+            <div class="fun-stat-box record-card interactive-box" id="card-rec-deaths">
               <div class="fun-val" id="rec-max-deaths" style="color: #ef4444;">—</div>
               <div class="fun-desc" id="rec-max-deaths-desc">Нет данных</div>
-              <div class="record-hint">Макс. смертей за карту</div>
+              <div class="record-hint">Максимум смертей за карту</div>
             </div>
-            <div class="fun-stat-box record-card" id="card-rec-adr">
+            <div class="fun-stat-box record-card interactive-box" id="card-rec-adr">
               <div class="fun-val" id="rec-max-adr" style="color: #10b981;">—</div>
               <div class="fun-desc" id="rec-max-adr-desc">Нет данных</div>
-              <div class="record-hint">Макс. ADR</div>
+              <div class="record-hint">Максимум ADR</div>
             </div>
           </div>
+        </section>
+
+        <!-- ИНТЕРЕСНЫЕ ФАКТЫ -->
+        <section class="glass-card mt-20 interactive-card">
+          <div class="card-header"><h2>Интересные факты</h2></div>
+          <div class="fun-facts-grid" id="fun-facts-container"></div>
         </section>
       </div>
 
       <div class="right-col">
         <!-- ДУЭЛИ -->
-        <section class="glass-card" id="duel-section">
+        <section class="glass-card interactive-card" id="duel-section">
           <div class="card-header"><h2>Сравнение игроков</h2></div>
           <div class="duel-selects">
             <select id="duel-p1" class="select-sort" style="width: 100%;"></select>
@@ -93,14 +122,14 @@
         </section>
 
         <!-- БАЛАНСИРОВЩИК -->
-        <section class="glass-card mt-20">
+        <section class="glass-card mt-20 interactive-card">
           <div class="card-header"><h2>Балансировщик 5х5</h2></div>
           <p class="text-muted mb-10">Соберите ровно 10 игроков для разделения на команды.</p>
           <button id="open-balancer-btn" class="btn-primary">Открыть балансировщик</button>
         </section>
 
         <!-- КАРТЫ -->
-        <section class="glass-card mt-20">
+        <section class="glass-card mt-20 interactive-card">
           <div class="card-header"><h2>Статистика карт</h2></div>
           <div class="table-container" style="max-height: 250px; overflow-y: auto;">
             <table class="stats-table" id="maps-table">
@@ -118,7 +147,7 @@
         </section>
 
         <!-- ОБЩАЯ СТАТИСТИКА -->
-        <section class="glass-card mt-20">
+        <section class="glass-card mt-20 interactive-card">
           <div class="card-header"><h2>Общая статистика</h2></div>
           <div class="fun-stats-grid">
             <div class="fun-stat-box"><div class="fun-val" id="stat-kills">0</div><div class="fun-desc">Всего убийств</div></div>
@@ -181,7 +210,7 @@
       <span class="close-btn" onclick="closeBalancer()">&times;</span>
       <div class="card-header" style="margin-bottom: 15px;">
         <h2>Балансировщик 5х5</h2>
-        <span id="selected-count" class="balance-counter">0 / 10</span>
+        <span id="selected-count" class="balance-counter">Выбрано: 0 / 10</span>
       </div>
       <div class="balancer-tools">
         <input type="text" id="player-search" class="input-search" style="flex:1;" placeholder="Поиск игрока...">
