@@ -384,3 +384,13 @@ h2 { font-size: 1.1rem; font-weight: 600; }
   .balancer-modal-content { margin: 0; height: 100vh; max-height: 100vh; border-radius: 0; }
   .map-actions { flex-direction: column; }
 }
+.record-map {
+  display: inline-block;
+  background: rgba(77, 107, 254, 0.15);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  margin-top: 4px;
+  font-weight: 600;
+}

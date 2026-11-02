@@ -11,7 +11,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- АНИМИРОВАННЫЙ ФОН -->
   <div class="bg-animation"></div>
 
   <div class="app-container">
@@ -43,13 +42,7 @@
           <div class="table-container">
             <table class="stats-table" id="players-table">
               <thead>
-                <tr>
-                  <th>Игрок</th>
-                  <th>Форма 🔥</th>
-                  <th>Карты 🗺️</th>
-                  <th>K/D 🔫</th>
-                  <th>Рейтинг 🏆</th>
-                </tr>
+                <tr><th>Игрок</th><th>Форма 🔥</th><th>Карты 🗺️</th><th>K/D 🔫</th><th>Рейтинг 🏆</th></tr>
               </thead>
               <tbody></tbody>
             </table>
@@ -57,11 +50,11 @@
         </section>
 
         <section class="glass-card mt-20">
-          <div class="card-header"><h2>Рекорды за карту</h2></div>
+          <div class="card-header"><h2>Абсолютные рекорды</h2></div>
           <div class="fun-stats-grid">
-            <div class="fun-stat-box"><div class="fun-val" id="rec-max-kills">0</div><div class="fun-desc" id="rec-max-kills-desc">Макс. убийств</div></div>
-            <div class="fun-stat-box"><div class="fun-val" id="rec-max-deaths">0</div><div class="fun-desc" id="rec-max-deaths-desc">Макс. смертей</div></div>
-            <div class="fun-stat-box"><div class="fun-val" id="rec-max-adr">0</div><div class="fun-desc" id="rec-max-adr-desc">Макс. ADR</div></div>
+            <div class="fun-stat-box"><div class="fun-val" id="rec-max-kills">0</div><div class="fun-desc" id="rec-max-kills-desc">Нет данных</div></div>
+            <div class="fun-stat-box"><div class="fun-val" id="rec-max-deaths" style="color: #ef4444;">0</div><div class="fun-desc" id="rec-max-deaths-desc">Нет данных</div></div>
+            <div class="fun-stat-box"><div class="fun-val" id="rec-max-adr" style="color: #10b981;">0</div><div class="fun-desc" id="rec-max-adr-desc">Нет данных</div></div>
           </div>
         </section>
 
@@ -136,9 +129,14 @@
   <div id="map-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeMapDetails()">&times;</span>
-      <div class="profile-header" style="margin-bottom: 10px;">
-        <div class="prof-info"><h2 id="map-modal-title">de_mirage</h2><span class="prof-title" style="color:var(--text-muted)">Лучшие игроки на карте</span></div>
+      <div class="profile-header" style="margin-bottom: 15px; padding-bottom: 10px;">
+        <div class="prof-info"><h2 id="map-modal-title">de_mirage</h2><span class="prof-title" style="color:var(--text-muted)">Детальная статистика</span></div>
       </div>
+      
+      <!-- РЕКОРДЫ КАРТЫ -->
+      <div class="fun-stats-grid" id="map-records-container" style="margin-bottom: 20px;"></div>
+
+      <!-- СПИСОК ИГРОКОВ -->
       <div class="table-container" style="max-height: 400px; overflow-y: auto;">
         <table class="stats-table">
           <thead><tr><th>Игрок</th><th>Игр</th><th>K</th><th>D</th><th>K/D</th><th>Рейтинг</th></tr></thead>

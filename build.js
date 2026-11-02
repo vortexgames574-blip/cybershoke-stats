@@ -8,8 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MATCHES_DIR = path.join(__dirname, 'data', 'matches');
 const OUTPUT_FILE = path.join(__dirname, 'docs', 'data', 'stats.json');
 
-// ⚠️ ВСТАВЬ СВОЙ КЛЮЧ STEAM API СЮДА
-const STEAM_API_KEY = 'ТВОЙ_КЛЮЧ_ЗДЕСЬ';
+const STEAM_API_KEY = 'ТВОЙ_КЛЮЧ_ЗДЕСЬ'; // НЕ ЗАБУДЬ ВСТАВИТЬ КЛЮЧ
 
 function num(val) {
   if (val === null || val === undefined || val === '') return null;
@@ -19,35 +18,23 @@ function num(val) {
 
 async function fetchSteamAvatars(steamIds) {
   const avatars = new Map();
-  if (!STEAM_API_KEY || STEAM_API_KEY === 'ТВОЙ_КЛЮЧ_ЗДЕСЬ') {
-    console.log('⚠️ Steam API ключ не указан. Аватарки будут заглушками.');
-    return avatars;
-  }
+  if (!STEAM_API_KEY || STEAM_API_KEY === 'ТВОЙ_КЛЮЧ_ЗДЕСЬ') return avatars;
 
   const chunks = [];
-  for (let i = 0; i < steamIds.length; i += 100) {
-    chunks.push(steamIds.slice(i, i + 100));
-  }
+  for (let i = 0; i < steamIds.length; i += 100) chunks.push(steamIds.slice(i, i + 100));
 
   for (const chunk of chunks) {
-    const ids = chunk.join(',');
-    const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_API_KEY}&steamids=${ids}`;
-    
+    const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_API_KEY}&steamids=${chunk.join(',')}`;
     try {
       const res = await fetch(url);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      
-      if (data.response && data.response.players) {
-        for (const player of data.response.players) {
-          avatars.set(player.steamid, player.avatarmedium); 
+      if (res.ok) {
+        const data = await res.json();
+        if (data.response && data.response.players) {
+          for (const player of data.response.players) avatars.set(player.steamid, player.avatarmedium); 
         }
       }
-    } catch (err) {
-      console.error('Ошибка запроса к Steam API:', err.message);
-    }
+    } catch (err) { console.error('Steam API Error:', err.message); }
   }
-
   return avatars;
 }
 
@@ -62,8 +49,7 @@ function calculateStats(matches, steamAvatars) {
   const records = {
     maxKills: { value: 0, player: '', map: '', date: '' },
     maxDeaths: { value: 0, player: '', map: '', date: '' },
-    maxAdr: { value: 0, player: '', map: '', date: '' },
-    minAdr: { value: 999, player: '', map: '', date: '' }
+    maxAdr: { value: 0, player: '', map: '', date: '' }
   };
 
   matches.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -77,7 +63,10 @@ function calculateStats(matches, steamAvatars) {
       const mapName = mapData.map || 'unknown';
       
       if (!mapStatsRaw[mapName]) {
-          mapStatsRaw[mapName] = { matches: 0, totalKills: 0, totalDeaths: 0, ratingSum: 0, ratingCount: 0, playersMap: new Map() };
+          mapStatsRaw[mapName] = { 
+            matches: 0, totalKills: 0, totalDeaths: 0, ratingSum: 0, ratingCount: 0, playersMap: new Map(),
+            records: { maxKills: {value:0, player:''}, maxDeaths: {value:0, player:''}, maxAdr: {value:0, player:''} }
+          };
       }
       mapStatsRaw[mapName].matches += 1;
 
@@ -107,16 +96,19 @@ function calculateStats(matches, steamAvatars) {
 
         const adrVal = num(p.adr); const kastVal = num(p.kast); const ratingVal = num(p.rating);
 
+        // Глобальные рекорды
         if (k > records.maxKills.value) records.maxKills = { value: k, player: p.name, map: mapName, date: match.date };
         if (d > records.maxDeaths.value) records.maxDeaths = { value: d, player: p.name, map: mapName, date: match.date };
-        if (adrVal !== null) {
-            if (adrVal > records.maxAdr.value) records.maxAdr = { value: adrVal, player: p.name, map: mapName, date: match.date };
-            if (adrVal < records.minAdr.value && adrVal > 5) records.minAdr = { value: adrVal, player: p.name, map: mapName, date: match.date };
-        }
+        if (adrVal !== null && adrVal > records.maxAdr.value) records.maxAdr = { value: adrVal, player: p.name, map: mapName, date: match.date };
+
+        // Рекорды на конкретной карте
+        const mapRec = mapStatsRaw[mapName].records;
+        if (k > mapRec.maxKills.value) mapRec.maxKills = { value: k, player: p.name };
+        if (d > mapRec.maxDeaths.value) mapRec.maxDeaths = { value: d, player: p.name };
+        if (adrVal !== null && adrVal > mapRec.maxAdr.value) mapRec.maxAdr = { value: adrVal, player: p.name };
 
         if (ratingVal !== null) { mapStatsRaw[mapName].ratingSum += ratingVal; mapStatsRaw[mapName].ratingCount += 1; }
 
-        // ВОТ ЗДЕСЬ ДОБАВЛЕН ID, ЧТОБЫ БАЛАНСИРОВЩИК МОГ СОПОСТАВИТЬ ИГРОКОВ
         if (!mapStatsRaw[mapName].playersMap.has(pid)) {
             mapStatsRaw[mapName].playersMap.set(pid, { id: pid, name: p.name, avatar: '', matches: 0, kills: 0, deaths: 0, ratingSum: 0 });
         }
@@ -164,10 +156,8 @@ function calculateStats(matches, steamAvatars) {
           else p.form = 'stable';
           return;
       }
-
       const hist = [...p.matchHistory].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
       const recentAvg = hist.reduce((sum, h) => sum + (h.rating || 0), 0) / hist.length;
-      
       if (recentAvg > (avgRating * 1.1)) p.form = 'hot';
       else if (recentAvg < (avgRating * 0.9)) p.form = 'cold';
       else p.form = 'stable';
@@ -183,7 +173,7 @@ function calculateStats(matches, steamAvatars) {
           const found = players.find(p => p.id === tp.id);
           return { ...tp, avatar: found ? found.avatar : '' };
       });
-      return { map, matches: data.matches, avgKd: data.totalDeaths > 0 ? +(data.totalKills / data.totalDeaths).toFixed(2) : data.totalKills, avgRating: data.ratingCount > 0 ? +(data.ratingSum / data.ratingCount).toFixed(2) : 0, topPlayers: updatedTop };
+      return { map, matches: data.matches, avgKd: data.totalDeaths > 0 ? +(data.totalKills / data.totalDeaths).toFixed(2) : data.totalKills, avgRating: data.ratingCount > 0 ? +(data.ratingSum / data.ratingCount).toFixed(2) : 0, topPlayers: updatedTop, records: data.records };
   }).sort((a,b) => b.matches - a.matches);
 
   return { players, mapStats: formattedMapStats, recentMatches: recentMatches.slice(0, 10), records, funStats: { totalHours: Math.round(totalMapsPlayed * 40 / 60), totalKills: totalKillsAll, totalDeaths: totalDeathsAll } };
@@ -208,9 +198,7 @@ async function main() {
 
     for (const map of match.maps || []) {
         for (const p of map.players || []) {
-            if (p.id && !p.id.startsWith('name_')) {
-                allSteamIds.add(p.id);
-            }
+            if (p.id && !p.id.startsWith('name_')) allSteamIds.add(p.id);
         }
     }
   }
@@ -221,9 +209,7 @@ async function main() {
   const output = {
     generatedAt: new Date().toISOString(),
     totalMatchesCount: allMatches.length,
-    tournaments: {
-      "Все матчи": calculateStats(allMatches, steamAvatars)
-    }
+    tournaments: { "Все матчи": calculateStats(allMatches, steamAvatars) }
   };
 
   for (const [tName, tMatches] of tournamentsMap.entries()) {
