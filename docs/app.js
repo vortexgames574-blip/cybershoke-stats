@@ -1,9 +1,11 @@
+// Перехватчик ошибок, чтобы сайт не падал молча
 window.onerror = function(message, source, lineno) {
   const meta = document.getElementById('meta-info');
   if (meta) meta.innerHTML = `<span style="color: #ef4444;">Ошибка: ${message} (строка ${lineno})</span>`;
   console.error(message);
 };
 
+// Регистрация PWA (если поддерживается)
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
@@ -12,10 +14,12 @@ if ('serviceWorker' in navigator) {
 
 let statsData = null;
 let currentStats = null;
-let myChart = null;
 let profChart = null;
 let selectedPlayers = [];
 
+// ==========================================
+// ЗАГРУЗКА ДАННЫХ
+// ==========================================
 async function loadData() {
   try {
     const res = await fetch('data/stats.json');
@@ -24,7 +28,7 @@ async function loadData() {
     if (!text) throw new Error('Файл пустой (запустите npm run build)');
     
     statsData = JSON.parse(text);
-    if (!statsData.tournaments) throw new Error('Нет поля tournaments');
+    if (!statsData.tournaments) throw new Error('Нет поля tournaments (ошибка в build.js)');
 
     const select = document.getElementById('tournament-select');
     select.innerHTML = Object.keys(statsData.tournaments).map(t => `<option value="${t}">${t}</option>`).join('');
@@ -43,14 +47,19 @@ async function loadData() {
   }
 }
 
+// ==========================================
+// ОСНОВНОЙ РЕНДЕР
+// ==========================================
 function renderAll() {
   try {
     document.getElementById('meta-info').innerHTML = `Матчей: <b>${currentStats.recentMatches ? currentStats.recentMatches.length : 0}</b>`;
+    
     if (currentStats.funStats) {
       document.getElementById('stat-kills').innerText = currentStats.funStats.totalKills || 0;
       document.getElementById('stat-deaths').innerText = currentStats.funStats.totalDeaths || 0;
       document.getElementById('stat-hours').innerText = (currentStats.funStats.totalHours || 0) + " ч.";
     }
+
     renderRecords();
     renderPlayersTable();
     renderMapStats();
@@ -61,17 +70,26 @@ function renderAll() {
   }
 }
 
+// ==========================================
+// РЕКОРДЫ И СТАТИСТИКА
+// ==========================================
 function renderRecords() {
   if (!currentStats.records) return;
   const r = currentStats.records;
+
   document.getElementById('rec-max-kills').innerText = r.maxKills?.value || 0;
   document.getElementById('rec-max-kills-desc').innerHTML = `<b>${r.maxKills?.player || '—'}</b> (${r.maxKills?.map || '—'})`;
+  
   document.getElementById('rec-max-deaths').innerText = r.maxDeaths?.value || 0;
   document.getElementById('rec-max-deaths-desc').innerHTML = `<b>${r.maxDeaths?.player || '—'}</b> (${r.maxDeaths?.map || '—'})`;
+
   document.getElementById('rec-max-adr').innerText = r.maxAdr?.value || 0;
   document.getElementById('rec-max-adr-desc').innerHTML = `<b>${r.maxAdr?.player || '—'}</b> (${r.maxAdr?.map || '—'})`;
 }
 
+// ==========================================
+// ТАБЛИЦА ИГРОКОВ
+// ==========================================
 function renderPlayersTable() {
   const tbody = document.querySelector('#players-table tbody');
   const filterInput = document.getElementById('filter-name');
@@ -80,6 +98,7 @@ function renderPlayersTable() {
   function draw() {
     const filter = filterInput.value.toLowerCase();
     const sortKey = sortSelect.value;
+
     let players = [...currentStats.players].filter(p => (p.displayName || p.name).toLowerCase().includes(filter));
     players.sort((a, b) => {
       if (sortKey === 'deaths') return b.deaths - a.deaths;
@@ -99,7 +118,9 @@ function renderPlayersTable() {
         <td>
           <div class="player-cell">
             <img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
-            <div><strong class="player-link" onclick="openProfile('${p.id}')">${p.displayName || p.name}</strong></div>
+            <div>
+              <strong class="player-link" onclick="openProfile('${p.id}')">${p.displayName || p.name}</strong>
+            </div>
           </div>
         </td>
         <td>${formText}</td>
@@ -110,14 +131,19 @@ function renderPlayersTable() {
     `}).join('');
   }
 
-  filterInput.addEventListener('input', draw);
-  sortSelect.addEventListener('change', draw);
+  // Убираем старые слушатели, чтобы не дублировались при переключении турниров
+  filterInput.oninput = draw;
+  sortSelect.onchange = draw;
   draw();
 }
 
+// ==========================================
+// ТАБЛИЦА КАРТ И МОДАЛКА КАРТЫ
+// ==========================================
 function renderMapStats() {
   const tbody = document.querySelector('#maps-table tbody');
   if (!tbody || !currentStats.mapStats) return;
+
   tbody.innerHTML = currentStats.mapStats.map(m => `
     <tr class="map-row" onclick="openMapDetails('${m.map}')">
       <td><strong>${m.map}</strong></td>
@@ -131,8 +157,10 @@ function renderMapStats() {
 function openMapDetails(mapName) {
   const mapData = currentStats.mapStats.find(m => m.map === mapName);
   if (!mapData) return;
+
   document.getElementById('map-modal-title').innerText = mapName;
   const tbody = document.getElementById('map-players-list');
+
   tbody.innerHTML = mapData.topPlayers.map((p) => `
     <tr>
       <td>
@@ -148,11 +176,17 @@ function openMapDetails(mapName) {
       <td style="color: var(--accent); font-weight: 600;">${p.avgRating}</td>
     </tr>
   `).join('');
+
   document.getElementById('map-modal').style.display = 'block';
 }
 
-function closeMapDetails() { document.getElementById('map-modal').style.display = 'none'; }
+function closeMapDetails() { 
+  document.getElementById('map-modal').style.display = 'none'; 
+}
 
+// ==========================================
+// ДУЭЛИ (СРАВНЕНИЕ)
+// ==========================================
 function initDuel() {
   const p1Select = document.getElementById('duel-p1');
   const p2Select = document.getElementById('duel-p2');
@@ -166,6 +200,7 @@ function initDuel() {
   btn.onclick = () => {
     const p1 = currentStats.players.find(p => p.id === p1Select.value);
     const p2 = currentStats.players.find(p => p.id === p2Select.value);
+    
     if (!p1 || !p2) return;
     if (p1.id === p2.id) return alert('Выбери двух разных людей!');
 
@@ -178,7 +213,10 @@ function initDuel() {
     const [classRat1, classRat2] = compare(p1.avgRating ?? 0, p2.avgRating ?? 0);
     const [classAdr1, classAdr2] = compare(p1.avgAdr ?? 0, p2.avgAdr ?? 0);
     const [classKast1, classKast2] = compare(p1.avgKast ?? 0, p2.avgKast ?? 0);
-    const winnerName = (p1.avgRating ?? p1.kd) > (p2.avgRating ?? p2.kd) ? (p1.displayName || p1.name) : (p2.displayName || p2.name);
+    
+    const p1Score = p1.avgRating ?? p1.kd;
+    const p2Score = p2.avgRating ?? p2.kd;
+    const winnerName = p1Score > p2Score ? (p1.displayName || p1.name) : (p2.displayName || p2.name);
 
     resultDiv.style.display = 'block';
     resultDiv.innerHTML = `
@@ -191,6 +229,9 @@ function initDuel() {
   };
 }
 
+// ==========================================
+// ПРОФИЛЬ ИГРОКА
+// ==========================================
 function openProfile(playerId) {
   const p = currentStats.players.find(pl => pl.id === playerId);
   if (!p) return;
@@ -198,6 +239,7 @@ function openProfile(playerId) {
   const img = document.getElementById('prof-avatar');
   img.src = p.avatar;
   img.onerror = function() { this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true&size=128`; };
+  
   document.getElementById('prof-name').innerText = p.displayName || p.name;
   document.getElementById('prof-matches').innerText = p.matches;
   document.getElementById('prof-kd').innerText = p.kd;
@@ -205,11 +247,13 @@ function openProfile(playerId) {
   document.getElementById('prof-adr').innerText = p.avgAdr ?? '—';
   document.getElementById('prof-kast').innerText = p.avgKast ?? '—';
 
+  // Логика шаринга в Телеграм
   const shareBtn = document.getElementById('share-btn');
   if (shareBtn) {
     shareBtn.onclick = () => {
-      const text = encodeURIComponent(`Смотрите, кто у нас тащит:\n🏆 ${p.displayName || p.name}\n📊 Рейтинг: ${p.avgRating || 0}\n🔫 K/D: ${p.kd}\n📈 ADR: ${p.avgAdr || 0}\n\nПруфы:`);
-      window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`, '_blank');
+      const text = encodeURIComponent(`Смотрите, кто у нас тащит:\n🏆 Игрок: ${p.displayName || p.name}\n📊 Рейтинг: ${p.avgRating || 0}\n🔫 K/D: ${p.kd} (${p.kills}/${p.deaths})\n📈 ADR: ${p.avgAdr || 0}\n\nПруфы:`);
+      const url = encodeURIComponent(window.location.href);
+      window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
     };
   }
 
@@ -222,29 +266,36 @@ function openProfile(playerId) {
 
   const canvas = document.getElementById('prof-chart');
   if (profChart) profChart.destroy();
+  
   if (p.history && p.history.length > 1) {
     const sortedHist = [...p.history].sort((a,b) => new Date(a.date) - new Date(b.date));
     profChart = new Chart(canvas, {
       type: 'line',
-      data: { labels: sortedHist.map(h => new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })), datasets: [{ label: 'Рейтинг', data: sortedHist.map(h => h.rating), borderColor: '#4d6bfe', backgroundColor: 'rgba(77, 107, 254, 0.1)', fill: true, tension: 0.3 }] },
+      data: { 
+        labels: sortedHist.map(h => new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })), 
+        datasets: [{ label: 'Рейтинг', data: sortedHist.map(h => h.rating), borderColor: '#4d6bfe', backgroundColor: 'rgba(77, 107, 254, 0.1)', fill: true, tension: 0.3 }] 
+      },
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#8b96a5' } }, y: { grid: { color: '#262f40' }, ticks: { color: '#8b96a5' } } } }
     });
   }
+
   document.getElementById('profile-modal').style.display = 'block';
 }
 
-function closeProfile() { document.getElementById('profile-modal').style.display = 'none'; }
+function closeProfile() { 
+  document.getElementById('profile-modal').style.display = 'none'; 
+}
 
+// Закрытие модалок по клику вне окна
 window.onclick = function(event) {
   if (event.target == document.getElementById('profile-modal')) closeProfile();
   if (event.target == document.getElementById('map-modal')) closeMapDetails();
   if (event.target == document.getElementById('balancer-modal')) closeBalancer();
 }
 
-// ============================================================
-// БАЛАНСИРОВЩИК (с сохранением, случайной и балансной картой)
-// ============================================================
-
+// ==========================================
+// БАЛАНСИРОВЩИК 5х5
+// ==========================================
 function getSavedKey() {
   return `savedTeams_${document.getElementById('tournament-select').value}`;
 }
@@ -282,8 +333,10 @@ function initBalancer() {
   window.closeBalancer = () => { modal.style.display = 'none'; };
 
   function drawGrid() {
+    if (!grid) return;
     const query = searchInput.value.toLowerCase();
     const filtered = currentStats.players.filter(p => (p.displayName || p.name).toLowerCase().includes(query));
+    
     grid.innerHTML = filtered.map(p => {
       const isSelected = selectedPlayers.find(sp => sp.id === p.id);
       return `
@@ -296,6 +349,7 @@ function initBalancer() {
     }).join('');
   }
 
+  // Экспортируем в window, чтобы onclick в HTML видел функцию
   window.togglePlayer = (id) => {
     const idx = selectedPlayers.findIndex(p => p.id === id);
     if (idx > -1) {
@@ -315,8 +369,10 @@ function initBalancer() {
   };
 
   function updateUI() {
+    if (!countLabel) return;
     countLabel.innerText = `${selectedPlayers.length} / 10`;
     balanceBtn.disabled = selectedPlayers.length !== 10;
+    
     if (selectedPlayers.length === 10) {
       mapActions.classList.add('show');
     } else {
@@ -344,17 +400,15 @@ function initBalancer() {
     drawGrid();
   };
 
-  // РАЗДЕЛЕНИЕ НА КОМАНДЫ + СОХРАНЕНИЕ
   balanceBtn.onclick = () => {
     if (selectedPlayers.length !== 10) return;
     const { teamA, teamB, sumA, sumB } = balanceTeams(selectedPlayers, p => p.avgRating ?? 0);
     renderTeams(resultDiv, teamA, teamB, sumA, sumB, 'Команда А', 'Команда Б');
     resultDiv.classList.add('show');
-    savedSection.classList.remove('show'); // скрываем старое, чтобы не дублировалось
+    savedSection.classList.remove('show');
     saveTeams(teamA, teamB);
   };
 
-  // СЛУЧАЙНАЯ КАРТА
   document.getElementById('random-map-btn').onclick = () => {
     const mapNames = currentStats.mapStats.map(m => m.map);
     if (mapNames.length === 0) return;
@@ -362,7 +416,6 @@ function initBalancer() {
     showMapResult(randomMap, '🎲 Случайная карта', null);
   };
 
-  // БАЛАНСНАЯ КАРТА
   document.getElementById('balanced-map-btn').onclick = () => {
     const result = findMostBalancedMap(selectedPlayers);
     if (!result) {
@@ -372,14 +425,14 @@ function initBalancer() {
     showMapResult(result.map, '⚖️ Самая балансная карта', result);
   };
 
-  // УДАЛИТЬ СОХРАНЕНИЕ
   document.getElementById('clear-saved-btn').onclick = () => {
     localStorage.removeItem(getSavedKey());
     savedSection.classList.remove('show');
     savedContent.innerHTML = '';
   };
 
-  // СОХРАНЕНИЕ В LOCALSTORAGE
+  // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ БАЛАНСИРОВЩИКА ---
+
   function saveTeams(teamA, teamB) {
     try {
       localStorage.setItem(getSavedKey(), JSON.stringify({
@@ -390,7 +443,6 @@ function initBalancer() {
     } catch (e) { console.error('Не удалось сохранить', e); }
   }
 
-  // ЗАГРУЗКА СОХРАНЁННОГО
   function loadSaved() {
     try {
       const raw = localStorage.getItem(getSavedKey());
@@ -489,7 +541,7 @@ function initBalancer() {
     `;
   }
 
-  // АЛГОРИТМ: самая балансная карта для выбранных 10 человек
+  // ПОИСК САМОЙ БАЛАНСНОЙ КАРТЫ
   function findMostBalancedMap(players) {
     if (!currentStats.mapStats || currentStats.mapStats.length === 0) return null;
 
@@ -498,16 +550,16 @@ function initBalancer() {
     let bestDetails = null;
 
     for (const mapStat of currentStats.mapStats) {
-      // Смотрим, есть ли у всех 10 игроков инфа на этой карте
+      // Проверяем, есть ли статистика по этой карте у всех 10 игроков
       const mapRatings = players.map(p => {
         const tp = mapStat.topPlayers.find(tp => tp.id === p.id);
         return tp ? { rating: tp.avgRating, hasData: true } : { rating: null, hasData: false };
       });
 
-      // Если хотя бы один игрок не играл эту карту, пропускаем — иначе баланс будет нечестным
+      // Если хотя бы один игрок не играл эту карту, пропускаем (баланс будет нечестным)
       if (mapRatings.some(r => !r.hasData)) continue;
 
-      // Сортируем и "змейкой" распределяем на 2 команды
+      // Сортируем рейтинги и распределяем "змейкой"
       const sorted = [...mapRatings].sort((a,b) => b.rating - a.rating);
       let sumA = 0, sumB = 0;
       sorted.forEach(r => {
@@ -516,6 +568,7 @@ function initBalancer() {
       });
       const diff = Math.abs(sumA - sumB);
 
+      // Если разница меньше предыдущей найденной - запоминаем
       if (diff < bestDiff) {
         bestDiff = diff;
         bestMap = mapStat.map;
@@ -528,6 +581,7 @@ function initBalancer() {
   }
 }
 
+// Запуск
 document.addEventListener('DOMContentLoaded', () => {
   loadData();
   initBalancer();

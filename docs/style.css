@@ -15,14 +15,54 @@
 body {
   font-family: 'Inter', system-ui, sans-serif;
   background-color: var(--bg-main);
-  background-image: radial-gradient(circle at 50% -20%, #1a2644 0%, transparent 50%);
   color: var(--text-main);
   min-height: 100vh;
   padding: 20px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ============== АНИМИРОВАННЫЙ ФОН ============== */
+.bg-animation {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, #101626 0%, #06080a 100%);
+}
+
+.bg-animation::before {
+  content: '';
+  position: absolute;
+  width: 200%; height: 200%;
+  top: -50%; left: -50%;
+  background-image: radial-gradient(rgba(77, 107, 254, 0.15) 1.5px, transparent 1.5px);
+  background-size: 50px 50px;
+  animation: moveGrid 25s linear infinite;
+}
+
+.bg-animation::after {
+  content: '';
+  position: absolute;
+  width: 100%; height: 100%;
+  top: 0; left: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(77, 107, 254, 0.08) 0%, transparent 60%);
+  animation: pulseGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes moveGrid {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-50px, -50px); }
+}
+
+@keyframes pulseGlow {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
 }
 
 /* ============== ОСНОВА ============== */
-.app-container { max-width: 1400px; margin: 0 auto; }
+.app-container { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
 .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 30px; }
 .logo { display: flex; align-items: center; gap: 12px; }
 .logo-icon { background: var(--accent); color: #fff; font-weight: 800; padding: 6px 12px; border-radius: 8px; font-size: 1.2rem; letter-spacing: 1px; }
@@ -30,11 +70,7 @@ body {
 .logo-text span { color: var(--accent); }
 .meta-info { font-size: 0.85rem; color: var(--text-muted); background: var(--bg-card); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); }
 
-.header-controls {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
+.header-controls { display: flex; align-items: center; gap: 15px; }
 
 .select-tournament {
   background: var(--bg-main);
@@ -52,7 +88,7 @@ body {
 .select-tournament:hover { background: var(--bg-hover); }
 
 .main-grid { display: grid; grid-template-columns: 1fr 400px; gap: 24px; align-items: start; }
-.glass-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
+.glass-card { background: rgba(21, 26, 37, 0.85); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
 .mt-20 { margin-top: 24px; }
 .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 h2 { font-size: 1.1rem; font-weight: 600; }
@@ -305,7 +341,7 @@ h2 { font-size: 1.1rem; font-weight: 600; }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ============== ВЫБОР КАРТЫ В БАЛАНСИРОВЩИКЕ ============== */
+/* ============== ВЫБОР КАРТЫ ============== */
 .map-actions {
   display: none;
   gap: 10px;

@@ -11,6 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- АНИМИРОВАННЫЙ ФОН -->
+  <div class="bg-animation"></div>
+
   <div class="app-container">
     <header class="header">
       <div class="logo">
@@ -40,7 +43,13 @@
           <div class="table-container">
             <table class="stats-table" id="players-table">
               <thead>
-                <tr><th>Игрок</th><th>Форма</th><th>Карты</th><th>K/D</th><th>Рейтинг</th></tr>
+                <tr>
+                  <th>Игрок</th>
+                  <th>Форма 🔥</th>
+                  <th>Карты 🗺️</th>
+                  <th>K/D 🔫</th>
+                  <th>Рейтинг 🏆</th>
+                </tr>
               </thead>
               <tbody></tbody>
             </table>
@@ -156,19 +165,15 @@
       <div id="players-grid" class="players-grid"></div>
       <button id="balance-btn" class="btn-primary mt-20" disabled>Разделить на команды</button>
 
-      <!-- РЕЗУЛЬТАТ РАЗДЕЛЕНИЯ -->
       <div id="balance-result" class="balance-result-modal"></div>
 
-      <!-- КНОПКИ ВЫБОРА КАРТЫ -->
       <div id="map-actions" class="map-actions">
         <button id="random-map-btn" class="btn-primary" style="background: #4d6bfe;">🎲 Случайная карта</button>
         <button id="balanced-map-btn" class="btn-primary" style="background: #10b981;">⚖️ Балансная карта</button>
       </div>
 
-      <!-- РЕЗУЛЬТАТ ВЫБОРА КАРТЫ -->
       <div id="map-result" class="map-result-box"></div>
 
-      <!-- СОХРАНЁННЫЕ СОСТАВЫ -->
       <div id="saved-teams-section" class="saved-teams-section">
         <div class="saved-header">
           <h3>💾 Сохранённые составы</h3>
