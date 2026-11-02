@@ -8,11 +8,8 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0b0e14">
   
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- AOS Animation -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   
@@ -23,22 +20,16 @@
 
   <div class="app-container">
     <header class="header">
-      <div class="logo">
-        <span class="logo-text">CS2 STATS</span>
-      </div>
+      <div class="logo"><span class="logo-text">CS2 STATS</span></div>
       <div class="header-controls">
         <select id="tournament-select" class="select-tournament"></select>
         <div id="meta-info" class="meta-info">Загрузка...</div>
-        <button id="beginner-toggle" class="btn-outline" title="Показать/скрыть объяснение метрик">
+        <button id="beginner-toggle" class="btn-outline" title="Гид">
           <i data-lucide="help-circle" style="width:16px; height:16px;"></i> Гид
-        </button>
-        <button id="export-csv-btn" class="btn-outline" title="Экспорт в CSV">
-          <i data-lucide="download" style="width:16px; height:16px;"></i> CSV
         </button>
       </div>
     </header>
 
-    <!-- БЛОК ДЛЯ НОВИЧКОВ -->
     <section class="metric-explanation" id="beginner-block">
       <h3>Что значит каждая метрика?</h3>
       <div class="metric-grid">
@@ -51,67 +42,42 @@
       </div>
     </section>
 
-    <!-- НАВИГАЦИЯ (ТАБЫ) -->
     <nav class="tabs-nav">
-      <button class="tab-btn active" data-tab="overview">
-        <i data-lucide="layout-dashboard"></i> Обзор
-      </button>
-      <button class="tab-btn" data-tab="players">
-        <i data-lucide="users"></i> Игроки
-      </button>
-      <button class="tab-btn" data-tab="maps">
-        <i data-lucide="map"></i> Карты
-      </button>
-      <button class="tab-btn" data-tab="balancer">
-        <i data-lucide="git-merge"></i> Балансировщик
-      </button>
+      <button class="tab-btn active" data-tab="overview"><i data-lucide="layout-dashboard"></i> Обзор</button>
+      <button class="tab-btn" data-tab="players"><i data-lucide="users"></i> Игроки</button>
+      <button class="tab-btn" data-tab="maps"><i data-lucide="map"></i> Карты</button>
+      <button class="tab-btn" data-tab="balancer"><i data-lucide="git-merge"></i> Балансировщик</button>
+      <button class="tab-btn" data-tab="bracket"><i data-lucide="trophy"></i> Сетка</button>
+      <button class="tab-btn" data-tab="draft"><i data-lucide="user-plus"></i> Драфт</button>
     </nav>
 
     <main class="main-content">
-      <!-- ВКЛАДКА: ОБЗОР -->
+      <!-- ОБЗОР -->
       <div class="tab-content active" id="tab-overview">
         <div class="grid-2col">
           <div class="col-left">
-            <!-- ПЬЕДЕСТАЛ -->
             <section class="glass-card interactive-card" data-aos="fade-up">
               <div class="card-header"><h2>Пьедестал</h2><span class="header-hint">Топ-3 по рейтингу</span></div>
               <div class="podium-grid" id="podium-container"></div>
             </section>
-
-            <!-- РЕКОРДЫ -->
-            <section class="glass-card mt-20 interactive-card" data-aos="fade-up" data-aos-delay="100">
-              <div class="card-header">
-                <h2>Рекорды за карту</h2>
-                <span class="header-hint">Нажми на карточку, чтобы увидеть все рекорды карты</span>
-              </div>
+            <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="100">
+              <div class="card-header"><h2>Последние матчи</h2></div>
+              <div id="recent-matches-container" class="recent-matches-list"></div>
+            </section>
+            <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="200">
+              <div class="card-header"><h2>Рекорды за карту</h2><span class="header-hint">Нажми на карточку</span></div>
               <div class="fun-stats-grid">
-                <div class="fun-stat-box record-card interactive-box" id="card-rec-kills">
-                  <div class="fun-val" id="rec-max-kills">—</div>
-                  <div class="fun-desc" id="rec-max-kills-desc">Нет данных</div>
-                  <div class="record-hint">Максимум убийств за карту</div>
-                </div>
-                <div class="fun-stat-box record-card interactive-box" id="card-rec-deaths">
-                  <div class="fun-val" id="rec-max-deaths" style="color: #ef4444;">—</div>
-                  <div class="fun-desc" id="rec-max-deaths-desc">Нет данных</div>
-                  <div class="record-hint">Максимум смертей за карту</div>
-                </div>
-                <div class="fun-stat-box record-card interactive-box" id="card-rec-adr">
-                  <div class="fun-val" id="rec-max-adr" style="color: #10b981;">—</div>
-                  <div class="fun-desc" id="rec-max-adr-desc">Нет данных</div>
-                  <div class="record-hint">Максимум ADR</div>
-                </div>
+                <div class="fun-stat-box record-card interactive-box" id="card-rec-kills"><div class="fun-val" id="rec-max-kills">—</div><div class="fun-desc" id="rec-max-kills-desc">Нет данных</div><div class="record-hint">Макс. убийств</div></div>
+                <div class="fun-stat-box record-card interactive-box" id="card-rec-deaths"><div class="fun-val" id="rec-max-deaths" style="color: #ef4444;">—</div><div class="fun-desc" id="rec-max-deaths-desc">Нет данных</div><div class="record-hint">Макс. смертей</div></div>
+                <div class="fun-stat-box record-card interactive-box" id="card-rec-adr"><div class="fun-val" id="rec-max-adr" style="color: #10b981;">—</div><div class="fun-desc" id="rec-max-adr-desc">Нет данных</div><div class="record-hint">Макс. ADR</div></div>
               </div>
             </section>
-
-            <!-- ИНТЕРЕСНЫЕ ФАКТЫ -->
-            <section class="glass-card mt-20 interactive-card" data-aos="fade-up" data-aos-delay="200">
+            <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="300">
               <div class="card-header"><h2>Интересные факты</h2></div>
               <div class="fun-facts-grid" id="fun-facts-container"></div>
             </section>
           </div>
-
           <div class="col-right">
-            <!-- ОБЩАЯ СТАТИСТИКА -->
             <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="100">
               <div class="card-header"><h2>Общая статистика</h2></div>
               <div class="fun-stats-grid vertical">
@@ -124,40 +90,31 @@
         </div>
       </div>
 
-      <!-- ВКЛАДКА: ИГРОКИ -->
+      <!-- ИГРОКИ -->
       <div class="tab-content" id="tab-players">
         <div class="grid-2col">
           <div class="col-left">
             <section class="glass-card interactive-card">
               <div class="card-header">
-                <h2>Сводная статистика игроков</h2>
+                <h2>Сводная статистика</h2>
                 <div class="controls">
-                  <input type="text" id="filter-name" class="input-search" placeholder="Поиск игрока...">
+                  <input type="text" id="filter-name" class="input-search" placeholder="Поиск...">
                   <select id="sort-by" class="select-sort">
-                    <option value="rating">Сортировка по рейтингу</option>
-                    <option value="kd">Сортировка по K/D</option>
-                    <option value="deaths">Сортировка по смертям</option>
+                    <option value="rating">По рейтингу</option>
+                    <option value="kd">По K/D</option>
+                    <option value="deaths">По смертям</option>
                   </select>
                 </div>
               </div>
               <div class="table-container">
                 <table class="stats-table" id="players-table">
-                  <thead>
-                    <tr>
-                      <th>Игрок</th>
-                      <th data-tooltip="Форма: в форме / спад / стабильно (по последним 3 матчам)">Форма</th>
-                      <th data-tooltip="Сколько карт сыграно">Карты</th>
-                      <th data-tooltip="Убийства / Смерти. Чем выше, тем лучше">K/D</th>
-                      <th data-tooltip="Средний рейтинг (как на HLTV)">Рейтинг</th>
-                    </tr>
-                  </thead>
+                  <thead><tr><th>Игрок</th><th>Форма</th><th>Карты</th><th>K/D</th><th>Рейтинг</th></tr></thead>
                   <tbody></tbody>
                 </table>
               </div>
             </section>
           </div>
           <div class="col-right">
-            <!-- ДУЭЛИ -->
             <section class="glass-card interactive-card" id="duel-section">
               <div class="card-header"><h2>Сравнение игроков</h2></div>
               <div class="duel-selects">
@@ -172,47 +129,96 @@
         </div>
       </div>
 
-      <!-- ВКЛАДКА: КАРТЫ -->
+      <!-- КАРТЫ -->
       <div class="tab-content" id="tab-maps">
         <section class="glass-card interactive-card">
-          <div class="card-header">
-            <h2>Статистика карт</h2>
-            <span class="header-hint">Нажми на строку, чтобы увидеть детали</span>
-          </div>
+          <div class="card-header"><h2>Статистика карт</h2><span class="header-hint">Нажми на строку</span></div>
           <div class="table-container">
             <table class="stats-table" id="maps-table">
-              <thead>
-                <tr>
-                  <th class="sortable" data-sort="map">Карта <span class="sort-arrow">⬍</span></th>
-                  <th class="sortable" data-sort="matches">Игр <span class="sort-arrow">⬍</span></th>
-                  <th class="sortable" data-sort="avgKd">Ср. K/D <span class="sort-arrow">⬍</span></th>
-                  <th class="sortable" data-sort="avgRating">Ср. Рейтинг <span class="sort-arrow">⬍</span></th>
-                </tr>
-              </thead>
+              <thead><tr>
+                <th class="sortable" data-sort="map">Карта <span class="sort-arrow">⬍</span></th>
+                <th class="sortable" data-sort="matches">Игр <span class="sort-arrow">⬍</span></th>
+                <th class="sortable" data-sort="avgKd">Ср. K/D <span class="sort-arrow">⬍</span></th>
+                <th class="sortable" data-sort="avgRating">Ср. Рейтинг <span class="sort-arrow">⬍</span></th>
+              </tr></thead>
               <tbody></tbody>
             </table>
           </div>
         </section>
       </div>
 
-      <!-- ВКЛАДКА: БАЛАНСИРОВЩИК -->
+      <!-- БАЛАНСИРОВЩИК -->
       <div class="tab-content" id="tab-balancer">
         <section class="glass-card interactive-card">
           <div class="card-header"><h2>Балансировщик 5х5</h2></div>
-          <p class="text-muted mb-10">Соберите ровно 10 игроков для разделения на команды.</p>
+          <p class="text-muted mb-10">Соберите 10 игроков для разделения.</p>
           <button id="open-balancer-btn" class="btn-primary">Открыть балансировщик</button>
+        </section>
+      </div>
+
+      <!-- СЕТКА ТУРНИРА -->
+      <div class="tab-content" id="tab-bracket">
+        <section class="glass-card interactive-card">
+          <div class="card-header">
+            <h2>Сетка турнира</h2>
+            <div class="controls">
+              <button id="generate-bracket-btn" class="btn-outline">Сгенерировать</button>
+              <button id="simulate-bracket-btn" class="btn-outline">Симулировать</button>
+              <button id="reset-bracket-btn" class="btn-outline">Сброс</button>
+            </div>
+          </div>
+          <p class="text-muted mb-10">Автопосев по рейтингу. Кликай на победителя — он пройдет дальше. "Симулировать" сыграет всё автоматически.</p>
+          <div id="bracket-container" class="bracket-container"></div>
+        </section>
+      </div>
+
+      <!-- ДРАФТ КАПИТАНОВ -->
+      <div class="tab-content" id="tab-draft">
+        <section class="glass-card interactive-card">
+          <div class="card-header">
+            <h2>Драфт капитанов</h2>
+            <button id="reset-draft-btn" class="btn-outline">Сброс</button>
+          </div>
+          
+          <div id="draft-setup">
+            <div class="draft-setup-row">
+              <select id="captain-1" class="select-sort"></select>
+              <span class="vs-text">VS</span>
+              <select id="captain-2" class="select-sort"></select>
+            </div>
+            <button id="start-draft-btn" class="btn-primary mt-20">Начать драфт</button>
+          </div>
+
+          <div id="draft-active" style="display: none;">
+            <div class="draft-turn-indicator" id="draft-turn"></div>
+            <div class="draft-grid">
+              <div class="draft-team">
+                <h3 id="draft-team1-title">Команда 1</h3>
+                <ul id="draft-team1-list"></ul>
+              </div>
+              <div class="draft-pool">
+                <h3>Доступные игроки</h3>
+                <div id="draft-pool-list" class="draft-pool-list"></div>
+                <button id="auto-pick-btn" class="btn-outline mt-20" style="width: 100%;">Авто-пик (лучший)</button>
+              </div>
+              <div class="draft-team">
+                <h3 id="draft-team2-title">Команда 2</h3>
+                <ul id="draft-team2-list"></ul>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
     </main>
   </div>
 
-  <!-- МОДАЛКА ПРОФИЛЯ -->
+  <!-- МОДАЛКИ (без изменений) -->
   <div id="profile-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeProfile()">&times;</span>
       <div class="profile-header">
         <img id="prof-avatar" class="prof-avatar" src="" alt="Avatar">
-        <div class="prof-info"><h2 id="prof-name">Name</h2></div>
+        <div class="prof-info"><h2 id="prof-name">Name</h2><span class="prof-title">Игрок</span></div>
       </div>
       <div class="profile-stats-grid">
         <div class="p-stat"><span>Карты</span><strong id="prof-matches">0</strong></div>
@@ -235,7 +241,6 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА КАРТЫ -->
   <div id="map-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeMapDetails()">&times;</span>
@@ -251,7 +256,6 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА БАЛАНСИРОВЩИКА -->
   <div id="balancer-modal" class="modal">
     <div class="modal-content glass-card balancer-modal-content">
       <span class="close-btn" onclick="closeBalancer()">&times;</span>
@@ -260,7 +264,7 @@
         <span id="selected-count" class="balance-counter">Выбрано: 0 / 10</span>
       </div>
       <div class="balancer-tools">
-        <input type="text" id="player-search" class="input-search" style="flex:1;" placeholder="Поиск игрока...">
+        <input type="text" id="player-search" class="input-search" style="flex:1;" placeholder="Поиск...">
         <button id="random-btn" class="btn-outline" title="Случайные 10">Рандом</button>
         <button id="clear-btn" class="btn-outline" title="Очистить">Сброс</button>
       </div>

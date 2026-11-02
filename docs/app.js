@@ -13,6 +13,8 @@ let currentStats = null;
 let profChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
+let bracketState = null;
+let draftState = null;
 
 // ============ ИНИЦИАЛИЗАЦИЯ ТАБОВ ============
 function initTabs() {
@@ -26,7 +28,10 @@ function initTabs() {
       contents.forEach(c => c.classList.remove('active'));
       tab.classList.add('active');
       document.getElementById(`tab-${target}`).classList.add('active');
-      // Обновляем иконки
+      
+      if (target === 'bracket') renderBracket();
+      if (target === 'draft') renderDraft();
+      
       if (window.lucide) lucide.createIcons();
     });
   });
@@ -47,9 +52,11 @@ async function loadData() {
     currentStats = statsData.tournaments["Все матчи"];
 
     select.addEventListener('change', (e) => {
-        currentStats = statsData.tournaments[e.target.value];
-        selectedPlayers = [];
-        renderAll();
+      currentStats = statsData.tournaments[e.target.value];
+      selectedPlayers = [];
+      bracketState = null;
+      draftState = null;
+      renderAll();
     });
 
     renderAll();
@@ -68,93 +75,95 @@ function renderAll() {
       document.getElementById('stat-hours').innerText = (currentStats.funStats.totalHours || 0) + " ч.";
     }
     renderPodium();
+    renderRecentMatches();
     renderFunFacts();
     renderRecords();
     renderPlayersTable();
     renderMapStats();
     initDuel();
+    initBracketTab();
+    initDraftTab();
   } catch (e) {
     document.getElementById('meta-info').innerHTML = `<span style="color: #ef4444;">Ошибка рендера: ${e.message}</span>`;
     console.error(e);
   }
 }
 
-// ПЬЕДЕСТАЛ
+// ============ ПЬЕДЕСТАЛ ============
 function renderPodium() {
   const container = document.getElementById('podium-container');
   if (!container || !currentStats.players) return;
   const top3 = currentStats.players.slice(0, 3);
   if (top3.length === 0) { container.innerHTML = '<p style="color:var(--text-muted);">Нет игроков</p>'; return; }
-
   const order = [1, 0, 2];
   const classes = ['podium-2', 'podium-1', 'podium-3'];
   const ranks = ['2 место', '1 место', '3 место'];
-
   container.innerHTML = order.map((idx, i) => {
     const p = top3[idx];
     if (!p) return '';
-    return `
-      <div class="podium-card ${classes[i]}" onclick="openProfile('${p.id}')">
-        <div class="podium-rank">${ranks[i]}</div>
-        <img src="${p.avatar}" class="podium-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
-        <div class="podium-name">${p.displayName || p.name}</div>
-        <div class="podium-rating">${p.avgRating ?? p.kd}</div>
-      </div>
-    `;
+    return `<div class="podium-card ${classes[i]}" onclick="openProfile('${p.id}')">
+      <div class="podium-rank">${ranks[i]}</div>
+      <img src="${p.avatar}" class="podium-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
+      <div class="podium-name">${p.displayName || p.name}</div>
+      <div class="podium-rating">${p.avgRating ?? p.kd}</div>
+    </div>`;
   }).join('');
 }
 
-// ФАКТЫ
+// ============ ПОСЛЕДНИЕ МАТЧИ ============
+function renderRecentMatches() {
+  const container = document.getElementById('recent-matches-container');
+  if (!container || !currentStats.recentMatches) return;
+  if (currentStats.recentMatches.length === 0) { container.innerHTML = '<p style="color:var(--text-muted);">Матчей пока нет</p>'; return; }
+  container.innerHTML = currentStats.recentMatches.map(m => {
+    const date = new Date(m.date).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+    return `<a href="${m.url}" target="_blank" class="recent-match-item">
+      <div class="recent-match-left"><span class="recent-match-date">${date}</span><span class="recent-match-maps">${m.maps.join(' · ')}</span></div>
+      <div class="recent-match-right"><span>Открыть</span><span style="font-size: 1.2rem;">→</span></div>
+    </a>`;
+  }).join('');
+}
+
+// ============ ФАКТЫ ============
 function renderFunFacts() {
   const container = document.getElementById('fun-facts-container');
   if (!container) return;
   const ff = currentStats.funFacts;
   if (!ff || (!ff.mostStable && !ff.highestPeak && !ff.favoriteMap)) {
-    container.innerHTML = '<p style="color:var(--text-muted);">Недостаточно данных для интересных фактов</p>';
+    container.innerHTML = '<p style="color:var(--text-muted);">Недостаточно данных</p>';
     return;
   }
-
   const items = [];
   if (ff.mostStable) items.push({ title: 'Самый стабильный', player: ff.mostStable.player, desc: `Разброс рейтинга ±${ff.mostStable.stdDev}` });
   if (ff.highestPeak) items.push({ title: 'Пиковый рейтинг', player: ff.highestPeak.player, desc: `${ff.highestPeak.rating.toFixed(2)} на ${ff.highestPeak.map}` });
   if (ff.lowestRating) items.push({ title: 'Худший матч', player: ff.lowestRating.player, desc: `${ff.lowestRating.rating.toFixed(2)} на ${ff.lowestRating.map}` });
   if (ff.favoriteMap) items.push({ title: 'Любимая карта', player: ff.favoriteMap.map, desc: `${ff.favoriteMap.matches} игр` });
-
-  container.innerHTML = items.map(i => `
-    <div class="fun-fact-item">
-      <div class="fact-title">${i.title}</div>
-      <div class="fact-player">${i.player}</div>
-      <div class="fact-desc">${i.desc}</div>
-    </div>
-  `).join('');
+  container.innerHTML = items.map(i => `<div class="fun-fact-item"><div class="fact-title">${i.title}</div><div class="fact-player">${i.player}</div><div class="fact-desc">${i.desc}</div></div>`).join('');
 }
 
-// РЕКОРДЫ
+// ============ РЕКОРДЫ ============
 function renderRecords() {
   if (!currentStats.records) return;
   const r = currentStats.records;
   const killRec = (r.maxKills && r.maxKills.value > 0) ? r.maxKills : null;
   const deathRec = (r.maxDeaths && r.maxDeaths.value > 0) ? r.maxDeaths : null;
   const adrRec = (r.maxAdr && r.maxAdr.value > 0) ? r.maxAdr : null;
-
   document.getElementById('rec-max-kills').innerText = killRec ? killRec.value : '—';
   document.getElementById('rec-max-kills-desc').innerHTML = killRec ? `<b>${killRec.player}</b><br><span>${killRec.map}</span>` : 'Нет данных';
   document.getElementById('rec-max-deaths').innerText = deathRec ? deathRec.value : '—';
   document.getElementById('rec-max-deaths-desc').innerHTML = deathRec ? `<b>${deathRec.player}</b><br><span>${deathRec.map}</span>` : 'Нет данных';
   document.getElementById('rec-max-adr').innerText = adrRec ? adrRec.value : '—';
   document.getElementById('rec-max-adr-desc').innerHTML = adrRec ? `<b>${adrRec.player}</b><br><span>${adrRec.map}</span>` : 'Нет данных';
-
   document.getElementById('card-rec-kills').onclick = killRec ? () => openMapDetails(killRec.map) : null;
   document.getElementById('card-rec-deaths').onclick = deathRec ? () => openMapDetails(deathRec.map) : null;
   document.getElementById('card-rec-adr').onclick = adrRec ? () => openMapDetails(adrRec.map) : null;
 }
 
-// ТАБЛИЦА ИГРОКОВ
+// ============ ТАБЛИЦА ИГРОКОВ ============
 function renderPlayersTable() {
   const tbody = document.querySelector('#players-table tbody');
   const filterInput = document.getElementById('filter-name');
   const sortSelect = document.getElementById('sort-by');
-
   function draw() {
     const filter = filterInput.value.toLowerCase();
     const sortKey = sortSelect.value;
@@ -164,81 +173,47 @@ function renderPlayersTable() {
       if (sortKey === 'kd') return b.kd - a.kd;
       return (b.avgRating ?? 0) - (a.avgRating ?? 0);
     });
-
     tbody.innerHTML = players.map((p) => {
       let formText = '';
       if (p.form === 'hot') formText = '<span style="color: #10b981;">В форме</span>';
       else if (p.form === 'cold') formText = '<span style="color: #ef4444;">Спад</span>';
       else if (p.form === 'new') formText = '<span style="color: #f59e0b;">Мало данных</span>';
       else formText = '<span style="color: var(--text-muted);">Стабильно</span>';
-
-      return `
-      <tr>
-        <td>
-          <div class="player-cell">
-            <img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
-            <div><strong class="player-link" onclick="openProfile('${p.id}')">${p.displayName || p.name}</strong></div>
-          </div>
-        </td>
-        <td>${formText}</td>
-        <td>${p.matches}</td>
-        <td><strong>${p.kd}</strong></td>
-        <td style="color: var(--accent); font-weight: 600;">${p.avgRating ?? '—'}</td>
-      </tr>
-    `}).join('');
+      return `<tr>
+        <td><div class="player-cell"><img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><div><strong class="player-link" onclick="openProfile('${p.id}')">${p.displayName || p.name}</strong></div></div></td>
+        <td>${formText}</td><td>${p.matches}</td><td><strong>${p.kd}</strong></td><td style="color: var(--accent); font-weight: 600;">${p.avgRating ?? '—'}</td>
+      </tr>`;
+    }).join('');
   }
-
   filterInput.oninput = draw;
   sortSelect.onchange = draw;
   draw();
 }
 
-// КАРТЫ
+// ============ КАРТЫ ============
 function renderMapStats() {
   const tbody = document.querySelector('#maps-table tbody');
   if (!tbody || !currentStats.mapStats) return;
-
   function draw() {
     let data = [...currentStats.mapStats];
     const key = currentMapSort.key;
     const dir = currentMapSort.dir === 'asc' ? 1 : -1;
-
-    data.sort((a, b) => {
-      if (key === 'map') return a.map.localeCompare(b.map) * dir;
-      return (a[key] - b[key]) * dir;
-    });
-
-    tbody.innerHTML = data.map(m => `
-      <tr class="map-row" onclick="openMapDetails('${m.map}')">
-        <td><strong>${m.map}</strong></td>
-        <td>${m.matches}</td>
-        <td>${m.avgKd}</td>
-        <td style="color: var(--accent); font-weight: 600;">${m.avgRating}</td>
-      </tr>
-    `).join('');
+    data.sort((a, b) => key === 'map' ? a.map.localeCompare(b.map) * dir : (a[key] - b[key]) * dir);
+    tbody.innerHTML = data.map(m => `<tr class="map-row" onclick="openMapDetails('${m.map}')"><td><strong>${m.map}</strong></td><td>${m.matches}</td><td>${m.avgKd}</td><td style="color: var(--accent); font-weight: 600;">${m.avgRating}</td></tr>`).join('');
   }
-
   document.querySelectorAll('#maps-table .sortable').forEach(th => {
     if (th.dataset.listenerAttached) return;
     th.dataset.listenerAttached = 'true';
     th.addEventListener('click', () => {
       const key = th.dataset.sort;
-      if (currentMapSort.key === key) {
-        currentMapSort.dir = currentMapSort.dir === 'asc' ? 'desc' : 'asc';
-      } else {
-        currentMapSort.key = key;
-        currentMapSort.dir = 'desc';
-      }
-      document.querySelectorAll('#maps-table .sortable').forEach(t => {
-        t.classList.remove('asc', 'desc');
-        t.querySelector('.sort-arrow').textContent = '⬍';
-      });
+      if (currentMapSort.key === key) currentMapSort.dir = currentMapSort.dir === 'asc' ? 'desc' : 'asc';
+      else { currentMapSort.key = key; currentMapSort.dir = 'desc'; }
+      document.querySelectorAll('#maps-table .sortable').forEach(t => { t.classList.remove('asc', 'desc'); t.querySelector('.sort-arrow').textContent = '⬍'; });
       th.classList.add(currentMapSort.dir);
       th.querySelector('.sort-arrow').textContent = currentMapSort.dir === 'asc' ? '▲' : '▼';
       draw();
     });
   });
-
   draw();
 }
 
@@ -247,37 +222,20 @@ function openMapDetails(mapName) {
   if (!mapData) return;
   document.getElementById('map-modal-title').innerText = mapName;
   const tbody = document.getElementById('map-players-list');
-  tbody.innerHTML = mapData.topPlayers.map((p) => `
-    <tr>
-      <td>
-        <div class="player-cell">
-          <img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
-          <strong>${p.name}</strong>
-        </div>
-      </td>
-      <td>${p.matches}</td>
-      <td>${p.kills}</td>
-      <td>${p.deaths}</td>
-      <td>${p.kd}</td>
-      <td style="color: var(--accent); font-weight: 600;">${p.avgRating}</td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = mapData.topPlayers.map((p) => `<tr><td><div class="player-cell"><img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><strong>${p.name}</strong></div></td><td>${p.matches}</td><td>${p.kills}</td><td>${p.deaths}</td><td>${p.kd}</td><td style="color: var(--accent); font-weight: 600;">${p.avgRating}</td></tr>`).join('');
   document.getElementById('map-modal').style.display = 'block';
 }
-
 function closeMapDetails() { document.getElementById('map-modal').style.display = 'none'; }
 
-// ДУЭЛИ
+// ============ ДУЭЛИ ============
 function initDuel() {
   const p1Select = document.getElementById('duel-p1');
   const p2Select = document.getElementById('duel-p2');
   const btn = document.getElementById('duel-btn');
   const resultDiv = document.getElementById('duel-result');
-
   const options = currentStats.players.map(p => `<option value="${p.id}">${p.displayName || p.name}</option>`).join('');
   p1Select.innerHTML = options;
   p2Select.innerHTML = options;
-
   btn.onclick = () => {
     const p1 = currentStats.players.find(p => p.id === p1Select.value);
     const p2 = currentStats.players.find(p => p.id === p2Select.value);
@@ -300,7 +258,7 @@ function initDuel() {
   };
 }
 
-// ПРОФИЛЬ
+// ============ ПРОФИЛЬ ============
 function openProfile(playerId) {
   const p = currentStats.players.find(pl => pl.id === playerId);
   if (!p) return;
@@ -313,18 +271,15 @@ function openProfile(playerId) {
   document.getElementById('prof-rating').innerText = p.avgRating ?? '—';
   document.getElementById('prof-adr').innerText = p.avgAdr ?? '—';
   document.getElementById('prof-kast').innerText = p.avgKast ?? '—';
-
   const shareBtn = document.getElementById('share-btn');
   if (shareBtn) shareBtn.onclick = () => {
     const text = encodeURIComponent(`Статистика: ${p.displayName || p.name}\nРейтинг: ${p.avgRating || 0}\nK/D: ${p.kd}\nADR: ${p.avgAdr || 0}\nПодробнее:`);
     window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`, '_blank');
   };
-
   const compareBtn = document.getElementById('compare-btn');
   if (compareBtn) compareBtn.onclick = () => {
     closeProfile();
     document.getElementById('duel-p1').value = p.id;
-    // Переключаемся на вкладку игроков
     const tabs = document.querySelectorAll('.tab-btn');
     const contents = document.querySelectorAll('.tab-content');
     tabs.forEach(t => t.classList.remove('active'));
@@ -333,14 +288,12 @@ function openProfile(playerId) {
     document.getElementById('tab-players').classList.add('active');
     setTimeout(() => document.getElementById('duel-section').scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
   };
-
   const tbody = document.getElementById('prof-match-history');
   const history = [...(p.matchHistory || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
   tbody.innerHTML = history.map(h => {
     const d = new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
     return `<tr><td>${d}</td><td>${h.map}</td><td>${h.kills}</td><td>${h.deaths}</td><td>${h.assists}</td><td>${h.adr ?? '—'}</td><td>${h.kast ?? '—'}</td><td style="color: var(--accent); font-weight: 600;">${h.rating ?? '—'}</td></tr>`;
   }).join('');
-
   const canvas = document.getElementById('prof-chart');
   if (profChart) profChart.destroy();
   if (p.history && p.history.length > 1) {
@@ -353,18 +306,15 @@ function openProfile(playerId) {
   }
   document.getElementById('profile-modal').style.display = 'block';
 }
-
 function closeProfile() { document.getElementById('profile-modal').style.display = 'none'; }
-
 window.onclick = function(event) {
   if (event.target == document.getElementById('profile-modal')) closeProfile();
   if (event.target == document.getElementById('map-modal')) closeMapDetails();
   if (event.target == document.getElementById('balancer-modal')) closeBalancer();
 }
 
+// ============ БАЛАНСИРОВЩИК ============
 function getSavedKey() { return `savedTeams_${document.getElementById('tournament-select').value}`; }
-
-// БАЛАНСИРОВЩИК
 function initBalancer() {
   const openBtn = document.getElementById('open-balancer-btn');
   const modal = document.getElementById('balancer-modal');
@@ -380,7 +330,6 @@ function initBalancer() {
   const savedSection = document.getElementById('saved-teams-section');
   const savedContent = document.getElementById('saved-teams-content');
   if (!openBtn) return;
-
   openBtn.onclick = () => {
     modal.style.display = 'block';
     selectedPlayers = [];
@@ -394,36 +343,25 @@ function initBalancer() {
     loadSaved();
   };
   window.closeBalancer = () => { modal.style.display = 'none'; };
-
   function drawGrid() {
     if (!grid) return;
     const q = searchInput.value.toLowerCase();
     grid.innerHTML = currentStats.players.filter(p => (p.displayName || p.name).toLowerCase().includes(q)).map(p => {
       const sel = selectedPlayers.find(sp => sp.id === p.id);
-      return `<div class="player-card ${sel ? 'selected' : ''}" onclick="togglePlayer('${p.id}')">
-        <img src="${p.avatar}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
-        <div class="card-name">${p.displayName || p.name}</div>
-        <div class="card-rating">${p.avgRating ?? p.kd}</div>
-      </div>`;
+      return `<div class="player-card ${sel ? 'selected' : ''}" onclick="togglePlayer('${p.id}')"><img src="${p.avatar}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><div class="card-name">${p.displayName || p.name}</div><div class="card-rating">${p.avgRating ?? p.kd}</div></div>`;
     }).join('');
   }
-
   window.togglePlayer = (id) => {
     const idx = selectedPlayers.findIndex(p => p.id === id);
     if (idx > -1) selectedPlayers.splice(idx, 1);
     else {
-      if (selectedPlayers.length >= 10) {
-        countLabel.style.color = '#ef4444';
-        setTimeout(() => { countLabel.style.color = 'var(--accent)'; }, 500);
-        return;
-      }
+      if (selectedPlayers.length >= 10) { countLabel.style.color = '#ef4444'; setTimeout(() => { countLabel.style.color = 'var(--accent)'; }, 500); return; }
       const p = currentStats.players.find(p => p.id === id);
       if (p) selectedPlayers.push(p);
     }
     updateUI();
     drawGrid();
   };
-
   function updateUI() {
     countLabel.innerText = `Выбрано: ${selectedPlayers.length} / 10`;
     balanceBtn.disabled = selectedPlayers.length !== 10;
@@ -431,103 +369,44 @@ function initBalancer() {
     else { mapActions.classList.remove('show'); mapResult.innerHTML = ''; }
     if (selectedPlayers.length !== 10) resultDiv.classList.remove('show');
   }
-
   searchInput.addEventListener('input', drawGrid);
-
-  randomBtn.onclick = () => {
-    const sh = [...currentStats.players].sort(() => Math.random() - 0.5);
-    selectedPlayers = sh.slice(0, Math.min(10, sh.length));
-    updateUI(); drawGrid();
-  };
-
-  clearBtn.onclick = () => {
-    selectedPlayers = []; mapResult.innerHTML = '';
-    updateUI(); drawGrid();
-  };
-
+  randomBtn.onclick = () => { const sh = [...currentStats.players].sort(() => Math.random() - 0.5); selectedPlayers = sh.slice(0, Math.min(10, sh.length)); updateUI(); drawGrid(); };
+  clearBtn.onclick = () => { selectedPlayers = []; mapResult.innerHTML = ''; updateUI(); drawGrid(); };
   balanceBtn.onclick = () => {
     if (selectedPlayers.length !== 10) return;
     const { teamA, teamB, sumA, sumB } = findBestTeams(selectedPlayers.map(p => ({ ...p, rating: p.avgRating ?? 0 })));
-    
-    resultDiv.innerHTML = `
-      <div class="team-box"><h3>Команда А <span>Σ ${sumA.toFixed(2)}</span></h3><ul>${teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div>
-      <div class="team-box"><h3>Команда Б <span>Σ ${sumB.toFixed(2)}</span></h3><ul>${teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div>
-    `;
+    resultDiv.innerHTML = `<div class="team-box"><h3>Команда А <span>Σ ${sumA.toFixed(2)}</span></h3><ul>${teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div><div class="team-box"><h3>Команда Б <span>Σ ${sumB.toFixed(2)}</span></h3><ul>${teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div>`;
     resultDiv.classList.add('show');
     savedSection.classList.remove('show');
-    try {
-      localStorage.setItem(getSavedKey(), JSON.stringify({
-        teamA: teamA.map(p => ({ name: p.displayName || p.name, rating: p.rating, avatar: p.avatar })),
-        teamB: teamB.map(p => ({ name: p.displayName || p.name, rating: p.rating, avatar: p.avatar })),
-        savedAt: new Date().toISOString()
-      }));
-    } catch (e) {}
+    try { localStorage.setItem(getSavedKey(), JSON.stringify({ teamA: teamA.map(p => ({ name: p.displayName || p.name, rating: p.rating, avatar: p.avatar })), teamB: teamB.map(p => ({ name: p.displayName || p.name, rating: p.rating, avatar: p.avatar })), savedAt: new Date().toISOString() })); } catch (e) {}
   };
-
-  document.getElementById('random-map-btn').onclick = () => {
-    const names = currentStats.mapStats.map(m => m.map);
-    if (!names.length) return;
-    mapResult.innerHTML = `<div class="team-box" style="text-align:center;"><p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Случайная карта:</p><h2 style="color: #4d6bfe; font-size: 1.5rem; margin: 0;">${names[Math.floor(Math.random() * names.length)]}</h2></div>`;
-  };
-
+  document.getElementById('random-map-btn').onclick = () => { const names = currentStats.mapStats.map(m => m.map); if (!names.length) return; mapResult.innerHTML = `<div class="team-box" style="text-align:center;"><p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Случайная карта:</p><h2 style="color: #4d6bfe; font-size: 1.5rem; margin: 0;">${names[Math.floor(Math.random() * names.length)]}</h2></div>`; };
   document.getElementById('balanced-map-btn').onclick = () => {
     let best = null, bestDiff = Infinity, bestD = null;
     for (const ms of currentStats.mapStats) {
-      const ratings = selectedPlayers.map(p => {
-        const tp = ms.topPlayers.find(t => t.id === p.id);
-        return tp ? { rating: tp.avgRating } : null;
-      });
+      const ratings = selectedPlayers.map(p => { const tp = ms.topPlayers.find(t => t.id === p.id); return tp ? { rating: tp.avgRating } : null; });
       if (ratings.some(r => r === null)) continue;
-      
       const { sumA, sumB } = findBestTeams(ratings.map((r, i) => ({ id: selectedPlayers[i].id, rating: r.rating })));
       const diff = Math.abs(sumA - sumB);
-      if (diff < bestDiff) {
-        bestDiff = diff;
-        best = ms.map;
-        bestD = { diff, sumA, sumB };
-      }
+      if (diff < bestDiff) { bestDiff = diff; best = ms.map; bestD = { diff, sumA, sumB }; }
     }
-    if (!best) {
-      mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color:#ef4444;"><p style="color:#ef4444; font-size:0.85rem;">Нет карты, где играли все 10 выбранных игроков</p></div>`;
-      return;
-    }
-    mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color: #10b981;"><p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Оптимальная карта по балансу:</p><h2 style="color: #10b981; font-size: 1.5rem; margin: 0 0 8px 0;">${best}</h2><p style="font-size: 0.8rem; color: var(--text-muted);">Разница рейтингов: <b style="color:#10b981;">${bestD.diff.toFixed(2)}</b> (${bestD.sumA.toFixed(2)} vs ${bestD.sumB.toFixed(2)})</p></div>`;
+    if (!best) { mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color:#ef4444;"><p style="color:#ef4444; font-size:0.85rem;">Нет карты, где играли все 10 игроков</p></div>`; return; }
+    mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color: #10b981;"><p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Оптимальная карта:</p><h2 style="color: #10b981; font-size: 1.5rem; margin: 0 0 8px 0;">${best}</h2><p style="font-size: 0.8rem; color: var(--text-muted);">Разница: <b style="color:#10b981;">${bestD.diff.toFixed(2)}</b> (${bestD.sumA.toFixed(2)} vs ${bestD.sumB.toFixed(2)})</p></div>`;
   };
-
   function findBestTeams(players) {
-    const n = players.length;
-    const half = n / 2;
-    let bestDiff = Infinity;
-    let bestTeamA = [], bestTeamB = [];
-    let bestSumA = 0, bestSumB = 0;
-
-    const combinations = (arr, k) => {
-      if (k === 0) return [[]];
-      if (arr.length === 0) return [];
-      const [first, ...rest] = arr;
-      const withFirst = combinations(rest, k - 1).map(comb => [first, ...comb]);
-      const withoutFirst = combinations(rest, k);
-      return [...withFirst, ...withoutFirst];
-    };
-
+    const half = players.length / 2;
+    let bestDiff = Infinity, bestTeamA = [], bestTeamB = [], bestSumA = 0, bestSumB = 0;
+    const combinations = (arr, k) => { if (k === 0) return [[]]; if (arr.length === 0) return []; const [first, ...rest] = arr; const withFirst = combinations(rest, k - 1).map(comb => [first, ...comb]); const withoutFirst = combinations(rest, k); return [...withFirst, ...withoutFirst]; };
     for (const teamA of combinations(players, half)) {
       const teamB = players.filter(p => !teamA.includes(p));
       const sumA = teamA.reduce((s, p) => s + p.rating, 0);
       const sumB = teamB.reduce((s, p) => s + p.rating, 0);
       const diff = Math.abs(sumA - sumB);
-      if (diff < bestDiff) {
-        bestDiff = diff; bestTeamA = teamA; bestTeamB = teamB; bestSumA = sumA; bestSumB = sumB;
-      }
+      if (diff < bestDiff) { bestDiff = diff; bestTeamA = teamA; bestTeamB = teamB; bestSumA = sumA; bestSumB = sumB; }
     }
     return { teamA: bestTeamA, teamB: bestTeamB, sumA: bestSumA, sumB: bestSumB };
   }
-
-  document.getElementById('clear-saved-btn').onclick = () => {
-    localStorage.removeItem(getSavedKey());
-    savedSection.classList.remove('show');
-    savedContent.innerHTML = '';
-  };
-
+  document.getElementById('clear-saved-btn').onclick = () => { localStorage.removeItem(getSavedKey()); savedSection.classList.remove('show'); savedContent.innerHTML = ''; };
   function loadSaved() {
     try {
       const raw = localStorage.getItem(getSavedKey());
@@ -535,51 +414,309 @@ function initBalancer() {
       const d = JSON.parse(raw);
       const sA = d.teamA.reduce((s, p) => s + (p.rating || 0), 0);
       const sB = d.teamB.reduce((s, p) => s + (p.rating || 0), 0);
-      savedContent.innerHTML = `
-        <div class="balance-result-modal show" style="margin-top: 0;">
-          <div class="team-box"><h3>Сохранено: Команда А <span>Σ ${sA.toFixed(2)}</span></h3><ul>${d.teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div>
-          <div class="team-box"><h3>Сохранено: Команда Б <span>Σ ${sB.toFixed(2)}</span></h3><ul>${d.teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div>
-        </div>`;
+      savedContent.innerHTML = `<div class="balance-result-modal show" style="margin-top: 0;"><div class="team-box"><h3>Сохранено: Команда А <span>Σ ${sA.toFixed(2)}</span></h3><ul>${d.teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div><div class="team-box"><h3>Сохранено: Команда Б <span>Σ ${sB.toFixed(2)}</span></h3><ul>${d.teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div></div>`;
       savedSection.classList.add('show');
     } catch (e) {}
   }
 }
 
-function initCSV() {
-  const btn = document.getElementById('export-csv-btn');
-  if (!btn) return;
-  btn.onclick = () => {
-    const players = currentStats.players;
-    const headers = ['Игрок','Карты','Убийства','Смерти','Ассисты','K/D','Рейтинг','ADR','KAST','Форма'];
-    const rows = players.map(p => [
-      p.displayName || p.name, p.matches, p.kills, p.deaths, p.assists,
-      p.kd, p.avgRating || '', p.avgAdr || '', p.avgKast || '', p.form || ''
-    ]);
-    const csv = [headers, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
-    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    const t = document.getElementById('tournament-select').value.replace(/[^a-zа-я0-9]/gi, '_');
-    a.download = `stats_${t}_${new Date().toISOString().slice(0,10)}.csv`;
-    a.click();
-  };
+// ============ СЕТКА ТУРНИРА ============
+function seedOrder(n) {
+  if (n === 1) return [1];
+  if (n === 2) return [1, 2];
+  const prev = seedOrder(n / 2);
+  const result = [];
+  for (const s of prev) { result.push(s); result.push(n + 1 - s); }
+  return result;
 }
 
-function initBeginnerMode() {
-  const btn = document.getElementById('beginner-toggle');
-  if (!btn) return;
-  const isActive = localStorage.getItem('beginnerMode') === '1';
-  if (isActive) { document.body.classList.add('beginner-mode'); btn.classList.add('active'); }
-  btn.onclick = () => {
-    const active = document.body.classList.toggle('beginner-mode');
-    localStorage.setItem('beginnerMode', active ? '1' : '0');
-    btn.classList.toggle('active', active);
-  };
+function initBracketTab() {
+  const genBtn = document.getElementById('generate-bracket-btn');
+  const simBtn = document.getElementById('simulate-bracket-btn');
+  const resetBtn = document.getElementById('reset-bracket-btn');
+  if (!genBtn) return;
+  genBtn.onclick = () => generateBracket();
+  simBtn.onclick = () => simulateBracket();
+  resetBtn.onclick = () => { bracketState = null; saveBracket(); renderBracket(); };
+  
+  // Load saved
+  try {
+    const raw = localStorage.getItem(`bracket_${document.getElementById('tournament-select').value}`);
+    if (raw) bracketState = JSON.parse(raw);
+  } catch(e){}
+  renderBracket();
 }
 
-// ЗАПУСК
+function generateBracket() {
+  const players = currentStats.players.slice().sort((a, b) => (b.avgRating ?? b.kd ?? 0) - (a.avgRating ?? a.kd ?? 0));
+  const n = players.length;
+  if (n < 2) { alert('Нужно минимум 2 игрока'); return; }
+  const size = Math.pow(2, Math.ceil(Math.log2(n)));
+  const seeded = seedOrder(size);
+  const round0 = [];
+  for (let i = 0; i < size; i += 2) {
+    const seedA = seeded[i], seedB = seeded[i + 1];
+    round0.push({
+      t1: seedA <= n ? { id: players[seedA - 1].id, name: players[seedA - 1].displayName || players[seedA - 1].name, avatar: players[seedA - 1].avatar, rating: players[seedA - 1].avgRating, seed: seedA } : null,
+      t2: seedB <= n ? { id: players[seedB - 1].id, name: players[seedB - 1].displayName || players[seedB - 1].name, avatar: players[seedB - 1].avatar, rating: players[seedB - 1].avgRating, seed: seedB } : null,
+      winner: null,
+    });
+  }
+  const rounds = [round0];
+  let curSize = size / 2;
+  while (curSize >= 1) {
+    const round = [];
+    for (let i = 0; i < curSize; i++) round.push({ t1: null, t2: null, winner: null });
+    rounds.push(round);
+    curSize /= 2;
+  }
+  bracketState = { size, participants: players.length, rounds, champion: null, completed: false };
+  processBracket(bracketState);
+  saveBracket();
+  renderBracket();
+}
+
+function processBracket(state) {
+  const rounds = state.rounds;
+  for (let r = 0; r < rounds.length; r++) {
+    for (let m = 0; m < rounds[r].length; m++) {
+      const match = rounds[r][m];
+      if (match.winner === null) {
+        if (match.t1 && !match.t2) match.winner = 1;
+        else if (!match.t1 && match.t2) match.winner = 2;
+      }
+      if (match.winner !== null && r < rounds.length - 1) {
+        const winner = match.winner === 1 ? match.t1 : match.t2;
+        if (winner) {
+          const nextMatch = rounds[r + 1][Math.floor(m / 2)];
+          if (m % 2 === 0) nextMatch.t1 = winner;
+          else nextMatch.t2 = winner;
+        }
+      }
+    }
+  }
+  const finalMatch = rounds[rounds.length - 1][0];
+  state.champion = finalMatch.winner === 1 ? finalMatch.t1 : (finalMatch.winner === 2 ? finalMatch.t2 : null);
+  state.completed = state.champion !== null;
+}
+
+function saveBracket() {
+  try {
+    const key = `bracket_${document.getElementById('tournament-select').value}`;
+    if (bracketState) localStorage.setItem(key, JSON.stringify(bracketState));
+    else localStorage.removeItem(key);
+  } catch(e){}
+}
+
+function renderBracket() {
+  const container = document.getElementById('bracket-container');
+  if (!container) return;
+  if (!bracketState) { container.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding: 40px;">Нажмите "Сгенерировать", чтобы создать сетку</p>'; return; }
+  const rounds = bracketState.rounds;
+  const roundNames = [];
+  const totalRounds = rounds.length;
+  for (let r = 0; r < totalRounds; r++) {
+    const remaining = Math.pow(2, totalRounds - r);
+    if (remaining === 2) roundNames.push('Финал');
+    else if (remaining === 4) roundNames.push('Полуфинал');
+    else if (remaining === 8) roundNames.push('1/4 финала');
+    else if (remaining === 16) roundNames.push('1/8 финала');
+    else roundNames.push(`Раунд ${r + 1}`);
+  }
+  
+  let html = '<div class="bracket">';
+  for (let r = 0; r < rounds.length; r++) {
+    html += `<div class="bracket-round"><div class="bracket-round-title">${roundNames[r]}</div>`;
+    for (let m = 0; m < rounds[r].length; m++) {
+      html += renderMatchCard(r, m, rounds[r][m]);
+    }
+    html += `</div>`;
+  }
+  html += '</div>';
+  if (bracketState.champion) html += `<div class="bracket-champion">Победитель турнира: ${bracketState.champion.name}</div>`;
+  container.innerHTML = html;
+}
+
+function renderMatchCard(r, m, match) {
+  const t1Class = match.winner === 1 ? 'winner' : (match.winner === 2 ? 'loser' : '');
+  const t2Class = match.winner === 2 ? 'winner' : (match.winner === 1 ? 'loser' : '');
+  const t1Name = match.t1 ? match.t1.name : '—';
+  const t2Name = match.t2 ? match.t2.name : '—';
+  const canClick = match.t1 && match.t2 && match.winner === null;
+  const t1Click = canClick ? `onclick="setBracketWinner(${r},${m},1)"` : '';
+  const t2Click = canClick ? `onclick="setBracketWinner(${r},${m},2)"` : '';
+  return `<div class="bracket-match ${match.winner ? 'completed' : ''}">
+    <div class="bracket-team ${t1Class}" ${t1Click}><span>${t1Name}</span>${match.winner === 1 ? '<span class="bracket-score">✓</span>' : ''}</div>
+    <div class="bracket-team ${t2Class}" ${t2Click}><span>${t2Name}</span>${match.winner === 2 ? '<span class="bracket-score">✓</span>' : ''}</div>
+  </div>`;
+}
+
+window.setBracketWinner = function(r, m, winner) {
+  if (!bracketState) return;
+  const match = bracketState.rounds[r][m];
+  if (!match.t1 || !match.t2) return;
+  match.winner = winner;
+  // Reset downstream chain
+  let curM = m;
+  for (let rr = r + 1; rr < bracketState.rounds.length; rr++) {
+    curM = Math.floor(curM / 2);
+    const nm = bracketState.rounds[rr][curM];
+    if (!nm) break;
+    nm.t1 = null; nm.t2 = null; nm.winner = null;
+  }
+  processBracket(bracketState);
+  saveBracket();
+  renderBracket();
+};
+
+function simulateBracket() {
+  if (!bracketState) return;
+  const rounds = bracketState.rounds;
+  // Reset all winners
+  for (const round of rounds) for (const m of round) { m.winner = null; }
+  // Rebuild from start
+  bracketState = null;
+  generateBracket(); // rebuild
+  // Now simulate
+  for (let r = 0; r < rounds.length; r++) {
+    for (let m = 0; m < rounds[r].length; m++) {
+      const match = rounds[r][m];
+      if (match.winner !== null) continue;
+      if (!match.t1 || !match.t2) continue;
+      const r1 = match.t1.rating ?? 0, r2 = match.t2.rating ?? 0;
+      const t1Better = r1 >= r2;
+      const rnd = Math.random();
+      match.winner = (rnd < 0.8) ? (t1Better ? 1 : 2) : (t1Better ? 2 : 1);
+    }
+    processBracket(bracketState);
+  }
+  saveBracket();
+  renderBracket();
+}
+
+// ============ ДРАФТ ============
+function initDraftTab() {
+  const c1 = document.getElementById('captain-1');
+  const c2 = document.getElementById('captain-2');
+  const startBtn = document.getElementById('start-draft-btn');
+  const resetBtn = document.getElementById('reset-draft-btn');
+  if (!c1) return;
+  const options = currentStats.players.map(p => `<option value="${p.id}">${p.displayName || p.name} (${p.avgRating ?? p.kd})</option>`).join('');
+  c1.innerHTML = options;
+  c2.innerHTML = options;
+  if (c2.options.length > 1) c2.selectedIndex = 1;
+  
+  startBtn.onclick = () => startDraft();
+  resetBtn.onclick = () => { draftState = null; saveDraft(); renderDraft(); };
+  
+  try {
+    const raw = localStorage.getItem(`draft_${document.getElementById('tournament-select').value}`);
+    if (raw) draftState = JSON.parse(raw);
+  } catch(e){}
+  renderDraft();
+}
+
+function startDraft() {
+  const c1id = document.getElementById('captain-1').value;
+  const c2id = document.getElementById('captain-2').value;
+  if (c1id === c2id) return alert('Выберите разных капитанов');
+  const c1 = currentStats.players.find(p => p.id === c1id);
+  const c2 = currentStats.players.find(p => p.id === c2id);
+  const pool = currentStats.players.filter(p => p.id !== c1id && p.id !== c2id).sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0));
+  draftState = {
+    captain1: { id: c1.id, name: c1.displayName || c1.name, avatar: c1.avatar, rating: c1.avgRating },
+    captain2: { id: c2.id, name: c2.displayName || c2.name, avatar: c2.avatar, rating: c2.avgRating },
+    pool: pool.map(p => ({ id: p.id, name: p.displayName || p.name, avatar: p.avatar, rating: p.avgRating ?? p.kd })),
+    team1: [{ id: c1.id, name: c1.displayName || c1.name, avatar: c1.avatar, isCaptain: true }],
+    team2: [{ id: c2.id, name: c2.displayName || c2.name, avatar: c2.avatar, isCaptain: true }],
+    pickNum: 0,
+    completed: false,
+  };
+  saveDraft();
+  renderDraft();
+}
+
+function getCurrentTurn(state) {
+  if (!state || state.completed) return null;
+  const pattern = [1, 2, 2, 1, 1, 2, 2, 1];
+  const maxPicks = Math.min(8, state.pool.length + (state.pool.length < 8 ? 8 - state.pool.length : 0));
+  if (state.pickNum >= Math.min(8, state.pool.length)) return null;
+  return pattern[state.pickNum];
+}
+
+function saveDraft() {
+  try {
+    const key = `draft_${document.getElementById('tournament-select').value}`;
+    if (draftState) localStorage.setItem(key, JSON.stringify(draftState));
+    else localStorage.removeItem(key);
+  } catch(e){}
+}
+
+function renderDraft() {
+  const setup = document.getElementById('draft-setup');
+  const active = document.getElementById('draft-active');
+  if (!setup || !active) return;
+  if (!draftState) {
+    setup.style.display = 'block';
+    active.style.display = 'none';
+    return;
+  }
+  setup.style.display = 'none';
+  active.style.display = 'block';
+  
+  const turn = getCurrentTurn(draftState);
+  const turnEl = document.getElementById('draft-turn');
+  if (!turn) {
+    turnEl.innerHTML = draftState.completed ? '✅ Драфт завершен' : '⏸ Все игроки выбраны';
+  } else {
+    const capName = turn === 1 ? draftState.captain1.name : draftState.captain2.name;
+    turnEl.innerHTML = `🎯 Сейчас выбирает: <strong>${capName}</strong>`;
+  }
+  
+  document.getElementById('draft-team1-title').innerHTML = `Команда ${draftState.captain1.name} (${draftState.team1.length}/5)`;
+  document.getElementById('draft-team2-title').innerHTML = `Команда ${draftState.captain2.name} (${draftState.team2.length}/5)`;
+  
+  document.getElementById('draft-team1-list').innerHTML = draftState.team1.map((p, i) => `<li>${p.isCaptain ? '👑 ' : ''}${i > 0 ? '• ' : ''}<img src="${p.avatar}">${p.name}</li>`).join('');
+  document.getElementById('draft-team2-list').innerHTML = draftState.team2.map((p, i) => `<li>${p.isCaptain ? '👑 ' : ''}${i > 0 ? '• ' : ''}<img src="${p.avatar}">${p.name}</li>`).join('');
+  
+  const poolEl = document.getElementById('draft-pool-list');
+  poolEl.innerHTML = draftState.pool.map(p => {
+    const isPicked = draftState.team1.find(t => t.id === p.id) || draftState.team2.find(t => t.id === p.id);
+    return `<div class="draft-pool-card ${isPicked ? 'picked' : ''}" onclick="${!isPicked && turn ? `pickPlayer('${p.id}')` : ''}">
+      <img src="${p.avatar}"><span>${p.name}</span><span style="margin-left:auto;color:var(--accent);">${p.rating}</span>
+    </div>`;
+  }).join('');
+  
+  document.getElementById('auto-pick-btn').disabled = !turn || draftState.pool.filter(p => !draftState.team1.find(t => t.id === p.id) && !draftState.team2.find(t => t.id === p.id)).length === 0;
+}
+
+window.pickPlayer = function(playerId) {
+  if (!draftState) return;
+  const turn = getCurrentTurn(draftState);
+  if (!turn) return;
+  const p = draftState.pool.find(x => x.id === playerId);
+  if (!p) return;
+  if (draftState.team1.find(x => x.id === playerId) || draftState.team2.find(x => x.id === playerId)) return;
+  if (turn === 1) draftState.team1.push({ ...p, isCaptain: false });
+  else draftState.team2.push({ ...p, isCaptain: false });
+  draftState.pickNum++;
+  if (draftState.team1.length >= 5 && draftState.team2.length >= 5) draftState.completed = true;
+  saveDraft();
+  renderDraft();
+};
+
+window.pickAuto = function() {
+  if (!draftState) return;
+  const turn = getCurrentTurn(draftState);
+  if (!turn) return;
+  const available = draftState.pool.filter(p => !draftState.team1.find(t => t.id === p.id) && !draftState.team2.find(t => t.id === p.id));
+  if (available.length === 0) return;
+  // Pick best by rating
+  available.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+  pickPlayer(available[0].id);
+};
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Инициализация анимаций и иконок
   if (window.AOS) AOS.init({ duration: 600, once: true });
   if (window.lucide) lucide.createIcons();
   
@@ -587,5 +724,5 @@ document.addEventListener('DOMContentLoaded', () => {
   loadData();
   initBalancer();
   initBeginnerMode();
-  initCSV();
+  document.getElementById('auto-pick-btn')?.addEventListener('click', pickAuto);
 });
