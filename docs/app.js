@@ -49,9 +49,7 @@ function renderAll() {
       document.getElementById('stat-deaths').innerText = currentStats.funStats.totalDeaths || 0;
       document.getElementById('stat-hours').innerText = (currentStats.funStats.totalHours || 0) + " ч.";
     }
-    renderPodium();
     renderRecords();
-    renderFunFacts();
     renderPlayersTable();
     renderMapStats();
     initDuel();
@@ -59,57 +57,6 @@ function renderAll() {
     document.getElementById('meta-info').innerHTML = `<span style="color: #ef4444;">Ошибка рендера: ${e.message}</span>`;
     console.error(e);
   }
-}
-
-function renderPodium() {
-  const container = document.getElementById('podium-container');
-  if (!container || !currentStats.players) return;
-  const top3 = currentStats.players.slice(0, 3);
-  if (top3.length === 0) { container.innerHTML = '<p style="color:var(--text-muted);">Нет игроков</p>'; return; }
-
-  const order = [1, 0, 2];
-  const classes = ['podium-2', 'podium-1', 'podium-3'];
-  const medals = ['🥈', '🥇', '🥉'];
-
-  container.innerHTML = order.map((idx, i) => {
-    const p = top3[idx];
-    if (!p) return '';
-    return `
-      <div class="podium-card ${classes[i]}" onclick="openProfile('${p.id}')">
-        <div class="podium-medal">${medals[i]}</div>
-        <img src="${p.avatar}" class="podium-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
-        <div class="podium-name">${p.displayName || p.name}</div>
-        <div class="podium-rating">${p.avgRating ?? p.kd}</div>
-      </div>
-    `;
-  }).join('');
-}
-
-function renderFunFacts() {
-  const container = document.getElementById('fun-facts-container');
-  if (!container) return;
-  const ff = currentStats.funFacts;
-  if (!ff || (!ff.mostStable && !ff.highestPeak && !ff.favoriteMap)) {
-    container.innerHTML = '<p style="color:var(--text-muted);">Недостаточно данных для интересных фактов</p>';
-    return;
-  }
-
-  const items = [];
-  if (ff.mostStable) items.push({ icon: '🎯', title: 'Самый стабильный', player: ff.mostStable.player, desc: `Разброс рейтинга ±${ff.mostStable.stdDev}` });
-  if (ff.highestPeak) items.push({ icon: '🚀', title: 'Пиковый рейтинг', player: ff.highestPeak.player, desc: `${ff.highestPeak.rating.toFixed(2)} на ${ff.highestPeak.map}` });
-  if (ff.lowestRating) items.push({ icon: '💩', title: 'Худший матч', player: ff.lowestRating.player, desc: `${ff.lowestRating.rating.toFixed(2)} на ${ff.lowestRating.map}` });
-  if (ff.favoriteMap) items.push({ icon: '🗺️', title: 'Любимая карта', player: ff.favoriteMap.map, desc: `${ff.favoriteMap.matches} игр` });
-
-  container.innerHTML = items.map(i => `
-    <div class="fun-fact-item">
-      <div class="fact-icon">${i.icon}</div>
-      <div>
-        <div class="fact-title">${i.title}</div>
-        <div class="fact-player">${i.player}</div>
-        <div class="fact-desc">${i.desc}</div>
-      </div>
-    </div>
-  `).join('');
 }
 
 function renderRecords() {
@@ -120,18 +67,15 @@ function renderRecords() {
   const adrRec = (r.maxAdr && r.maxAdr.value > 0) ? r.maxAdr : null;
 
   document.getElementById('rec-max-kills').innerText = killRec ? killRec.value : '—';
-  document.getElementById('rec-max-kills-desc').innerHTML = killRec ? `<b>${killRec.player}</b><br><span class="record-map">${killRec.map}</span>` : 'Нет данных';
+  document.getElementById('rec-max-kills-desc').innerHTML = killRec ? `<b>${killRec.player}</b><br><span>${killRec.map}</span>` : 'Нет данных';
   document.getElementById('rec-max-deaths').innerText = deathRec ? deathRec.value : '—';
-  document.getElementById('rec-max-deaths-desc').innerHTML = deathRec ? `<b>${deathRec.player}</b><br><span class="record-map">${deathRec.map}</span>` : 'Нет данных';
+  document.getElementById('rec-max-deaths-desc').innerHTML = deathRec ? `<b>${deathRec.player}</b><br><span>${deathRec.map}</span>` : 'Нет данных';
   document.getElementById('rec-max-adr').innerText = adrRec ? adrRec.value : '—';
-  document.getElementById('rec-max-adr-desc').innerHTML = adrRec ? `<b>${adrRec.player}</b><br><span class="record-map">${adrRec.map}</span>` : 'Нет данных';
+  document.getElementById('rec-max-adr-desc').innerHTML = adrRec ? `<b>${adrRec.player}</b><br><span>${adrRec.map}</span>` : 'Нет данных';
 
-  const killCard = document.getElementById('card-rec-kills');
-  const deathCard = document.getElementById('card-rec-deaths');
-  const adrCard = document.getElementById('card-rec-adr');
-  killCard.onclick = killRec ? () => openMapDetails(killRec.map) : null;
-  deathCard.onclick = deathRec ? () => openMapDetails(deathRec.map) : null;
-  adrCard.onclick = adrRec ? () => openMapDetails(adrRec.map) : null;
+  document.getElementById('card-rec-kills').onclick = killRec ? () => openMapDetails(killRec.map) : null;
+  document.getElementById('card-rec-deaths').onclick = deathRec ? () => openMapDetails(deathRec.map) : null;
+  document.getElementById('card-rec-adr').onclick = adrRec ? () => openMapDetails(adrRec.map) : null;
 }
 
 function renderPlayersTable() {
@@ -151,10 +95,10 @@ function renderPlayersTable() {
 
     tbody.innerHTML = players.map((p) => {
       let formText = '';
-      if (p.form === 'hot') formText = '<span style="color: #10b981; font-weight: 600;">В форме</span>';
-      else if (p.form === 'cold') formText = '<span style="color: #ef4444; font-weight: 600;">Спад</span>';
+      if (p.form === 'hot') formText = '<span style="color: #10b981;">В форме</span>';
+      else if (p.form === 'cold') formText = '<span style="color: #ef4444;">Спад</span>';
       else if (p.form === 'new') formText = '<span style="color: #f59e0b;">Мало данных</span>';
-      else formText = '<span style="color: #8b96a5;">Стабильно</span>';
+      else formText = '<span style="color: var(--text-muted);">Стабильно</span>';
 
       return `
       <tr>
@@ -264,7 +208,7 @@ function initDuel() {
     const p1 = currentStats.players.find(p => p.id === p1Select.value);
     const p2 = currentStats.players.find(p => p.id === p2Select.value);
     if (!p1 || !p2) return;
-    if (p1.id === p2.id) return alert('Выбери двух разных людей!');
+    if (p1.id === p2.id) return alert('Выберите двух разных игроков');
     const compare = (v1, v2) => v1 === v2 ? ['', ''] : (v1 > v2 ? ['duel-winner', 'duel-loser'] : ['duel-loser', 'duel-winner']);
     const [kd1, kd2] = compare(p1.kd, p2.kd);
     const [rat1, rat2] = compare(p1.avgRating ?? 0, p2.avgRating ?? 0);
@@ -274,10 +218,10 @@ function initDuel() {
     resultDiv.style.display = 'block';
     resultDiv.innerHTML = `
       <div class="duel-row"><span class="${kd1}">${p1.kd} K/D</span><span style="font-weight:bold;color:var(--text-muted);">K/D</span><span class="${kd2}">${p2.kd} K/D</span></div>
-      <div class="duel-row"><span class="${rat1}">${p1.avgRating ?? '—'} Рейтинг</span><span style="font-weight:bold;color:var(--text-muted);">RATING</span><span class="${rat2}">${p2.avgRating ?? '—'} Рейтинг</span></div>
+      <div class="duel-row"><span class="${rat1}">${p1.avgRating ?? '—'} Рейтинг</span><span style="font-weight:bold;color:var(--text-muted);">Рейтинг</span><span class="${rat2}">${p2.avgRating ?? '—'} Рейтинг</span></div>
       <div class="duel-row"><span class="${adr1}">${p1.avgAdr ?? '—'} ADR</span><span style="font-weight:bold;color:var(--text-muted);">ADR</span><span class="${adr2}">${p2.avgAdr ?? '—'} ADR</span></div>
       <div class="duel-row"><span class="${kast1}">${p1.avgKast ?? '—'} KAST</span><span style="font-weight:bold;color:var(--text-muted);">KAST</span><span class="${kast2}">${p2.avgKast ?? '—'} KAST</span></div>
-      <div style="text-align:center; margin-top:15px; font-weight:bold; font-size:1.2rem; color:#fff;">Победитель: <span style="color:#10b981;">${winnerName}</span></div>
+      <div style="text-align:center; margin-top:15px; font-weight:bold; font-size:1rem; color:#fff;">Победитель: <span style="color:#10b981;">${winnerName}</span></div>
     `;
   };
 }
@@ -297,7 +241,7 @@ function openProfile(playerId) {
 
   const shareBtn = document.getElementById('share-btn');
   if (shareBtn) shareBtn.onclick = () => {
-    const text = encodeURIComponent(`Смотрите, кто у нас тащит:\n🏆 ${p.displayName || p.name}\n📊 Рейтинг: ${p.avgRating || 0}\n🔫 K/D: ${p.kd}\n📈 ADR: ${p.avgAdr || 0}\n\nПруфы:`);
+    const text = encodeURIComponent(`Статистика: ${p.displayName || p.name}\nРейтинг: ${p.avgRating || 0}\nK/D: ${p.kd}\nADR: ${p.avgAdr || 0}\nПодробнее:`);
     window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`, '_blank');
   };
 
@@ -386,9 +330,8 @@ function initBalancer() {
     if (idx > -1) selectedPlayers.splice(idx, 1);
     else {
       if (selectedPlayers.length >= 10) {
-        countLabel.style.background = 'rgba(239, 68, 68, 0.2)';
         countLabel.style.color = '#ef4444';
-        setTimeout(() => { countLabel.style.background = 'rgba(77, 107, 254, 0.1)'; countLabel.style.color = 'var(--accent)'; }, 500);
+        setTimeout(() => { countLabel.style.color = 'var(--accent)'; }, 500);
         return;
       }
       const p = currentStats.players.find(p => p.id === id);
@@ -399,7 +342,7 @@ function initBalancer() {
   };
 
   function updateUI() {
-    countLabel.innerText = `${selectedPlayers.length} / 10`;
+    countLabel.innerText = `Выбрано: ${selectedPlayers.length} / 10`;
     balanceBtn.disabled = selectedPlayers.length !== 10;
     if (selectedPlayers.length === 10) mapActions.classList.add('show');
     else { mapActions.classList.remove('show'); mapResult.innerHTML = ''; }
@@ -421,11 +364,11 @@ function initBalancer() {
 
   balanceBtn.onclick = () => {
     if (selectedPlayers.length !== 10) return;
-    // Используем полный перебор для гарантированно лучшего баланса
     const { teamA, teamB, sumA, sumB } = findBestTeams(selectedPlayers.map(p => ({ ...p, rating: p.avgRating ?? 0 })));
+    
     resultDiv.innerHTML = `
-      <div class="team-box"><h3>Команда А <span>Σ ${sumA.toFixed(1)}</span></h3><ul>${teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.rating.toFixed(1)}</span></li>`).join('')}</ul></div>
-      <div class="team-box"><h3>Команда Б <span>Σ ${sumB.toFixed(1)}</span></h3><ul>${teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.rating.toFixed(1)}</span></li>`).join('')}</ul></div>
+      <div class="team-box"><h3>Команда А <span>Σ ${sumA.toFixed(2)}</span></h3><ul>${teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div>
+      <div class="team-box"><h3>Команда Б <span>Σ ${sumB.toFixed(2)}</span></h3><ul>${teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div>
     `;
     resultDiv.classList.add('show');
     savedSection.classList.remove('show');
@@ -441,41 +384,33 @@ function initBalancer() {
   document.getElementById('random-map-btn').onclick = () => {
     const names = currentStats.mapStats.map(m => m.map);
     if (!names.length) return;
-    mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color: #4d6bfe;"><p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">🎲 Случайная карта</p><h2 style="color: #4d6bfe; font-size: 1.8rem; margin: 0;">${names[Math.floor(Math.random() * names.length)]}</h2></div>`;
+    mapResult.innerHTML = `<div class="team-box" style="text-align:center;"><p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Случайная карта:</p><h2 style="color: #4d6bfe; font-size: 1.5rem; margin: 0;">${names[Math.floor(Math.random() * names.length)]}</h2></div>`;
   };
 
   document.getElementById('balanced-map-btn').onclick = () => {
     let best = null, bestDiff = Infinity, bestD = null;
-    
-    // Перебираем все карты
     for (const ms of currentStats.mapStats) {
-      // Проверяем, играли ли ВСЕ выбранные игроки эту карту
       const ratings = selectedPlayers.map(p => {
         const tp = ms.topPlayers.find(t => t.id === p.id);
         return tp ? { rating: tp.avgRating } : null;
       });
-
-      if (ratings.some(r => r === null)) continue; // Если хотя бы один не играл — скипаем карту
-
-      // Для этой карты ищем идеальное разделение
+      if (ratings.some(r => r === null)) continue;
+      
       const { sumA, sumB } = findBestTeams(ratings.map((r, i) => ({ id: selectedPlayers[i].id, rating: r.rating })));
       const diff = Math.abs(sumA - sumB);
-
       if (diff < bestDiff) {
         bestDiff = diff;
         best = ms.map;
         bestD = { diff, sumA, sumB };
       }
     }
-
     if (!best) {
-      mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color:#ef4444;"><p style="color:#ef4444;">Нет карты, на которой играли все 10 игроков</p></div>`;
+      mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color:#ef4444;"><p style="color:#ef4444; font-size:0.85rem;">Нет карты, где играли все 10 выбранных игроков</p></div>`;
       return;
     }
-    mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color: #10b981;"><p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">⚖️ Балансная карта</p><h2 style="color: #10b981; font-size: 1.8rem; margin: 0;">${best}</h2><p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Разница: <b style="color:#10b981;">${bestD.diff.toFixed(1)}</b> (${bestD.sumA.toFixed(1)} vs ${bestD.sumB.toFixed(1)})</p></div>`;
+    mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color: #10b981;"><p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Оптимальная карта по балансу:</p><h2 style="color: #10b981; font-size: 1.5rem; margin: 0 0 8px 0;">${best}</h2><p style="font-size: 0.8rem; color: var(--text-muted);">Разница рейтингов: <b style="color:#10b981;">${bestD.diff.toFixed(2)}</b> (${bestD.sumA.toFixed(2)} vs ${bestD.sumB.toFixed(2)})</p></div>`;
   };
 
-  // НОВЫЙ АЛГОРИТМ ПОЛНОГО ПЕРЕБОРА (для 10 игроков это всего 252 комбинации)
   function findBestTeams(players) {
     const n = players.length;
     const half = n / 2;
@@ -483,7 +418,6 @@ function initBalancer() {
     let bestTeamA = [], bestTeamB = [];
     let bestSumA = 0, bestSumB = 0;
 
-    // Генерируем все возможные комбинации для команды A
     const combinations = (arr, k) => {
       if (k === 0) return [[]];
       if (arr.length === 0) return [];
@@ -493,23 +427,15 @@ function initBalancer() {
       return [...withFirst, ...withoutFirst];
     };
 
-    const allCombinations = combinations(players, half);
-
-    for (const teamA of allCombinations) {
+    for (const teamA of combinations(players, half)) {
       const teamB = players.filter(p => !teamA.includes(p));
       const sumA = teamA.reduce((s, p) => s + p.rating, 0);
       const sumB = teamB.reduce((s, p) => s + p.rating, 0);
       const diff = Math.abs(sumA - sumB);
-
       if (diff < bestDiff) {
-        bestDiff = diff;
-        bestTeamA = teamA;
-        bestTeamB = teamB;
-        bestSumA = sumA;
-        bestSumB = sumB;
+        bestDiff = diff; bestTeamA = teamA; bestTeamB = teamB; bestSumA = sumA; bestSumB = sumB;
       }
     }
-
     return { teamA: bestTeamA, teamB: bestTeamB, sumA: bestSumA, sumB: bestSumB };
   }
 
@@ -526,11 +452,10 @@ function initBalancer() {
       const d = JSON.parse(raw);
       const sA = d.teamA.reduce((s, p) => s + (p.rating || 0), 0);
       const sB = d.teamB.reduce((s, p) => s + (p.rating || 0), 0);
-      const date = new Date(d.savedAt).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-      savedContent.innerHTML = `<p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">Сохранено: ${date}</p>
+      savedContent.innerHTML = `
         <div class="balance-result-modal show" style="margin-top: 0;">
-          <div class="team-box"><h3>Команда А <span>Σ ${sA.toFixed(1)}</span></h3><ul>${d.teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(1)}</span></li>`).join('')}</ul></div>
-          <div class="team-box"><h3>Команда Б <span>Σ ${sB.toFixed(1)}</span></h3><ul>${d.teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(1)}</span></li>`).join('')}</ul></div>
+          <div class="team-box"><h3>Сохранено: Команда А <span>Σ ${sA.toFixed(2)}</span></h3><ul>${d.teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div>
+          <div class="team-box"><h3>Сохранено: Команда Б <span>Σ ${sB.toFixed(2)}</span></h3><ul>${d.teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div>
         </div>`;
       savedSection.classList.add('show');
     } catch (e) {}
@@ -557,21 +482,8 @@ function initCSV() {
   };
 }
 
-function initBeginnerMode() {
-  const btn = document.getElementById('beginner-toggle');
-  if (!btn) return;
-  const isActive = localStorage.getItem('beginnerMode') === '1';
-  if (isActive) { document.body.classList.add('beginner-mode'); btn.classList.add('active'); }
-  btn.onclick = () => {
-    const active = document.body.classList.toggle('beginner-mode');
-    localStorage.setItem('beginnerMode', active ? '1' : '0');
-    btn.classList.toggle('active', active);
-  };
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   loadData();
   initBalancer();
-  initBeginnerMode();
   initCSV();
 });
