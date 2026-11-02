@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MATCHES_DIR = path.join(__dirname, 'data', 'matches');
 const OUTPUT_FILE = path.join(__dirname, 'docs', 'data', 'stats.json');
 
-const STEAM_API_KEY = 'ТВОЙ_КЛЮЧ_ЗДЕСЬ';
+const STEAM_API_KEY = '';
 
 function num(val) {
   if (val === null || val === undefined || val === '') return null;
