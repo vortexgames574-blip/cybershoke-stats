@@ -14,7 +14,14 @@ let profChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 let bracketState = null;
-let draftState = null;
+
+// --- ПЕРЕМЕННЫЕ ДЛЯ ОНЛАЙН ДРАФТА ---
+let peer = null;
+let isHost = false;
+let hostConn = null; // Соединение с хостом (если мы клиент)
+let clients = []; // Соединения с клиентами (если мы хост)
+let onlineRoomState = null; // Текущее состояние драфта
+let myNickname = "";
 
 // ============ ИНИЦИАЛИЗАЦИЯ ТАБОВ ============
 function initTabs() {
@@ -30,7 +37,7 @@ function initTabs() {
       document.getElementById(`tab-${target}`).classList.add('active');
       
       if (target === 'bracket') renderBracket();
-      if (target === 'draft') renderDraft();
+      if (target === 'draft') initOnlineDraftTab();
       
       if (window.lucide) lucide.createIcons();
     });
@@ -55,7 +62,6 @@ async function loadData() {
       currentStats = statsData.tournaments[e.target.value];
       selectedPlayers = [];
       bracketState = null;
-      draftState = null;
       renderAll();
     });
 
@@ -82,7 +88,6 @@ function renderAll() {
     renderMapStats();
     initDuel();
     initBracketTab();
-    initDraftTab();
   } catch (e) {
     document.getElementById('meta-info').innerHTML = `<span style="color: #ef4444;">Ошибка рендера: ${e.message}</span>`;
     console.error(e);
@@ -439,7 +444,6 @@ function initBracketTab() {
   simBtn.onclick = () => simulateBracket();
   resetBtn.onclick = () => { bracketState = null; saveBracket(); renderBracket(); };
   
-  // Load saved
   try {
     const raw = localStorage.getItem(`bracket_${document.getElementById('tournament-select').value}`);
     if (raw) bracketState = JSON.parse(raw);
@@ -556,7 +560,6 @@ window.setBracketWinner = function(r, m, winner) {
   const match = bracketState.rounds[r][m];
   if (!match.t1 || !match.t2) return;
   match.winner = winner;
-  // Reset downstream chain
   let curM = m;
   for (let rr = r + 1; rr < bracketState.rounds.length; rr++) {
     curM = Math.floor(curM / 2);
@@ -572,12 +575,9 @@ window.setBracketWinner = function(r, m, winner) {
 function simulateBracket() {
   if (!bracketState) return;
   const rounds = bracketState.rounds;
-  // Reset all winners
   for (const round of rounds) for (const m of round) { m.winner = null; }
-  // Rebuild from start
   bracketState = null;
-  generateBracket(); // rebuild
-  // Now simulate
+  generateBracket();
   for (let r = 0; r < rounds.length; r++) {
     for (let m = 0; m < rounds[r].length; m++) {
       const match = rounds[r][m];
@@ -594,126 +594,300 @@ function simulateBracket() {
   renderBracket();
 }
 
-// ============ ДРАФТ ============
-function initDraftTab() {
-  const c1 = document.getElementById('captain-1');
-  const c2 = document.getElementById('captain-2');
-  const startBtn = document.getElementById('start-draft-btn');
-  const resetBtn = document.getElementById('reset-draft-btn');
-  if (!c1) return;
-  const options = currentStats.players.map(p => `<option value="${p.id}">${p.displayName || p.name} (${p.avgRating ?? p.kd})</option>`).join('');
-  c1.innerHTML = options;
-  c2.innerHTML = options;
-  if (c2.options.length > 1) c2.selectedIndex = 1;
+// ============ ОНЛАЙН ДРАФТ (WebRTC) ============
+function initOnlineDraftTab() {
+  const lobbyScreen = document.getElementById('draft-lobby-screen');
+  const roomScreen = document.getElementById('draft-room-screen');
   
-  startBtn.onclick = () => startDraft();
-  resetBtn.onclick = () => { draftState = null; saveDraft(); renderDraft(); };
-  
-  try {
-    const raw = localStorage.getItem(`draft_${document.getElementById('tournament-select').value}`);
-    if (raw) draftState = JSON.parse(raw);
-  } catch(e){}
-  renderDraft();
-}
+  if (!peer) {
+    // Если еще не подключились
+    lobbyScreen.style.display = 'block';
+    roomScreen.style.display = 'none';
+    
+    document.getElementById('create-room-btn').onclick = () => {
+      const nick = document.getElementById('draft-nickname').value.trim();
+      if (!nick) return alert('Введите ник');
+      myNickname = nick;
+      isHost = true;
+      createPeer(true);
+    };
 
-function startDraft() {
-  const c1id = document.getElementById('captain-1').value;
-  const c2id = document.getElementById('captain-2').value;
-  if (c1id === c2id) return alert('Выберите разных капитанов');
-  const c1 = currentStats.players.find(p => p.id === c1id);
-  const c2 = currentStats.players.find(p => p.id === c2id);
-  const pool = currentStats.players.filter(p => p.id !== c1id && p.id !== c2id).sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0));
-  draftState = {
-    captain1: { id: c1.id, name: c1.displayName || c1.name, avatar: c1.avatar, rating: c1.avgRating },
-    captain2: { id: c2.id, name: c2.displayName || c2.name, avatar: c2.avatar, rating: c2.avgRating },
-    pool: pool.map(p => ({ id: p.id, name: p.displayName || p.name, avatar: p.avatar, rating: p.avgRating ?? p.kd })),
-    team1: [{ id: c1.id, name: c1.displayName || c1.name, avatar: c1.avatar, isCaptain: true }],
-    team2: [{ id: c2.id, name: c2.displayName || c2.name, avatar: c2.avatar, isCaptain: true }],
-    pickNum: 0,
-    completed: false,
-  };
-  saveDraft();
-  renderDraft();
-}
-
-function getCurrentTurn(state) {
-  if (!state || state.completed) return null;
-  const pattern = [1, 2, 2, 1, 1, 2, 2, 1];
-  const maxPicks = Math.min(8, state.pool.length + (state.pool.length < 8 ? 8 - state.pool.length : 0));
-  if (state.pickNum >= Math.min(8, state.pool.length)) return null;
-  return pattern[state.pickNum];
-}
-
-function saveDraft() {
-  try {
-    const key = `draft_${document.getElementById('tournament-select').value}`;
-    if (draftState) localStorage.setItem(key, JSON.stringify(draftState));
-    else localStorage.removeItem(key);
-  } catch(e){}
-}
-
-function renderDraft() {
-  const setup = document.getElementById('draft-setup');
-  const active = document.getElementById('draft-active');
-  if (!setup || !active) return;
-  if (!draftState) {
-    setup.style.display = 'block';
-    active.style.display = 'none';
-    return;
-  }
-  setup.style.display = 'none';
-  active.style.display = 'block';
-  
-  const turn = getCurrentTurn(draftState);
-  const turnEl = document.getElementById('draft-turn');
-  if (!turn) {
-    turnEl.innerHTML = draftState.completed ? '✅ Драфт завершен' : '⏸ Все игроки выбраны';
+    document.getElementById('join-room-btn').onclick = () => {
+      const nick = document.getElementById('draft-nickname').value.trim();
+      const code = document.getElementById('join-room-code').value.trim().toUpperCase();
+      if (!nick) return alert('Введите ник');
+      if (!code) return alert('Введите код комнаты');
+      myNickname = nick;
+      isHost = false;
+      createPeer(false, code);
+    };
   } else {
-    const capName = turn === 1 ? draftState.captain1.name : draftState.captain2.name;
-    turnEl.innerHTML = `🎯 Сейчас выбирает: <strong>${capName}</strong>`;
+    // Если уже в комнате
+    lobbyScreen.style.display = 'none';
+    roomScreen.style.display = 'block';
+    renderOnlineRoom();
   }
-  
-  document.getElementById('draft-team1-title').innerHTML = `Команда ${draftState.captain1.name} (${draftState.team1.length}/5)`;
-  document.getElementById('draft-team2-title').innerHTML = `Команда ${draftState.captain2.name} (${draftState.team2.length}/5)`;
-  
-  document.getElementById('draft-team1-list').innerHTML = draftState.team1.map((p, i) => `<li>${p.isCaptain ? '👑 ' : ''}${i > 0 ? '• ' : ''}<img src="${p.avatar}">${p.name}</li>`).join('');
-  document.getElementById('draft-team2-list').innerHTML = draftState.team2.map((p, i) => `<li>${p.isCaptain ? '👑 ' : ''}${i > 0 ? '• ' : ''}<img src="${p.avatar}">${p.name}</li>`).join('');
-  
-  const poolEl = document.getElementById('draft-pool-list');
-  poolEl.innerHTML = draftState.pool.map(p => {
-    const isPicked = draftState.team1.find(t => t.id === p.id) || draftState.team2.find(t => t.id === p.id);
-    return `<div class="draft-pool-card ${isPicked ? 'picked' : ''}" onclick="${!isPicked && turn ? `pickPlayer('${p.id}')` : ''}">
-      <img src="${p.avatar}"><span>${p.name}</span><span style="margin-left:auto;color:var(--accent);">${p.rating}</span>
-    </div>`;
-  }).join('');
-  
-  document.getElementById('auto-pick-btn').disabled = !turn || draftState.pool.filter(p => !draftState.team1.find(t => t.id === p.id) && !draftState.team2.find(t => t.id === p.id)).length === 0;
 }
 
-window.pickPlayer = function(playerId) {
-  if (!draftState) return;
-  const turn = getCurrentTurn(draftState);
-  if (!turn) return;
-  const p = draftState.pool.find(x => x.id === playerId);
-  if (!p) return;
-  if (draftState.team1.find(x => x.id === playerId) || draftState.team2.find(x => x.id === playerId)) return;
-  if (turn === 1) draftState.team1.push({ ...p, isCaptain: false });
-  else draftState.team2.push({ ...p, isCaptain: false });
-  draftState.pickNum++;
-  if (draftState.team1.length >= 5 && draftState.team2.length >= 5) draftState.completed = true;
-  saveDraft();
-  renderDraft();
+function createPeer(host, joinCode) {
+  if (peer) peer.destroy();
+  
+  peer = new Peer(host ? undefined : undefined, { debug: 0 });
+  
+  peer.on('open', (id) => {
+    if (host) {
+      // Мы хост. ID = код комнаты.
+      onlineRoomState = {
+        status: 'lobby',
+        hostId: id,
+        players: [{ id: id, name: myNickname, isCaptain: false, team: null }],
+        captains: [], // массив id
+        turnIndex: 0,
+        pickOrder: [],
+        pool: []
+      };
+      document.getElementById('draft-room-id').innerText = id;
+      document.getElementById('draft-connection-status').innerText = 'Вы хост. Ждем подключений...';
+      showRoomScreen();
+    } else {
+      // Мы клиент. Подключаемся к хасту.
+      hostConn = peer.connect(joinCode, { metadata: { name: myNickname } });
+      hostConn.on('open', () => {
+        document.getElementById('draft-room-id').innerText = joinCode;
+        document.getElementById('draft-connection-status').innerText = 'Подключено к комнате. Ожидание данных...';
+        showRoomScreen();
+      });
+      hostConn.on('data', (data) => {
+        if (data.type === 'STATE') {
+          onlineRoomState = data.state;
+          renderOnlineRoom();
+        }
+      });
+      hostConn.on('close', () => {
+        alert('Соединение с хостом потеряно.');
+        location.reload();
+      });
+    }
+  });
+
+  if (host) {
+    peer.on('connection', (conn) => {
+      clients.push(conn);
+      conn.on('data', (data) => {
+        if (data.type === 'JOIN') {
+          // Добавляем игрока
+          onlineRoomState.players.push({ id: conn.peer, name: data.name, isCaptain: false, team: null });
+          broadcastState();
+        } else if (data.type === 'MAKE_CAPTAIN') {
+          const p = onlineRoomState.players.find(x => x.id === data.playerId);
+          if (p) { p.isCaptain = true; broadcastState(); }
+        } else if (data.type === 'REMOVE_CAPTAIN') {
+          const p = onlineRoomState.players.find(x => x.id === data.playerId);
+          if (p) { p.isCaptain = false; broadcastState(); }
+        } else if (data.type === 'START_DRAFT') {
+          startOnlineDraftLogic();
+        } else if (data.type === 'PICK') {
+          if (onlineRoomState.status === 'picking') {
+            const currentCaptainId = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
+            if (data.captainId === currentCaptainId) {
+              executePickLogic(data.playerId);
+            }
+          }
+        }
+      });
+      conn.on('close', () => {
+        clients = clients.filter(c => c !== conn);
+        // Удаляем игрока
+        onlineRoomState.players = onlineRoomState.players.filter(p => p.id !== conn.peer);
+        onlineRoomState.captains = onlineRoomState.captains.filter(id => id !== conn.peer);
+        if (onlineRoomState.status === 'lobby') {
+           broadcastState();
+        }
+      });
+    });
+  }
+}
+
+function showRoomScreen() {
+  document.getElementById('draft-lobby-screen').style.display = 'none';
+  document.getElementById('draft-room-screen').style.display = 'block';
+  renderOnlineRoom();
+}
+
+function broadcastState() {
+  if (!isHost) return;
+  clients.forEach(conn => {
+    if (conn.open) conn.send({ type: 'STATE', state: onlineRoomState });
+  });
+  renderOnlineRoom();
+}
+
+function renderOnlineRoom() {
+  if (!onlineRoomState) return;
+  
+  if (onlineRoomState.status === 'lobby') {
+    document.getElementById('draft-phase-lobby').style.display = 'block';
+    document.getElementById('draft-phase-picking').style.display = 'none';
+    
+    const container = document.getElementById('draft-lobby-players');
+    container.innerHTML = onlineRoomState.players.map(p => {
+      const isCap = p.isCaptain;
+      const isMe = p.id === peer?.id;
+      const canToggle = isHost; // Только хост может назначать капитанов
+      const btnText = isCap ? 'Снять' : 'Сделать капитаном';
+      return `<div class="draft-lobby-card ${isCap ? 'captain' : ''}">
+        <span>${p.name} ${isMe ? '(Вы)' : ''}</span>
+        ${canToggle ? `<button class="btn-outline" style="font-size: 0.7rem; padding: 4px 8px;" onclick="toggleCaptain('${p.id}')">${btnText}</button>` : (isCap ? '<span style="color:#ffd700; font-size:0.8rem;">Капитан</span>' : '')}
+      </div>`;
+    }).join('');
+    
+    const startBtn = document.getElementById('start-online-draft-btn');
+    if (isHost) {
+      startBtn.style.display = 'block';
+      startBtn.disabled = onlineRoomState.captains.length !== 4 || onlineRoomState.players.length < 10;
+      startBtn.onclick = () => {
+        if (!isHost) return;
+        startOnlineDraftLogic();
+      };
+    } else {
+      startBtn.style.display = 'none';
+    }
+  } else if (onlineRoomState.status === 'picking') {
+    document.getElementById('draft-phase-lobby').style.display = 'none';
+    document.getElementById('draft-phase-picking').style.display = 'block';
+    
+    const turnCapId = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
+    const turnPlayer = onlineRoomState.players.find(p => p.id === turnCapId);
+    const isMyTurn = peer?.id === turnCapId;
+    
+    document.getElementById('draft-online-turn').innerHTML = isMyTurn 
+      ? `<span style="color:#ffd700;">Ваш ход! Выбирайте игрока.</span>` 
+      : `Сейчас выбирает: <strong>${turnPlayer ? turnPlayer.name : '...'}</strong>`;
+    
+    // Рендер 4 команд
+    for (let i = 0; i < 4; i++) {
+      const capId = onlineRoomState.pickOrder[i]; // Капитаны в порядке пиков
+      const cap = onlineRoomState.players.find(p => p.id === capId);
+      const col = document.getElementById(`team-col-${i}`);
+      const isTurn = onlineRoomState.pickOrder[onlineRoomState.turnIndex] === capId;
+      
+      if (cap) {
+        const teamPlayers = onlineRoomState.players.filter(p => p.team === capId);
+        col.className = `draft-team-col ${isTurn ? 'active-turn' : ''}`;
+        col.innerHTML = `
+          <h4>${cap.name}</h4>
+          <ul>${teamPlayers.map(tp => `<li><img src="${tp.avatar || 'https://ui-avatars.com/api/?name='+encodeURIComponent(tp.name)+'&background=4d6bfe&color=fff'}">${tp.name}</li>`).join('')}</ul>
+        `;
+      }
+    }
+    
+    // Рендер пула
+    const poolEl = document.getElementById('draft-online-pool');
+    poolEl.innerHTML = onlineRoomState.pool.map(p => {
+      const canPick = isMyTurn && onlineRoomState.status === 'picking';
+      return `<div class="draft-pool-card ${!canPick ? 'picked' : ''}" onclick="${canPick ? `submitOnlinePick('${p.id}')` : ''}">
+        <img src="${p.avatar || 'https://ui-avatars.com/api/?name='+encodeURIComponent(p.name)+'&background=4d6bfe&color=fff'}">
+        <span>${p.name}</span>
+        <span style="margin-left:auto;color:var(--accent);">${p.rating || ''}</span>
+      </div>`;
+    }).join('');
+    
+    if (onlineRoomState.pool.length === 0) {
+      poolEl.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">Пул пуст</p>';
+    }
+  }
+}
+
+// === ЛОГИКА ДРАФТА (Выполняется на хосте) ===
+function startOnlineDraftLogic() {
+  if (!isHost) return;
+  const captainIds = onlineRoomState.players.filter(p => p.isCaptain).map(p => p.id);
+  if (captainIds.length !== 4) return alert('Нужно ровно 4 капитана');
+  
+  // Сортируем капитанов по рейтингу, чтобы дать лучший пик слабейшему (опционально)
+  const getRating = (id) => {
+    const stat = currentStats.players.find(p => p.name === onlineRoomState.players.find(x=>x.id===id).name);
+    return stat ? (stat.avgRating ?? 0) : 0;
+  };
+  captainIds.sort((a,b) => getRating(a) - getRating(b)); // Слабейший получает пик первым
+  
+  onlineRoomState.status = 'picking';
+  onlineRoomState.pickOrder = captainIds; // В каком порядке они ходят (1-2-3-4)
+  
+  // Ставим капитанов в их команды
+  onlineRoomState.players.forEach(p => {
+    if (p.isCaptain) p.team = p.id;
+  });
+  
+  // Остальные в пул
+  onlineRoomState.pool = onlineRoomState.players.filter(p => !p.isCaptain).map(p => {
+    const stat = currentStats.players.find(x => x.name === p.name);
+    return { ...p, avatar: stat ? stat.avatar : '', rating: stat ? stat.avgRating : 0 };
+  });
+  
+  // Сортируем пул по рейтингу (сильные сверху, чтобы капитаны дрались за них)
+  onlineRoomState.pool.sort((a,b) => (b.rating || 0) - (a.rating || 0));
+  
+  onlineRoomState.turnIndex = 0;
+  broadcastState();
+}
+
+function executePickLogic(playerId) {
+  if (!isHost) return;
+  if (onlineRoomState.status !== 'picking') return;
+  
+  const poolIdx = onlineRoomState.pool.findIndex(p => p.id === playerId);
+  if (poolIdx === -1) return;
+  
+  const player = onlineRoomState.pool[poolIdx];
+  const turnCapId = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
+  
+  // Добавляем в команду
+  player.team = turnCapId;
+  // Убираем из пула
+  onlineRoomState.pool.splice(poolIdx, 1);
+  
+  // Определяем следующего (Змейка)
+  // 0-1-2-3-3-2-1-0-0-1-2-3-3-2-1-0
+  const round = Math.floor(onlineRoomState.turnIndex / 4);
+  const nextIdx = (onlineRoomState.turnIndex + 1) % 16; // Всего 16 пиков (по 4 на каждого)
+  
+  // Формула змейки: если четный круг -> 1,2,3,4, если нечетный -> 4,3,2,1
+  const step = nextIdx % 4;
+  const currentRound = Math.floor(nextIdx / 4);
+  let nextCaptainIndex;
+  if (currentRound % 2 === 0) {
+    nextCaptainIndex = step;
+  } else {
+    nextCaptainIndex = 3 - step;
+  }
+  
+  onlineRoomState.turnIndex++;
+  
+  if (onlineRoomState.turnIndex >= 16 || onlineRoomState.pool.length === 0) {
+    onlineRoomState.status = 'finished';
+  }
+  
+  broadcastState();
+}
+
+window.toggleCaptain = function(id) {
+  if (!isHost) return;
+  const p = onlineRoomState.players.find(x => x.id === id);
+  if (p) {
+    p.isCaptain = !p.isCaptain;
+    broadcastState();
+  }
 };
 
-window.pickAuto = function() {
-  if (!draftState) return;
-  const turn = getCurrentTurn(draftState);
-  if (!turn) return;
-  const available = draftState.pool.filter(p => !draftState.team1.find(t => t.id === p.id) && !draftState.team2.find(t => t.id === p.id));
-  if (available.length === 0) return;
-  // Pick best by rating
-  available.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
-  pickPlayer(available[0].id);
+window.submitOnlinePick = function(id) {
+  if (!peer) return;
+  if (isHost) {
+    const currentCap = onlineRoomState.pickOrder[onlineRoomState.turnIndex];
+    if (currentCap === peer.id) executePickLogic(id);
+  } else {
+    hostConn.send({ type: 'PICK', captainId: peer.id, playerId: id });
+  }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -724,5 +898,4 @@ document.addEventListener('DOMContentLoaded', () => {
   loadData();
   initBalancer();
   initBeginnerMode();
-  document.getElementById('auto-pick-btn')?.addEventListener('click', pickAuto);
 });

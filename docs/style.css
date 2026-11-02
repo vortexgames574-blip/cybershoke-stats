@@ -215,3 +215,111 @@ body.beginner-mode .metric-explanation { display: block; }
   .podium-card.podium-1 { order: -1; }
   .draft-pool-list { grid-template-columns: 1fr; }
 }
+
+/* СТИЛИ ДЛЯ ОНЛАЙН ДРАФТА */
+#draft-lobby-screen .input-group {
+  margin-bottom: 12px;
+}
+#draft-lobby-screen .input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+#draft-lobby-screen .input-search {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+}
+
+.draft-lobby-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+.draft-lobby-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  padding: 10px;
+  border-radius: 8px;
+}
+.draft-lobby-card.captain {
+  border-color: #ffd700;
+  background: rgba(255, 215, 0, 0.05);
+}
+.draft-lobby-card span {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.draft-4teams-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 15px;
+}
+@media (max-width: 1024px) {
+  .draft-4teams-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .draft-pool-col {
+    grid-column: span 2;
+    order: -1;
+    margin-bottom: 15px;
+  }
+}
+.draft-team-col {
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  min-height: 200px;
+}
+.draft-team-col.active-turn {
+  border-color: #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+.draft-team-col h4 {
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+  text-align: center;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+.draft-team-col.active-turn h4 {
+  color: #ffd700;
+}
+.draft-team-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.draft-team-col li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  padding: 4px 0;
+}
+.draft-team-col li img {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
+.draft-pool-col {
+  background: var(--bg-card);
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+.draft-pool-col h3 {
+  font-size: 0.85rem;
+  text-align: center;
+  margin-bottom: 10px;
+  color: var(--accent);
+}

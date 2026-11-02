@@ -10,6 +10,8 @@
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Подключаем PeerJS для P2P соединения -->
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   
@@ -48,7 +50,7 @@
       <button class="tab-btn" data-tab="maps"><i data-lucide="map"></i> Карты</button>
       <button class="tab-btn" data-tab="balancer"><i data-lucide="git-merge"></i> Балансировщик</button>
       <button class="tab-btn" data-tab="bracket"><i data-lucide="trophy"></i> Сетка</button>
-      <button class="tab-btn" data-tab="draft"><i data-lucide="user-plus"></i> Драфт</button>
+      <button class="tab-btn" data-tab="draft"><i data-lucide="users"></i> Онлайн Драфт</button>
     </nav>
 
     <main class="main-content">
@@ -167,52 +169,69 @@
               <button id="reset-bracket-btn" class="btn-outline">Сброс</button>
             </div>
           </div>
-          <p class="text-muted mb-10">Автопосев по рейтингу. Кликай на победителя — он пройдет дальше. "Симулировать" сыграет всё автоматически.</p>
+          <p class="text-muted mb-10">Автопосев по рейтингу.</p>
           <div id="bracket-container" class="bracket-container"></div>
         </section>
       </div>
 
-      <!-- ДРАФТ КАПИТАНОВ -->
+      <!-- ОНЛАЙН ДРАФТ -->
       <div class="tab-content" id="tab-draft">
-        <section class="glass-card interactive-card">
-          <div class="card-header">
-            <h2>Драфт капитанов</h2>
-            <button id="reset-draft-btn" class="btn-outline">Сброс</button>
-          </div>
-          
-          <div id="draft-setup">
-            <div class="draft-setup-row">
-              <select id="captain-1" class="select-sort"></select>
-              <span class="vs-text">VS</span>
-              <select id="captain-2" class="select-sort"></select>
+        <!-- Экран лобби (до создания/входа) -->
+        <div id="draft-lobby-screen">
+          <section class="glass-card interactive-card" style="max-width: 500px; margin: 0 auto;">
+            <div class="card-header"><h2>Онлайн Драфт</h2></div>
+            <div class="input-group">
+              <label>Ваш ник:</label>
+              <input type="text" id="draft-nickname" class="input-search" placeholder="Введите ваш ник из CS2">
             </div>
-            <button id="start-draft-btn" class="btn-primary mt-20">Начать драфт</button>
-          </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+              <button id="create-room-btn" class="btn-primary" style="flex: 1;">Создать комнату</button>
+            </div>
+            <div style="text-align: center; margin: 15px 0; color: var(--text-muted);">— ИЛИ —</div>
+            <div class="input-group">
+              <label>Код комнаты:</label>
+              <input type="text" id="join-room-code" class="input-search" placeholder="Например: A1B2C3">
+            </div>
+            <button id="join-room-btn" class="btn-primary" style="margin-top: 15px;">Войти в комнату</button>
+          </section>
+        </div>
 
-          <div id="draft-active" style="display: none;">
-            <div class="draft-turn-indicator" id="draft-turn"></div>
-            <div class="draft-grid">
-              <div class="draft-team">
-                <h3 id="draft-team1-title">Команда 1</h3>
-                <ul id="draft-team1-list"></ul>
-              </div>
-              <div class="draft-pool">
-                <h3>Доступные игроки</h3>
-                <div id="draft-pool-list" class="draft-pool-list"></div>
-                <button id="auto-pick-btn" class="btn-outline mt-20" style="width: 100%;">Авто-пик (лучший)</button>
-              </div>
-              <div class="draft-team">
-                <h3 id="draft-team2-title">Команда 2</h3>
-                <ul id="draft-team2-list"></ul>
+        <!-- Экран драфта (когда в комнате) -->
+        <div id="draft-room-screen" style="display: none;">
+          <section class="glass-card interactive-card">
+            <div class="card-header">
+              <h2>Драфт: <span id="draft-room-id" style="color: var(--accent);"></span></h2>
+              <div id="draft-connection-status" style="font-size: 0.85rem; color: var(--text-muted);"></div>
+            </div>
+            
+            <!-- Фаза 1: Лобби (набор игроков) -->
+            <div id="draft-phase-lobby">
+              <p class="text-muted mb-10">Ожидание игроков. Назначьте 4 капитанов.</p>
+              <div id="draft-lobby-players" class="draft-lobby-grid"></div>
+              <button id="start-online-draft-btn" class="btn-primary mt-20" disabled>Начать драфт</button>
+            </div>
+
+            <!-- Фаза 2: Пики -->
+            <div id="draft-phase-picking" style="display: none;">
+              <div class="draft-turn-indicator" id="draft-online-turn"></div>
+              <div class="draft-4teams-grid">
+                <div class="draft-team-col" id="team-col-0"></div>
+                <div class="draft-team-col" id="team-col-1"></div>
+                <div class="draft-pool-col">
+                  <h3>Доступные игроки</h3>
+                  <div id="draft-online-pool" class="draft-pool-list"></div>
+                </div>
+                <div class="draft-team-col" id="team-col-2"></div>
+                <div class="draft-team-col" id="team-col-3"></div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </main>
   </div>
 
-  <!-- МОДАЛКИ (без изменений) -->
+  <!-- МОДАЛКА ПРОФИЛЯ -->
   <div id="profile-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeProfile()">&times;</span>
