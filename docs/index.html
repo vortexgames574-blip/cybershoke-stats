@@ -22,12 +22,34 @@
       <div class="header-controls">
         <select id="tournament-select" class="select-tournament"></select>
         <div id="meta-info" class="meta-info">Загрузка...</div>
+        <button id="beginner-toggle" class="btn-icon" title="Режим новичка">🎓</button>
+        <button id="export-csv-btn" class="btn-icon" title="Скачать CSV">📥</button>
       </div>
     </header>
 
+    <!-- ОБЪЯСНЕНИЯ ДЛЯ НОВИЧКОВ -->
+    <section class="metric-explanation" id="beginner-block">
+      <h3>📚 Что значит каждая метрика?</h3>
+      <div class="metric-grid">
+        <div class="metric-item"><b>K/D 🔫</b><br>Отношение убийств к смертям. 1.0 = один к одному. Чем выше, тем лучше.</div>
+        <div class="metric-item"><b>Рейтинг 🏆</b><br>Общая оценка (как в HLTV). 1.0 — средний, 1.2+ — сильный, 0.8- — слабый.</div>
+        <div class="metric-item"><b>ADR</b><br>Средний урон за раунд. 60 — мало, 80 — норм, 100+ — отлично.</div>
+        <div class="metric-item"><b>KAST</b><br>% раундов, где ты убил, помог, выжил или обменял. 70%+ — хорошо.</div>
+        <div class="metric-item"><b>Форма 🔥</b><br>Тренд последних 3 матчей. 🔥 — растёт, 🧊 — падает, — — стабильно.</div>
+        <div class="metric-item"><b>Карты 🗺️</b><br>Сколько карт сыграно (не матчей). В одном лобби может быть 2-3 карты.</div>
+      </div>
+    </section>
+
     <main class="main-grid">
       <div class="left-col">
+        <!-- ПЬЕДЕСТАЛ -->
         <section class="glass-card">
+          <div class="card-header"><h2>🏆 Пьедестал</h2><span class="header-hint">Топ-3 по рейтингу</span></div>
+          <div class="podium-grid" id="podium-container"></div>
+        </section>
+
+        <!-- ИГРОКИ -->
+        <section class="glass-card mt-20">
           <div class="card-header">
             <h2>Рейтинг игроков</h2>
             <div class="controls">
@@ -42,34 +64,54 @@
           <div class="table-container">
             <table class="stats-table" id="players-table">
               <thead>
-                <tr><th>Игрок</th><th>Форма 🔥</th><th>Карты 🗺️</th><th>K/D 🔫</th><th>Рейтинг 🏆</th></tr>
+                <tr>
+                  <th>Игрок</th>
+                  <th data-tooltip="Горячая серия / Спад / Стабильно">Форма 🔥</th>
+                  <th data-tooltip="Сколько карт сыграно">Карты 🗺️</th>
+                  <th data-tooltip="Убийства / Смерти">K/D 🔫</th>
+                  <th data-tooltip="Средний рейтинг (как в HLTV)">Рейтинг 🏆</th>
+                </tr>
               </thead>
               <tbody></tbody>
             </table>
           </div>
         </section>
 
+        <!-- РЕКОРДЫ -->
         <section class="glass-card mt-20">
-          <div class="card-header"><h2>Абсолютные рекорды</h2></div>
+          <div class="card-header">
+            <h2>Рекорды за карту</h2>
+            <span class="header-hint">Нажми на карточку, чтобы увидеть все рекорды карты</span>
+          </div>
           <div class="fun-stats-grid">
-            <div class="fun-stat-box"><div class="fun-val" id="rec-max-kills">0</div><div class="fun-desc" id="rec-max-kills-desc">Нет данных</div></div>
-            <div class="fun-stat-box"><div class="fun-val" id="rec-max-deaths" style="color: #ef4444;">0</div><div class="fun-desc" id="rec-max-deaths-desc">Нет данных</div></div>
-            <div class="fun-stat-box"><div class="fun-val" id="rec-max-adr" style="color: #10b981;">0</div><div class="fun-desc" id="rec-max-adr-desc">Нет данных</div></div>
+            <div class="fun-stat-box record-card" id="card-rec-kills">
+              <div class="fun-val" id="rec-max-kills">—</div>
+              <div class="fun-desc" id="rec-max-kills-desc">Нет данных</div>
+              <div class="record-hint">Макс. убийств за карту</div>
+            </div>
+            <div class="fun-stat-box record-card" id="card-rec-deaths">
+              <div class="fun-val" id="rec-max-deaths" style="color: #ef4444;">—</div>
+              <div class="fun-desc" id="rec-max-deaths-desc">Нет данных</div>
+              <div class="record-hint">Макс. смертей за карту</div>
+            </div>
+            <div class="fun-stat-box record-card" id="card-rec-adr">
+              <div class="fun-val" id="rec-max-adr" style="color: #10b981;">—</div>
+              <div class="fun-desc" id="rec-max-adr-desc">Нет данных</div>
+              <div class="record-hint">Макс. ADR (урон за раунд)</div>
+            </div>
           </div>
         </section>
 
+        <!-- ИНТЕРЕСНЫЕ ФАКТЫ -->
         <section class="glass-card mt-20">
-          <div class="card-header"><h2>Общая статистика</h2></div>
-          <div class="fun-stats-grid">
-            <div class="fun-stat-box"><div class="fun-val" id="stat-kills">0</div><div class="fun-desc">Всего убийств</div></div>
-            <div class="fun-stat-box"><div class="fun-val" id="stat-deaths">0</div><div class="fun-desc">Всего смертей</div></div>
-            <div class="fun-stat-box"><div class="fun-val" id="stat-hours">0</div><div class="fun-desc">Часов в игре</div></div>
-          </div>
+          <div class="card-header"><h2>💡 Интересные факты</h2></div>
+          <div class="fun-facts-grid" id="fun-facts-container"></div>
         </section>
       </div>
 
       <div class="right-col">
-        <section class="glass-card">
+        <!-- ДУЭЛИ -->
+        <section class="glass-card" id="duel-section">
           <div class="card-header"><h2>Сравнение игроков</h2></div>
           <div class="duel-selects">
             <select id="duel-p1" class="select-sort" style="width: 100%;"></select>
@@ -80,19 +122,38 @@
           <div id="duel-result" class="duel-result"></div>
         </section>
 
+        <!-- БАЛАНСИРОВЩИК -->
         <section class="glass-card mt-20">
           <div class="card-header"><h2>Балансировщик 5х5</h2></div>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Соберите ровно 10 бойцов и разделите их на две равные команды.</p>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Соберите ровно 10 бойцов и разделите их на две команды.</p>
           <button id="open-balancer-btn" class="btn-primary">Открыть меню балансировщика</button>
         </section>
 
+        <!-- КАРТЫ (СОРТИРУЕМЫЕ) -->
         <section class="glass-card mt-20">
           <div class="card-header"><h2>Статистика карт</h2></div>
           <div class="table-container" style="max-height: 250px; overflow-y: auto;">
             <table class="stats-table" id="maps-table">
-              <thead><tr><th>Карта</th><th>Игр</th><th>Ср. K/D</th><th>Ср. Рейтинг</th></tr></thead>
+              <thead>
+                <tr>
+                  <th class="sortable" data-sort="map">Карта <span class="sort-arrow">⬍</span></th>
+                  <th class="sortable" data-sort="matches">Игр <span class="sort-arrow">⬍</span></th>
+                  <th class="sortable" data-sort="avgKd">Ср. K/D <span class="sort-arrow">⬍</span></th>
+                  <th class="sortable" data-sort="avgRating">Ср. Рейтинг <span class="sort-arrow">⬍</span></th>
+                </tr>
+              </thead>
               <tbody></tbody>
             </table>
+          </div>
+        </section>
+
+        <!-- ОБЩАЯ СТАТИСТИКА -->
+        <section class="glass-card mt-20">
+          <div class="card-header"><h2>Общая статистика</h2></div>
+          <div class="fun-stats-grid">
+            <div class="fun-stat-box"><div class="fun-val" id="stat-kills">0</div><div class="fun-desc">Всего убийств</div></div>
+            <div class="fun-stat-box"><div class="fun-val" id="stat-deaths">0</div><div class="fun-desc">Всего смертей</div></div>
+            <div class="fun-stat-box"><div class="fun-val" id="stat-hours">0</div><div class="fun-desc">Часов в игре</div></div>
           </div>
         </section>
       </div>
@@ -114,7 +175,10 @@
         <div class="p-stat"><span>ADR</span><strong id="prof-adr">0</strong></div>
         <div class="p-stat"><span>KAST</span><strong id="prof-kast">0</strong></div>
       </div>
-      <button id="share-btn" class="btn-primary btn-telegram">Поделиться в Telegram</button>
+      <div style="display: flex; gap: 10px;">
+        <button id="share-btn" class="btn-primary btn-telegram" style="margin-bottom: 20px;">Поделиться в Telegram</button>
+        <button id="compare-btn" class="btn-primary" style="margin-bottom: 20px; background: #10b981;">⚔️ Сравнить с...</button>
+      </div>
       <div class="profile-chart-container"><canvas id="prof-chart"></canvas></div>
       <div class="profile-history">
         <h3>История матчей</h3>
@@ -132,11 +196,7 @@
       <div class="profile-header" style="margin-bottom: 15px; padding-bottom: 10px;">
         <div class="prof-info"><h2 id="map-modal-title">de_mirage</h2><span class="prof-title" style="color:var(--text-muted)">Детальная статистика</span></div>
       </div>
-      
-      <!-- РЕКОРДЫ КАРТЫ -->
       <div class="fun-stats-grid" id="map-records-container" style="margin-bottom: 20px;"></div>
-
-      <!-- СПИСОК ИГРОКОВ -->
       <div class="table-container" style="max-height: 400px; overflow-y: auto;">
         <table class="stats-table">
           <thead><tr><th>Игрок</th><th>Игр</th><th>K</th><th>D</th><th>K/D</th><th>Рейтинг</th></tr></thead>
@@ -159,19 +219,14 @@
         <button id="random-btn" class="btn-icon" title="Случайные 10">🎲</button>
         <button id="clear-btn" class="btn-icon" title="Очистить">✖</button>
       </div>
-
       <div id="players-grid" class="players-grid"></div>
       <button id="balance-btn" class="btn-primary mt-20" disabled>Разделить на команды</button>
-
       <div id="balance-result" class="balance-result-modal"></div>
-
       <div id="map-actions" class="map-actions">
         <button id="random-map-btn" class="btn-primary" style="background: #4d6bfe;">🎲 Случайная карта</button>
         <button id="balanced-map-btn" class="btn-primary" style="background: #10b981;">⚖️ Балансная карта</button>
       </div>
-
       <div id="map-result" class="map-result-box"></div>
-
       <div id="saved-teams-section" class="saved-teams-section">
         <div class="saved-header">
           <h3>💾 Сохранённые составы</h3>
