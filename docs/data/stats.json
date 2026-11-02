@@ -1,6 +1,1122 @@
 {
-  "generatedAt": "2026-11-02T21:36:58.556Z",
+  "generatedAt": "2026-11-02T21:49:51.087Z",
   "totalMatchesCount": 9,
+  "avatarsMap": {},
+  "allMatches": [
+    {
+      "matchId": "13349605",
+      "tournament": "31.10.2026",
+      "date": "2026-11-02T19:39:53.049Z",
+      "maps": [
+        {
+          "map": "de_anubis",
+          "players": [
+            {
+              "id": "76561198090688036",
+              "name": "BB-00",
+              "kills": 27,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 94,
+              "kast": 84,
+              "rating": 1.6
+            },
+            {
+              "id": "76561198042805941",
+              "name": "PRADA_CODE",
+              "kills": 23,
+              "deaths": 17,
+              "assists": 0,
+              "adr": 97,
+              "kast": 80,
+              "rating": 1.4
+            },
+            {
+              "id": "76561199109745015",
+              "name": "BB-00",
+              "kills": 19,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 91,
+              "kast": 72,
+              "rating": 1.23
+            },
+            {
+              "id": "76561199022192304",
+              "name": "Pizdets_tip",
+              "kills": 16,
+              "deaths": 17,
+              "assists": 0,
+              "adr": 89,
+              "kast": 80,
+              "rating": 1.16
+            },
+            {
+              "id": "76561198272167310",
+              "name": "Изумительные Брючки.",
+              "kills": 17,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 74,
+              "kast": 68,
+              "rating": 1.07
+            },
+            {
+              "id": "76561198015424675",
+              "name": "tolya800x600",
+              "kills": 18,
+              "deaths": 21,
+              "assists": 0,
+              "adr": 87,
+              "kast": 68,
+              "rating": 1.03
+            },
+            {
+              "id": "76561198728309900",
+              "name": "BB-00",
+              "kills": 13,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 74,
+              "kast": 80,
+              "rating": 0.98
+            },
+            {
+              "id": "76561198210127765",
+              "name": "blackpolosa",
+              "kills": 15,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 60,
+              "kast": 68,
+              "rating": 0.91
+            },
+            {
+              "id": "76561198818222401",
+              "name": "Kyo  Ilonmax8",
+              "kills": 11,
+              "deaths": 17,
+              "assists": 0,
+              "adr": 56,
+              "kast": 64,
+              "rating": 0.75
+            },
+            {
+              "id": "76561199482946683",
+              "name": "BB-03",
+              "kills": 7,
+              "deaths": 19,
+              "assists": 0,
+              "adr": 45,
+              "kast": 64,
+              "rating": 0.53
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "matchId": "13350180",
+      "tournament": "31.10.2026",
+      "date": "2026-11-02T19:40:13.063Z",
+      "maps": [
+        {
+          "map": "de_nuke",
+          "players": [
+            {
+              "id": "76561198054507577",
+              "name": "kvsmstr",
+              "kills": 17,
+              "deaths": 10,
+              "assists": 0,
+              "adr": 132,
+              "kast": 100,
+              "rating": 1.84
+            },
+            {
+              "id": "76561199542530681",
+              "name": "AuraTeam",
+              "kills": 17,
+              "deaths": 10,
+              "assists": 0,
+              "adr": 119,
+              "kast": 81,
+              "rating": 1.65
+            },
+            {
+              "id": "76561199467682493",
+              "name": "Господин Босс",
+              "kills": 17,
+              "deaths": 11,
+              "assists": 0,
+              "adr": 112,
+              "kast": 81,
+              "rating": 1.59
+            },
+            {
+              "id": "76561199417613918",
+              "name": "ЯнаЦист",
+              "kills": 12,
+              "deaths": 8,
+              "assists": 0,
+              "adr": 88,
+              "kast": 81,
+              "rating": 1.32
+            },
+            {
+              "id": "76561198283381727",
+              "name": "St1gmat",
+              "kills": 14,
+              "deaths": 16,
+              "assists": 0,
+              "adr": 98,
+              "kast": 75,
+              "rating": 1.17
+            },
+            {
+              "id": "76561198872139873",
+              "name": "1lpk",
+              "kills": 12,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 87,
+              "kast": 75,
+              "rating": 1.09
+            },
+            {
+              "id": "76561198681103731",
+              "name": "Анальный бур",
+              "kills": 8,
+              "deaths": 9,
+              "assists": 0,
+              "adr": 31,
+              "kast": 88,
+              "rating": 0.95
+            },
+            {
+              "id": "76561198053530322",
+              "name": "ZAZA_",
+              "kills": 7,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 72,
+              "kast": 75,
+              "rating": 0.75
+            },
+            {
+              "id": "76561199210250164",
+              "name": "s1slw",
+              "kills": 7,
+              "deaths": 16,
+              "assists": 0,
+              "adr": 52,
+              "kast": 56,
+              "rating": 0.49
+            },
+            {
+              "id": "76561198128494347",
+              "name": "Игрок",
+              "kills": 5,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 41,
+              "kast": 50,
+              "rating": 0.34
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "matchId": "13352007",
+      "tournament": "31.10.2026",
+      "date": "2026-11-02T19:40:17.305Z",
+      "maps": [
+        {
+          "map": "de_cache",
+          "players": [
+            {
+              "id": "76561198872139873",
+              "name": "1lpk",
+              "kills": 27,
+              "deaths": 13,
+              "assists": 0,
+              "adr": 112,
+              "kast": 77,
+              "rating": 1.74
+            },
+            {
+              "id": "76561198053530322",
+              "name": "ZAZA_",
+              "kills": 21,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 94,
+              "kast": 86,
+              "rating": 1.5
+            },
+            {
+              "id": "76561198818222401",
+              "name": "Kyo  Ilonmax8",
+              "kills": 19,
+              "deaths": 16,
+              "assists": 0,
+              "adr": 88,
+              "kast": 73,
+              "rating": 1.24
+            },
+            {
+              "id": "76561198042805941",
+              "name": "PRADA_CODE",
+              "kills": 19,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 82,
+              "kast": 77,
+              "rating": 1.21
+            },
+            {
+              "id": "76561198128494347",
+              "name": "Игрок",
+              "kills": 15,
+              "deaths": 16,
+              "assists": 0,
+              "adr": 88,
+              "kast": 82,
+              "rating": 1.17
+            },
+            {
+              "id": "76561198283381727",
+              "name": "St1gmat",
+              "kills": 15,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 71,
+              "kast": 73,
+              "rating": 1.07
+            },
+            {
+              "id": "76561198210127765",
+              "name": "blackpolosa",
+              "kills": 16,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 91,
+              "kast": 68,
+              "rating": 1.06
+            },
+            {
+              "id": "76561199210250164",
+              "name": "s1slw",
+              "kills": 13,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 74,
+              "kast": 73,
+              "rating": 1.02
+            },
+            {
+              "id": "76561198015424675",
+              "name": "tolya800x600",
+              "kills": 10,
+              "deaths": 20,
+              "assists": 0,
+              "adr": 56,
+              "kast": 50,
+              "rating": 0.53
+            },
+            {
+              "id": "76561198272167310",
+              "name": "Изумительные Брючки.",
+              "kills": 6,
+              "deaths": 21,
+              "assists": 0,
+              "adr": 43,
+              "kast": 45,
+              "rating": 0.27
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "matchId": "13352013",
+      "tournament": "31.10.2026",
+      "date": "2026-11-02T19:39:57.238Z",
+      "maps": [
+        {
+          "map": "de_ancient",
+          "players": [
+            {
+              "id": "76561199542530681",
+              "name": "AuraTeam",
+              "kills": 22,
+              "deaths": 19,
+              "assists": 0,
+              "adr": 111,
+              "kast": 84,
+              "rating": 1.42
+            },
+            {
+              "id": "76561199109745015",
+              "name": "BB-00",
+              "kills": 22,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 121,
+              "kast": 68,
+              "rating": 1.36
+            },
+            {
+              "id": "76561198054507577",
+              "name": "kvsmstr",
+              "kills": 20,
+              "deaths": 19,
+              "assists": 0,
+              "adr": 95,
+              "kast": 80,
+              "rating": 1.28
+            },
+            {
+              "id": "76561198728309900",
+              "name": "BB-00",
+              "kills": 22,
+              "deaths": 21,
+              "assists": 0,
+              "adr": 84,
+              "kast": 72,
+              "rating": 1.19
+            },
+            {
+              "id": "76561199417613918",
+              "name": "ЯнаЦист",
+              "kills": 18,
+              "deaths": 17,
+              "assists": 0,
+              "adr": 81,
+              "kast": 76,
+              "rating": 1.16
+            },
+            {
+              "id": "76561199467682493",
+              "name": "Господин Босс",
+              "kills": 16,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 55,
+              "kast": 72,
+              "rating": 1
+            },
+            {
+              "id": "76561198090688036",
+              "name": "Kara7evich",
+              "kills": 13,
+              "deaths": 17,
+              "assists": 0,
+              "adr": 82,
+              "kast": 60,
+              "rating": 0.88
+            },
+            {
+              "id": "76561199022192304",
+              "name": "Pizdets_tip",
+              "kills": 16,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 61,
+              "kast": 60,
+              "rating": 0.87
+            },
+            {
+              "id": "76561199482946683",
+              "name": "Oleg123",
+              "kills": 14,
+              "deaths": 17,
+              "assists": 0,
+              "adr": 49,
+              "kast": 72,
+              "rating": 0.87
+            },
+            {
+              "id": "76561198681103731",
+              "name": "Анальный бур",
+              "kills": 8,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 45,
+              "kast": 72,
+              "rating": 0.64
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "matchId": "13354491",
+      "tournament": "31.10.2026",
+      "date": "2026-11-02T19:40:01.424Z",
+      "maps": [
+        {
+          "map": "de_inferno",
+          "players": [
+            {
+              "id": "76561199022192304",
+              "name": "Pizdets_tip",
+              "kills": 19,
+              "deaths": 13,
+              "assists": 0,
+              "adr": 100,
+              "kast": 76,
+              "rating": 1.49
+            },
+            {
+              "id": "76561198283381727",
+              "name": "St1gmat",
+              "kills": 15,
+              "deaths": 11,
+              "assists": 0,
+              "adr": 121,
+              "kast": 76,
+              "rating": 1.48
+            },
+            {
+              "id": "76561198872139873",
+              "name": "1lpk",
+              "kills": 14,
+              "deaths": 10,
+              "assists": 0,
+              "adr": 102,
+              "kast": 82,
+              "rating": 1.43
+            },
+            {
+              "id": "76561198053530322",
+              "name": "ZAZA_",
+              "kills": 16,
+              "deaths": 10,
+              "assists": 0,
+              "adr": 81,
+              "kast": 76,
+              "rating": 1.4
+            },
+            {
+              "id": "76561198128494347",
+              "name": "Игрок",
+              "kills": 14,
+              "deaths": 8,
+              "assists": 0,
+              "adr": 75,
+              "kast": 76,
+              "rating": 1.34
+            },
+            {
+              "id": "76561199109745015",
+              "name": "BB-00",
+              "kills": 14,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 95,
+              "kast": 59,
+              "rating": 1.08
+            },
+            {
+              "id": "76561199210250164",
+              "name": "s1slw",
+              "kills": 9,
+              "deaths": 10,
+              "assists": 0,
+              "adr": 41,
+              "kast": 65,
+              "rating": 0.81
+            },
+            {
+              "id": "76561198090688036",
+              "name": "Kara7evich",
+              "kills": 9,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 57,
+              "kast": 59,
+              "rating": 0.71
+            },
+            {
+              "id": "76561198728309900",
+              "name": "BB-00",
+              "kills": 5,
+              "deaths": 13,
+              "assists": 0,
+              "adr": 50,
+              "kast": 65,
+              "rating": 0.57
+            },
+            {
+              "id": "76561199482946683",
+              "name": "Oleg123",
+              "kills": 2,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 45,
+              "kast": 41,
+              "rating": 0.21
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "matchId": "13354626",
+      "tournament": "31.10.2026",
+      "date": "2026-11-02T19:40:21.558Z",
+      "maps": [
+        {
+          "map": "de_inferno",
+          "players": [
+            {
+              "id": "76561199542530681",
+              "name": "AuraTeam",
+              "kills": 21,
+              "deaths": 12,
+              "assists": 0,
+              "adr": 127,
+              "kast": 88,
+              "rating": 1.82
+            },
+            {
+              "id": "76561199417613918",
+              "name": "ЯнаЦист",
+              "kills": 15,
+              "deaths": 6,
+              "assists": 0,
+              "adr": 81,
+              "kast": 88,
+              "rating": 1.56
+            },
+            {
+              "id": "76561199467682493",
+              "name": "Господин Босс",
+              "kills": 16,
+              "deaths": 10,
+              "assists": 0,
+              "adr": 94,
+              "kast": 76,
+              "rating": 1.43
+            },
+            {
+              "id": "76561198054507577",
+              "name": "kvsmstr",
+              "kills": 13,
+              "deaths": 9,
+              "assists": 0,
+              "adr": 85,
+              "kast": 88,
+              "rating": 1.38
+            },
+            {
+              "id": "76561198681103731",
+              "name": "Анальный бур",
+              "kills": 9,
+              "deaths": 11,
+              "assists": 0,
+              "adr": 63,
+              "kast": 82,
+              "rating": 1.02
+            },
+            {
+              "id": "76561198210127765",
+              "name": "blackpolosa",
+              "kills": 10,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 69,
+              "kast": 71,
+              "rating": 0.89
+            },
+            {
+              "id": "76561198015424675",
+              "name": "tolya800x600",
+              "kills": 11,
+              "deaths": 16,
+              "assists": 0,
+              "adr": 78,
+              "kast": 59,
+              "rating": 0.82
+            },
+            {
+              "id": "76561198272167310",
+              "name": "Изумительные Брючки.",
+              "kills": 11,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 60,
+              "kast": 53,
+              "rating": 0.77
+            },
+            {
+              "id": "76561198042805941",
+              "name": "PRADA_CODE",
+              "kills": 8,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 61,
+              "kast": 65,
+              "rating": 0.72
+            },
+            {
+              "id": "76561198818222401",
+              "name": "Kyo  Ilonmax8",
+              "kills": 8,
+              "deaths": 16,
+              "assists": 0,
+              "adr": 47,
+              "kast": 59,
+              "rating": 0.56
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "matchId": "13357260",
+      "tournament": "31.10.2026",
+      "date": "2026-11-02T19:40:25.822Z",
+      "maps": [
+        {
+          "map": "de_dust2",
+          "players": [
+            {
+              "id": "76561198053530322",
+              "name": "ZAZA_",
+              "kills": 29,
+              "deaths": 9,
+              "assists": 0,
+              "adr": 148,
+              "kast": 95,
+              "rating": 2.31
+            },
+            {
+              "id": "76561198872139873",
+              "name": "1lpk",
+              "kills": 18,
+              "deaths": 9,
+              "assists": 0,
+              "adr": 93,
+              "kast": 79,
+              "rating": 1.52
+            },
+            {
+              "id": "76561198210127765",
+              "name": "blackpolosa",
+              "kills": 16,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 93,
+              "kast": 63,
+              "rating": 1.17
+            },
+            {
+              "id": "76561198283381727",
+              "name": "St1gmat",
+              "kills": 13,
+              "deaths": 12,
+              "assists": 0,
+              "adr": 81,
+              "kast": 74,
+              "rating": 1.13
+            },
+            {
+              "id": "76561198272167310",
+              "name": "Изумительные Брючки.",
+              "kills": 15,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 83,
+              "kast": 63,
+              "rating": 1.05
+            },
+            {
+              "id": "76561198128494347",
+              "name": "Игрок",
+              "kills": 11,
+              "deaths": 10,
+              "assists": 0,
+              "adr": 59,
+              "kast": 74,
+              "rating": 1.02
+            },
+            {
+              "id": "76561199210250164",
+              "name": "s1slw",
+              "kills": 7,
+              "deaths": 13,
+              "assists": 0,
+              "adr": 51,
+              "kast": 68,
+              "rating": 0.7
+            },
+            {
+              "id": "76561198015424675",
+              "name": "tolya800x600",
+              "kills": 9,
+              "deaths": 16,
+              "assists": 0,
+              "adr": 46,
+              "kast": 53,
+              "rating": 0.56
+            },
+            {
+              "id": "76561198042805941",
+              "name": "PRADA_CODE",
+              "kills": 7,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 40,
+              "kast": 47,
+              "rating": 0.44
+            },
+            {
+              "id": "76561198818222401",
+              "name": "Kyo  Ilonmax8",
+              "kills": 6,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 42,
+              "kast": 32,
+              "rating": 0.21
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "matchId": "13357312",
+      "tournament": "31.10.2026",
+      "date": "2026-11-02T19:40:08.831Z",
+      "maps": [
+        {
+          "map": "de_anubis",
+          "players": [
+            {
+              "id": "76561199417613918",
+              "name": "ЯнаЦист",
+              "kills": 23,
+              "deaths": 13,
+              "assists": 0,
+              "adr": 103,
+              "kast": 83,
+              "rating": 1.56
+            },
+            {
+              "id": "76561199109745015",
+              "name": "BB-00",
+              "kills": 27,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 103,
+              "kast": 67,
+              "rating": 1.54
+            },
+            {
+              "id": "76561199542530681",
+              "name": "AuraTeam",
+              "kills": 20,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 95,
+              "kast": 63,
+              "rating": 1.25
+            },
+            {
+              "id": "76561198054507577",
+              "name": "kvsmstr",
+              "kills": 18,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 89,
+              "kast": 67,
+              "rating": 1.19
+            },
+            {
+              "id": "76561199022192304",
+              "name": "Pizdets_tip",
+              "kills": 16,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 91,
+              "kast": 79,
+              "rating": 1.15
+            },
+            {
+              "id": "76561199467682493",
+              "name": "Господин Босс",
+              "kills": 15,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 65,
+              "kast": 67,
+              "rating": 0.97
+            },
+            {
+              "id": "76561198090688036",
+              "name": "Kara7evich",
+              "kills": 11,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 66,
+              "kast": 71,
+              "rating": 0.8
+            },
+            {
+              "id": "76561198728309900",
+              "name": "BB-00",
+              "kills": 11,
+              "deaths": 17,
+              "assists": 0,
+              "adr": 64,
+              "kast": 54,
+              "rating": 0.7
+            },
+            {
+              "id": "76561198681103731",
+              "name": "Анальный бур",
+              "kills": 5,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 35,
+              "kast": 63,
+              "rating": 0.43
+            },
+            {
+              "id": "76561199482946683",
+              "name": "Oleg123",
+              "kills": 5,
+              "deaths": 19,
+              "assists": 0,
+              "adr": 38,
+              "kast": 50,
+              "rating": 0.32
+            }
+          ]
+        },
+        {
+          "map": "de_inferno",
+          "players": [
+            {
+              "id": "76561198054507577",
+              "name": "kvsmstr",
+              "kills": 17,
+              "deaths": 10,
+              "assists": 0,
+              "adr": 103,
+              "kast": 95,
+              "rating": 1.61
+            },
+            {
+              "id": "76561199542530681",
+              "name": "AuraTeam",
+              "kills": 18,
+              "deaths": 11,
+              "assists": 0,
+              "adr": 103,
+              "kast": 90,
+              "rating": 1.57
+            },
+            {
+              "id": "76561199417613918",
+              "name": "ЯнаЦист",
+              "kills": 20,
+              "deaths": 10,
+              "assists": 0,
+              "adr": 105,
+              "kast": 75,
+              "rating": 1.56
+            },
+            {
+              "id": "76561199467682493",
+              "name": "Господин Босс",
+              "kills": 15,
+              "deaths": 8,
+              "assists": 0,
+              "adr": 77,
+              "kast": 75,
+              "rating": 1.31
+            },
+            {
+              "id": "76561198681103731",
+              "name": "Анальный бур",
+              "kills": 12,
+              "deaths": 10,
+              "assists": 0,
+              "adr": 61,
+              "kast": 80,
+              "rating": 1.12
+            },
+            {
+              "id": "76561198090688036",
+              "name": "Kara7evich",
+              "kills": 14,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 75,
+              "kast": 55,
+              "rating": 0.84
+            },
+            {
+              "id": "76561199022192304",
+              "name": "Pizdets_tip",
+              "kills": 13,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 63,
+              "kast": 65,
+              "rating": 0.84
+            },
+            {
+              "id": "76561199109745015",
+              "name": "BB-00",
+              "kills": 7,
+              "deaths": 17,
+              "assists": 0,
+              "adr": 73,
+              "kast": 65,
+              "rating": 0.64
+            },
+            {
+              "id": "76561198728309900",
+              "name": "BB-00",
+              "kills": 7,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 45,
+              "kast": 50,
+              "rating": 0.41
+            },
+            {
+              "id": "76561199482946683",
+              "name": "Oleg123",
+              "kills": 5,
+              "deaths": 18,
+              "assists": 0,
+              "adr": 43,
+              "kast": 55,
+              "rating": 0.37
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "matchId": "13358986",
+      "tournament": "31.10.2026",
+      "date": "2026-11-02T19:40:30.090Z",
+      "maps": [
+        {
+          "map": "de_mirage",
+          "players": [
+            {
+              "id": "76561198872139873",
+              "name": "1lpk",
+              "kills": 17,
+              "deaths": 10,
+              "assists": 0,
+              "adr": 129,
+              "kast": 94,
+              "rating": 1.79
+            },
+            {
+              "id": "76561198053530322",
+              "name": "ZAZA_",
+              "kills": 18,
+              "deaths": 9,
+              "assists": 0,
+              "adr": 100,
+              "kast": 81,
+              "rating": 1.66
+            },
+            {
+              "id": "76561199210250164",
+              "name": "s1slw",
+              "kills": 13,
+              "deaths": 8,
+              "assists": 0,
+              "adr": 66,
+              "kast": 81,
+              "rating": 1.32
+            },
+            {
+              "id": "76561198283381727",
+              "name": "St1gmat",
+              "kills": 13,
+              "deaths": 10,
+              "assists": 0,
+              "adr": 92,
+              "kast": 69,
+              "rating": 1.25
+            },
+            {
+              "id": "76561198210127765",
+              "name": "blackpolosa",
+              "kills": 13,
+              "deaths": 13,
+              "assists": 0,
+              "adr": 92,
+              "kast": 81,
+              "rating": 1.25
+            },
+            {
+              "id": "76561198015424675",
+              "name": "tolya800x600",
+              "kills": 13,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 105,
+              "kast": 75,
+              "rating": 1.21
+            },
+            {
+              "id": "76561198128494347",
+              "name": "Игрок",
+              "kills": 9,
+              "deaths": 8,
+              "assists": 0,
+              "adr": 63,
+              "kast": 75,
+              "rating": 1.05
+            },
+            {
+              "id": "76561198272167310",
+              "name": "Изумительные Брючки.",
+              "kills": 9,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 77,
+              "kast": 56,
+              "rating": 0.72
+            },
+            {
+              "id": "76561198042805941",
+              "name": "PRADA_CODE",
+              "kills": 4,
+              "deaths": 14,
+              "assists": 0,
+              "adr": 37,
+              "kast": 56,
+              "rating": 0.35
+            },
+            {
+              "id": "76561198818222401",
+              "name": "Kyo  Ilonmax8",
+              "kills": 5,
+              "deaths": 15,
+              "assists": 0,
+              "adr": 42,
+              "kast": 38,
+              "rating": 0.26
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "tournaments": {
     "Все матчи": {
       "players": [
@@ -2152,21 +3268,7 @@
               "kd": 0.22,
               "avgRating": 0.29
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 21,
-              "player": "AuraTeam"
-            },
-            "maxDeaths": {
-              "value": 18,
-              "player": "Kara7evich"
-            },
-            "maxAdr": {
-              "value": 127,
-              "player": "AuraTeam"
-            }
-          }
+          ]
         },
         {
           "map": "de_anubis",
@@ -2339,21 +3441,7 @@
               "kd": 0.32,
               "avgRating": 0.43
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 27,
-              "player": "BB-00"
-            },
-            "maxDeaths": {
-              "value": 21,
-              "player": "tolya800x600"
-            },
-            "maxAdr": {
-              "value": 103,
-              "player": "ЯнаЦист"
-            }
-          }
+          ]
         },
         {
           "map": "de_mirage",
@@ -2471,21 +3559,7 @@
               "kd": 0.33,
               "avgRating": 0.26
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 18,
-              "player": "ZAZA_"
-            },
-            "maxDeaths": {
-              "value": 15,
-              "player": "Изумительные Брючки."
-            },
-            "maxAdr": {
-              "value": 129,
-              "player": "1lpk"
-            }
-          }
+          ]
         },
         {
           "map": "de_dust2",
@@ -2603,21 +3677,7 @@
               "kd": 0.33,
               "avgRating": 0.21
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 29,
-              "player": "ZAZA_"
-            },
-            "maxDeaths": {
-              "value": 18,
-              "player": "Kyo  Ilonmax8"
-            },
-            "maxAdr": {
-              "value": 148,
-              "player": "ZAZA_"
-            }
-          }
+          ]
         },
         {
           "map": "de_cache",
@@ -2735,21 +3795,7 @@
               "kd": 0.29,
               "avgRating": 0.27
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 27,
-              "player": "1lpk"
-            },
-            "maxDeaths": {
-              "value": 21,
-              "player": "Изумительные Брючки."
-            },
-            "maxAdr": {
-              "value": 112,
-              "player": "1lpk"
-            }
-          }
+          ]
         },
         {
           "map": "de_nuke",
@@ -2867,21 +3913,7 @@
               "kd": 0.33,
               "avgRating": 0.34
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 17,
-              "player": "kvsmstr"
-            },
-            "maxDeaths": {
-              "value": 16,
-              "player": "St1gmat"
-            },
-            "maxAdr": {
-              "value": 132,
-              "player": "kvsmstr"
-            }
-          }
+          ]
         },
         {
           "map": "de_ancient",
@@ -2999,21 +4031,7 @@
               "kd": 0.44,
               "avgRating": 0.64
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 22,
-              "player": "AuraTeam"
-            },
-            "maxDeaths": {
-              "value": 21,
-              "player": "BB-00"
-            },
-            "maxAdr": {
-              "value": 121,
-              "player": "BB-00"
-            }
-          }
+          ]
         }
       ],
       "recentMatches": [
@@ -3115,6 +4133,26 @@
         "totalHours": 7,
         "totalKills": 1377,
         "totalDeaths": 1426
+      },
+      "funFacts": {
+        "mostStable": {
+          "player": "St1gmat",
+          "stdDev": 0.14
+        },
+        "highestPeak": {
+          "player": "ZAZA_",
+          "rating": 2.31,
+          "map": "de_dust2"
+        },
+        "lowestRating": {
+          "player": "Kyo  Ilonmax8",
+          "rating": 0.21,
+          "map": "de_dust2"
+        },
+        "favoriteMap": {
+          "map": "de_inferno",
+          "matches": 3
+        }
       }
     },
     "31.10.2026": {
@@ -5267,21 +6305,7 @@
               "kd": 0.22,
               "avgRating": 0.29
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 21,
-              "player": "AuraTeam"
-            },
-            "maxDeaths": {
-              "value": 18,
-              "player": "Kara7evich"
-            },
-            "maxAdr": {
-              "value": 127,
-              "player": "AuraTeam"
-            }
-          }
+          ]
         },
         {
           "map": "de_anubis",
@@ -5454,21 +6478,7 @@
               "kd": 0.32,
               "avgRating": 0.43
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 27,
-              "player": "BB-00"
-            },
-            "maxDeaths": {
-              "value": 21,
-              "player": "tolya800x600"
-            },
-            "maxAdr": {
-              "value": 103,
-              "player": "ЯнаЦист"
-            }
-          }
+          ]
         },
         {
           "map": "de_mirage",
@@ -5586,21 +6596,7 @@
               "kd": 0.33,
               "avgRating": 0.26
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 18,
-              "player": "ZAZA_"
-            },
-            "maxDeaths": {
-              "value": 15,
-              "player": "Изумительные Брючки."
-            },
-            "maxAdr": {
-              "value": 129,
-              "player": "1lpk"
-            }
-          }
+          ]
         },
         {
           "map": "de_dust2",
@@ -5718,21 +6714,7 @@
               "kd": 0.33,
               "avgRating": 0.21
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 29,
-              "player": "ZAZA_"
-            },
-            "maxDeaths": {
-              "value": 18,
-              "player": "Kyo  Ilonmax8"
-            },
-            "maxAdr": {
-              "value": 148,
-              "player": "ZAZA_"
-            }
-          }
+          ]
         },
         {
           "map": "de_cache",
@@ -5850,21 +6832,7 @@
               "kd": 0.29,
               "avgRating": 0.27
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 27,
-              "player": "1lpk"
-            },
-            "maxDeaths": {
-              "value": 21,
-              "player": "Изумительные Брючки."
-            },
-            "maxAdr": {
-              "value": 112,
-              "player": "1lpk"
-            }
-          }
+          ]
         },
         {
           "map": "de_nuke",
@@ -5982,21 +6950,7 @@
               "kd": 0.33,
               "avgRating": 0.34
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 17,
-              "player": "kvsmstr"
-            },
-            "maxDeaths": {
-              "value": 16,
-              "player": "St1gmat"
-            },
-            "maxAdr": {
-              "value": 132,
-              "player": "kvsmstr"
-            }
-          }
+          ]
         },
         {
           "map": "de_ancient",
@@ -6114,21 +7068,7 @@
               "kd": 0.44,
               "avgRating": 0.64
             }
-          ],
-          "records": {
-            "maxKills": {
-              "value": 22,
-              "player": "AuraTeam"
-            },
-            "maxDeaths": {
-              "value": 21,
-              "player": "BB-00"
-            },
-            "maxAdr": {
-              "value": 121,
-              "player": "BB-00"
-            }
-          }
+          ]
         }
       ],
       "recentMatches": [
@@ -6230,6 +7170,26 @@
         "totalHours": 7,
         "totalKills": 1377,
         "totalDeaths": 1426
+      },
+      "funFacts": {
+        "mostStable": {
+          "player": "St1gmat",
+          "stdDev": 0.14
+        },
+        "highestPeak": {
+          "player": "ZAZA_",
+          "rating": 2.31,
+          "map": "de_dust2"
+        },
+        "lowestRating": {
+          "player": "Kyo  Ilonmax8",
+          "rating": 0.21,
+          "map": "de_dust2"
+        },
+        "favoriteMap": {
+          "map": "de_inferno",
+          "matches": 3
+        }
       }
     }
   }
