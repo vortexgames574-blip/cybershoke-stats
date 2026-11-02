@@ -14,6 +14,24 @@ let profChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 
+// ============ ИНИЦИАЛИЗАЦИЯ ТАБОВ ============
+function initTabs() {
+  const tabs = document.querySelectorAll('.tab-btn');
+  const contents = document.querySelectorAll('.tab-content');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      tabs.forEach(t => t.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(`tab-${target}`).classList.add('active');
+      // Обновляем иконки
+      if (window.lucide) lucide.createIcons();
+    });
+  });
+}
+
 async function loadData() {
   try {
     const res = await fetch('data/stats.json');
@@ -61,7 +79,7 @@ function renderAll() {
   }
 }
 
-// ============ ПЬЕДЕСТАЛ (без эмодзи) ============
+// ПЬЕДЕСТАЛ
 function renderPodium() {
   const container = document.getElementById('podium-container');
   if (!container || !currentStats.players) return;
@@ -86,7 +104,7 @@ function renderPodium() {
   }).join('');
 }
 
-// ============ ИНТЕРЕСНЫЕ ФАКТЫ (без эмодзи) ============
+// ФАКТЫ
 function renderFunFacts() {
   const container = document.getElementById('fun-facts-container');
   if (!container) return;
@@ -111,7 +129,7 @@ function renderFunFacts() {
   `).join('');
 }
 
-// ============ РЕКОРДЫ (кликабельные) ============
+// РЕКОРДЫ
 function renderRecords() {
   if (!currentStats.records) return;
   const r = currentStats.records;
@@ -131,6 +149,7 @@ function renderRecords() {
   document.getElementById('card-rec-adr').onclick = adrRec ? () => openMapDetails(adrRec.map) : null;
 }
 
+// ТАБЛИЦА ИГРОКОВ
 function renderPlayersTable() {
   const tbody = document.querySelector('#players-table tbody');
   const filterInput = document.getElementById('filter-name');
@@ -174,6 +193,7 @@ function renderPlayersTable() {
   draw();
 }
 
+// КАРТЫ
 function renderMapStats() {
   const tbody = document.querySelector('#maps-table tbody');
   if (!tbody || !currentStats.mapStats) return;
@@ -247,6 +267,7 @@ function openMapDetails(mapName) {
 
 function closeMapDetails() { document.getElementById('map-modal').style.display = 'none'; }
 
+// ДУЭЛИ
 function initDuel() {
   const p1Select = document.getElementById('duel-p1');
   const p2Select = document.getElementById('duel-p2');
@@ -279,6 +300,7 @@ function initDuel() {
   };
 }
 
+// ПРОФИЛЬ
 function openProfile(playerId) {
   const p = currentStats.players.find(pl => pl.id === playerId);
   if (!p) return;
@@ -302,6 +324,13 @@ function openProfile(playerId) {
   if (compareBtn) compareBtn.onclick = () => {
     closeProfile();
     document.getElementById('duel-p1').value = p.id;
+    // Переключаемся на вкладку игроков
+    const tabs = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
+    tabs.forEach(t => t.classList.remove('active'));
+    contents.forEach(c => c.classList.remove('active'));
+    document.querySelector('[data-tab="players"]').classList.add('active');
+    document.getElementById('tab-players').classList.add('active');
     setTimeout(() => document.getElementById('duel-section').scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
   };
 
@@ -335,6 +364,7 @@ window.onclick = function(event) {
 
 function getSavedKey() { return `savedTeams_${document.getElementById('tournament-select').value}`; }
 
+// БАЛАНСИРОВЩИК
 function initBalancer() {
   const openBtn = document.getElementById('open-balancer-btn');
   const modal = document.getElementById('balancer-modal');
@@ -547,7 +577,13 @@ function initBeginnerMode() {
   };
 }
 
+// ЗАПУСК
 document.addEventListener('DOMContentLoaded', () => {
+  // Инициализация анимаций и иконок
+  if (window.AOS) AOS.init({ duration: 600, once: true });
+  if (window.lucide) lucide.createIcons();
+  
+  initTabs();
   loadData();
   initBalancer();
   initBeginnerMode();
