@@ -1,4 +1,4 @@
-// build.js — СБОРКА ДАННЫХ
+// build.js — СБОРКА ДАННЫХ + РЕАЛЬНЫЕ АВАТАРКИ STEAM
 import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MATCHES_DIR = path.join(__dirname, 'data', 'matches');
 const OUTPUT_FILE = path.join(__dirname, 'docs', 'data', 'stats.json');
 
-const STEAM_API_KEY = '';
+const STEAM_API_KEY = 'ТВОЙ_КЛЮЧ_ЗДЕСЬ';
 
 function num(val) {
   if (val === null || val === undefined || val === '') return null;
@@ -40,9 +40,9 @@ function calculateStats(matches, steamAvatars) {
   let totalKillsAll = 0, totalDeathsAll = 0, totalMapsPlayed = 0;
 
   const records = {
-    maxKills: { value: 0, player: '', map: '', date: '' },
-    maxDeaths: { value: 0, player: '', map: '', date: '' },
-    maxAdr: { value: 0, player: '', map: '', date: '' }
+    maxKills: { value: 0, player: '', playerId: '', map: '', date: '', matchId: '' },
+    maxDeaths: { value: 0, player: '', playerId: '', map: '', date: '', matchId: '' },
+    maxAdr: { value: 0, player: '', playerId: '', map: '', date: '', matchId: '' }
   };
 
   matches.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -72,9 +72,9 @@ function calculateStats(matches, steamAvatars) {
         mapStatsRaw[mapName].totalKills += k; mapStatsRaw[mapName].totalDeaths += d;
         totalKillsAll += k; totalDeathsAll += d;
         const adrVal = num(p.adr), kastVal = num(p.kast), ratingVal = num(p.rating);
-        if (k > records.maxKills.value) records.maxKills = { value: k, player: p.name, map: mapName, date: match.date };
-        if (d > records.maxDeaths.value) records.maxDeaths = { value: d, player: p.name, map: mapName, date: match.date };
-        if (adrVal !== null && adrVal > records.maxAdr.value) records.maxAdr = { value: adrVal, player: p.name, map: mapName, date: match.date };
+        if (k > records.maxKills.value) records.maxKills = { value: k, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
+        if (d > records.maxDeaths.value) records.maxDeaths = { value: d, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
+        if (adrVal !== null && adrVal > records.maxAdr.value) records.maxAdr = { value: adrVal, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
         if (ratingVal !== null) { mapStatsRaw[mapName].ratingSum += ratingVal; mapStatsRaw[mapName].ratingCount += 1; }
         if (!mapStatsRaw[mapName].playersMap.has(pid)) mapStatsRaw[mapName].playersMap.set(pid, { id: pid, name: p.name, avatar: '', matches: 0, kills: 0, deaths: 0, ratingSum: 0 });
         let mp = mapStatsRaw[mapName].playersMap.get(pid);
@@ -141,7 +141,7 @@ function calculateStats(matches, steamAvatars) {
       if (ratings.length < 3) return null;
       const mean = ratings.reduce((a, b) => a + b, 0) / ratings.length;
       const variance = ratings.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) / ratings.length;
-      return { player: p.displayName, stdDev: parseFloat(Math.sqrt(variance).toFixed(2)) };
+      return { player: p.displayName, playerId: p.id, stdDev: parseFloat(Math.sqrt(variance).toFixed(2)) };
     }).filter(Boolean);
     if (stats.length > 0) mostStable = stats.sort((a, b) => a.stdDev - b.stdDev)[0];
   }
@@ -150,8 +150,8 @@ function calculateStats(matches, steamAvatars) {
   for (const p of players) {
     for (const h of p.matchHistory) {
       if (h.rating && h.rating > 0) {
-        if (!highestPeak || h.rating > highestPeak.rating) highestPeak = { player: p.displayName, rating: h.rating, map: h.map };
-        if (!lowestRating || h.rating < lowestRating.rating) lowestRating = { player: p.displayName, rating: h.rating, map: h.map };
+        if (!highestPeak || h.rating > highestPeak.rating) highestPeak = { player: p.displayName, playerId: p.id, rating: h.rating, map: h.map };
+        if (!lowestRating || h.rating < lowestRating.rating) lowestRating = { player: p.displayName, playerId: p.id, rating: h.rating, map: h.map };
       }
     }
   }
@@ -193,8 +193,6 @@ async function main() {
   const output = {
     generatedAt: new Date().toISOString(),
     totalMatchesCount: allMatches.length,
-    avatarsMap: Object.fromEntries(steamAvatars),
-    allMatches: allMatches.map(m => ({ matchId: m.matchId, tournament: m.tournament || 'Без турнира', date: m.date, maps: m.maps })),
     tournaments: { "Все матчи": calculateStats(allMatches, steamAvatars) }
   };
 

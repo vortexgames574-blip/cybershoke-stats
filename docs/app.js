@@ -1,8 +1,3 @@
-Я нашел проблему. В присланном тобой коде функция initDraft() написана (она идет сразу после renderAll), но она нигде не вызывается. Из-за этого выпадающие списки капитанов остаются пустыми.
-
-Нужно добавить её вызов в функцию renderAll(). Вот исправленный файл app.js целиком (я добавил вызов initDraft() в renderAll):
-
-docs/app.js (полный)
 window.onerror = function(message, source, lineno) {
   const meta = document.getElementById('meta-info');
   if (meta) meta.innerHTML = `<span style="color: #ef4444;">Ошибка: ${message} (строка ${lineno})</span>`;
@@ -83,7 +78,7 @@ function renderAll() {
     renderMapStats();
     initDuel();
     initBracketTab();
-    initDraft(); // <--- ВОТ ЭТА СТРОКА БЫЛА ПРОПУЩЕНА
+    initDraft();
   } catch (e) {
     document.getElementById('meta-info').innerHTML = `<span style="color: #ef4444;">Ошибка рендера: ${e.message}</span>`;
     console.error(e);
@@ -214,11 +209,18 @@ function renderFunFacts() {
     return;
   }
   const items = [];
-  if (ff.mostStable) items.push({ title: 'Самый стабильный', player: ff.mostStable.player, desc: `Разброс рейтинга ±${ff.mostStable.stdDev}` });
-  if (ff.highestPeak) items.push({ title: 'Пиковый рейтинг', player: ff.highestPeak.player, desc: `${ff.highestPeak.rating.toFixed(2)} на ${ff.highestPeak.map}` });
-  if (ff.lowestRating) items.push({ title: 'Худший матч', player: ff.lowestRating.player, desc: `${ff.lowestRating.rating.toFixed(2)} на ${ff.lowestRating.map}` });
-  if (ff.favoriteMap) items.push({ title: 'Любимая карта', player: ff.favoriteMap.map, desc: `${ff.favoriteMap.matches} игр` });
-  container.innerHTML = items.map(i => `<div class="fun-fact-item"><div class="fact-title">${i.title}</div><div class="fact-player">${i.player}</div><div class="fact-desc">${i.desc}</div></div>`).join('');
+  if (ff.mostStable) items.push({ title: 'Самый стабильный', player: ff.mostStable.player, playerId: ff.mostStable.playerId, desc: `Разброс рейтинга ±${ff.mostStable.stdDev}` });
+  if (ff.highestPeak) items.push({ title: 'Пиковый рейтинг', player: ff.highestPeak.player, playerId: ff.highestPeak.playerId, desc: `${ff.highestPeak.rating.toFixed(2)} на ${ff.highestPeak.map}` });
+  if (ff.lowestRating) items.push({ title: 'Худший матч', player: ff.lowestRating.player, playerId: ff.lowestRating.playerId, desc: `${ff.lowestRating.rating.toFixed(2)} на ${ff.lowestRating.map}` });
+  if (ff.favoriteMap) items.push({ title: 'Любимая карта', player: ff.favoriteMap.map, playerId: null, desc: `${ff.favoriteMap.matches} игр` });
+  
+  container.innerHTML = items.map(i => `
+    <div class="fun-fact-item" ${i.playerId ? `onclick="openProfile('${i.playerId}')" style="cursor:pointer;"` : ''}>
+      <div class="fact-title">${i.title}</div>
+      <div class="fact-player">${i.player}</div>
+      <div class="fact-desc">${i.desc}</div>
+    </div>
+  `).join('');
 }
 
 function renderRecords() {
@@ -233,9 +235,45 @@ function renderRecords() {
   document.getElementById('rec-max-deaths-desc').innerHTML = deathRec ? `<b>${deathRec.player}</b><br><span>${deathRec.map}</span>` : 'Нет данных';
   document.getElementById('rec-max-adr').innerText = adrRec ? adrRec.value : '—';
   document.getElementById('rec-max-adr-desc').innerHTML = adrRec ? `<b>${adrRec.player}</b><br><span>${adrRec.map}</span>` : 'Нет данных';
-  document.getElementById('card-rec-kills').onclick = killRec ? () => openMapDetails(killRec.map) : null;
-  document.getElementById('card-rec-deaths').onclick = deathRec ? () => openMapDetails(deathRec.map) : null;
-  document.getElementById('card-rec-adr').onclick = adrRec ? () => openMapDetails(adrRec.map) : null;
+  
+  document.getElementById('card-rec-kills').onclick = killRec ? () => openRecordDetails('maxKills') : null;
+  document.getElementById('card-rec-deaths').onclick = deathRec ? () => openRecordDetails('maxDeaths') : null;
+  document.getElementById('card-rec-adr').onclick = adrRec ? () => openRecordDetails('maxAdr') : null;
+}
+
+// ============ МОДАЛКА РЕКОРДА ============
+function openRecordDetails(type) {
+  const rec = currentStats.records[type];
+  if (!rec || !rec.player) return;
+  
+  const player = currentStats.players.find(p => p.id === rec.playerId || p.name === rec.player);
+  const titleText = type === 'maxKills' ? 'Рекорд: макс. убийств' : type === 'maxDeaths' ? 'Антирекорд: макс. смертей' : 'Рекорд: макс. ADR';
+  
+  document.getElementById('record-title').innerText = titleText;
+  
+  const avatar = player?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(rec.player)}&background=4d6bfe&color=fff`;
+  const date = rec.date ? new Date(rec.date).toLocaleDateString('ru-RU', {day:'2-digit', month:'2-digit', year:'numeric'}) : '';
+  const playerId = rec.playerId || player?.id;
+  const matchUrl = rec.matchId ? `https://cybershoke.net/ru/match/${rec.matchId}` : '#';
+  
+  document.getElementById('record-content').innerHTML = `
+    <div style="text-align:center; margin-bottom: 20px;">
+      <img src="${avatar}" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; cursor: pointer;" onclick="openProfile('${playerId}')">
+      <h3 style="cursor:pointer; color: var(--accent);" onclick="openProfile('${playerId}')">${rec.player}</h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem;">${rec.map} · ${date}</p>
+    </div>
+    <div style="background: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; padding: 15px; text-align:center; margin-bottom: 15px;">
+      <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px;">${type === 'maxDeaths' ? 'Смертей' : type === 'maxAdr' ? 'ADR' : 'Убийств'}</div>
+      <div style="font-size: 2.5rem; font-weight: 800; color: var(--accent);">${rec.value}</div>
+    </div>
+    ${rec.matchId ? `<a href="${matchUrl}" target="_blank" class="btn-primary" style="display:block; text-align:center; text-decoration:none; padding: 12px;">Открыть матч на Cybershoke</a>` : ''}
+  `;
+  
+  document.getElementById('record-modal').style.display = 'block';
+}
+
+function closeRecordDetails() {
+  document.getElementById('record-modal').style.display = 'none';
 }
 
 function renderPlayersTable() {
@@ -299,7 +337,21 @@ function openMapDetails(mapName) {
   if (!mapData) return;
   document.getElementById('map-modal-title').innerText = mapName;
   const tbody = document.getElementById('map-players-list');
-  tbody.innerHTML = mapData.topPlayers.map((p) => `<tr><td><div class="player-cell"><img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><strong>${p.name}</strong></div></td><td>${p.matches}</td><td>${p.kills}</td><td>${p.deaths}</td><td>${p.kd}</td><td style="color: var(--accent); font-weight: 600;">${p.avgRating}</td></tr>`).join('');
+  tbody.innerHTML = mapData.topPlayers.map((p) => `
+    <tr>
+      <td>
+        <div class="player-cell" style="cursor:pointer;" onclick="openProfile('${p.id}')">
+          <img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
+          <strong>${p.name}</strong>
+        </div>
+      </td>
+      <td>${p.matches}</td>
+      <td>${p.kills}</td>
+      <td>${p.deaths}</td>
+      <td>${p.kd}</td>
+      <td style="color: var(--accent); font-weight: 600;">${p.avgRating}</td>
+    </tr>
+  `).join('');
   document.getElementById('map-modal').style.display = 'block';
 }
 function closeMapDetails() { document.getElementById('map-modal').style.display = 'none'; }
@@ -358,7 +410,6 @@ function openProfile(playerId) {
       try {
         const res = await fetch(`https://steamgpt.net/faceit/${p.id}.json`);
         if (!res.ok) throw new Error('Ошибка API');
-        
         const json = await res.json();
         
         if (json.result === 'success' && json.data && json.data.faceit) {
@@ -417,6 +468,7 @@ function closeProfile() { document.getElementById('profile-modal').style.display
 window.onclick = function(event) {
   if (event.target == document.getElementById('profile-modal')) closeProfile();
   if (event.target == document.getElementById('map-modal')) closeMapDetails();
+  if (event.target == document.getElementById('record-modal')) closeRecordDetails();
   if (event.target == document.getElementById('balancer-modal')) closeBalancer();
   if (event.target == document.getElementById('feedback-modal')) closeFeedback();
 }
