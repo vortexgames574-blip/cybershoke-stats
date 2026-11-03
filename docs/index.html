@@ -46,8 +46,7 @@
     </section>
 
     <nav class="tabs-nav">
-      <button class="tab-btn active" data-tab="draft"><i data-lucide="trophy"></i> Драфт</button>
-      <button class="tab-btn" data-tab="overview"><i data-lucide="layout-dashboard"></i> Обзор</button>
+      <button class="tab-btn active" data-tab="overview"><i data-lucide="layout-dashboard"></i> Обзор</button>
       <button class="tab-btn" data-tab="players"><i data-lucide="users"></i> Игроки</button>
       <button class="tab-btn" data-tab="maps"><i data-lucide="map"></i> Карты</button>
       <button class="tab-btn" data-tab="balancer"><i data-lucide="git-merge"></i> Балансировщик</button>
@@ -55,40 +54,8 @@
     </nav>
 
     <main class="main-content">
-      <!-- ДРАФТ -->
-      <div class="tab-content active" id="tab-draft">
-        <section class="glass-card interactive-card" style="max-width: 700px; margin: 0 auto;">
-          <div class="card-header"><h2>Создать 4 команды</h2></div>
-          <p class="text-muted mb-10">Выберите 4 капитанов. Остальные игроки распределятся по командам автоматически (максимально честно, по рейтингу).</p>
-          
-          <div class="draft-captain-grid">
-            <div class="draft-captain-slot">
-              <label>Капитан 1</label>
-              <select id="cap-1" class="select-sort"></select>
-            </div>
-            <div class="draft-captain-slot">
-              <label>Капитан 2</label>
-              <select id="cap-2" class="select-sort"></select>
-            </div>
-            <div class="draft-captain-slot">
-              <label>Капитан 3</label>
-              <select id="cap-3" class="select-sort"></select>
-            </div>
-            <div class="draft-captain-slot">
-              <label>Капитан 4</label>
-              <select id="cap-4" class="select-sort"></select>
-            </div>
-          </div>
-
-          <button id="build-teams-btn" class="btn-primary mt-20">Собрать команды</button>
-          <button id="reset-teams-btn" class="btn-outline mt-20" style="width: 100%; display: none;">Сбросить</button>
-
-          <div id="draft-result" class="draft-result-grid" style="display: none; margin-top: 20px;"></div>
-        </section>
-      </div>
-
       <!-- ОБЗОР -->
-      <div class="tab-content" id="tab-overview">
+      <div class="tab-content active" id="tab-overview">
         <div class="grid-2col">
           <div class="col-left">
             <section class="glass-card interactive-card" data-aos="fade-up">
@@ -225,8 +192,9 @@
         <div class="p-stat"><span>KAST</span><strong id="prof-kast">0</strong></div>
       </div>
       <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-        <button id="share-btn" class="btn-primary">Поделиться</button>
-        <button id="compare-btn" class="btn-primary" style="background: #10b981;">Сравнить с...</button>
+        <button id="share-btn" class="btn-primary" style="flex: 1;">Поделиться</button>
+        <button id="compare-btn" class="btn-primary" style="background: #10b981; flex: 1;">Сравнить с...</button>
+        <button id="faceit-btn" class="btn-primary" style="background: #ff5500; flex: 1;">FACEIT</button>
       </div>
       <div class="profile-chart-container"><canvas id="prof-chart"></canvas></div>
       <div class="profile-history">

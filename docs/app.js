@@ -1,5 +1,3 @@
-// БЕЗ FIREBASE. Всё работает локально.
-
 window.onerror = function(message, source, lineno) {
   const meta = document.getElementById('meta-info');
   if (meta) meta.innerHTML = `<span style="color: #ef4444;">Ошибка: ${message} (строка ${lineno})</span>`;
@@ -55,11 +53,9 @@ async function loadData() {
       selectedPlayers = [];
       bracketState = null;
       renderAll();
-      initDraft();
     });
 
     renderAll();
-    initDraft();
   } catch (err) {
     document.getElementById('meta-info').innerHTML = `<span style="color: #ef4444;">${err.message}</span>`;
     console.error(err);
@@ -86,88 +82,6 @@ function renderAll() {
     document.getElementById('meta-info').innerHTML = `<span style="color: #ef4444;">Ошибка рендера: ${e.message}</span>`;
     console.error(e);
   }
-}
-
-// ============ ДРАФТ ============
-function initDraft() {
-  const c1 = document.getElementById('cap-1');
-  const c2 = document.getElementById('cap-2');
-  const c3 = document.getElementById('cap-3');
-  const c4 = document.getElementById('cap-4');
-  if (!c1) return;
-
-  const opts = currentStats.players
-    .slice()
-    .sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0))
-    .map(p => `<option value="${p.id}">${p.displayName || p.name} (${p.avgRating ?? p.kd})</option>`)
-    .join('');
-  
-  [c1, c2, c3, c4].forEach((sel, i) => {
-    sel.innerHTML = `<option value="">— выберите —</option>` + opts;
-    if (currentStats.players.length > i) {
-      sel.selectedIndex = i + 1;
-    }
-  });
-
-  const buildBtn = document.getElementById('build-teams-btn');
-  const resetBtn = document.getElementById('reset-teams-btn');
-  const resultDiv = document.getElementById('draft-result');
-
-  buildBtn.onclick = () => {
-    const capIds = [c1.value, c2.value, c3.value, c4.value].filter(Boolean);
-    if (capIds.length !== 4) return alert('Выберите 4 капитана');
-    if (new Set(capIds).size !== 4) return alert('Капитаны не должны повторяться');
-
-    const captains = capIds.map(id => currentStats.players.find(p => p.id === id)).filter(Boolean);
-    const allPlayers = currentStats.players.filter(p => !capIds.includes(p.id));
-    const sorted = allPlayers.slice().sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0));
-
-    // Сколько нужно на команду всего (5). Уже есть капитан (1). Добираем 4.
-    const perTeam = 4;
-    const totalNeeded = perTeam * 4; // 16
-    const pool = sorted.slice(0, totalNeeded);
-
-    const teams = captains.map(c => ({
-      captain: c,
-      players: [],
-      sumRating: c.avgRating ?? 0
-    }));
-
-    // Snake order: 0,1,2,3, 3,2,1,0, 0,1,2,3, 3,2,1,0
-    const order = [0,1,2,3, 3,2,1,0, 0,1,2,3, 3,2,1,0];
-    let idx = 0;
-    for (const t of order) {
-      if (idx >= pool.length) break;
-      const player = pool[idx++];
-      teams[t].players.push(player);
-      teams[t].sumRating += player.avgRating ?? 0;
-    }
-
-    resultDiv.style.display = 'grid';
-    resultDiv.innerHTML = teams.map((team, i) => {
-      const avg = (team.sumRating / (team.players.length + 1)).toFixed(2);
-      const capAva = team.captain.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(team.captain.name)}&background=ffd700&color=000`;
-      return `
-        <div class="draft-team-result">
-          <h3>Команда ${i + 1} <span class="draft-team-avg">Σ ${team.sumRating.toFixed(2)} · Avg ${avg}</span></h3>
-          <ul>
-            <li><img src="${capAva}"> <b>${team.captain.displayName || team.captain.name}</b> <span style="color:#ffd700;font-size:0.7rem;margin-left:auto;">К</span></li>
-            ${team.players.map(p => {
-              const ava = p.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
-              return `<li><img src="${ava}"> ${p.displayName || p.name} <span style="margin-left:auto;color:var(--text-muted);font-size:0.75rem;">${(p.avgRating ?? 0).toFixed(2)}</span></li>`;
-            }).join('')}
-          </ul>
-        </div>
-      `;
-    }).join('');
-
-    resetBtn.style.display = 'block';
-    resetBtn.onclick = () => {
-      resultDiv.style.display = 'none';
-      resultDiv.innerHTML = '';
-      resetBtn.style.display = 'none';
-    };
-  };
 }
 
 // ============ ПЬЕДЕСТАЛ ============
@@ -345,6 +259,38 @@ function openProfile(playerId) {
   document.getElementById('prof-rating').innerText = p.avgRating ?? '—';
   document.getElementById('prof-adr').innerText = p.avgAdr ?? '—';
   document.getElementById('prof-kast').innerText = p.avgKast ?? '—';
+  
+  // Кнопка FACEIT (поиск по Steam ID)
+  const faceitBtn = document.getElementById('faceit-btn');
+  if (faceitBtn) {
+    faceitBtn.onclick = async () => {
+      const newTab = window.open('about:blank', '_blank');
+      faceitBtn.innerText = 'Загрузка...';
+      faceitBtn.disabled = true;
+
+      try {
+        const res = await fetch(`https://steamgpt.net/faceit/${p.id}.json`);
+        if (!res.ok) throw new Error('Ошибка API');
+        
+        const json = await res.json();
+        
+        if (json.result === 'success' && json.data && json.data.faceit) {
+          const nickname = json.data.faceit.nickname;
+          newTab.location.href = `https://www.faceit.com/en/players/${nickname}`;
+        } else {
+          newTab.close();
+          alert('У этого игрока нет аккаунта FACEIT');
+        }
+      } catch (err) {
+        newTab.close();
+        alert('Не удалось найти профиль FACEIT. Проверьте Steam ID.');
+      } finally {
+        faceitBtn.innerText = 'FACEIT';
+        faceitBtn.disabled = false;
+      }
+    };
+  }
+
   const shareBtn = document.getElementById('share-btn');
   if (shareBtn) shareBtn.onclick = () => {
     const text = encodeURIComponent(`Статистика: ${p.displayName || p.name}\nРейтинг: ${p.avgRating || 0}\nK/D: ${p.kd}\nADR: ${p.avgAdr || 0}\nПодробнее:`);
@@ -707,7 +653,6 @@ document.getElementById('send-feedback-btn').onclick = () => {
   const text = document.getElementById('feedback-text').value.trim();
   if (!text) return alert('Введите текст');
   
-  // Сохраняем в localStorage (без Firebase)
   try {
     const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
     feedbacks.push({ text, date: new Date().toISOString() });
