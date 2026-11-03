@@ -159,20 +159,21 @@ function initDraft() {
     const allPlayers = currentStats.players.filter(p => !capIds.includes(p.id));
     const scoredPool = allPlayers.map(p => ({ ...p, score: playerCompositeScore(p, weights) }));
     
-    // Сортируем игроков по силе
+    // Сортируем всех игроков по силе
     const sorted = scoredPool.slice().sort((a, b) => b.score - a.score);
 
     let pool = [];
     if (isShuffle) {
-      // Берем топ-30 игроков (или сколько есть)
+      // Берем топ-30 игроков (или сколько есть на сервере)
       const topPool = sorted.slice(0, Math.min(30, sorted.length));
-      // Полностью перемешиваем
+      // Случайно перемешиваем
       topPool.sort(() => Math.random() - 0.5);
       // Берем случайных 16
       pool = topPool.slice(0, 16);
-      // ВАЖНО: НЕ сортируем обратно, чтобы алгоритм раздавал в случайном порядке
+      // Возвращаем сортировку по силе, чтобы алгоритм раздавал лучших слабым командам
+      pool.sort((a, b) => b.score - a.score);
     } else {
-      // Обычная сборка: берём просто топ-16 (по силе)
+      // Идеальная сборка: берем просто топ-16
       pool = sorted.slice(0, 16);
     }
 
@@ -183,10 +184,19 @@ function initDraft() {
 
     let poolIdx = 0;
     while (poolIdx < pool.length) {
-      let weakestIdx = 0;
-      for (let i = 1; i < teams.length; i++) {
-        if (teams[i].sumScore < teams[weakestIdx].sumScore) weakestIdx = i;
+      let weakestIdx = -1;
+      let minScore = Infinity;
+      
+      // Ищем самую слабую команду, в которой МЕНЬШЕ 4 игроков (чтобы было по 5 с капитаном)
+      for (let i = 0; i < teams.length; i++) {
+        if (teams[i].players.length < 4 && teams[i].sumScore < minScore) {
+          minScore = teams[i].sumScore;
+          weakestIdx = i;
+        }
       }
+      
+      if (weakestIdx === -1) break; // Все команды укомплектованы
+      
       const player = pool[poolIdx++];
       teams[weakestIdx].players.push(player);
       teams[weakestIdx].sumScore += player.score;
@@ -289,7 +299,7 @@ function initDraft() {
 }
 
 function drawDraftCard({ teams, spread, quality, tournamentName }) {
-  const W = 1200, H = 1180; // Увеличили высоту под 5 человек в команде
+  const W = 1200, H = 1180;
   const canvas = document.createElement('canvas');
   canvas.width = W;
   canvas.height = H;
