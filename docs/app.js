@@ -14,6 +14,35 @@ let profChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 
+// ============ АЛИАСЫ НИКОВ ============
+// Данные в stats.json и ключи localStorage (savedTeams_*, bracket_*)
+// остаются с исходным ником — меняется только отображение на странице.
+const PLAYER_ALIASES = new Map([
+  ['BB-00 (5015)', 'q1nce_'],
+  ['BB-00', 'q1nce_'],
+]);
+
+function aliasText(str) {
+  if (typeof str !== 'string' || str === '') return str;
+  return PLAYER_ALIASES.get(str) ?? str;
+}
+
+function displayName(p) {
+  if (!p) return '';
+  const raw = p.displayName || p.name || '';
+  return aliasText(raw);
+}
+
+// Поиск по нику: матчит и старое, и новое имя — чтобы старый ник
+// продолжал находиться в фильтре и в поиске балансировщика.
+function matchesFilter(p, query) {
+  const q = (query || '').toLowerCase();
+  if (!q) return true;
+  const raw = (p.displayName || p.name || '').toLowerCase();
+  const shown = String(displayName(p)).toLowerCase();
+  return raw.includes(q) || shown.includes(q);
+}
+
 function initTabs() {
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = document.querySelectorAll('.tab-content');
@@ -90,7 +119,7 @@ function initDraft() {
   const opts = currentStats.players
     .slice()
     .sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0))
-    .map(p => `<option value="${p.id}">${p.displayName || p.name} (${p.avgRating ?? p.kd})</option>`)
+    .map(p => `<option value="${p.id}">${displayName(p)} (${p.avgRating ?? p.kd})</option>`)
     .join('');
   
   [c1, c2, c3, c4].forEach((sel, i) => {
@@ -158,10 +187,10 @@ function initDraft() {
           <div class="draft-team-result">
             <h3>Команда ${i + 1} <span class="draft-team-avg">Σ ${team.sumScore.toFixed(2)}</span></h3>
             <ul>
-              <li><img src="${capAva}"> <b>${team.captain.displayName || team.captain.name}</b> <span style="color:#ffd700;font-size:0.7rem;margin-left:auto;">К · ${team.captainScore.toFixed(2)}</span></li>
+              <li><img src="${capAva}"> <b>${displayName(team.captain)}</b> <span style="color:#ffd700;font-size:0.7rem;margin-left:auto;">К · ${team.captainScore.toFixed(2)}</span></li>
               ${team.players.map(p => {
                 const ava = p.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
-                return `<li><img src="${ava}"> ${p.displayName || p.name} <span style="margin-left:auto;color:var(--text-muted);font-size:0.75rem;">${p.score.toFixed(2)}</span></li>`;
+                return `<li><img src="${ava}"> ${displayName(p)} <span style="margin-left:auto;color:var(--text-muted);font-size:0.75rem;">${p.score.toFixed(2)}</span></li>`;
               }).join('')}
             </ul>
           </div>
@@ -206,7 +235,7 @@ function renderPodium() {
     return `<div class="podium-card ${classes[i]}" onclick="openProfile('${p.id}')">
       <div class="podium-rank">${ranks[i]}</div>
       <img src="${p.avatar}" class="podium-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
-      <div class="podium-name">${p.displayName || p.name}</div>
+      <div class="podium-name">${displayName(p)}</div>
       <div class="podium-rating">${p.avgRating ?? p.kd}</div>
     </div>`;
   }).join('');
@@ -234,9 +263,9 @@ function renderFunFacts() {
     return;
   }
   const items = [];
-  if (ff.mostStable) items.push({ title: 'Самый стабильный', player: ff.mostStable.player, playerId: ff.mostStable.playerId, desc: `Разброс рейтинга ±${ff.mostStable.stdDev}` });
-  if (ff.highestPeak) items.push({ title: 'Пиковый рейтинг', player: ff.highestPeak.player, playerId: ff.highestPeak.playerId, desc: `${ff.highestPeak.rating.toFixed(2)} на ${ff.highestPeak.map}` });
-  if (ff.lowestRating) items.push({ title: 'Худший матч', player: ff.lowestRating.player, playerId: ff.lowestRating.playerId, desc: `${ff.lowestRating.rating.toFixed(2)} на ${ff.lowestRating.map}` });
+  if (ff.mostStable) items.push({ title: 'Самый стабильный', player: aliasText(ff.mostStable.player), playerId: ff.mostStable.playerId, desc: `Разброс рейтинга ±${ff.mostStable.stdDev}` });
+  if (ff.highestPeak) items.push({ title: 'Пиковый рейтинг', player: aliasText(ff.highestPeak.player), playerId: ff.highestPeak.playerId, desc: `${ff.highestPeak.rating.toFixed(2)} на ${ff.highestPeak.map}` });
+  if (ff.lowestRating) items.push({ title: 'Худший матч', player: aliasText(ff.lowestRating.player), playerId: ff.lowestRating.playerId, desc: `${ff.lowestRating.rating.toFixed(2)} на ${ff.lowestRating.map}` });
   if (ff.favoriteMap) items.push({ title: 'Любимая карта', player: ff.favoriteMap.map, playerId: null, desc: `${ff.favoriteMap.matches} игр` });
   
   container.innerHTML = items.map(i => `
@@ -255,11 +284,11 @@ function renderRecords() {
   const deathRec = (r.maxDeaths && r.maxDeaths.value > 0) ? r.maxDeaths : null;
   const adrRec = (r.maxAdr && r.maxAdr.value > 0) ? r.maxAdr : null;
   document.getElementById('rec-max-kills').innerText = killRec ? killRec.value : '—';
-  document.getElementById('rec-max-kills-desc').innerHTML = killRec ? `<b>${killRec.player}</b><br><span>${killRec.map}</span>` : 'Нет данных';
+  document.getElementById('rec-max-kills-desc').innerHTML = killRec ? `<b>${aliasText(killRec.player)}</b><br><span>${killRec.map}</span>` : 'Нет данных';
   document.getElementById('rec-max-deaths').innerText = deathRec ? deathRec.value : '—';
-  document.getElementById('rec-max-deaths-desc').innerHTML = deathRec ? `<b>${deathRec.player}</b><br><span>${deathRec.map}</span>` : 'Нет данных';
+  document.getElementById('rec-max-deaths-desc').innerHTML = deathRec ? `<b>${aliasText(deathRec.player)}</b><br><span>${deathRec.map}</span>` : 'Нет данных';
   document.getElementById('rec-max-adr').innerText = adrRec ? adrRec.value : '—';
-  document.getElementById('rec-max-adr-desc').innerHTML = adrRec ? `<b>${adrRec.player}</b><br><span>${adrRec.map}</span>` : 'Нет данных';
+  document.getElementById('rec-max-adr-desc').innerHTML = adrRec ? `<b>${aliasText(adrRec.player)}</b><br><span>${adrRec.map}</span>` : 'Нет данных';
   
   document.getElementById('card-rec-kills').onclick = killRec ? () => openRecordDetails('maxKills') : null;
   document.getElementById('card-rec-deaths').onclick = deathRec ? () => openRecordDetails('maxDeaths') : null;
@@ -284,7 +313,7 @@ function openRecordDetails(type) {
   document.getElementById('record-content').innerHTML = `
     <div style="text-align:center; margin-bottom: 20px;">
       <img src="${avatar}" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; cursor: pointer;" onclick="openProfile('${playerId}')">
-      <h3 style="cursor:pointer; color: var(--accent);" onclick="openProfile('${playerId}')">${rec.player}</h3>
+      <h3 style="cursor:pointer; color: var(--accent);" onclick="openProfile('${playerId}')">${aliasText(rec.player)}</h3>
       <p style="color: var(--text-muted); font-size: 0.85rem;">${rec.map} · ${date}</p>
     </div>
     <div style="background: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; padding: 15px; text-align:center; margin-bottom: 15px;">
@@ -308,7 +337,7 @@ function renderPlayersTable() {
   function draw() {
     const filter = filterInput.value.toLowerCase();
     const sortKey = sortSelect.value;
-    let players = [...currentStats.players].filter(p => (p.displayName || p.name).toLowerCase().includes(filter));
+    let players = [...currentStats.players].filter(p => matchesFilter(p, filter));
     players.sort((a, b) => {
       if (sortKey === 'deaths') return b.deaths - a.deaths;
       if (sortKey === 'kd') return b.kd - a.kd;
@@ -322,7 +351,7 @@ function renderPlayersTable() {
       else if (p.form === 'new') formText = '<span style="color: #f59e0b;">Мало данных</span>';
       else formText = '<span style="color: var(--text-muted);">Стабильно</span>';
       return `<tr>
-        <td><div class="player-cell"><img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><div><strong class="player-link" onclick="openProfile('${p.id}')">${p.displayName || p.name}</strong></div></div></td>
+        <td><div class="player-cell"><img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><div><strong class="player-link" onclick="openProfile('${p.id}')">${displayName(p)}</strong></div></div></td>
         <td>${formText}</td><td>${p.matches}</td><td><strong>${p.kd}</strong></td><td style="color: var(--accent); font-weight: 600;">${p.avgRating ?? '—'}</td>
       </tr>`;
     }).join('');
@@ -368,7 +397,7 @@ function openMapDetails(mapName) {
       <td>
         <div class="player-cell" style="cursor:pointer;" onclick="openProfile('${p.id}')">
           <img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
-          <strong>${p.name}</strong>
+          <strong>${displayName(p)}</strong>
         </div>
       </td>
       <td>${p.matches}</td>
@@ -387,7 +416,7 @@ function initDuel() {
   const p2Select = document.getElementById('duel-p2');
   const btn = document.getElementById('duel-btn');
   const resultDiv = document.getElementById('duel-result');
-  const options = currentStats.players.map(p => `<option value="${p.id}">${p.displayName || p.name}</option>`).join('');
+  const options = currentStats.players.map(p => `<option value="${p.id}">${displayName(p)}</option>`).join('');
   p1Select.innerHTML = options;
   p2Select.innerHTML = options;
   btn.onclick = () => {
@@ -400,7 +429,7 @@ function initDuel() {
     const [rat1, rat2] = compare(p1.avgRating ?? 0, p2.avgRating ?? 0);
     const [adr1, adr2] = compare(p1.avgAdr ?? 0, p2.avgAdr ?? 0);
     const [kast1, kast2] = compare(p1.avgKast ?? 0, p2.avgKast ?? 0);
-    const winnerName = (p1.avgRating ?? p1.kd) > (p2.avgRating ?? p2.kd) ? (p1.displayName || p1.name) : (p2.displayName || p2.name);
+    const winnerName = (p1.avgRating ?? p1.kd) > (p2.avgRating ?? p2.kd) ? displayName(p1) : displayName(p2);
     resultDiv.style.display = 'block';
     resultDiv.innerHTML = `
       <div class="duel-row"><span class="${kd1}">${p1.kd} K/D</span><span style="font-weight:bold;color:var(--text-muted);">K/D</span><span class="${kd2}">${p2.kd} K/D</span></div>
@@ -418,7 +447,7 @@ function openProfile(playerId) {
   const img = document.getElementById('prof-avatar');
   img.src = p.avatar;
   img.onerror = function() { this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true&size=128`; };
-  document.getElementById('prof-name').innerText = p.displayName || p.name;
+  document.getElementById('prof-name').innerText = displayName(p);
   document.getElementById('prof-matches').innerText = p.matches;
   document.getElementById('prof-kd').innerText = p.kd;
   document.getElementById('prof-rating').innerText = p.avgRating ?? '—';
@@ -456,7 +485,7 @@ function openProfile(playerId) {
 
   const shareBtn = document.getElementById('share-btn');
   if (shareBtn) shareBtn.onclick = () => {
-    const text = encodeURIComponent(`Статистика: ${p.displayName || p.name}\nРейтинг: ${p.avgRating || 0}\nK/D: ${p.kd}\nADR: ${p.avgAdr || 0}\nПодробнее:`);
+    const text = encodeURIComponent(`Статистика: ${displayName(p)}\nРейтинг: ${p.avgRating || 0}\nK/D: ${p.kd}\nADR: ${p.avgAdr || 0}\nПодробнее:`);
     window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`, '_blank');
   };
   const compareBtn = document.getElementById('compare-btn');
@@ -653,7 +682,7 @@ function drawTeamColumn(ctx, title, players, sumScore, x, y, w, accentColor) {
   const sorted = [...players].sort((a, b) => b.score - a.score);
   let py = innerY + 72;
   for (const p of sorted) {
-    const nameStr = (p.displayName || p.name || '?');
+    const nameStr = String(displayName(p) || '?');
     const initial = nameStr.slice(0, 1).toUpperCase();
 
     // Круг с инициалом
@@ -786,12 +815,12 @@ function buildShareText(best, quality, deltaKd, deltaAdr, tournamentName, weight
   lines.push('');
   lines.push('Команда А (Σ ' + best.sumA.toFixed(2) + '):');
   for (const p of [...best.teamA].sort((a, b) => b.score - a.score)) {
-    lines.push('  · ' + (p.displayName || p.name) + ' — ' + p.score.toFixed(2));
+    lines.push('  · ' + displayName(p) + ' — ' + p.score.toFixed(2));
   }
   lines.push('');
   lines.push('Команда Б (Σ ' + best.sumB.toFixed(2) + '):');
   for (const p of [...best.teamB].sort((a, b) => b.score - a.score)) {
-    lines.push('  · ' + (p.displayName || p.name) + ' — ' + p.score.toFixed(2));
+    lines.push('  · ' + displayName(p) + ' — ' + p.score.toFixed(2));
   }
   lines.push('');
   const w = normalizeWeights(weights);
@@ -893,10 +922,10 @@ function initBalancer() {
 
   function drawGrid() {
     if (!grid) return;
-    const q = searchInput.value.toLowerCase();
-    grid.innerHTML = currentStats.players.filter(p => (p.displayName || p.name).toLowerCase().includes(q)).map(p => {
+    const q = searchInput.value;
+    grid.innerHTML = currentStats.players.filter(p => matchesFilter(p, q)).map(p => {
       const sel = selectedPlayers.find(sp => sp.id === p.id);
-      return `<div class="player-card ${sel ? 'selected' : ''}" onclick="togglePlayer('${p.id}')"><img src="${p.avatar}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><div class="card-name">${p.displayName || p.name}</div><div class="card-rating">${p.avgRating ?? p.kd}</div></div>`;
+      return `<div class="player-card ${sel ? 'selected' : ''}" onclick="togglePlayer('${p.id}')"><img src="${p.avatar}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><div class="card-name">${displayName(p)}</div><div class="card-rating">${p.avgRating ?? p.kd}</div></div>`;
     }).join('');
   }
 
@@ -955,13 +984,14 @@ function initBalancer() {
           <span>Δ ADR <b>${deltaAdr.toFixed(1)}</b></span>
         </span>
       </div>
-      <div class="team-box"><h3>Команда А <span>Σ ${best.sumA.toFixed(2)}</span></h3><ul>${[...best.teamA].sort((a,b)=>b.score-a.score).map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.score.toFixed(2)}</span></li>`).join('')}</ul></div>
-      <div class="team-box"><h3>Команда Б <span>Σ ${best.sumB.toFixed(2)}</span></h3><ul>${[...best.teamB].sort((a,b)=>b.score-a.score).map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.score.toFixed(2)}</span></li>`).join('')}</ul></div>
+      <div class="team-box"><h3>Команда А <span>Σ ${best.sumA.toFixed(2)}</span></h3><ul>${[...best.teamA].sort((a,b)=>b.score-a.score).map(p => `<li><div class="t-player"><img src="${p.avatar}">${displayName(p)}</div><span>${p.score.toFixed(2)}</span></li>`).join('')}</ul></div>
+      <div class="team-box"><h3>Команда Б <span>Σ ${best.sumB.toFixed(2)}</span></h3><ul>${[...best.teamB].sort((a,b)=>b.score-a.score).map(p => `<li><div class="t-player"><img src="${p.avatar}">${displayName(p)}</div><span>${p.score.toFixed(2)}</span></li>`).join('')}</ul></div>
     `;
     resultDiv.classList.add('show');
     savedSection.classList.remove('show');
 
     // savedTeams_* — как раньше, поле rating теперь хранит composite score. Ключ не меняем.
+    // В name сохраняем исходное имя (без алиаса) — при отображении применится aliasText.
     try {
       localStorage.setItem(getSavedKey(), JSON.stringify({
         teamA: best.teamA.map(p => ({ name: p.displayName || p.name, rating: p.score, avatar: p.avatar })),
@@ -1087,7 +1117,7 @@ function initBalancer() {
       const d = JSON.parse(raw);
       const sA = d.teamA.reduce((s, p) => s + (p.rating || 0), 0);
       const sB = d.teamB.reduce((s, p) => s + (p.rating || 0), 0);
-      savedContent.innerHTML = `<div class="balance-result-modal show" style="margin-top: 0;"><div class="team-box"><h3>Сохранено: Команда А <span>Σ ${sA.toFixed(2)}</span></h3><ul>${d.teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div><div class="team-box"><h3>Сохранено: Команда Б <span>Σ ${sB.toFixed(2)}</span></h3><ul>${d.teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div></div>`;
+      savedContent.innerHTML = `<div class="balance-result-modal show" style="margin-top: 0;"><div class="team-box"><h3>Сохранено: Команда А <span>Σ ${sA.toFixed(2)}</span></h3><ul>${d.teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${aliasText(p.name)}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div><div class="team-box"><h3>Сохранено: Команда Б <span>Σ ${sB.toFixed(2)}</span></h3><ul>${d.teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${aliasText(p.name)}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div></div>`;
       savedSection.classList.add('show');
     } catch (e) {}
   }
