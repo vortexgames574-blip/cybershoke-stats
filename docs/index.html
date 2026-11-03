@@ -49,7 +49,8 @@
       <button class="tab-btn active" data-tab="overview"><i data-lucide="layout-dashboard"></i> Обзор</button>
       <button class="tab-btn" data-tab="players"><i data-lucide="users"></i> Игроки</button>
       <button class="tab-btn" data-tab="maps"><i data-lucide="map"></i> Карты</button>
-      <button class="tab-btn" data-tab="balancer"><i data-lucide="git-merge"></i> Балансировщик</button>
+      <button class="tab-btn" data-tab="balancer"><i data-lucide="git-merge"></i> Балансировщик 5х5</button>
+      <button class="tab-btn" data-tab="draft"><i data-lucide="users"></i> Драфт 4х</button>
       <button class="tab-btn" data-tab="bracket"><i data-lucide="trophy"></i> Сетка</button>
     </nav>
 
@@ -149,12 +150,44 @@
         </section>
       </div>
 
-      <!-- БАЛАНСИРОВЩИК -->
+      <!-- БАЛАНСИРОВЩИК 2x5 -->
       <div class="tab-content" id="tab-balancer">
         <section class="glass-card interactive-card">
           <div class="card-header"><h2>Балансировщик 5х5</h2></div>
-          <p class="text-muted mb-10">Соберите 10 игроков для разделения.</p>
+          <p class="text-muted mb-10">Соберите 10 игроков для разделения на 2 команды.</p>
           <button id="open-balancer-btn" class="btn-primary">Открыть балансировщик</button>
+        </section>
+      </div>
+
+      <!-- ДРАФТ 4x -->
+      <div class="tab-content" id="tab-draft">
+        <section class="glass-card interactive-card" style="max-width: 800px; margin: 0 auto;">
+          <div class="card-header"><h2>Создать 4 команды</h2></div>
+          <p class="text-muted mb-10">Выберите 4 капитанов. Остальные игроки распределятся автоматически (по рейтингу, змейкой).</p>
+          
+          <div class="draft-captain-grid">
+            <div class="draft-captain-slot">
+              <label>Капитан 1</label>
+              <select id="cap-1" class="select-sort"></select>
+            </div>
+            <div class="draft-captain-slot">
+              <label>Капитан 2</label>
+              <select id="cap-2" class="select-sort"></select>
+            </div>
+            <div class="draft-captain-slot">
+              <label>Капитан 3</label>
+              <select id="cap-3" class="select-sort"></select>
+            </div>
+            <div class="draft-captain-slot">
+              <label>Капитан 4</label>
+              <select id="cap-4" class="select-sort"></select>
+            </div>
+          </div>
+
+          <button id="build-teams-btn" class="btn-primary mt-20">Собрать команды</button>
+          <button id="reset-teams-btn" class="btn-outline mt-20" style="width: 100%; display: none;">Сбросить</button>
+
+          <div id="draft-result" class="draft-result-grid" style="display: none; margin-top: 20px;"></div>
         </section>
       </div>
 
