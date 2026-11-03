@@ -33,7 +33,7 @@ async function fetchSteamAvatars(steamIds) {
     return avatars;
   }
 
-  console.log('API ключ не найден. Парсим публичные профили Steam...');
+  console.log('Парсим публичные профили Steam...');
   for (const id of steamIds) {
     try {
       const res = await fetch(`https://steamcommunity.com/profiles/${id}/?xml=1`);
@@ -43,7 +43,7 @@ async function fetchSteamAvatars(steamIds) {
         if (match && match[1]) avatars.set(id, match[1]);
       }
     } catch (err) {}
-    await new Promise(r => setTimeout(r, 150));
+    await new Promise(r => setTimeout(r, 200)); // Задержка от бана
   }
   return avatars;
 }
@@ -99,10 +99,12 @@ function calculateStats(matches, steamAvatars) {
         
         const adrVal = num(p.adr), kastVal = num(p.kast), ratingVal = num(p.rating);
         
-        // РАСЧЕТ ELO
+        // === ДИНАМИЧЕСКИЙ РАСЧЕТ ELO ===
         let eloChange = 0;
         if (ratingVal !== null) {
-          eloChange = Math.round((ratingVal - 1.0) * 50);
+          // K-фактор уменьшается с каждым матчем (защита от инфляции)
+          const K = Math.max(5, 50 - (st.matches * 1.5));
+          eloChange = Math.round(K * (ratingVal - 1.0) * 2);
           st.elo += eloChange;
         }
 
@@ -153,9 +155,7 @@ function calculateStats(matches, steamAvatars) {
   const displayNameById = new Map(players.map(p => [p.id, p.displayName]));
   for (const key of ['maxKills', 'maxDeaths', 'maxAdr']) {
     const rec = records[key];
-    if (rec && rec.playerId && displayNameById.has(rec.playerId)) {
-      rec.player = displayNameById.get(rec.playerId);
-    }
+    if (rec && rec.playerId && displayNameById.has(rec.playerId)) rec.player = displayNameById.get(rec.playerId);
   }
 
   players.forEach(p => {
@@ -253,7 +253,7 @@ async function main() {
 
   for (const [tName, tMatches] of tournamentsMap.entries()) output.tournaments[tName] = calculateStats(tMatches, steamAvatars);
   await fs.writeJson(OUTPUT_FILE, output, { spaces: 2 });
-  console.log(`Статистика обновлена! Турниров: ${Object.keys(output.tournaments).length}`);
+  console.log(`Статистика обновлена!`);
 }
 
 main().catch(err => { console.error(err); process.exit(1); });

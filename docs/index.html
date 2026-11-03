@@ -26,7 +26,9 @@
         <span class="logo-badge">CS2</span>
       </div>
       <div class="header-controls">
-        <select id="tournament-select" class="select-tournament"></select>
+        <select id="tournament-select" class="select-tournament">
+          <option>Загрузка...</option>
+        </select>
         <div id="meta-info" class="meta-info">Загрузка...</div>
         <button id="feedback-btn" class="btn-outline" title="Обратная связь">
           <i data-lucide="message-square" style="width:16px; height:16px;"></i> Связь
@@ -40,12 +42,12 @@
     <section class="metric-explanation" id="beginner-block">
       <h3>Что значит каждая метрика?</h3>
       <div class="metric-grid">
+        <div class="metric-item"><b>ELO</b><br>Твой глобальный рейтинг. Зависит от качества твоей игры. Старт: 1000.</div>
         <div class="metric-item"><b>K/D</b><br>Отношение убийств к смертям. 1.0 — средний, выше — лучше.</div>
         <div class="metric-item"><b>Рейтинг</b><br>Оценка (как на HLTV). 1.0 — средний, 1.2+ — сильный.</div>
         <div class="metric-item"><b>ADR</b><br>Средний урон за раунд. 60 — мало, 80 — норма, 100+ — отлично.</div>
         <div class="metric-item"><b>KAST</b><br>% раундов, где ты убил, помог или выжил. 70%+ — хорошо.</div>
         <div class="metric-item"><b>Форма</b><br>Тренд последних 3 матчей: в форме, стабильно или спад.</div>
-        <div class="metric-item"><b>Карты</b><br>Сколько карт сыграно. Одна карта может быть частью матча.</div>
       </div>
     </section>
 
@@ -62,7 +64,10 @@
       <!-- ГЛАВНАЯ -->
       <div class="tab-content active" id="tab-home">
         <section class="glass-card interactive-card">
-          <div id="home-winners-root"></div>
+          <div id="home-winners-root">
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-hero"></div>
+          </div>
         </section>
       </div>
 
@@ -72,32 +77,41 @@
           <div class="col-left">
             <section class="glass-card interactive-card" data-aos="fade-up">
               <div class="card-header"><h2>Пьедестал</h2><span class="header-hint">Топ-3 по ELO</span></div>
-              <div class="podium-grid" id="podium-container"></div>
+              <div class="podium-grid" id="podium-container">
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+              </div>
             </section>
             <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="100">
               <div class="card-header"><h2>Последние матчи</h2></div>
-              <div id="recent-matches-container" class="recent-matches-list"></div>
+              <div id="recent-matches-container" class="recent-matches-list">
+                <div class="skeleton skeleton-row"></div>
+                <div class="skeleton skeleton-row"></div>
+              </div>
             </section>
             <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="200">
               <div class="card-header"><h2>Рекорды за карту</h2><span class="header-hint">Нажми на карточку</span></div>
               <div class="fun-stats-grid">
-                <div class="fun-stat-box record-card interactive-box" id="card-rec-kills"><div class="fun-val" id="rec-max-kills">—</div><div class="fun-desc" id="rec-max-kills-desc">Нет данных</div><div class="record-hint">Макс. убийств</div></div>
-                <div class="fun-stat-box record-card interactive-box" id="card-rec-deaths"><div class="fun-val" id="rec-max-deaths" style="color: #ef4444;">—</div><div class="fun-desc" id="rec-max-deaths-desc">Нет данных</div><div class="record-hint">Макс. смертей</div></div>
-                <div class="fun-stat-box record-card interactive-box" id="card-rec-adr"><div class="fun-val" id="rec-max-adr" style="color: #10b981;">—</div><div class="fun-desc" id="rec-max-adr-desc">Нет данных</div><div class="record-hint">Макс. ADR</div></div>
+                <div class="fun-stat-box record-card interactive-box" id="card-rec-kills"><div class="fun-val skeleton-text"></div><div class="fun-desc">Макс. убийств</div></div>
+                <div class="fun-stat-box record-card interactive-box" id="card-rec-deaths"><div class="fun-val skeleton-text"></div><div class="fun-desc">Макс. смертей</div></div>
+                <div class="fun-stat-box record-card interactive-box" id="card-rec-adr"><div class="fun-val skeleton-text"></div><div class="fun-desc">Макс. ADR</div></div>
               </div>
             </section>
             <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="300">
               <div class="card-header"><h2>Интересные факты</h2></div>
-              <div class="fun-facts-grid" id="fun-facts-container"></div>
+              <div class="fun-facts-grid" id="fun-facts-container">
+                 <div class="skeleton skeleton-row"></div>
+              </div>
             </section>
           </div>
           <div class="col-right">
             <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="100">
               <div class="card-header"><h2>Общая статистика</h2></div>
               <div class="fun-stats-grid vertical">
-                <div class="fun-stat-box"><div class="fun-val" id="stat-kills">0</div><div class="fun-desc">Всего убийств</div></div>
-                <div class="fun-stat-box"><div class="fun-val" id="stat-deaths">0</div><div class="fun-desc">Всего смертей</div></div>
-                <div class="fun-stat-box"><div class="fun-val" id="stat-hours">0</div><div class="fun-desc">Часов в игре</div></div>
+                <div class="fun-stat-box"><div class="fun-val skeleton-text" id="stat-kills">0</div><div class="fun-desc">Всего убийств</div></div>
+                <div class="fun-stat-box"><div class="fun-val skeleton-text" id="stat-deaths">0</div><div class="fun-desc">Всего смертей</div></div>
+                <div class="fun-stat-box"><div class="fun-val skeleton-text" id="stat-hours">0</div><div class="fun-desc">Часов в игре</div></div>
               </div>
             </section>
           </div>
@@ -125,7 +139,11 @@
               <div class="table-container">
                 <table class="stats-table" id="players-table">
                   <thead><tr><th>Игрок</th><th>ELO</th><th>Форма</th><th>Карты</th><th>K/D</th><th>Рейтинг</th></tr></thead>
-                  <tbody></tbody>
+                  <tbody>
+                    <tr><td colspan="6"><div class="skeleton skeleton-row"></div></td></tr>
+                    <tr><td colspan="6"><div class="skeleton skeleton-row"></div></td></tr>
+                    <tr><td colspan="6"><div class="skeleton skeleton-row"></div></td></tr>
+                  </tbody>
                 </table>
               </div>
             </section>
@@ -157,7 +175,9 @@
                 <th class="sortable" data-sort="avgKd">Ср. K/D <span class="sort-arrow">⬍</span></th>
                 <th class="sortable" data-sort="avgRating">Ср. Рейтинг <span class="sort-arrow">⬍</span></th>
               </tr></thead>
-              <tbody></tbody>
+              <tbody>
+                <tr><td colspan="4"><div class="skeleton skeleton-row"></div></td></tr>
+              </tbody>
             </table>
           </div>
         </section>
@@ -179,22 +199,10 @@
           <p class="text-muted mb-10">Выберите 4 капитанов. Остальные игроки распределятся автоматически по композитному скору (тем же весам, что в балансировщике) — алгоритмом "жадный выбор".</p>
           
           <div class="draft-captain-grid">
-            <div class="draft-captain-slot">
-              <label>Капитан 1</label>
-              <select id="cap-1" class="select-sort"></select>
-            </div>
-            <div class="draft-captain-slot">
-              <label>Капитан 2</label>
-              <select id="cap-2" class="select-sort"></select>
-            </div>
-            <div class="draft-captain-slot">
-              <label>Капитан 3</label>
-              <select id="cap-3" class="select-sort"></select>
-            </div>
-            <div class="draft-captain-slot">
-              <label>Капитан 4</label>
-              <select id="cap-4" class="select-sort"></select>
-            </div>
+            <div class="draft-captain-slot"><label>Капитан 1</label><select id="cap-1" class="select-sort"></select></div>
+            <div class="draft-captain-slot"><label>Капитан 2</label><select id="cap-2" class="select-sort"></select></div>
+            <div class="draft-captain-slot"><label>Капитан 3</label><select id="cap-3" class="select-sort"></select></div>
+            <div class="draft-captain-slot"><label>Капитан 4</label><select id="cap-4" class="select-sort"></select></div>
           </div>
 
           <div class="draft-actions-row">
@@ -240,9 +248,7 @@
         <h3>История матчей</h3>
         <div class="table-container" style="max-height: 300px; overflow-y: auto;">
           <table class="stats-table">
-            <thead>
-              <tr><th>Дата</th><th>Карта</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Рейтинг</th><th>ELO</th></tr>
-            </thead>
+            <thead><tr><th>Дата</th><th>Карта</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Рейтинг</th><th>ELO</th></tr></thead>
             <tbody id="prof-match-history"></tbody>
           </table>
         </div>
@@ -304,22 +310,10 @@
           <span>Веса метрик <span style="color: var(--text-muted); font-size: 0.75rem;">(пропорция нормализуется)</span></span>
           <button id="reset-weights-btn" class="btn-outline" style="font-size: 0.75rem; padding: 4px 10px;">Сброс</button>
         </div>
-        <div class="weight-slider-row">
-          <label>Рейтинг <span id="weight-rating-val">50%</span></label>
-          <input type="range" id="weight-rating" min="0" max="1" step="0.05" value="0.5">
-        </div>
-        <div class="weight-slider-row">
-          <label>K/D <span id="weight-kd-val">20%</span></label>
-          <input type="range" id="weight-kd" min="0" max="1" step="0.05" value="0.2">
-        </div>
-        <div class="weight-slider-row">
-          <label>ADR <span id="weight-adr-val">20%</span></label>
-          <input type="range" id="weight-adr" min="0" max="1" step="0.05" value="0.2">
-        </div>
-        <div class="weight-slider-row">
-          <label>KAST <span id="weight-kast-val">10%</span></label>
-          <input type="range" id="weight-kast" min="0" max="1" step="0.05" value="0.1">
-        </div>
+        <div class="weight-slider-row"><label>Рейтинг <span id="weight-rating-val">50%</span></label><input type="range" id="weight-rating" min="0" max="1" step="0.05" value="0.5"></div>
+        <div class="weight-slider-row"><label>K/D <span id="weight-kd-val">20%</span></label><input type="range" id="weight-kd" min="0" max="1" step="0.05" value="0.2"></div>
+        <div class="weight-slider-row"><label>ADR <span id="weight-adr-val">20%</span></label><input type="range" id="weight-adr" min="0" max="1" step="0.05" value="0.2"></div>
+        <div class="weight-slider-row"><label>KAST <span id="weight-kast-val">10%</span></label><input type="range" id="weight-kast" min="0" max="1" step="0.05" value="0.1"></div>
       </div>
       <div id="players-grid" class="players-grid"></div>
       <button id="balance-btn" class="btn-primary mt-20" disabled>Разделить на команды</button>
@@ -330,10 +324,7 @@
       </div>
       <div id="map-result" class="map-result-box"></div>
       <div id="saved-teams-section" class="saved-teams-section">
-        <div class="saved-header">
-          <h3>Сохранённые составы</h3>
-          <button id="clear-saved-btn" class="btn-outline" style="font-size: 0.75rem; padding: 4px 10px;">Удалить</button>
-        </div>
+        <div class="saved-header"><h3>Сохранённые составы</h3><button id="clear-saved-btn" class="btn-outline" style="font-size: 0.75rem; padding: 4px 10px;">Удалить</button></div>
         <div id="saved-teams-content"></div>
       </div>
     </div>
