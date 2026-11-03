@@ -229,7 +229,7 @@
       <!-- Линейный график -->
       <div class="profile-chart-container"><canvas id="prof-chart"></canvas></div>
       
-      <!-- РАДАР-ГРАФИК (Добавлено) -->
+      <!-- РАДАР-ГРАФИК -->
       <div style="height: 250px; margin-bottom: 24px; max-width: 400px; margin-left: auto; margin-right: auto;">
         <canvas id="prof-radar-chart"></canvas>
       </div>
@@ -256,6 +256,17 @@
           <tbody id="map-players-list"></tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛКА МАТЧА (НОВАЯ) -->
+  <div id="match-modal" class="modal">
+    <div class="modal-content glass-card">
+      <span class="close-btn" onclick="closeMatchDetails()">&times;</span>
+      <div class="profile-header" style="margin-bottom: 15px; padding-bottom: 10px;">
+        <div class="prof-info"><h2 id="match-modal-title">Детали матча</h2><span class="prof-title">Статистика игроков</span></div>
+      </div>
+      <div id="match-modal-content" style="max-height: 70vh; overflow-y: auto; padding-right: 5px;"></div>
     </div>
   </div>
 
@@ -298,7 +309,6 @@
           <label>ADR <span id="weight-adr-val">20%</span></label>
           <input type="range" id="weight-adr" min="0" max="1" step="0.05" value="0.2">
         </div>
-        <!-- ДОБАВЛЕН KAST -->
         <div class="weight-slider-row">
           <label>KAST <span id="weight-kast-val">10%</span></label>
           <input type="range" id="weight-kast" min="0" max="1" step="0.05" value="0.1">

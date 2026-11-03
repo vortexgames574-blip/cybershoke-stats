@@ -15,7 +15,6 @@ let profRadarChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 
-// ============ УВЕДОМЛЕНИЯ (TOAST) ============
 function showToast(message, type = 'info') {
   let container = document.getElementById('toast-container');
   if (!container) {
@@ -30,7 +29,6 @@ function showToast(message, type = 'info') {
   setTimeout(() => toast.remove(), 3500);
 }
 
-// ============ АЛИАСЫ НИКОВ ============
 const ALIAS_BY_ID = new Map([
   ['76561199109745015', 'q1nce_'],
 ]);
@@ -127,7 +125,7 @@ function renderAll() {
   }
 }
 
-// ============ ДРАФТ 4x С ГЕНЕРАЦИЕЙ КАРТИНКИ ============
+// ============ ДРАФТ 4x ============
 function initDraft() {
   const c1 = document.getElementById('cap-1');
   const c2 = document.getElementById('cap-2');
@@ -162,7 +160,7 @@ function initDraft() {
     const scoredPool = allPlayers.map(p => ({ ...p, score: playerCompositeScore(p, weights) }));
     const sorted = scoredPool.slice().sort((a, b) => b.score - a.score);
 
-    const pool = sorted.slice(0, 12); // Для 4 команд по 4 человека нужно 12 игроков в пул
+    const pool = sorted.slice(0, 12);
     const teams = captains.map(c => {
       const capScore = playerCompositeScore(c, weights);
       return { captain: c, captainScore: capScore, players: [], sumScore: capScore };
@@ -185,7 +183,6 @@ function initDraft() {
 
     resultDiv.style.display = 'grid';
     
-    // Очистка старых превью/кнопок
     resultDiv.querySelectorAll('.balance-card-preview, .balance-share-actions').forEach(el => {
       if (el.dataset && el.dataset.url) URL.revokeObjectURL(el.dataset.url);
       el.remove();
@@ -219,7 +216,6 @@ function initDraft() {
       resetBtn.style.display = 'none';
     };
 
-    // === ГЕНЕРАЦИЯ КАРТИНКИ ДЛЯ ДРАФТА ===
     const tournamentName = document.getElementById('tournament-select').value || 'Все матчи';
     const cardCanvas = drawDraftCard({ teams, spread, quality: q, tournamentName });
 
@@ -230,7 +226,7 @@ function initDraft() {
       const preview = document.createElement('div');
       preview.className = 'balance-card-preview';
       preview.dataset.url = url;
-      preview.style.gridColumn = '1 / -1'; // Растягиваем на всю ширину
+      preview.style.gridColumn = '1 / -1';
       preview.innerHTML = `<img src="${url}" alt="Карточка драфта">`;
       resultDiv.appendChild(preview);
 
@@ -280,7 +276,6 @@ function initDraft() {
   }
 }
 
-// Функция отрисовки сетки 2х2 для 4 команд
 function drawDraftCard({ teams, spread, quality, tournamentName }) {
   const W = 1200, H = 1100;
   const canvas = document.createElement('canvas');
@@ -303,7 +298,6 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
   for (let x = 0; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
   for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
 
-  // Header
   ctx.fillStyle = TEXT;
   ctx.font = '800 28px Inter, system-ui, sans-serif';
   ctx.textBaseline = 'top';
@@ -319,7 +313,6 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
   ctx.strokeStyle = BORDER;
   ctx.beginPath(); ctx.moveTo(60, 130); ctx.lineTo(W - 60, 130); ctx.stroke();
 
-  // Бейдж качества
   const qColor = quality.key === 'perfect' ? '#10b981' : quality.key === 'good' ? ACCENT : quality.key === 'ok' ? '#f59e0b' : '#ef4444';
   const badgeText = quality.label + ' · разброс Σ ' + spread.toFixed(2);
   ctx.font = '600 14px Inter, system-ui, sans-serif';
@@ -337,7 +330,6 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
   ctx.textBaseline = 'middle';
   ctx.fillText(badgeText, badgeX + 14, badgeY + 16);
 
-  // Сетка 2х2
   const colY = 230;
   const boxW = 520;
   const boxH = 380;
@@ -354,7 +346,6 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
     const by = colY + row * (boxH + gapY);
     const accentColor = colors[i];
 
-    // Панель команды
     ctx.fillStyle = PANEL;
     roundRectPath(ctx, bx, by, boxW, boxH, 12);
     ctx.fill();
@@ -362,7 +353,6 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    // Заголовок
     ctx.textBaseline = 'top';
     ctx.fillStyle = TEXT;
     ctx.font = '700 20px Inter, system-ui, sans-serif';
@@ -380,7 +370,6 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
     ctx.lineTo(bx + boxW - 24, by + 60);
     ctx.stroke();
 
-    // Игроки
     const allPlayers = [
       { ...team.captain, score: team.captainScore, isCap: true },
       ...team.players
@@ -391,7 +380,6 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
       const nameStr = String(displayName(p) || '?');
       const initial = nameStr.slice(0, 1).toUpperCase();
 
-      // Круг
       ctx.fillStyle = (p.isCap ? '#ffd700' : accentColor) + '33';
       ctx.beginPath();
       ctx.arc(bx + 44, py + 20, 20, 0, Math.PI * 2);
@@ -406,7 +394,6 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
       ctx.textBaseline = 'middle';
       ctx.fillText(initial, bx + 44, py + 21);
 
-      // Имя
       let name = nameStr;
       if (name.length > 26) name = name.slice(0, 24) + '…';
       ctx.fillStyle = TEXT;
@@ -421,7 +408,6 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
         ctx.fillText('CAPTAIN', bx + 80, py + 38);
       }
 
-      // Скор
       ctx.fillStyle = MUTED;
       ctx.font = '600 16px Inter, system-ui, sans-serif';
       ctx.textAlign = 'right';
@@ -432,7 +418,6 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
     }
   });
 
-  // Footer
   ctx.fillStyle = MUTED;
   ctx.font = '500 14px Inter, system-ui, sans-serif';
   ctx.textAlign = 'center';
@@ -643,6 +628,53 @@ function openMapDetails(mapName) {
 }
 function closeMapDetails() { document.getElementById('map-modal').style.display = 'none'; }
 
+// ============ ДЕТАЛИ МАТЧА ============
+function openMatchDetails(matchId) {
+  if (!matchId) return showToast('Нет ID матча. Пересоберите статистику (npm run build)', 'error');
+  
+  // Ищем матч в общем списке (он должен быть в statsData.allMatches)
+  const match = statsData.allMatches ? statsData.allMatches.find(m => m.matchId === matchId) : null;
+  if (!match) {
+    return showToast('Данные матча не найдены (пересоберите stats.json)', 'error');
+  }
+
+  let contentHtml = '';
+  for (const mapData of match.maps) {
+    const players = [...mapData.players].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    
+    contentHtml += `
+      <div style="margin-bottom: 24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:8px;">
+          <h3 style="margin:0; color:var(--accent); font-size:1.1rem;">${mapData.map}</h3>
+          <a href="https://cybershoke.net/ru/match/${matchId}" target="_blank" class="btn-outline" style="font-size:0.75rem; padding:4px 8px;">На Cybershoke ↗</a>
+        </div>
+        <div class="table-container">
+          <table class="stats-table">
+            <thead><tr><th>Игрок</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Rating</th></tr></thead>
+            <tbody>
+              ${players.map(p => {
+                const playerObj = currentStats.players.find(sp => sp.id === p.id) || p;
+                const ava = playerObj.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
+                return `<tr>
+                  <td><div class="player-cell"><img src="${ava}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><strong>${displayName(p)}</strong></div></td>
+                  <td>${p.kills}</td><td>${p.deaths}</td><td>${p.assists}</td>
+                  <td>${p.adr ?? '—'}</td><td>${p.kast ?? '—'}</td><td style="color:#10b981; font-weight:600;">${p.rating ?? '—'}</td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('match-modal-title').innerText = 'Детали матча';
+  document.getElementById('match-modal-content').innerHTML = contentHtml;
+  document.getElementById('match-modal').style.display = 'block';
+}
+
+function closeMatchDetails() { document.getElementById('match-modal').style.display = 'none'; }
+
 function initDuel() {
   const p1Select = document.getElementById('duel-p1');
   const p2Select = document.getElementById('duel-p2');
@@ -732,9 +764,13 @@ function openProfile(playerId) {
 
   const tbody = document.getElementById('prof-match-history');
   const history = [...(p.matchHistory || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+  // ДОБАВЛЕН КЛИК НА СТРОКУ (onclick="openMatchDetails('${h.matchId}')")
   tbody.innerHTML = history.map(h => {
-    const d = new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
-    return `<tr><td>${d}</td><td>${h.map}</td><td>${h.kills}</td><td>${h.deaths}</td><td>${h.assists}</td><td>${h.adr ?? '—'}</td><td>${h.kast ?? '—'}</td><td style="color: var(--accent); font-weight: 600;">${h.rating ?? '—'}</td></tr>`;
+    const d = new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+    return `<tr class="match-history-row" style="cursor:pointer;" onclick="openMatchDetails('${h.matchId}')">
+      <td>${d}</td><td>${h.map}</td><td>${h.kills}</td><td>${h.deaths}</td><td>${h.assists}</td><td>${h.adr ?? '—'}</td><td>${h.kast ?? '—'}</td><td style="color: var(--accent); font-weight: 600;">${h.rating ?? '—'}</td>
+    </tr>`;
   }).join('');
 
   // Линейный график
@@ -752,7 +788,7 @@ function openProfile(playerId) {
     });
   }
 
-  // РАДАР-ГРАФИК (нормализованный)
+  // РАДАР-ГРАФИК
   const radarCanvas = document.getElementById('prof-radar-chart');
   if (radarCanvas) {
     if (profRadarChart) profRadarChart.destroy();
@@ -846,6 +882,7 @@ function closeProfile() { document.getElementById('profile-modal').style.display
 window.onclick = function(event) {
   if (event.target == document.getElementById('profile-modal')) closeProfile();
   if (event.target == document.getElementById('map-modal')) closeMapDetails();
+  if (event.target == document.getElementById('match-modal')) closeMatchDetails();
   if (event.target == document.getElementById('record-modal')) closeRecordDetails();
   if (event.target == document.getElementById('balancer-modal')) closeBalancer();
   if (event.target == document.getElementById('feedback-modal')) closeFeedback();
@@ -853,7 +890,7 @@ window.onclick = function(event) {
 
 function getSavedKey() { return `savedTeams_${document.getElementById('tournament-select').value}`; }
 
-// ============ БАЛАНСИРОВЩИК С УЧЕТОМ ПЛЕЙСТАЙЛОВ ============
+// ============ БАЛАНСИРОВЩИК ============
 const BALANCER_DEFAULTS = { rating: 0.5, kd: 0.2, adr: 0.2, kast: 0.1 };
 const BALANCER_WEIGHTS_KEY = 'balancerWeights';
 

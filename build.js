@@ -8,6 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MATCHES_DIR = path.join(__dirname, 'data', 'matches');
 const OUTPUT_FILE = path.join(__dirname, 'docs', 'data', 'stats.json');
 
+// Если ключа нет, скрипт будет парсить публичные профили
 const STEAM_API_KEY = 'ТВОЙ_КЛЮЧ_ЗДЕСЬ';
 
 function num(val) {
@@ -18,17 +19,42 @@ function num(val) {
 
 async function fetchSteamAvatars(steamIds) {
   const avatars = new Map();
-  if (!STEAM_API_KEY || STEAM_API_KEY === 'ТВОЙ_КЛЮЧ_ЗДЕСЬ') return avatars;
-  const chunks = [];
-  for (let i = 0; i < steamIds.length; i += 100) chunks.push(steamIds.slice(i, i + 100));
-  for (const chunk of chunks) {
+  
+  // 1. Если есть официальный API ключ
+  if (STEAM_API_KEY && STEAM_API_KEY !== 'ТВОЙ_КЛЮЧ_ЗДЕСЬ') {
+    const chunks = [];
+    for (let i = 0; i < steamIds.length; i += 100) chunks.push(steamIds.slice(i, i + 100));
+    for (const chunk of chunks) {
+      try {
+        const res = await fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_API_KEY}&steamids=${chunk.join(',')}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.response?.players) {
+            for (const p of data.response.players) avatars.set(p.steamid, p.avatarmedium);
+          }
+        }
+      } catch (err) { console.error('Steam API Error:', err.message); }
+    }
+    return avatars;
+  }
+
+  // 2. Если ключа нет, парсим XML профили (без ключа)
+  console.log('API ключ не найден. Парсим публичные профили Steam...');
+  for (const id of steamIds) {
     try {
-      const res = await fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_API_KEY}&steamids=${chunk.join(',')}`);
+      const res = await fetch(`https://steamcommunity.com/profiles/${id}/?xml=1`);
       if (res.ok) {
-        const data = await res.json();
-        if (data.response?.players) for (const p of data.response.players) avatars.set(p.steamid, p.avatarmedium);
+        const text = await res.text();
+        const match = text.match(/<avatarMedium><!\[CDATA\[(.*?)\]\]><\/avatarMedium>/i);
+        if (match && match[1]) {
+          avatars.set(id, match[1]);
+        }
       }
-    } catch (err) { console.error('Steam API Error:', err.message); }
+    } catch (err) {
+      console.error(`Не удалось получить аватар для ${id}:`, err.message);
+    }
+    // Пауза 150мс, чтобы Steam не забанил за частые запросы
+    await new Promise(r => setTimeout(r, 150));
   }
   return avatars;
 }
@@ -45,9 +71,9 @@ function calculateStats(matches, steamAvatars) {
     maxAdr: { value: 0, player: '', playerId: '', map: '', date: '', matchId: '' }
   };
 
-  matches.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sortedMatches = [...matches].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  for (const match of matches) {
+  for (const match of sortedMatches) {
     const maps = match.maps || [];
     recentMatches.push({ matchId: match.matchId, url: match.url, date: match.date, maps: maps.map(m => m.map) });
     totalMapsPlayed += maps.length;
@@ -83,7 +109,8 @@ function calculateStats(matches, steamAvatars) {
         if (adrVal !== null) { st.adrSum += adrVal; st.adrCount += 1; }
         if (kastVal !== null) { st.kastSum += kastVal; st.kastCount += 1; }
         if (ratingVal !== null) { st.ratingSum += ratingVal; st.ratingCount += 1; st.history.push({ date: match.date, rating: ratingVal }); }
-        st.matchHistory.push({ date: match.date, map: mapData.map, kills: k, deaths: d, assists: a, adr: adrVal, kast: kastVal, rating: ratingVal });
+        
+        st.matchHistory.push({ date: match.date, matchId: match.matchId, map: mapData.map, kills: k, deaths: d, assists: a, adr: adrVal, kast: kastVal, rating: ratingVal });
       }
     }
   }
@@ -103,9 +130,6 @@ function calculateStats(matches, steamAvatars) {
     } else p.displayName = p.name;
   });
 
-  // Рекорды вычислялись до присвоения displayName — подтягиваем канонические имена.
-  // Иначе в блоках «Рекорды за карту» и в модалке рекорда будет сырое имя ("BB-00"),
-  // которое затем неотличимо от других игроков с таким же ником.
   const displayNameById = new Map(players.map(p => [p.id, p.displayName]));
   for (const key of ['maxKills', 'maxDeaths', 'maxAdr']) {
     const rec = records[key];
@@ -136,20 +160,13 @@ function calculateStats(matches, steamAvatars) {
       const topPlayers = Array.from(data.playersMap.values())
         .map(pl => ({ ...pl, kd: pl.deaths > 0 ? +(pl.kills / pl.deaths).toFixed(2) : pl.kills, avgRating: pl.matches > 0 ? +(pl.ratingSum / pl.matches).toFixed(2) : 0 }))
         .sort((a,b) => b.avgRating - a.avgRating);
-      // displayName нужен, чтобы в модалке карты правильно отображались игроки
-      // с дублирующимися никами (BB-00 × 3). Иначе показывались бы одинаково.
       const updatedTop = topPlayers.map(tp => {
           const found = players.find(p => p.id === tp.id);
-          return {
-            ...tp,
-            avatar: found ? found.avatar : '',
-            displayName: found ? found.displayName : tp.name,
-          };
+          return { ...tp, avatar: found ? found.avatar : '', displayName: found ? found.displayName : tp.name };
       });
       return { map, matches: data.matches, avgKd: data.totalDeaths > 0 ? +(data.totalKills / data.totalDeaths).toFixed(2) : data.totalKills, avgRating: data.ratingCount > 0 ? +(data.ratingSum / data.ratingCount).toFixed(2) : 0, topPlayers: updatedTop };
   }).sort((a,b) => b.matches - a.matches);
 
-  // === ИНТЕРЕСНЫЕ ФАКТЫ ===
   const eligibleForStability = players.filter(p => p.matches >= 3);
   let mostStable = null;
   if (eligibleForStability.length > 0) {
@@ -210,6 +227,7 @@ async function main() {
   const output = {
     generatedAt: new Date().toISOString(),
     totalMatchesCount: allMatches.length,
+    allMatches: allMatches,
     tournaments: { "Все матчи": calculateStats(allMatches, steamAvatars) }
   };
 
