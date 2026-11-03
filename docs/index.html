@@ -93,9 +93,22 @@
             <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="200">
               <div class="card-header"><h2>Рекорды за карту</h2><span class="header-hint">Нажми на карточку</span></div>
               <div class="fun-stats-grid">
-                <div class="fun-stat-box record-card interactive-box" id="card-rec-kills"><div class="fun-val skeleton-text"></div><div class="fun-desc">Макс. убийств</div></div>
-                <div class="fun-stat-box record-card interactive-box" id="card-rec-deaths"><div class="fun-val skeleton-text"></div><div class="fun-desc">Макс. смертей</div></div>
-                <div class="fun-stat-box record-card interactive-box" id="card-rec-adr"><div class="fun-val skeleton-text"></div><div class="fun-desc">Макс. ADR</div></div>
+                <!-- ВОТ ТУТ ВЕРНУЛ ID -->
+                <div class="fun-stat-box record-card interactive-box" id="card-rec-kills">
+                  <div class="fun-val" id="rec-max-kills">—</div>
+                  <div class="fun-desc" id="rec-max-kills-desc">Нет данных</div>
+                  <div class="record-hint">Макс. убийств</div>
+                </div>
+                <div class="fun-stat-box record-card interactive-box" id="card-rec-deaths">
+                  <div class="fun-val" id="rec-max-deaths" style="color: #ef4444;">—</div>
+                  <div class="fun-desc" id="rec-max-deaths-desc">Нет данных</div>
+                  <div class="record-hint">Макс. смертей</div>
+                </div>
+                <div class="fun-stat-box record-card interactive-box" id="card-rec-adr">
+                  <div class="fun-val" id="rec-max-adr" style="color: #10b981;">—</div>
+                  <div class="fun-desc" id="rec-max-adr-desc">Нет данных</div>
+                  <div class="record-hint">Макс. ADR</div>
+                </div>
               </div>
             </section>
             <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="300">
@@ -109,9 +122,9 @@
             <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="100">
               <div class="card-header"><h2>Общая статистика</h2></div>
               <div class="fun-stats-grid vertical">
-                <div class="fun-stat-box"><div class="fun-val skeleton-text" id="stat-kills">0</div><div class="fun-desc">Всего убийств</div></div>
-                <div class="fun-stat-box"><div class="fun-val skeleton-text" id="stat-deaths">0</div><div class="fun-desc">Всего смертей</div></div>
-                <div class="fun-stat-box"><div class="fun-val skeleton-text" id="stat-hours">0</div><div class="fun-desc">Часов в игре</div></div>
+                <div class="fun-stat-box"><div class="fun-val" id="stat-kills">0</div><div class="fun-desc">Всего убийств</div></div>
+                <div class="fun-stat-box"><div class="fun-val" id="stat-deaths">0</div><div class="fun-desc">Всего смертей</div></div>
+                <div class="fun-stat-box"><div class="fun-val" id="stat-hours">0</div><div class="fun-desc">Часов в игре</div></div>
               </div>
             </section>
           </div>
