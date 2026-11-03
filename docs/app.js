@@ -11,7 +11,7 @@ if ('serviceWorker' in navigator) {
 let statsData = null;
 let currentStats = null;
 let profChart = null;
-let profRadarChart = null; // Новая переменная для радара
+let profRadarChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 
@@ -127,7 +127,7 @@ function renderAll() {
   }
 }
 
-// ============ ДРАФТ 4x ============
+// ============ ДРАФТ 4x С ГЕНЕРАЦИЕЙ КАРТИНКИ ============
 function initDraft() {
   const c1 = document.getElementById('cap-1');
   const c2 = document.getElementById('cap-2');
@@ -162,7 +162,7 @@ function initDraft() {
     const scoredPool = allPlayers.map(p => ({ ...p, score: playerCompositeScore(p, weights) }));
     const sorted = scoredPool.slice().sort((a, b) => b.score - a.score);
 
-    const pool = sorted.slice(0, 16);
+    const pool = sorted.slice(0, 12); // Для 4 команд по 4 человека нужно 12 игроков в пул
     const teams = captains.map(c => {
       const capScore = playerCompositeScore(c, weights);
       return { captain: c, captainScore: capScore, players: [], sumScore: capScore };
@@ -184,6 +184,13 @@ function initDraft() {
     const q = balanceQuality(spread);
 
     resultDiv.style.display = 'grid';
+    
+    // Очистка старых превью/кнопок
+    resultDiv.querySelectorAll('.balance-card-preview, .balance-share-actions').forEach(el => {
+      if (el.dataset && el.dataset.url) URL.revokeObjectURL(el.dataset.url);
+      el.remove();
+    });
+
     resultDiv.innerHTML = `
       <div class="draft-quality-row">
         <span class="quality-badge ${q.key}">${q.label} · разброс Σ ${spread.toFixed(2)}</span>
@@ -211,6 +218,54 @@ function initDraft() {
       resultDiv.innerHTML = '';
       resetBtn.style.display = 'none';
     };
+
+    // === ГЕНЕРАЦИЯ КАРТИНКИ ДЛЯ ДРАФТА ===
+    const tournamentName = document.getElementById('tournament-select').value || 'Все матчи';
+    const cardCanvas = drawDraftCard({ teams, spread, quality: q, tournamentName });
+
+    cardCanvas.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+
+      const preview = document.createElement('div');
+      preview.className = 'balance-card-preview';
+      preview.dataset.url = url;
+      preview.style.gridColumn = '1 / -1'; // Растягиваем на всю ширину
+      preview.innerHTML = `<img src="${url}" alt="Карточка драфта">`;
+      resultDiv.appendChild(preview);
+
+      const actions = document.createElement('div');
+      actions.className = 'balance-share-actions';
+      actions.style.gridColumn = '1 / -1';
+
+      const dlBtn = document.createElement('button');
+      dlBtn.className = 'btn-outline';
+      dlBtn.style.flex = '1';
+      dlBtn.innerText = 'Скачать PNG';
+      dlBtn.onclick = () => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'draft-' + Date.now() + '.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
+      actions.appendChild(dlBtn);
+
+      const file = new File([blob], 'draft.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        const shareBtn2 = document.createElement('button');
+        shareBtn2.className = 'btn-outline';
+        shareBtn2.style.flex = '1';
+        shareBtn2.innerText = 'Поделиться';
+        shareBtn2.onclick = async () => {
+          try { await navigator.share({ files: [file], title: 'Драфт команд', text: 'Драфт для CS2' }); } catch (e) {}
+        };
+        actions.appendChild(shareBtn2);
+      }
+
+      resultDiv.appendChild(actions);
+    }, 'image/png');
   };
 
   buildBtn.onclick = executeDraft;
@@ -223,6 +278,183 @@ function initDraft() {
       executeDraft();
     };
   }
+}
+
+// Функция отрисовки сетки 2х2 для 4 команд
+function drawDraftCard({ teams, spread, quality, tournamentName }) {
+  const W = 1200, H = 1100;
+  const canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  const BG = '#0b0e14';
+  const TEXT = '#f0f3f8';
+  const MUTED = '#8b96a5';
+  const BORDER = '#262f40';
+  const PANEL = '#151a25';
+  const ACCENT = '#4d6bfe';
+
+  ctx.fillStyle = BG;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.strokeStyle = 'rgba(77,107,254,0.06)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  // Header
+  ctx.fillStyle = TEXT;
+  ctx.font = '800 28px Inter, system-ui, sans-serif';
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'left';
+  ctx.fillText('CS2 DRAFT', 60, 56);
+
+  ctx.fillStyle = MUTED;
+  ctx.font = '500 16px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText(tournamentName || 'Все матчи', W - 60, 56);
+  ctx.fillText('Сгенерировано ' + new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }), W - 60, 80);
+  
+  ctx.strokeStyle = BORDER;
+  ctx.beginPath(); ctx.moveTo(60, 130); ctx.lineTo(W - 60, 130); ctx.stroke();
+
+  // Бейдж качества
+  const qColor = quality.key === 'perfect' ? '#10b981' : quality.key === 'good' ? ACCENT : quality.key === 'ok' ? '#f59e0b' : '#ef4444';
+  const badgeText = quality.label + ' · разброс Σ ' + spread.toFixed(2);
+  ctx.font = '600 14px Inter, system-ui, sans-serif';
+  const badgeW = ctx.measureText(badgeText).width + 28;
+  const badgeX = 60, badgeY = 158;
+
+  ctx.fillStyle = qColor + '26';
+  roundRectPath(ctx, badgeX, badgeY, badgeW, 32, 6);
+  ctx.fill();
+  ctx.strokeStyle = qColor + '4d';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  ctx.fillStyle = qColor;
+  ctx.textBaseline = 'middle';
+  ctx.fillText(badgeText, badgeX + 14, badgeY + 16);
+
+  // Сетка 2х2
+  const colY = 230;
+  const boxW = 520;
+  const boxH = 380;
+  const gapX = 40;
+  const gapY = 30;
+  const startX = 60;
+  
+  const colors = ['#4d6bfe', '#10b981', '#f59e0b', '#ef4444'];
+
+  teams.forEach((team, i) => {
+    const row = Math.floor(i / 2);
+    const col = i % 2;
+    const bx = startX + col * (boxW + gapX);
+    const by = colY + row * (boxH + gapY);
+    const accentColor = colors[i];
+
+    // Панель команды
+    ctx.fillStyle = PANEL;
+    roundRectPath(ctx, bx, by, boxW, boxH, 12);
+    ctx.fill();
+    ctx.strokeStyle = BORDER;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Заголовок
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = TEXT;
+    ctx.font = '700 20px Inter, system-ui, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(`Команда ${i + 1}`, bx + 24, by + 24);
+
+    ctx.fillStyle = accentColor;
+    ctx.textAlign = 'right';
+    ctx.fillText('Σ ' + team.sumScore.toFixed(2), bx + boxW - 24, by + 24);
+    ctx.textAlign = 'left';
+
+    ctx.strokeStyle = BORDER;
+    ctx.beginPath();
+    ctx.moveTo(bx + 24, by + 60);
+    ctx.lineTo(bx + boxW - 24, by + 60);
+    ctx.stroke();
+
+    // Игроки
+    const allPlayers = [
+      { ...team.captain, score: team.captainScore, isCap: true },
+      ...team.players
+    ].sort((a,b) => b.score - a.score);
+
+    let py = by + 80;
+    for (const p of allPlayers) {
+      const nameStr = String(displayName(p) || '?');
+      const initial = nameStr.slice(0, 1).toUpperCase();
+
+      // Круг
+      ctx.fillStyle = (p.isCap ? '#ffd700' : accentColor) + '33';
+      ctx.beginPath();
+      ctx.arc(bx + 44, py + 20, 20, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = p.isCap ? '#ffd700' : accentColor;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = p.isCap ? '#ffd700' : accentColor;
+      ctx.font = '700 18px Inter, system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(initial, bx + 44, py + 21);
+
+      // Имя
+      let name = nameStr;
+      if (name.length > 26) name = name.slice(0, 24) + '…';
+      ctx.fillStyle = TEXT;
+      ctx.font = p.isCap ? '700 18px Inter, system-ui, sans-serif' : '600 18px Inter, system-ui, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(name, bx + 80, py + 20);
+
+      if (p.isCap) {
+        ctx.fillStyle = '#ffd700';
+        ctx.font = '600 12px Inter, system-ui, sans-serif';
+        ctx.fillText('CAPTAIN', bx + 80, py + 38);
+      }
+
+      // Скор
+      ctx.fillStyle = MUTED;
+      ctx.font = '600 16px Inter, system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(p.score.toFixed(2), bx + boxW - 24, py + 20);
+      ctx.textAlign = 'left';
+
+      py += 64;
+    }
+  });
+
+  // Footer
+  ctx.fillStyle = MUTED;
+  ctx.font = '500 14px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('vortexgames574-blip.github.io/cybershoke-stats', W / 2, H - 40);
+  ctx.textAlign = 'left';
+
+  return canvas;
+}
+
+function roundRectPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
 }
 
 // ============ ПЬЕДЕСТАЛ И РЕКОРДЫ ============
@@ -455,7 +687,6 @@ function openProfile(playerId) {
   document.getElementById('prof-adr').innerText = p.avgAdr ?? '—';
   document.getElementById('prof-kast').innerText = p.avgKast ?? '—';
 
-  // Faceit & Share & Compare
   const faceitBtn = document.getElementById('faceit-btn');
   if (faceitBtn) {
     faceitBtn.onclick = async () => {
@@ -499,7 +730,6 @@ function openProfile(playerId) {
     setTimeout(() => document.getElementById('duel-section').scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
   };
 
-  // История
   const tbody = document.getElementById('prof-match-history');
   const history = [...(p.matchHistory || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
   tbody.innerHTML = history.map(h => {
@@ -514,17 +744,19 @@ function openProfile(playerId) {
     const sortedHist = [...p.history].sort((a,b) => new Date(a.date) - new Date(b.date));
     profChart = new Chart(canvas, {
       type: 'line',
-      data: { labels: sortedHist.map(h => new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })), datasets: [{ label: 'Рейтинг', data: sortedHist.map(h => h.rating), borderColor: '#4d6bfe', backgroundColor: 'rgba(77, 107, 254, 0.1)', fill: true, tension: 0.3 }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#8b96a5' } }, y: { grid: { color: '#262f40' }, ticks: { color: '#8b96a5' } } } }
+      data: { 
+        labels: sortedHist.map(h => new Date(h.date).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })), 
+        datasets: [{ label: 'Рейтинг', data: sortedHist.map(h => h.rating), borderColor: '#4d6bfe', backgroundColor: 'rgba(77, 107, 254, 0.1)', fill: true, tension: 0.3 }] 
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#8b96a5', maxRotation: 45, minRotation: 45 } }, y: { grid: { color: '#262f40' }, ticks: { color: '#8b96a5' } } } }
     });
   }
 
-  // РАДАР-ГРАФИК
+  // РАДАР-ГРАФИК (нормализованный)
   const radarCanvas = document.getElementById('prof-radar-chart');
   if (radarCanvas) {
     if (profRadarChart) profRadarChart.destroy();
     
-    // Считаем средние по серверу для сравнения
     const serverAvg = currentStats.players.reduce((acc, curr) => {
       acc.kd += curr.kd || 0;
       acc.adr += curr.avgAdr || 0;
@@ -535,6 +767,23 @@ function openProfile(playerId) {
     const count = currentStats.players.length || 1;
     serverAvg.kd /= count; serverAvg.adr /= count; serverAvg.kast /= count; serverAvg.rating /= count;
 
+    const maxKd = 2.0, maxAdr = 120, maxKast = 100, maxRating = 2.0;
+    const normalize = (val, max) => Math.min(100, (val / max) * 100);
+
+    const playerData = [
+      normalize(p.kd || 0, maxKd),
+      normalize(p.avgAdr || 0, maxAdr),
+      normalize(p.avgKast || 0, maxKast),
+      normalize(p.avgRating || 0, maxRating)
+    ];
+    
+    const serverData = [
+      normalize(serverAvg.kd, maxKd),
+      normalize(serverAvg.adr, maxAdr),
+      normalize(serverAvg.kast, maxKast),
+      normalize(serverAvg.rating, maxRating)
+    ];
+
     profRadarChart = new Chart(radarCanvas, {
       type: 'radar',
       data: {
@@ -542,15 +791,15 @@ function openProfile(playerId) {
         datasets: [
           {
             label: 'Игрок',
-            data: [p.kd || 0, p.avgAdr || 0, p.avgKast || 0, p.avgRating || 0],
+            data: playerData,
             borderColor: '#4d6bfe',
-            backgroundColor: 'rgba(77, 107, 254, 0.2)',
+            backgroundColor: 'rgba(77, 107, 254, 0.3)',
             pointBackgroundColor: '#4d6bfe',
             borderWidth: 2,
           },
           {
             label: 'Среднее по серверу',
-            data: [serverAvg.kd, serverAvg.adr, serverAvg.kast, serverAvg.rating],
+            data: serverData,
             borderColor: '#8b96a5',
             backgroundColor: 'rgba(139, 150, 165, 0.1)',
             pointBackgroundColor: '#8b96a5',
@@ -562,13 +811,29 @@ function openProfile(playerId) {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: '#8b96a5', font: { size: 10 } } } },
+        plugins: { 
+          legend: { labels: { color: '#8b96a5', font: { size: 11 } } },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const isPlayer = context.datasetIndex === 0;
+                const idx = context.dataIndex;
+                let realVal = 0;
+                if (idx === 0) realVal = isPlayer ? (p.kd || 0) : serverAvg.kd;
+                if (idx === 1) realVal = isPlayer ? (p.avgAdr || 0) : serverAvg.adr;
+                if (idx === 2) realVal = isPlayer ? (p.avgKast || 0) : serverAvg.kast;
+                if (idx === 3) realVal = isPlayer ? (p.avgRating || 0) : serverAvg.rating;
+                return `${context.dataset.label}: ${realVal.toFixed(2)}`;
+              }
+            }
+          }
+        },
         scales: {
           r: {
             angleLines: { color: '#262f40' },
             grid: { color: '#262f40' },
-            pointLabels: { color: '#f0f3f8', font: { size: 11, weight: 'bold' } },
-            ticks: { display: false, min: 0 }
+            pointLabels: { color: '#f0f3f8', font: { size: 12, weight: 'bold' } },
+            ticks: { display: false, min: 0, max: 100 }
           }
         }
       }
@@ -632,7 +897,6 @@ function mapPlayerCompositeScore(player, mapEntry, w) {
   return rVal * n.rating + kVal * n.kd + aVal * n.adr + sVal * n.kast;
 }
 
-// Определяем плейстайл на основе статов
 function getPlaystyle(p) {
   if (!p || p.matches < 3) return 'Универсал';
   const adr = p.avgAdr || 0;
@@ -654,7 +918,6 @@ function combinations(arr, k) {
   return [...withFirst, ...withoutFirst];
 }
 
-// Улучшенный поиск с учетом ролей
 function findBestTeams(playersWithScores) {
   const n = playersWithScores.length;
   if (n !== 10) return null;
@@ -662,31 +925,25 @@ function findBestTeams(playersWithScores) {
   const EPS = 0.02;
   let best = null;
 
-  // Размечаем роли заранее
   const playersWithRoles = playersWithScores.map(p => ({ ...p, role: getPlaystyle(p) }));
 
   for (const teamA of combinations(playersWithRoles, half)) {
     const setA = new Set(teamA.map(p => p.id));
     const teamB = playersWithRoles.filter(p => !setA.has(p.id));
     
-    // Суммы
     const sumA = teamA.reduce((s, p) => s + p.score, 0);
     const sumB = teamB.reduce((s, p) => s + p.score, 0);
     const diff = Math.abs(sumA - sumB);
 
-    // Штраф за дисбаланс по ролям
     let rolePenalty = 0;
     const roles = ['Фраггер', 'Снайпер', 'Саппорт'];
     roles.forEach(role => {
       const countA = teamA.filter(p => p.role === role).length;
       const countB = teamB.filter(p => p.role === role).length;
-      // Если в одной команде 2 фраггера, а в другой 0 - штрафуем
       if (countA !== countB) rolePenalty += Math.abs(countA - countB) * 0.15; 
     });
 
-    // Итоговый отрыв с учетом штрафа
     const effectiveDiff = diff + rolePenalty;
-
     const maxGap = Math.abs(Math.max(...teamA.map(p=>p.score)) - Math.max(...teamB.map(p=>p.score)));
     const minGap = Math.abs(Math.min(...teamA.map(p=>p.score)) - Math.min(...teamB.map(p=>p.score)));
     
@@ -714,20 +971,6 @@ function balanceQuality(diff) {
   if (diff <= 0.15) return { key: 'good', label: 'Отлично' };
   if (diff <= 0.30) return { key: 'ok', label: 'Приемлемо' };
   return { key: 'bad', label: 'Слабо' };
-}
-
-function roundRectPath(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
 }
 
 function drawTeamColumn(ctx, title, players, sumScore, x, y, w, accentColor) {
@@ -937,11 +1180,11 @@ function initBalancer() {
   const sliderRating = document.getElementById('weight-rating');
   const sliderKd = document.getElementById('weight-kd');
   const sliderAdr = document.getElementById('weight-adr');
-  const sliderKast = document.getElementById('weight-kast'); // Новый слайдер KAST
+  const sliderKast = document.getElementById('weight-kast'); 
   const valRating = document.getElementById('weight-rating-val');
   const valKd = document.getElementById('weight-kd-val');
   const valAdr = document.getElementById('weight-adr-val');
-  const valKast = document.getElementById('weight-kast-val'); // Новый вывод
+  const valKast = document.getElementById('weight-kast-val'); 
   const resetWeightsBtn = document.getElementById('reset-weights-btn');
 
   let currentWeights = getBalancerWeights();
@@ -1060,7 +1303,6 @@ function initBalancer() {
     const best = findBestTeams(pool);
     if (!best) return;
     
-    // Проверяем, что реальный разрыв не слишком большой из-за штрафа за роли
     const q = balanceQuality(best.realDiff); 
     const deltaKd = Math.abs((best.kdA - best.kdB) / 5);
     const deltaAdr = Math.abs((best.adrA - best.adrB) / 5);
