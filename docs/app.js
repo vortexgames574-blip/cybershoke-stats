@@ -79,7 +79,7 @@ function renderAll() {
   }
 }
 
-// ============ ДРАФТ 4x (композитный скор) ============
+// ============ ДРАФТ 4x (композитный скор + жадный алгоритм) ============
 function initDraft() {
   const c1 = document.getElementById('cap-1');
   const c2 = document.getElementById('cap-2');
@@ -101,10 +101,11 @@ function initDraft() {
   });
 
   const buildBtn = document.getElementById('build-teams-btn');
+  const shuffleBtn = document.getElementById('shuffle-teams-btn');
   const resetBtn = document.getElementById('reset-teams-btn');
   const resultDiv = document.getElementById('draft-result');
 
-  buildBtn.onclick = () => {
+  const executeDraft = () => {
     const capIds = [c1.value, c2.value, c3.value, c4.value].filter(Boolean);
     if (capIds.length !== 4) return alert('Выберите 4 капитана');
     if (new Set(capIds).size !== 4) return alert('Капитаны не должны повторяться');
@@ -126,14 +127,19 @@ function initDraft() {
       return { captain: c, captainScore: capScore, players: [], sumScore: capScore };
     });
 
-    // Змейка на 4 команды
-    const order = [0,1,2,3, 3,2,1,0, 0,1,2,3, 3,2,1,0];
-    let idx = 0;
-    for (const t of order) {
-      if (idx >= pool.length) break;
-      const player = pool[idx++];
-      teams[t].players.push(player);
-      teams[t].sumScore += player.score;
+    // ЖАДНЫЙ АЛГОРИТМ: лучший оставшийся игрок уходит в самую слабую команду на текущий момент.
+    // Это уменьшает итоговый разброс, если капитаны изначально очень разные.
+    let poolIdx = 0;
+    while (poolIdx < pool.length) {
+      let weakestIdx = 0;
+      for (let i = 1; i < teams.length; i++) {
+        if (teams[i].sumScore < teams[weakestIdx].sumScore) {
+          weakestIdx = i;
+        }
+      }
+      const player = pool[poolIdx++];
+      teams[weakestIdx].players.push(player);
+      teams[weakestIdx].sumScore += player.score;
     }
 
     // Бейдж качества: разброс сумм по 4 командам
@@ -170,6 +176,19 @@ function initDraft() {
       resetBtn.style.display = 'none';
     };
   };
+
+  buildBtn.onclick = executeDraft;
+
+  if (shuffleBtn) {
+    shuffleBtn.onclick = () => {
+      const shuffled = [...currentStats.players].sort(() => Math.random() - 0.5);
+      if (shuffled.length < 4) return;
+      [c1, c2, c3, c4].forEach((sel, i) => {
+        sel.value = shuffled[i].id;
+      });
+      executeDraft();
+    };
+  }
 }
 
 // ============ ПЬЕДЕСТАЛ ============

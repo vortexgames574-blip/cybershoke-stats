@@ -211,6 +211,11 @@ body.beginner-mode .metric-explanation { display: block; }
   border-radius: 6px;
   font-size: 0.85rem;
 }
+.draft-actions-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
 .draft-result-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -329,4 +334,62 @@ body.beginner-mode .metric-explanation { display: block; }
   display: inline-block;
   padding: 4px 10px;
   border-radius: 4px;
-  font-size
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.quality-badge.perfect { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+.quality-badge.good    { background: rgba(77, 107, 254, 0.15); color: var(--accent); border: 1px solid rgba(77, 107, 254, 0.3); }
+.quality-badge.ok      { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+.quality-badge.bad     { background: rgba(239, 68, 68, 0.15);  color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+/* Превью и кнопки шаринга PNG-карточки состава */
+.balance-card-preview {
+  grid-column: 1 / -1;
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-main);
+}
+.balance-card-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.balance-share-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.balance-share-actions .btn-outline {
+  justify-content: center;
+}
+
+/* Адаптив таблиц на узких экранах (D) */
+@media (max-width: 600px) {
+  .table-container { -webkit-overflow-scrolling: touch; }
+  .stats-table th,
+  .stats-table td {
+    padding: 8px 10px;
+    font-size: 0.78rem;
+  }
+  .stats-table th:nth-child(n+2),
+  .stats-table td:nth-child(n+2) {
+    white-space: nowrap;
+  }
+  .player-cell { gap: 6px; }
+  .player-avatar { width: 22px; height: 22px; }
+  .stats-table td:first-child .player-link,
+  .stats-table td:first-child strong {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+  }
+}

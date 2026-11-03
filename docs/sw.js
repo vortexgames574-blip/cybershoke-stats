@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cs2-stats-v3'; // Меняем версию кэша
+const CACHE_NAME = 'cs2-stats-v5'; // Меняем версию кэша
 
 self.addEventListener('install', (e) => {
   self.skipWaiting(); // Принудительно активируем новый SW

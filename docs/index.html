@@ -163,7 +163,7 @@
       <div class="tab-content" id="tab-draft">
         <section class="glass-card interactive-card" style="max-width: 800px; margin: 0 auto;">
           <div class="card-header"><h2>Создать 4 команды</h2></div>
-          <p class="text-muted mb-10">Выберите 4 капитанов. Остальные игроки распределятся автоматически по композитному скору (тем же весам, что в балансировщике) — змейкой.</p>
+          <p class="text-muted mb-10">Выберите 4 капитанов. Остальные игроки распределятся автоматически по композитному скору (тем же весам, что в балансировщике) — алгоритмом "жадный выбор".</p>
           
           <div class="draft-captain-grid">
             <div class="draft-captain-slot">
@@ -184,7 +184,10 @@
             </div>
           </div>
 
-          <button id="build-teams-btn" class="btn-primary mt-20">Собрать команды</button>
+          <div class="draft-actions-row">
+            <button id="shuffle-teams-btn" class="btn-outline" style="flex: 1;">Перемешать</button>
+            <button id="build-teams-btn" class="btn-primary" style="flex: 2;">Собрать команды</button>
+          </div>
           <button id="reset-teams-btn" class="btn-outline mt-20" style="width: 100%; display: none;">Сбросить</button>
 
           <div id="draft-result" class="draft-result-grid" style="display: none; margin-top: 20px;"></div>
