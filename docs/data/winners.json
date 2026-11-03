@@ -1,70 +1,10 @@
 [
   {
-    "title": "Cybershoke Autumn Cup 2026",
-    "date": "2026-10-25",
-    "finalScore": "2 : 1",
-    "url": "https://cybershoke.net/ru/tournament/example",
-    "teamPhoto": "team-2026-autumn.jpg",
-    "players": [
-      {
-        "playerId": "",
-        "name": "Игрок 1",
-        "role": "Капитан"
-      },
-      {
-        "playerId": "",
-        "name": "Игрок 2",
-        "role": "Снайпер"
-      },
-      {
-        "playerId": "",
-        "name": "Игрок 3",
-        "role": "Рифлер"
-      },
-      {
-        "playerId": "",
-        "name": "Игрок 4",
-        "role": "Рифлер"
-      },
-      {
-        "playerId": "",
-        "name": "Игрок 5",
-        "role": "Саппорт"
-      }
-    ]
-  },
-  {
-    "title": "ЮБИЛЕЙНЫЙ ТУРНИР",
-    "date": "2026-07-12",
-    "finalScore": "2 : 0",
-    "url": "https://cybershoke.net/ru/tournament/example-summer",
-    "teamPhoto": "team-2026-summer.jpg",
-    "players": [
-      {
-        "playerId": "76561199542530681",
-        "name": "AuraTeam",
-        "role": ""
-      },
-      {
-        "playerId": "76561199467682493",
-        "name": "Господин Босс",
-        "role": ""
-      },
-      {
-        "playerId": "76561198681103731",
-        "name": "Анальный бур",
-        "role": ""
-      },
-      {
-        "playerId": "76561198054507577",
-        "name": "kvsmstr",
-        "role": ""
-      },
-      {
-        "playerId": "76561199417613918",
-        "name": "ЯнаЦист",
-        "role": ""
-      }
-    ]
+    "title": "Юбилейный турнир",
+    "date": "2026-10-31",
+    "finalScore": "2:0",
+    "url": "https://cybershoke.net/ru/match/13357312",
+    "teamPhoto": "photo_2026-10-31_23-47-47 (2).jpg",
+    "players": []
   }
 ]
