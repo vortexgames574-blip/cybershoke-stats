@@ -13,8 +13,6 @@ let currentStats = null;
 let profChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
-let bracketState = null;
-let bracketMode = 'solo';
 
 function initTabs() {
   const tabs = document.querySelectorAll('.tab-btn');
@@ -27,8 +25,6 @@ function initTabs() {
       contents.forEach(c => c.classList.remove('active'));
       tab.classList.add('active');
       document.getElementById(`tab-${target}`).classList.add('active');
-      
-      if (target === 'bracket') renderBracket();
       if (window.lucide) lucide.createIcons();
     });
   });
@@ -51,7 +47,6 @@ async function loadData() {
     select.addEventListener('change', (e) => {
       currentStats = statsData.tournaments[e.target.value];
       selectedPlayers = [];
-      bracketState = null;
       renderAll();
     });
 
@@ -77,7 +72,6 @@ function renderAll() {
     renderPlayersTable();
     renderMapStats();
     initDuel();
-    initBracketTab();
     initDraft();
   } catch (e) {
     document.getElementById('meta-info').innerHTML = `<span style="color: #ef4444;">Ошибка рендера: ${e.message}</span>`;
@@ -85,7 +79,7 @@ function renderAll() {
   }
 }
 
-// ============ ДРАФТ 4x ============
+// ============ ДРАФТ 4x (композитный скор) ============
 function initDraft() {
   const c1 = document.getElementById('cap-1');
   const c2 = document.getElementById('cap-2');
@@ -115,19 +109,22 @@ function initDraft() {
     if (capIds.length !== 4) return alert('Выберите 4 капитана');
     if (new Set(capIds).size !== 4) return alert('Капитаны не должны повторяться');
 
+    // Сила игрока считается тем же композитным скором, что и в балансировщике,
+    // с теми же весами из localStorage.balancerWeights.
+    const weights = getBalancerWeights();
     const captains = capIds.map(id => currentStats.players.find(p => p.id === id)).filter(Boolean);
     const allPlayers = currentStats.players.filter(p => !capIds.includes(p.id));
-    const sorted = allPlayers.slice().sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0));
+    const scoredPool = allPlayers.map(p => ({ ...p, score: playerCompositeScore(p, weights) }));
+    const sorted = scoredPool.slice().sort((a, b) => b.score - a.score);
 
     const perTeam = 4;
     const totalNeeded = perTeam * 4;
     const pool = sorted.slice(0, totalNeeded);
 
-    const teams = captains.map(c => ({
-      captain: c,
-      players: [],
-      sumRating: c.avgRating ?? 0
-    }));
+    const teams = captains.map(c => {
+      const capScore = playerCompositeScore(c, weights);
+      return { captain: c, captainScore: capScore, players: [], sumScore: capScore };
+    });
 
     // Змейка на 4 команды
     const order = [0,1,2,3, 3,2,1,0, 0,1,2,3, 3,2,1,0];
@@ -136,26 +133,35 @@ function initDraft() {
       if (idx >= pool.length) break;
       const player = pool[idx++];
       teams[t].players.push(player);
-      teams[t].sumRating += player.avgRating ?? 0;
+      teams[t].sumScore += player.score;
     }
 
+    // Бейдж качества: разброс сумм по 4 командам
+    const sums = teams.map(t => t.sumScore);
+    const spread = Math.max(...sums) - Math.min(...sums);
+    const q = balanceQuality(spread);
+
     resultDiv.style.display = 'grid';
-    resultDiv.innerHTML = teams.map((team, i) => {
-      const avg = (team.sumRating / (team.players.length + 1)).toFixed(2);
-      const capAva = team.captain.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(team.captain.name)}&background=ffd700&color=000`;
-      return `
-        <div class="draft-team-result">
-          <h3>Команда ${i + 1} <span class="draft-team-avg">Σ ${team.sumRating.toFixed(2)}</span></h3>
-          <ul>
-            <li><img src="${capAva}"> <b>${team.captain.displayName || team.captain.name}</b> <span style="color:#ffd700;font-size:0.7rem;margin-left:auto;">К</span></li>
-            ${team.players.map(p => {
-              const ava = p.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
-              return `<li><img src="${ava}"> ${p.displayName || p.name} <span style="margin-left:auto;color:var(--text-muted);font-size:0.75rem;">${(p.avgRating ?? 0).toFixed(2)}</span></li>`;
-            }).join('')}
-          </ul>
-        </div>
-      `;
-    }).join('');
+    resultDiv.innerHTML = `
+      <div class="draft-quality-row">
+        <span class="quality-badge ${q.key}">${q.label} · разброс Σ ${spread.toFixed(2)}</span>
+      </div>
+      ${teams.map((team, i) => {
+        const capAva = team.captain.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(team.captain.name)}&background=ffd700&color=000`;
+        return `
+          <div class="draft-team-result">
+            <h3>Команда ${i + 1} <span class="draft-team-avg">Σ ${team.sumScore.toFixed(2)}</span></h3>
+            <ul>
+              <li><img src="${capAva}"> <b>${team.captain.displayName || team.captain.name}</b> <span style="color:#ffd700;font-size:0.7rem;margin-left:auto;">К · ${team.captainScore.toFixed(2)}</span></li>
+              ${team.players.map(p => {
+                const ava = p.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
+                return `<li><img src="${ava}"> ${p.displayName || p.name} <span style="margin-left:auto;color:var(--text-muted);font-size:0.75rem;">${p.score.toFixed(2)}</span></li>`;
+              }).join('')}
+            </ul>
+          </div>
+        `;
+      }).join('')}
+    `;
 
     resetBtn.style.display = 'block';
     resetBtn.onclick = () => {
@@ -287,6 +293,7 @@ function renderPlayersTable() {
     players.sort((a, b) => {
       if (sortKey === 'deaths') return b.deaths - a.deaths;
       if (sortKey === 'kd') return b.kd - a.kd;
+      if (sortKey === 'adr') return (b.avgAdr ?? 0) - (a.avgAdr ?? 0);
       return (b.avgRating ?? 0) - (a.avgRating ?? 0);
     });
     tbody.innerHTML = players.map((p) => {
@@ -399,7 +406,6 @@ function openProfile(playerId) {
   document.getElementById('prof-adr').innerText = p.avgAdr ?? '—';
   document.getElementById('prof-kast').innerText = p.avgKast ?? '—';
 
-  // Кнопка FACEIT
   const faceitBtn = document.getElementById('faceit-btn');
   if (faceitBtn) {
     faceitBtn.onclick = async () => {
@@ -474,6 +480,326 @@ window.onclick = function(event) {
 }
 
 function getSavedKey() { return `savedTeams_${document.getElementById('tournament-select').value}`; }
+
+// ============ БАЛАНСИРОВЩИК: веса и математика ============
+const BALANCER_DEFAULTS = { rating: 0.6, kd: 0.2, adr: 0.2 };
+const BALANCER_WEIGHTS_KEY = 'balancerWeights';
+
+function normalizeWeights(w) {
+  const r = Math.max(0, Number(w?.rating) || 0);
+  const k = Math.max(0, Number(w?.kd) || 0);
+  const a = Math.max(0, Number(w?.adr) || 0);
+  const sum = r + k + a;
+  if (sum <= 0) return { ...BALANCER_DEFAULTS };
+  return { rating: r / sum, kd: k / sum, adr: a / sum };
+}
+
+function getBalancerWeights() {
+  try {
+    const raw = localStorage.getItem(BALANCER_WEIGHTS_KEY);
+    if (raw) return normalizeWeights(JSON.parse(raw));
+  } catch (e) {}
+  return { ...BALANCER_DEFAULTS };
+}
+
+function saveBalancerWeights(w) {
+  try { localStorage.setItem(BALANCER_WEIGHTS_KEY, JSON.stringify(w)); } catch (e) {}
+}
+
+// Композитный скор: смешивает три метрики в одной шкале (средний игрок ~1.0).
+// null-поля трактуются как «средний», чтобы не наказывать за отсутствие данных.
+function playerCompositeScore(p, w) {
+  const n = normalizeWeights(w);
+  const rNorm = p && p.avgRating != null ? p.avgRating : 1.0;
+  const kNorm = p && p.kd != null ? p.kd : 1.0;
+  const aNorm = p && p.avgAdr != null ? p.avgAdr / 75 : 1.0;
+  return rNorm * n.rating + kNorm * n.kd + aNorm * n.adr;
+}
+
+// Скор на конкретной карте: rating и K/D берём из topPlayers карты,
+// ADR — общий по игроку (в mapStats по карте ADR не собирается, в build.js его нет).
+function mapPlayerCompositeScore(player, mapEntry, w) {
+  const n = normalizeWeights(w);
+  const rVal = mapEntry && mapEntry.avgRating != null ? mapEntry.avgRating : (player.avgRating ?? 1.0);
+  const kVal = mapEntry && mapEntry.kd != null ? mapEntry.kd : (player.kd ?? 1.0);
+  const aVal = player.avgAdr != null ? player.avgAdr / 75 : 1.0;
+  return rVal * n.rating + kVal * n.kd + aVal * n.adr;
+}
+
+function combinations(arr, k) {
+  if (k === 0) return [[]];
+  if (arr.length === 0) return [];
+  const [first, ...rest] = arr;
+  const withFirst = combinations(rest, k - 1).map(c => [first, ...c]);
+  const withoutFirst = combinations(rest, k);
+  return [...withFirst, ...withoutFirst];
+}
+
+// Лучший сплит 5/5. Критерии лексикографически:
+//   1) |Δscore| — минимальная разница суммарного composite score команд;
+//   2) |maxA − maxB| — минимальный разрыв сильнейших (при почти равном Δscore);
+//   3) |minA − minB| — финальный tie-break по слабейшим.
+function findBestTeams(playersWithScores) {
+  const n = playersWithScores.length;
+  if (n !== 10) return null;
+  const half = 5;
+  const EPS = 0.02;
+  let best = null;
+  for (const teamA of combinations(playersWithScores, half)) {
+    const setA = new Set(teamA.map(p => p.id));
+    const teamB = playersWithScores.filter(p => !setA.has(p.id));
+    const scoresA = teamA.map(p => p.score);
+    const scoresB = teamB.map(p => p.score);
+    const sumA = scoresA.reduce((s, v) => s + v, 0);
+    const sumB = scoresB.reduce((s, v) => s + v, 0);
+    const diff = Math.abs(sumA - sumB);
+    const maxGap = Math.abs(Math.max(...scoresA) - Math.max(...scoresB));
+    const minGap = Math.abs(Math.min(...scoresA) - Math.min(...scoresB));
+    const kdA = teamA.reduce((s, p) => s + (p.kd ?? 0), 0);
+    const kdB = teamB.reduce((s, p) => s + (p.kd ?? 0), 0);
+    const adrA = teamA.reduce((s, p) => s + (p.avgAdr ?? 0), 0);
+    const adrB = teamB.reduce((s, p) => s + (p.avgAdr ?? 0), 0);
+    const candidate = { teamA, teamB, sumA, sumB, diff, maxGap, minGap, kdA, kdB, adrA, adrB };
+    if (!best) { best = candidate; continue; }
+    if (diff < best.diff - EPS) { best = candidate; continue; }
+    if (Math.abs(diff - best.diff) <= EPS) {
+      if (maxGap < best.maxGap - EPS) { best = candidate; continue; }
+      if (Math.abs(maxGap - best.maxGap) <= EPS && minGap < best.minGap) {
+        best = candidate;
+      }
+    }
+  }
+  return best;
+}
+
+function balanceQuality(diff) {
+  if (diff <= 0.05) return { key: 'perfect', label: 'Идеально' };
+  if (diff <= 0.15) return { key: 'good', label: 'Отлично' };
+  if (diff <= 0.30) return { key: 'ok', label: 'Приемлемо' };
+  return { key: 'bad', label: 'Слабо' };
+}
+
+// ============ PNG-КАРТОЧКА СОСТАВА ============
+// Рисуем на Canvas 2D без внешних картинок (только инициалы) — нет риска
+// CORS-taint при toBlob(), работает офлайн и без сторонних серверов.
+function roundRectPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function drawTeamColumn(ctx, title, players, sumScore, x, y, w, accentColor) {
+  const TEXT = '#f0f3f8';
+  const MUTED = '#8b96a5';
+  const BORDER = '#262f40';
+  const PANEL = '#151a25';
+
+  ctx.fillStyle = PANEL;
+  roundRectPath(ctx, x, y, w, 480, 12);
+  ctx.fill();
+  ctx.strokeStyle = BORDER;
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  const innerX = x + 24;
+  const innerY = y + 24;
+
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = TEXT;
+  ctx.font = '700 22px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText(title, innerX, innerY);
+
+  ctx.fillStyle = accentColor;
+  ctx.font = '700 22px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('Σ ' + sumScore.toFixed(2), x + w - 24, innerY);
+  ctx.textAlign = 'left';
+
+  ctx.strokeStyle = BORDER;
+  ctx.beginPath();
+  ctx.moveTo(innerX, innerY + 44);
+  ctx.lineTo(x + w - 24, innerY + 44);
+  ctx.stroke();
+
+  // Игроки по убыванию score
+  const sorted = [...players].sort((a, b) => b.score - a.score);
+  let py = innerY + 72;
+  for (const p of sorted) {
+    const nameStr = (p.displayName || p.name || '?');
+    const initial = nameStr.slice(0, 1).toUpperCase();
+
+    // Круг с инициалом
+    ctx.fillStyle = accentColor + '33';
+    ctx.beginPath();
+    ctx.arc(innerX + 24, py + 16, 20, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = accentColor;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    ctx.fillStyle = accentColor;
+    ctx.font = '700 18px Inter, system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(initial, innerX + 24, py + 17);
+
+    // Ник (обрезаем длинные)
+    let name = nameStr;
+    if (name.length > 26) name = name.slice(0, 24) + '…';
+    ctx.fillStyle = TEXT;
+    ctx.font = '600 16px Inter, system-ui, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(name, innerX + 60, py + 16);
+
+    // Score
+    ctx.fillStyle = MUTED;
+    ctx.font = '600 16px Inter, system-ui, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(p.score.toFixed(2), x + w - 24, py + 16);
+    ctx.textAlign = 'left';
+
+    py += 64;
+  }
+}
+
+function drawBalanceCard({ teamA, teamB, sumA, sumB, diff, quality, deltaKd, deltaAdr, tournamentName }) {
+  const W = 1200, H = 800;
+  const canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  const BG = '#0b0e14';
+  const TEXT = '#f0f3f8';
+  const MUTED = '#8b96a5';
+  const BORDER = '#262f40';
+  const ACCENT = '#4d6bfe';
+
+  // Фон
+  ctx.fillStyle = BG;
+  ctx.fillRect(0, 0, W, H);
+
+  // Едва заметная сетка
+  ctx.strokeStyle = 'rgba(77,107,254,0.06)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  // Header
+  ctx.fillStyle = TEXT;
+  ctx.font = '800 28px Inter, system-ui, sans-serif';
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'left';
+  ctx.fillText('CS2 STATS', 60, 56);
+
+  ctx.fillStyle = MUTED;
+  ctx.font = '500 16px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText(tournamentName || 'Все матчи', W - 60, 56);
+  ctx.fillText(
+    'Состав сгенерирован ' +
+    new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+    W - 60, 80
+  );
+  ctx.textAlign = 'left';
+
+  // Разделитель
+  ctx.strokeStyle = BORDER;
+  ctx.beginPath(); ctx.moveTo(60, 130); ctx.lineTo(W - 60, 130); ctx.stroke();
+
+  // Бейдж качества + Δ-метрики
+  const qColor = quality.key === 'perfect' ? '#10b981' :
+                 quality.key === 'good'    ? ACCENT      :
+                 quality.key === 'ok'      ? '#f59e0b'   : '#ef4444';
+  const badgeText = quality.label + ' · Δscore ' + diff.toFixed(2);
+  ctx.font = '600 14px Inter, system-ui, sans-serif';
+  const badgeW = ctx.measureText(badgeText).width + 28;
+  const badgeH = 32;
+  const badgeX = 60, badgeY = 158;
+
+  ctx.fillStyle = qColor + '26';
+  roundRectPath(ctx, badgeX, badgeY, badgeW, badgeH, 6);
+  ctx.fill();
+  ctx.strokeStyle = qColor + '4d';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  ctx.fillStyle = qColor;
+  ctx.textBaseline = 'middle';
+  ctx.fillText(badgeText, badgeX + 14, badgeY + badgeH / 2);
+
+  ctx.fillStyle = MUTED;
+  ctx.font = '500 14px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('Δ K/D ' + deltaKd.toFixed(2) + '   ·   Δ ADR ' + deltaAdr.toFixed(1), W - 60, badgeY + badgeH / 2);
+  ctx.textAlign = 'left';
+
+  // Две колонки
+  const colY = 230;
+  drawTeamColumn(ctx, 'Команда А', teamA, sumA, 60,  colY, 520, ACCENT);
+  drawTeamColumn(ctx, 'Команда Б', teamB, sumB, 620, colY, 520, '#10b981');
+
+  // Footer
+  ctx.fillStyle = MUTED;
+  ctx.font = '500 14px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('vortexgames574-blip.github.io/cybershoke-stats', W / 2, H - 50);
+  ctx.textAlign = 'left';
+
+  return canvas;
+}
+
+function buildShareText(best, quality, deltaKd, deltaAdr, tournamentName, weights) {
+  const lines = [];
+  lines.push('Состав CS2 · ' + tournamentName);
+  lines.push(quality.label + ' · Δscore ' + best.diff.toFixed(2) + ' · Δ K/D ' + deltaKd.toFixed(2) + ' · Δ ADR ' + deltaAdr.toFixed(1));
+  lines.push('');
+  lines.push('Команда А (Σ ' + best.sumA.toFixed(2) + '):');
+  for (const p of [...best.teamA].sort((a, b) => b.score - a.score)) {
+    lines.push('  · ' + (p.displayName || p.name) + ' — ' + p.score.toFixed(2));
+  }
+  lines.push('');
+  lines.push('Команда Б (Σ ' + best.sumB.toFixed(2) + '):');
+  for (const p of [...best.teamB].sort((a, b) => b.score - a.score)) {
+    lines.push('  · ' + (p.displayName || p.name) + ' — ' + p.score.toFixed(2));
+  }
+  lines.push('');
+  const w = normalizeWeights(weights);
+  lines.push('Веса: R ' + Math.round(w.rating * 100) + '% / K/D ' + Math.round(w.kd * 100) + '% / ADR ' + Math.round(w.adr * 100) + '%');
+  return lines.join('\n');
+}
+
+async function copyTextToClipboard(text) {
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (e) {}
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch (e) { return false; }
+}
+
 function initBalancer() {
   const openBtn = document.getElementById('open-balancer-btn');
   const modal = document.getElementById('balancer-modal');
@@ -489,6 +815,47 @@ function initBalancer() {
   const savedSection = document.getElementById('saved-teams-section');
   const savedContent = document.getElementById('saved-teams-content');
   if (!openBtn) return;
+
+  const sliderRating = document.getElementById('weight-rating');
+  const sliderKd = document.getElementById('weight-kd');
+  const sliderAdr = document.getElementById('weight-adr');
+  const valRating = document.getElementById('weight-rating-val');
+  const valKd = document.getElementById('weight-kd-val');
+  const valAdr = document.getElementById('weight-adr-val');
+  const resetWeightsBtn = document.getElementById('reset-weights-btn');
+
+  let currentWeights = getBalancerWeights();
+
+  function syncSliderUI() {
+    if (sliderRating) sliderRating.value = currentWeights.rating;
+    if (sliderKd) sliderKd.value = currentWeights.kd;
+    if (sliderAdr) sliderAdr.value = currentWeights.adr;
+    const n = normalizeWeights(currentWeights);
+    if (valRating) valRating.innerText = Math.round(n.rating * 100) + '%';
+    if (valKd) valKd.innerText = Math.round(n.kd * 100) + '%';
+    if (valAdr) valAdr.innerText = Math.round(n.adr * 100) + '%';
+  }
+
+  function applySliders() {
+    currentWeights = {
+      rating: parseFloat(sliderRating?.value ?? BALANCER_DEFAULTS.rating),
+      kd: parseFloat(sliderKd?.value ?? BALANCER_DEFAULTS.kd),
+      adr: parseFloat(sliderAdr?.value ?? BALANCER_DEFAULTS.adr)
+    };
+    saveBalancerWeights(currentWeights);
+    syncSliderUI();
+  }
+
+  if (sliderRating) sliderRating.addEventListener('input', applySliders);
+  if (sliderKd) sliderKd.addEventListener('input', applySliders);
+  if (sliderAdr) sliderAdr.addEventListener('input', applySliders);
+  if (resetWeightsBtn) resetWeightsBtn.onclick = () => {
+    currentWeights = { ...BALANCER_DEFAULTS };
+    saveBalancerWeights(currentWeights);
+    syncSliderUI();
+  };
+  syncSliderUI();
+
   openBtn.onclick = () => {
     modal.style.display = 'block';
     selectedPlayers = [];
@@ -497,11 +864,14 @@ function initBalancer() {
     resultDiv.innerHTML = '';
     mapActions.classList.remove('show');
     mapResult.innerHTML = '';
+    currentWeights = getBalancerWeights();
+    syncSliderUI();
     updateUI();
     drawGrid();
     loadSaved();
   };
   window.closeBalancer = () => { modal.style.display = 'none'; };
+
   function drawGrid() {
     if (!grid) return;
     const q = searchInput.value.toLowerCase();
@@ -510,6 +880,7 @@ function initBalancer() {
       return `<div class="player-card ${sel ? 'selected' : ''}" onclick="togglePlayer('${p.id}')"><img src="${p.avatar}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><div class="card-name">${p.displayName || p.name}</div><div class="card-rating">${p.avgRating ?? p.kd}</div></div>`;
     }).join('');
   }
+
   window.togglePlayer = (id) => {
     const idx = selectedPlayers.findIndex(p => p.id === id);
     if (idx > -1) selectedPlayers.splice(idx, 1);
@@ -521,6 +892,7 @@ function initBalancer() {
     updateUI();
     drawGrid();
   };
+
   function updateUI() {
     countLabel.innerText = `Выбрано: ${selectedPlayers.length} / 10`;
     balanceBtn.disabled = selectedPlayers.length !== 10;
@@ -528,44 +900,167 @@ function initBalancer() {
     else { mapActions.classList.remove('show'); mapResult.innerHTML = ''; }
     if (selectedPlayers.length !== 10) resultDiv.classList.remove('show');
   }
+
   searchInput.addEventListener('input', drawGrid);
-  randomBtn.onclick = () => { const sh = [...currentStats.players].sort(() => Math.random() - 0.5); selectedPlayers = sh.slice(0, Math.min(10, sh.length)); updateUI(); drawGrid(); };
+
+  randomBtn.onclick = () => {
+    const sh = [...currentStats.players].sort(() => Math.random() - 0.5);
+    selectedPlayers = sh.slice(0, Math.min(10, sh.length));
+    updateUI(); drawGrid();
+  };
   clearBtn.onclick = () => { selectedPlayers = []; mapResult.innerHTML = ''; updateUI(); drawGrid(); };
+
   balanceBtn.onclick = () => {
     if (selectedPlayers.length !== 10) return;
-    const { teamA, teamB, sumA, sumB } = findBestTeams(selectedPlayers.map(p => ({ ...p, rating: p.avgRating ?? 0 })));
-    resultDiv.innerHTML = `<div class="team-box"><h3>Команда А <span>Σ ${sumA.toFixed(2)}</span></h3><ul>${teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div><div class="team-box"><h3>Команда Б <span>Σ ${sumB.toFixed(2)}</span></h3><ul>${teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div>`;
+    const pool = selectedPlayers.map(p => ({
+      ...p,
+      score: playerCompositeScore(p, currentWeights)
+    }));
+    const best = findBestTeams(pool);
+    if (!best) return;
+    const q = balanceQuality(best.diff);
+    const deltaKd = Math.abs((best.kdA - best.kdB) / 5);
+    const deltaAdr = Math.abs((best.adrA - best.adrB) / 5);
+
+    // Очищаем старые превью/кнопки (от предыдущих раскладок)
+    resultDiv.querySelectorAll('.balance-card-preview, .balance-share-actions').forEach(el => {
+      if (el.dataset && el.dataset.url) URL.revokeObjectURL(el.dataset.url);
+      el.remove();
+    });
+
+    resultDiv.innerHTML = `
+      <div class="balance-header-row">
+        <span class="quality-badge ${q.key}">${q.label} · Δscore ${best.diff.toFixed(2)}</span>
+        <span class="delta-row-inline">
+          <span>Δ K/D <b>${deltaKd.toFixed(2)}</b></span>
+          <span>Δ ADR <b>${deltaAdr.toFixed(1)}</b></span>
+        </span>
+      </div>
+      <div class="team-box"><h3>Команда А <span>Σ ${best.sumA.toFixed(2)}</span></h3><ul>${[...best.teamA].sort((a,b)=>b.score-a.score).map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.score.toFixed(2)}</span></li>`).join('')}</ul></div>
+      <div class="team-box"><h3>Команда Б <span>Σ ${best.sumB.toFixed(2)}</span></h3><ul>${[...best.teamB].sort((a,b)=>b.score-a.score).map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.displayName || p.name}</div><span>${p.score.toFixed(2)}</span></li>`).join('')}</ul></div>
+    `;
     resultDiv.classList.add('show');
     savedSection.classList.remove('show');
-    try { localStorage.setItem(getSavedKey(), JSON.stringify({ teamA: teamA.map(p => ({ name: p.displayName || p.name, rating: p.rating, avatar: p.avatar })), teamB: teamB.map(p => ({ name: p.displayName || p.name, rating: p.rating, avatar: p.avatar })), savedAt: new Date().toISOString() })); } catch (e) {}
+
+    // savedTeams_* — как раньше, поле rating теперь хранит composite score. Ключ не меняем.
+    try {
+      localStorage.setItem(getSavedKey(), JSON.stringify({
+        teamA: best.teamA.map(p => ({ name: p.displayName || p.name, rating: p.score, avatar: p.avatar })),
+        teamB: best.teamB.map(p => ({ name: p.displayName || p.name, rating: p.score, avatar: p.avatar })),
+        savedAt: new Date().toISOString(),
+        weights: currentWeights
+      }));
+    } catch (e) {}
+
+    // PNG-карточка
+    const tournamentName = document.getElementById('tournament-select').value || 'Все матчи';
+    const cardCanvas = drawBalanceCard({
+      teamA: best.teamA, teamB: best.teamB,
+      sumA: best.sumA, sumB: best.sumB,
+      diff: best.diff, quality: q,
+      deltaKd, deltaAdr,
+      tournamentName
+    });
+
+    cardCanvas.toBlob((blob) => {
+      if (!blob) {
+        const warn = document.createElement('div');
+        warn.className = 'balance-share-actions';
+        warn.innerHTML = `<span class="text-muted" style="color:#ef4444;">Не удалось сгенерировать карточку</span>`;
+        resultDiv.appendChild(warn);
+        return;
+      }
+      const url = URL.createObjectURL(blob);
+
+      const preview = document.createElement('div');
+      preview.className = 'balance-card-preview';
+      preview.dataset.url = url;
+      preview.innerHTML = `<img src="${url}" alt="Карточка состава">`;
+      resultDiv.appendChild(preview);
+
+      const actions = document.createElement('div');
+      actions.className = 'balance-share-actions';
+
+      const dlBtn = document.createElement('button');
+      dlBtn.className = 'btn-outline';
+      dlBtn.style.flex = '1';
+      dlBtn.innerText = 'Скачать PNG';
+      dlBtn.onclick = () => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'balance-' + (tournamentName.replace(/[^\wа-я-]+/gi, '_')) + '-' + Date.now() + '.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
+      actions.appendChild(dlBtn);
+
+      const file = new File([blob], 'balance.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        const shareBtn2 = document.createElement('button');
+        shareBtn2.className = 'btn-outline';
+        shareBtn2.style.flex = '1';
+        shareBtn2.innerText = 'Поделиться';
+        shareBtn2.onclick = async () => {
+          try {
+            await navigator.share({ files: [file], title: 'Состав команд', text: 'Состав для CS2' });
+          } catch (e) {}
+        };
+        actions.appendChild(shareBtn2);
+      }
+
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'btn-outline';
+      copyBtn.style.flex = '1';
+      copyBtn.innerText = 'Скопировать текст';
+      copyBtn.onclick = async () => {
+        const text = buildShareText(best, q, deltaKd, deltaAdr, tournamentName, currentWeights);
+        const ok = await copyTextToClipboard(text);
+        copyBtn.innerText = ok ? '✓ Скопировано' : 'Не удалось';
+        setTimeout(() => { copyBtn.innerText = 'Скопировать текст'; }, 1800);
+      };
+      actions.appendChild(copyBtn);
+
+      resultDiv.appendChild(actions);
+    }, 'image/png');
   };
-  document.getElementById('random-map-btn').onclick = () => { const names = currentStats.mapStats.map(m => m.map); if (!names.length) return; mapResult.innerHTML = `<div class="team-box" style="text-align:center;"><p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Случайная карта:</p><h2 style="color: #4d6bfe; font-size: 1.5rem; margin: 0;">${names[Math.floor(Math.random() * names.length)]}</h2></div>`; };
+
+  document.getElementById('random-map-btn').onclick = () => {
+    const names = currentStats.mapStats.map(m => m.map);
+    if (!names.length) return;
+    mapResult.innerHTML = `<div class="team-box" style="text-align:center;"><p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Случайная карта:</p><h2 style="color: #4d6bfe; font-size: 1.5rem; margin: 0;">${names[Math.floor(Math.random() * names.length)]}</h2></div>`;
+  };
+
   document.getElementById('balanced-map-btn').onclick = () => {
-    let best = null, bestDiff = Infinity, bestD = null;
+    let best = null;
     for (const ms of currentStats.mapStats) {
-      const ratings = selectedPlayers.map(p => { const tp = ms.topPlayers.find(t => t.id === p.id); return tp ? { rating: tp.avgRating } : null; });
-      if (ratings.some(r => r === null)) continue;
-      const { sumA, sumB } = findBestTeams(ratings.map((r, i) => ({ id: selectedPlayers[i].id, rating: r.rating })));
-      const diff = Math.abs(sumA - sumB);
-      if (diff < bestDiff) { bestDiff = diff; best = ms.map; bestD = { diff, sumA, sumB }; }
+      const pool = [];
+      let ok = true;
+      for (const p of selectedPlayers) {
+        const tp = ms.topPlayers.find(t => t.id === p.id);
+        if (!tp) { ok = false; break; }
+        pool.push({ ...p, score: mapPlayerCompositeScore(p, tp, currentWeights) });
+      }
+      if (!ok || pool.length !== 10) continue;
+      const split = findBestTeams(pool);
+      if (!split) continue;
+      const candidate = { map: ms.map, matches: ms.matches, diff: split.diff, sumA: split.sumA, sumB: split.sumB };
+      if (!best) { best = candidate; continue; }
+      const EPS = 0.02;
+      if (split.diff < best.diff - EPS ||
+          (Math.abs(split.diff - best.diff) <= EPS && ms.matches > best.matches)) {
+        best = candidate;
+      }
     }
-    if (!best) { mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color:#ef4444;"><p style="color:#ef4444; font-size:0.85rem;">Нет карты, где играли все 10 игроков</p></div>`; return; }
-    mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color: #10b981;"><p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Оптимальная карта:</p><h2 style="color: #10b981; font-size: 1.5rem; margin: 0 0 8px 0;">${best}</h2><p style="font-size: 0.8rem; color: var(--text-muted);">Разница: <b style="color:#10b981;">${bestD.diff.toFixed(2)}</b> (${bestD.sumA.toFixed(2)} vs ${bestD.sumB.toFixed(2)})</p></div>`;
+    if (!best) {
+      mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color:#ef4444;"><p style="color:#ef4444; font-size:0.85rem;">Нет карты, где играли все 10 игроков</p></div>`;
+      return;
+    }
+    mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color: #10b981;"><p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Оптимальная карта:</p><h2 style="color: #10b981; font-size: 1.5rem; margin: 0 0 8px 0;">${best.map}</h2><p style="font-size: 0.8rem; color: var(--text-muted);">Δscore: <b style="color:#10b981;">${best.diff.toFixed(2)}</b> (${best.sumA.toFixed(2)} vs ${best.sumB.toFixed(2)}) · матчей на карте: ${best.matches}</p></div>`;
   };
-  function findBestTeams(players) {
-    const half = players.length / 2;
-    let bestDiff = Infinity, bestTeamA = [], bestTeamB = [], bestSumA = 0, bestSumB = 0;
-    const combinations = (arr, k) => { if (k === 0) return [[]]; if (arr.length === 0) return []; const [first, ...rest] = arr; const withFirst = combinations(rest, k - 1).map(comb => [first, ...comb]); const withoutFirst = combinations(rest, k); return [...withFirst, ...withoutFirst]; };
-    for (const teamA of combinations(players, half)) {
-      const teamB = players.filter(p => !teamA.includes(p));
-      const sumA = teamA.reduce((s, p) => s + p.rating, 0);
-      const sumB = teamB.reduce((s, p) => s + p.rating, 0);
-      const diff = Math.abs(sumA - sumB);
-      if (diff < bestDiff) { bestDiff = diff; bestTeamA = teamA; bestTeamB = teamB; bestSumA = sumA; bestSumB = sumB; }
-    }
-    return { teamA: bestTeamA, teamB: bestTeamB, sumA: bestSumA, sumB: bestSumB };
-  }
+
   document.getElementById('clear-saved-btn').onclick = () => { localStorage.removeItem(getSavedKey()); savedSection.classList.remove('show'); savedContent.innerHTML = ''; };
+
   function loadSaved() {
     try {
       const raw = localStorage.getItem(getSavedKey());
@@ -576,208 +1071,6 @@ function initBalancer() {
       savedContent.innerHTML = `<div class="balance-result-modal show" style="margin-top: 0;"><div class="team-box"><h3>Сохранено: Команда А <span>Σ ${sA.toFixed(2)}</span></h3><ul>${d.teamA.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div><div class="team-box"><h3>Сохранено: Команда Б <span>Σ ${sB.toFixed(2)}</span></h3><ul>${d.teamB.map(p => `<li><div class="t-player"><img src="${p.avatar}">${p.name}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div></div>`;
       savedSection.classList.add('show');
     } catch (e) {}
-  }
-}
-
-// ============ СЕТКА ============
-function seedOrder(n) {
-  if (n === 1) return [1];
-  if (n === 2) return [1, 2];
-  const prev = seedOrder(n / 2);
-  const result = [];
-  for (const s of prev) { result.push(s); result.push(n + 1 - s); }
-  return result;
-}
-
-function initBracketTab() {
-  const genBtn = document.getElementById('generate-bracket-btn');
-  const simBtn = document.getElementById('simulate-bracket-btn');
-  const resetBtn = document.getElementById('reset-bracket-btn');
-  if (!genBtn) return;
-  genBtn.onclick = () => { bracketMode = 'solo'; generateSoloBracket(); };
-  simBtn.onclick = () => simulateBracket();
-  resetBtn.onclick = () => { bracketState = null; saveBracket(); renderBracket(); };
-  
-  try {
-    const raw = localStorage.getItem(`bracket_${document.getElementById('tournament-select').value}`);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (parsed && parsed.mode) { bracketState = parsed; bracketMode = parsed.mode; }
-    }
-  } catch(e){}
-  renderBracket();
-}
-
-function generateSoloBracket() {
-  const players = currentStats.players.slice().sort((a, b) => (b.avgRating ?? b.kd ?? 0) - (a.avgRating ?? a.kd ?? 0));
-  const n = players.length;
-  if (n < 2) { alert('Нужно минимум 2 игрока'); return; }
-  const size = Math.pow(2, Math.ceil(Math.log2(n)));
-  const seeded = seedOrder(size);
-  const round0 = [];
-  for (let i = 0; i < size; i += 2) {
-    const seedA = seeded[i], seedB = seeded[i + 1];
-    round0.push({
-      t1: seedA <= n ? { id: players[seedA - 1].id, name: players[seedA - 1].displayName || players[seedA - 1].name, avatar: players[seedA - 1].avatar, rating: players[seedA - 1].avgRating, seed: seedA } : null,
-      t2: seedB <= n ? { id: players[seedB - 1].id, name: players[seedB - 1].displayName || players[seedB - 1].name, avatar: players[seedB - 1].avatar, rating: players[seedB - 1].avgRating, seed: seedB } : null,
-      winner: null,
-    });
-  }
-  const rounds = [round0];
-  let curSize = size / 2;
-  while (curSize >= 1) {
-    const round = [];
-    for (let i = 0; i < curSize; i++) round.push({ t1: null, t2: null, winner: null });
-    rounds.push(round);
-    curSize /= 2;
-  }
-  bracketState = { mode: 'solo', size, participants: players.length, rounds, champion: null, completed: false };
-  processBracket(bracketState);
-  saveBracket();
-  renderBracket();
-}
-
-function generateTeamBracket(teams) {
-  if (teams.length !== 4) { alert('Для командной сетки нужно ровно 4 команды'); return; }
-  const round0 = [
-    { t1: teams[0], t2: teams[1], winner: null },
-    { t1: teams[2], t2: teams[3], winner: null }
-  ];
-  const round1 = [{ t1: null, t2: null, winner: null }];
-  bracketState = { mode: 'team', teams, rounds: [round0, round1], champion: null, completed: false };
-  processBracket(bracketState);
-  saveBracket();
-  const tabs = document.querySelectorAll('.tab-btn');
-  const contents = document.querySelectorAll('.tab-content');
-  tabs.forEach(t => t.classList.remove('active'));
-  contents.forEach(c => c.classList.remove('active'));
-  document.querySelector('[data-tab="bracket"]').classList.add('active');
-  document.getElementById('tab-bracket').classList.add('active');
-  renderBracket();
-}
-
-function processBracket(state) {
-  const rounds = state.rounds;
-  for (let r = 0; r < rounds.length; r++) {
-    for (let m = 0; m < rounds[r].length; m++) {
-      const match = rounds[r][m];
-      if (match.winner === null) {
-        if (match.t1 && !match.t2) match.winner = 1;
-        else if (!match.t1 && match.t2) match.winner = 2;
-      }
-      if (match.winner !== null && r < rounds.length - 1) {
-        const winner = match.winner === 1 ? match.t1 : match.t2;
-        if (winner) {
-          const nextMatch = rounds[r + 1][Math.floor(m / 2)];
-          if (m % 2 === 0) nextMatch.t1 = winner;
-          else nextMatch.t2 = winner;
-        }
-      }
-    }
-  }
-  const finalMatch = rounds[rounds.length - 1][0];
-  state.champion = finalMatch.winner === 1 ? finalMatch.t1 : (finalMatch.winner === 2 ? finalMatch.t2 : null);
-  state.completed = state.champion !== null;
-}
-
-function saveBracket() {
-  try {
-    const key = `bracket_${document.getElementById('tournament-select').value}`;
-    if (bracketState) localStorage.setItem(key, JSON.stringify(bracketState));
-    else localStorage.removeItem(key);
-  } catch(e){}
-}
-
-function renderBracket() {
-  const container = document.getElementById('bracket-container');
-  if (!container) return;
-  if (!bracketState) { container.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding: 40px;">Нажмите "Сгенерировать", чтобы создать сетку</p>'; return; }
-  
-  const rounds = bracketState.rounds;
-  const roundNames = [];
-  const totalRounds = rounds.length;
-  for (let r = 0; r < totalRounds; r++) {
-    const remaining = Math.pow(2, totalRounds - r);
-    if (remaining === 2) roundNames.push('Финал');
-    else if (remaining === 4) roundNames.push('Полуфинал');
-    else if (remaining === 8) roundNames.push('1/4 финала');
-    else if (remaining === 16) roundNames.push('1/8 финала');
-    else roundNames.push(`Раунд ${r + 1}`);
-  }
-  
-  let html = '<div class="bracket">';
-  for (let r = 0; r < rounds.length; r++) {
-    html += `<div class="bracket-round"><div class="bracket-round-title">${roundNames[r]}</div>`;
-    for (let m = 0; m < rounds[r].length; m++) {
-      html += renderMatchCard(r, m, rounds[r][m]);
-    }
-    html += `</div>`;
-  }
-  html += '</div>';
-  
-  if (bracketState.champion) {
-    const champName = bracketState.champion.name;
-    html += `<div class="bracket-champion">Победитель турнира: ${champName}</div>`;
-  }
-  container.innerHTML = html;
-}
-
-function renderMatchCard(r, m, match) {
-  const t1Class = match.winner === 1 ? 'winner' : (match.winner === 2 ? 'loser' : '');
-  const t2Class = match.winner === 2 ? 'winner' : (match.winner === 1 ? 'loser' : '');
-  const t1Name = match.t1 ? match.t1.name : '—';
-  const t2Name = match.t2 ? match.t2.name : '—';
-  const canClick = match.t1 && match.t2 && match.winner === null;
-  const t1Click = canClick ? `onclick="setBracketWinner(${r},${m},1)"` : '';
-  const t2Click = canClick ? `onclick="setBracketWinner(${r},${m},2)"` : '';
-  return `<div class="bracket-match ${match.winner ? 'completed' : ''}">
-    <div class="bracket-team ${t1Class}" ${t1Click}><span>${t1Name}</span>${match.winner === 1 ? '<span class="bracket-score">✓</span>' : ''}</div>
-    <div class="bracket-team ${t2Class}" ${t2Click}><span>${t2Name}</span>${match.winner === 2 ? '<span class="bracket-score">✓</span>' : ''}</div>
-  </div>`;
-}
-
-window.setBracketWinner = function(r, m, winner) {
-  if (!bracketState) return;
-  const match = bracketState.rounds[r][m];
-  if (!match.t1 || !match.t2) return;
-  match.winner = winner;
-  let curM = m;
-  for (let rr = r + 1; rr < bracketState.rounds.length; rr++) {
-    curM = Math.floor(curM / 2);
-    const nm = bracketState.rounds[rr][curM];
-    if (!nm) break;
-    nm.t1 = null; nm.t2 = null; nm.winner = null;
-  }
-  processBracket(bracketState);
-  saveBracket();
-  renderBracket();
-};
-
-function simulateBracket() {
-  if (!bracketState) return;
-  const rounds = bracketState.rounds;
-  for (const round of rounds) for (const m of round) { m.winner = null; }
-  
-  if (bracketState.mode === 'solo') {
-    bracketState = null;
-    generateSoloBracket();
-  } else {
-    processBracket(bracketState);
-    for (let r = 0; r < rounds.length; r++) {
-      for (let m = 0; m < rounds[r].length; m++) {
-        const match = rounds[r][m];
-        if (match.winner !== null) continue;
-        if (!match.t1 || !match.t2) continue;
-        const avg1 = match.t1.avgRating ?? 0;
-        const avg2 = match.t2.avgRating ?? 0;
-        const t1Better = avg1 >= avg2;
-        const rnd = Math.random();
-        match.winner = (rnd < 0.8) ? (t1Better ? 1 : 2) : (t1Better ? 2 : 1);
-      }
-      processBracket(bracketState);
-    }
-    saveBracket();
-    renderBracket();
   }
 }
 

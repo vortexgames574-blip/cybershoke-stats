@@ -51,7 +51,6 @@
       <button class="tab-btn" data-tab="maps"><i data-lucide="map"></i> Карты</button>
       <button class="tab-btn" data-tab="balancer"><i data-lucide="git-merge"></i> Балансировщик 5х5</button>
       <button class="tab-btn" data-tab="draft"><i data-lucide="users"></i> Драфт 4х</button>
-      <button class="tab-btn" data-tab="bracket"><i data-lucide="trophy"></i> Сетка</button>
     </nav>
 
     <main class="main-content">
@@ -105,6 +104,7 @@
                   <select id="sort-by" class="select-sort">
                     <option value="rating">По рейтингу</option>
                     <option value="kd">По K/D</option>
+                    <option value="adr">По ADR</option>
                     <option value="deaths">По смертям</option>
                   </select>
                 </div>
@@ -150,7 +150,7 @@
         </section>
       </div>
 
-      <!-- БАЛАНСИРОВЩИК 2x5 -->
+      <!-- БАЛАНСИРОВЩИК 5х5 -->
       <div class="tab-content" id="tab-balancer">
         <section class="glass-card interactive-card">
           <div class="card-header"><h2>Балансировщик 5х5</h2></div>
@@ -163,7 +163,7 @@
       <div class="tab-content" id="tab-draft">
         <section class="glass-card interactive-card" style="max-width: 800px; margin: 0 auto;">
           <div class="card-header"><h2>Создать 4 команды</h2></div>
-          <p class="text-muted mb-10">Выберите 4 капитанов. Остальные игроки распределятся автоматически (по рейтингу, змейкой).</p>
+          <p class="text-muted mb-10">Выберите 4 капитанов. Остальные игроки распределятся автоматически по композитному скору (тем же весам, что в балансировщике) — змейкой.</p>
           
           <div class="draft-captain-grid">
             <div class="draft-captain-slot">
@@ -188,22 +188,6 @@
           <button id="reset-teams-btn" class="btn-outline mt-20" style="width: 100%; display: none;">Сбросить</button>
 
           <div id="draft-result" class="draft-result-grid" style="display: none; margin-top: 20px;"></div>
-        </section>
-      </div>
-
-      <!-- СЕТКА ТУРНИРА -->
-      <div class="tab-content" id="tab-bracket">
-        <section class="glass-card interactive-card">
-          <div class="card-header">
-            <h2>Сетка турнира</h2>
-            <div class="controls">
-              <button id="generate-bracket-btn" class="btn-outline">Сгенерировать (1х1)</button>
-              <button id="simulate-bracket-btn" class="btn-outline">Симулировать</button>
-              <button id="reset-bracket-btn" class="btn-outline">Сброс</button>
-            </div>
-          </div>
-          <p class="text-muted mb-10">Автопосев по рейтингу. Кликай на победителя.</p>
-          <div id="bracket-container" class="bracket-container"></div>
         </section>
       </div>
     </main>
@@ -276,6 +260,24 @@
         <input type="text" id="player-search" class="input-search" style="flex:1;" placeholder="Поиск...">
         <button id="random-btn" class="btn-outline" title="Случайные 10">Рандом</button>
         <button id="clear-btn" class="btn-outline" title="Очистить">Сброс</button>
+      </div>
+      <div class="balancer-weights">
+        <div class="weights-header">
+          <span>Веса метрик <span style="color: var(--text-muted); font-size: 0.75rem;">(пропорция нормализуется)</span></span>
+          <button id="reset-weights-btn" class="btn-outline" style="font-size: 0.75rem; padding: 4px 10px;">Сброс</button>
+        </div>
+        <div class="weight-slider-row">
+          <label>Рейтинг <span id="weight-rating-val">60%</span></label>
+          <input type="range" id="weight-rating" min="0" max="1" step="0.05" value="0.6">
+        </div>
+        <div class="weight-slider-row">
+          <label>K/D <span id="weight-kd-val">20%</span></label>
+          <input type="range" id="weight-kd" min="0" max="1" step="0.05" value="0.2">
+        </div>
+        <div class="weight-slider-row">
+          <label>ADR <span id="weight-adr-val">20%</span></label>
+          <input type="range" id="weight-adr" min="0" max="1" step="0.05" value="0.2">
+        </div>
       </div>
       <div id="players-grid" class="players-grid"></div>
       <button id="balance-btn" class="btn-primary mt-20" disabled>Разделить на команды</button>
