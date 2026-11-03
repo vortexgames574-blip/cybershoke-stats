@@ -159,7 +159,7 @@ function initDraft() {
     const allPlayers = currentStats.players.filter(p => !capIds.includes(p.id));
     const scoredPool = allPlayers.map(p => ({ ...p, score: playerCompositeScore(p, weights) }));
     
-    // Сортируем всех игроков по силе
+    // Сортируем ВСЕХ игроков по силе (нужно для идеальной сборки)
     const sorted = scoredPool.slice().sort((a, b) => b.score - a.score);
 
     let pool = [];
@@ -170,10 +170,9 @@ function initDraft() {
       topPool.sort(() => Math.random() - 0.5);
       // Берем случайных 16
       pool = topPool.slice(0, 16);
-      // Возвращаем сортировку по силе, чтобы алгоритм раздавал лучших слабым командам
-      pool.sort((a, b) => b.score - a.score);
+      // ВАЖНО: Мы НЕ сортируем пул обратно. Отдаем в случайном порядке.
     } else {
-      // Идеальная сборка: берем просто топ-16
+      // Идеальная сборка: берем просто топ-16 (по силе)
       pool = sorted.slice(0, 16);
     }
 
