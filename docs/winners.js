@@ -1,7 +1,8 @@
 /* docs/winners.js — главная: последний турнир + хронология победителей.
-   Данные: docs/data/winners.json (массив, новые сверху)
-   Фото:   docs/img/winners/<teamPhoto>
-   Клик по нику → openProfile(playerId) из app.js.
+   Источник данных:
+     - обычный режим: docs/data/winners.json
+     - режим редактирования (?admin): localStorage winnersDraft_v1
+   Редактор живёт в docs/winners-admin.js.
 */
 (() => {
   'use strict';
@@ -9,6 +10,8 @@
   const DATA_URL = 'data/winners.json';
   const PHOTO_BASE = 'img/winners/';
   const ROOT_ID = 'home-winners-root';
+  const STORAGE_KEY = 'winnersDraft_v1';
+  const ADMIN_FLAG_KEY = 'winnersAdminMode';
 
   function esc(s) {
     return String(s == null ? '' : s)
@@ -46,6 +49,43 @@
     return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
   }
 
+  function isAdminMode() {
+    try {
+      // .has('admin') сработает и для ?admin, и для ?admin=1
+      if (new URLSearchParams(location.search).has('admin')) {
+        localStorage.setItem(ADMIN_FLAG_KEY, '1');
+        return true;
+      }
+      return localStorage.getItem(ADMIN_FLAG_KEY) === '1';
+    } catch (e) { return false; }
+  }
+
+  function readDraft() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch (e) { return null; }
+  }
+
+  async function loadData() {
+    const admin = isAdminMode();
+    if (admin) {
+      const draft = readDraft();
+      if (draft) return { list: draft, source: 'draft' };
+    }
+    try {
+      const res = await fetch(DATA_URL, { cache: 'no-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      return { list: Array.isArray(data) ? data : [], source: 'server' };
+    } catch (e) {
+      if (admin) return { list: [], source: 'empty' };
+      throw e;
+    }
+  }
+
   window.openWinnerProfile = function (playerId, name) {
     if (typeof openProfile === 'function' && playerId) {
       openProfile(playerId);
@@ -63,8 +103,10 @@
   }
 
   function chipsHtml(players) {
-    if (!Array.isArray(players) || players.length === 0) return '';
-    const chips = players.map((p) => {
+    if (!Array.isArray(players)) return '';
+    const valid = players.filter((p) => (p && (p.name || p.nick)));
+    if (!valid.length) return '';
+    const chips = valid.map((p) => {
       const raw = p.name || p.nick || '';
       const shown = displayName(raw);
       const role = p.role || '';
@@ -84,7 +126,8 @@
     const parts = [];
     if (data.date) parts.push(`<span>${esc(formatDate(data.date))}</span>`);
     if (data.finalScore) parts.push(`<span class="winners-score">Счёт финала: <b>${esc(data.finalScore)}</b></span>`);
-    return parts.length ? `<div class="winners-meta">${parts.join('')}</div>` : '';
+    if (!parts.length) return '';
+    return `<div class="winners-meta">${parts.join('')}</div>`;
   }
 
   function tournamentLinkHtml(data) {
@@ -93,14 +136,17 @@
   }
 
   function currentHtml(data) {
-    const title = data.title || 'Победители последнего турнира';
+    const title = (data.title || '').trim();
+    const head = (title || data.date || data.finalScore)
+      ? `<div class="winners-head">
+           ${title ? `<h2 class="winners-title">${esc(title)}</h2>` : ''}
+           ${metaHtml(data)}
+         </div>`
+      : '';
     return `
       <div class="winners-current">
-        ${heroHtml(data.teamPhoto, title)}
-        <div class="winners-head">
-          <h2 class="winners-title">${esc(title)}</h2>
-          ${metaHtml(data)}
-        </div>
+        ${heroHtml(data.teamPhoto, title || 'Фото команды-победителя')}
+        ${head}
         ${chipsHtml(data.players)}
         ${tournamentLinkHtml(data)}
       </div>
@@ -108,7 +154,7 @@
   }
 
   function timelineItemHtml(data) {
-    const title = data.title || 'Турнир';
+    const title = (data.title || '').trim() || 'Турнир без названия';
     return `
       <li class="timeline-item">
         <details>
@@ -127,27 +173,48 @@
     `;
   }
 
-  function render(root, list) {
+  function draftBannerHtml() {
+    return `
+      <div class="winners-draft-banner">
+        <span>Показаны локальные правки из этого браузера. Обычные посетители их не видят.</span>
+        <button class="btn-outline" onclick="window.winnersResetDraft()">Сбросить</button>
+      </div>
+    `;
+  }
+
+  function adminBarHtml() {
+    return `
+      <div class="winners-admin-bar">
+        <button class="btn-primary" onclick="window.openWinnersAdmin()">✏️ Редактировать</button>
+      </div>
+    `;
+  }
+
+  function render(root, list, source) {
+    const admin = isAdminMode();
     const tournaments = Array.isArray(list) ? list.filter(Boolean) : [];
+
+    const bar = admin ? adminBarHtml() : '';
+    const banner = source === 'draft' ? draftBannerHtml() : '';
+
     if (tournaments.length === 0) {
-      root.innerHTML = '<p class="winners-empty">Победители пока не добавлены</p>';
+      root.innerHTML = `
+        ${bar}
+        ${banner}
+        <p class="winners-empty">Победители пока не добавлены${admin ? '. Нажмите «Редактировать», чтобы заполнить.' : '.'}</p>
+      `;
       return;
     }
 
     const [current, ...past] = tournaments;
-
     const timelineHtml = past.length
-      ? `
-        <div class="winners-timeline">
-          <h3 class="winners-timeline-title">Хронология победителей</h3>
-          <ol class="timeline-list">
-            ${past.map(timelineItemHtml).join('')}
-          </ol>
-        </div>
-      `
+      ? `<div class="winners-timeline">
+           <h3 class="winners-timeline-title">Хронология победителей</h3>
+           <ol class="timeline-list">${past.map(timelineItemHtml).join('')}</ol>
+         </div>`
       : '';
 
-    root.innerHTML = `<div class="winners-wrap">${currentHtml(current)}${timelineHtml}</div>`;
+    root.innerHTML = `${bar}${banner}<div class="winners-wrap">${currentHtml(current)}${timelineHtml}</div>`;
 
     root.querySelectorAll('.winner-chip.link').forEach((chip) => {
       chip.addEventListener('click', (ev) => {
@@ -166,24 +233,51 @@
     });
   }
 
-  async function boot() {
+  window.renderWinners = async function () {
     const root = document.getElementById(ROOT_ID);
     if (!root) return;
-
     try {
-      const res = await fetch(DATA_URL, { cache: 'no-cache' });
-      if (!res.ok) throw new Error('winners.json не найден (HTTP ' + res.status + ')');
-      const data = await res.json();
-      render(root, data);
+      const { list, source } = await loadData();
+      render(root, list, source);
     } catch (e) {
       console.warn('[winners]', e.message);
       root.innerHTML = '<p class="winners-empty">Победители последнего турнира пока не загружены</p>';
     }
-  }
+  };
+
+  window.winnersResetDraft = function () {
+    if (!confirm('Удалить локальные правки и вернуться к файлу с сервера?')) return;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    window.renderWinners();
+  };
+
+  window.winnersSaveDraft = function (list) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      return true;
+    } catch (e) {
+      alert('Не удалось сохранить: ' + e.message + '\nВозможно, переполнен localStorage.');
+      return false;
+    }
+  };
+
+  window.winnersReadDraft = readDraft;
+
+  window.winnersDownloadJson = function (list) {
+    const blob = new Blob([JSON.stringify(list, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'winners.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot, { once: true });
+    document.addEventListener('DOMContentLoaded', () => window.renderWinners(), { once: true });
   } else {
-    boot();
+    window.renderWinners();
   }
 })();

@@ -1,9 +1,4 @@
-/* docs/winners-admin.js — редактор победителей.
-   Открывается кнопкой «✏️ Редактировать» (только в admin-режиме, ?admin=1).
-   Сохраняет в localStorage winnersDraft_v1.
-   Фото: только имя файла из docs/img/winners/ (без вшивания в JSON).
-   Кнопка «Скачать winners.json» отдаёт файл для публикации.
-*/
+/* docs/winners-admin.js — редактор победителей. */
 (() => {
   'use strict';
 
@@ -25,7 +20,7 @@
 
   function isAdminMode() {
     try {
-      if (new URLSearchParams(location.search).get('admin') === '1') {
+      if (new URLSearchParams(location.search).has('admin')) {
         localStorage.setItem(ADMIN_FLAG_KEY, '1');
         return true;
       }
