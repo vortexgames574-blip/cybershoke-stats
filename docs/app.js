@@ -125,7 +125,7 @@ function renderAll() {
   }
 }
 
-// ============ ДРАФТ 4x ============
+// ============ ДРАФТ 4x С ГЕНЕРАЦИЕЙ КАРТИНКИ ============
 function initDraft() {
   const c1 = document.getElementById('cap-1');
   const c2 = document.getElementById('cap-2');
@@ -149,7 +149,7 @@ function initDraft() {
   const resetBtn = document.getElementById('reset-teams-btn');
   const resultDiv = document.getElementById('draft-result');
 
-  const executeDraft = () => {
+  const executeDraft = (isShuffle = false) => {
     const capIds = [c1.value, c2.value, c3.value, c4.value].filter(Boolean);
     if (capIds.length !== 4) return showToast('Выберите 4 капитана', 'error');
     if (new Set(capIds).size !== 4) return showToast('Капитаны не должны повторяться', 'error');
@@ -158,9 +158,23 @@ function initDraft() {
     const captains = capIds.map(id => currentStats.players.find(p => p.id === id)).filter(Boolean);
     const allPlayers = currentStats.players.filter(p => !capIds.includes(p.id));
     const scoredPool = allPlayers.map(p => ({ ...p, score: playerCompositeScore(p, weights) }));
+    
+    // Сортируем игроков по силе
     const sorted = scoredPool.slice().sort((a, b) => b.score - a.score);
 
-    const pool = sorted.slice(0, 12);
+    let pool = [];
+    if (isShuffle) {
+      // Берем топ-24 игроков, трясем их и выбираем 16 случайных. Капитаны не меняются.
+      const topPool = sorted.slice(0, Math.min(24, sorted.length));
+      topPool.sort(() => Math.random() - 0.5);
+      pool = topPool.slice(0, 16);
+      // Жадный алгоритм ожидает сортировку по убыванию, возвращаем порядок
+      pool.sort((a, b) => b.score - a.score);
+    } else {
+      // Обычная сборка: берём просто топ-16
+      pool = sorted.slice(0, 16);
+    }
+
     const teams = captains.map(c => {
       const capScore = playerCompositeScore(c, weights);
       return { captain: c, captainScore: capScore, players: [], sumScore: capScore };
@@ -264,20 +278,17 @@ function initDraft() {
     }, 'image/png');
   };
 
-  buildBtn.onclick = executeDraft;
+  // Обычная сборка (идеальный баланс)
+  buildBtn.onclick = () => executeDraft(false);
 
+  // Перемешать (меняем игроков, кэпы остаются)
   if (shuffleBtn) {
-    shuffleBtn.onclick = () => {
-      const shuffled = [...currentStats.players].sort(() => Math.random() - 0.5);
-      if (shuffled.length < 4) return;
-      [c1, c2, c3, c4].forEach((sel, i) => sel.value = shuffled[i].id);
-      executeDraft();
-    };
+    shuffleBtn.onclick = () => executeDraft(true);
   }
 }
 
 function drawDraftCard({ teams, spread, quality, tournamentName }) {
-  const W = 1200, H = 1100;
+  const W = 1200, H = 1180; // Увеличили высоту под 5 человек в команде
   const canvas = document.createElement('canvas');
   canvas.width = W;
   canvas.height = H;
@@ -332,7 +343,7 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
 
   const colY = 230;
   const boxW = 520;
-  const boxH = 380;
+  const boxH = 420; // Увеличили высоту панели под 5 игроков
   const gapX = 40;
   const gapY = 30;
   const startX = 60;
@@ -632,7 +643,6 @@ function closeMapDetails() { document.getElementById('map-modal').style.display 
 function openMatchDetails(matchId) {
   if (!matchId) return showToast('Нет ID матча. Пересоберите статистику (npm run build)', 'error');
   
-  // Ищем матч в общем списке (он должен быть в statsData.allMatches)
   const match = statsData.allMatches ? statsData.allMatches.find(m => m.matchId === matchId) : null;
   if (!match) {
     return showToast('Данные матча не найдены (пересоберите stats.json)', 'error');
@@ -765,7 +775,6 @@ function openProfile(playerId) {
   const tbody = document.getElementById('prof-match-history');
   const history = [...(p.matchHistory || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
   
-  // ДОБАВЛЕН КЛИК НА СТРОКУ (onclick="openMatchDetails('${h.matchId}')")
   tbody.innerHTML = history.map(h => {
     const d = new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
     return `<tr class="match-history-row" style="cursor:pointer;" onclick="openMatchDetails('${h.matchId}')">
@@ -773,7 +782,6 @@ function openProfile(playerId) {
     </tr>`;
   }).join('');
 
-  // Линейный график
   const canvas = document.getElementById('prof-chart');
   if (profChart) profChart.destroy();
   if (p.history && p.history.length > 1) {
@@ -788,7 +796,6 @@ function openProfile(playerId) {
     });
   }
 
-  // РАДАР-ГРАФИК
   const radarCanvas = document.getElementById('prof-radar-chart');
   if (radarCanvas) {
     if (profRadarChart) profRadarChart.destroy();
