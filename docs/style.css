@@ -96,6 +96,23 @@ body.beginner-mode .metric-explanation { display: block; }
 .vs-text { text-align: center; font-weight: 700; color: var(--text-muted); font-size: 0.9rem; }
 .select-sort { background: var(--bg-main); border: 1px solid var(--border); color: var(--text-main); padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; outline: none; transition: border-color 0.2s; }
 .select-sort:hover, .select-sort:focus { border-color: var(--accent); }
+
+/* Общие стили для текстовых инпутов и обёртки фильтра — раньше в CSS
+   их не было, инпуты выглядели как дефолтные элементы браузера. */
+.controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.input-search {
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+.input-search:hover, .input-search:focus { border-color: var(--accent); }
+
 .duel-result { display: none; margin-top: 15px; background: var(--bg-main); padding: 12px; border-radius: 6px; border: 1px solid var(--border); animation: fadeIn 0.3s; }
 .duel-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
 .duel-row:last-child { border-bottom: none; }

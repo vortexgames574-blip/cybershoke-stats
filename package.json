@@ -7,7 +7,8 @@
   "scripts": {
     "collect": "node collect.js",
     "build": "node build.js",
-    "update": "npm run collect && npm run build"
+    "update": "npm run collect && npm run build",
+    "serve": "npx serve docs"
   },
   "dependencies": {
     "fs-extra": "^11.1.1",

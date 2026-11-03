@@ -17,18 +17,31 @@ let currentMapSort = { key: 'matches', dir: 'desc' };
 // ============ АЛИАСЫ НИКОВ ============
 // Данные в stats.json и ключи localStorage (savedTeams_*, bracket_*)
 // остаются с исходным ником — меняется только отображение на странице.
-const PLAYER_ALIASES = new Map([
+//
+// Канонический ключ алиаса — SteamID. В stats.json несколько человек
+// с ником "BB-00", поэтому алиасить по имени нельзя — легко попасть
+// не на того игрока. Имена с уникализирующим суффиксом ("BB-00 (5015)")
+// оставляем в PLAYER_ALIASES_BY_NAME только для обратной совместимости
+// со старыми сохранениями в localStorage, где хранится только ник.
+const ALIAS_BY_ID = new Map([
+  ['76561199109745015', 'q1nce_'],
+]);
+const PLAYER_ALIASES_BY_NAME = new Map([
   ['BB-00 (5015)', 'q1nce_'],
-  ['BB-00', 'q1nce_'],
 ]);
 
 function aliasText(str) {
   if (typeof str !== 'string' || str === '') return str;
-  return PLAYER_ALIASES.get(str) ?? str;
+  return PLAYER_ALIASES_BY_NAME.get(str) ?? str;
 }
 
 function displayName(p) {
   if (!p) return '';
+  const id = p.id != null ? String(p.id) : '';
+  if (id) {
+    const alias = ALIAS_BY_ID.get(id);
+    if (alias) return alias;
+  }
   const raw = p.displayName || p.name || '';
   return aliasText(raw);
 }

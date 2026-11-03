@@ -1,1143 +1,6 @@
 {
-  "generatedAt": "2026-11-03T00:12:25.116Z",
+  "generatedAt": "2026-11-03T12:42:34.847Z",
   "totalMatchesCount": 9,
-  "avatarsMap": {
-    "76561199022192304": "https://avatars.steamstatic.com/861419d247165c17842e5e0b8947136c1cdf9437_medium.jpg",
-    "76561198872139873": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
-    "76561198210127765": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
-    "76561199109745015": "https://avatars.steamstatic.com/63d97d0de7bb0ac2aca644728cb88ee86b48b02f_medium.jpg",
-    "76561199417613918": "https://avatars.steamstatic.com/85081424d81868f047561a1986f696658c24f312_medium.jpg",
-    "76561198272167310": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
-    "76561199482946683": "https://avatars.steamstatic.com/e1a875d389d3e036d0f057ba421b07dfb1ab4236_medium.jpg",
-    "76561199210250164": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
-    "76561198054507577": "https://avatars.steamstatic.com/7803494eb2b6188dbd6cc8256710c38ebf2281a0_medium.jpg",
-    "76561198053530322": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
-    "76561199542530681": "https://avatars.steamstatic.com/b060cb14a8ed1f34dd3d2813bfda6269df223cc0_medium.jpg",
-    "76561198283381727": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
-    "76561198728309900": "https://avatars.steamstatic.com/6831fc87d94f4126dafbefa466ff3a56cbe7fa6c_medium.jpg",
-    "76561199467682493": "https://avatars.steamstatic.com/9520224e43bdb916daa0585c0c5e95589f86e409_medium.jpg",
-    "76561198090688036": "https://avatars.steamstatic.com/dbac4b11778dcf2b210deb108071cdb44088720f_medium.jpg",
-    "76561198818222401": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
-    "76561198128494347": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
-    "76561198015424675": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
-    "76561198042805941": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
-    "76561198681103731": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_medium.jpg"
-  },
-  "allMatches": [
-    {
-      "matchId": "13349605",
-      "tournament": "31.10.2026",
-      "date": "2026-11-02T19:39:53.049Z",
-      "maps": [
-        {
-          "map": "de_anubis",
-          "players": [
-            {
-              "id": "76561198090688036",
-              "name": "BB-00",
-              "kills": 27,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 94,
-              "kast": 84,
-              "rating": 1.6
-            },
-            {
-              "id": "76561198042805941",
-              "name": "PRADA_CODE",
-              "kills": 23,
-              "deaths": 17,
-              "assists": 0,
-              "adr": 97,
-              "kast": 80,
-              "rating": 1.4
-            },
-            {
-              "id": "76561199109745015",
-              "name": "BB-00",
-              "kills": 19,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 91,
-              "kast": 72,
-              "rating": 1.23
-            },
-            {
-              "id": "76561199022192304",
-              "name": "Pizdets_tip",
-              "kills": 16,
-              "deaths": 17,
-              "assists": 0,
-              "adr": 89,
-              "kast": 80,
-              "rating": 1.16
-            },
-            {
-              "id": "76561198272167310",
-              "name": "Изумительные Брючки.",
-              "kills": 17,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 74,
-              "kast": 68,
-              "rating": 1.07
-            },
-            {
-              "id": "76561198015424675",
-              "name": "tolya800x600",
-              "kills": 18,
-              "deaths": 21,
-              "assists": 0,
-              "adr": 87,
-              "kast": 68,
-              "rating": 1.03
-            },
-            {
-              "id": "76561198728309900",
-              "name": "BB-00",
-              "kills": 13,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 74,
-              "kast": 80,
-              "rating": 0.98
-            },
-            {
-              "id": "76561198210127765",
-              "name": "blackpolosa",
-              "kills": 15,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 60,
-              "kast": 68,
-              "rating": 0.91
-            },
-            {
-              "id": "76561198818222401",
-              "name": "Kyo  Ilonmax8",
-              "kills": 11,
-              "deaths": 17,
-              "assists": 0,
-              "adr": 56,
-              "kast": 64,
-              "rating": 0.75
-            },
-            {
-              "id": "76561199482946683",
-              "name": "BB-03",
-              "kills": 7,
-              "deaths": 19,
-              "assists": 0,
-              "adr": 45,
-              "kast": 64,
-              "rating": 0.53
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "matchId": "13350180",
-      "tournament": "31.10.2026",
-      "date": "2026-11-02T19:40:13.063Z",
-      "maps": [
-        {
-          "map": "de_nuke",
-          "players": [
-            {
-              "id": "76561198054507577",
-              "name": "kvsmstr",
-              "kills": 17,
-              "deaths": 10,
-              "assists": 0,
-              "adr": 132,
-              "kast": 100,
-              "rating": 1.84
-            },
-            {
-              "id": "76561199542530681",
-              "name": "AuraTeam",
-              "kills": 17,
-              "deaths": 10,
-              "assists": 0,
-              "adr": 119,
-              "kast": 81,
-              "rating": 1.65
-            },
-            {
-              "id": "76561199467682493",
-              "name": "Господин Босс",
-              "kills": 17,
-              "deaths": 11,
-              "assists": 0,
-              "adr": 112,
-              "kast": 81,
-              "rating": 1.59
-            },
-            {
-              "id": "76561199417613918",
-              "name": "ЯнаЦист",
-              "kills": 12,
-              "deaths": 8,
-              "assists": 0,
-              "adr": 88,
-              "kast": 81,
-              "rating": 1.32
-            },
-            {
-              "id": "76561198283381727",
-              "name": "St1gmat",
-              "kills": 14,
-              "deaths": 16,
-              "assists": 0,
-              "adr": 98,
-              "kast": 75,
-              "rating": 1.17
-            },
-            {
-              "id": "76561198872139873",
-              "name": "1lpk",
-              "kills": 12,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 87,
-              "kast": 75,
-              "rating": 1.09
-            },
-            {
-              "id": "76561198681103731",
-              "name": "Анальный бур",
-              "kills": 8,
-              "deaths": 9,
-              "assists": 0,
-              "adr": 31,
-              "kast": 88,
-              "rating": 0.95
-            },
-            {
-              "id": "76561198053530322",
-              "name": "ZAZA_",
-              "kills": 7,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 72,
-              "kast": 75,
-              "rating": 0.75
-            },
-            {
-              "id": "76561199210250164",
-              "name": "s1slw",
-              "kills": 7,
-              "deaths": 16,
-              "assists": 0,
-              "adr": 52,
-              "kast": 56,
-              "rating": 0.49
-            },
-            {
-              "id": "76561198128494347",
-              "name": "Игрок",
-              "kills": 5,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 41,
-              "kast": 50,
-              "rating": 0.34
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "matchId": "13352007",
-      "tournament": "31.10.2026",
-      "date": "2026-11-02T19:40:17.305Z",
-      "maps": [
-        {
-          "map": "de_cache",
-          "players": [
-            {
-              "id": "76561198872139873",
-              "name": "1lpk",
-              "kills": 27,
-              "deaths": 13,
-              "assists": 0,
-              "adr": 112,
-              "kast": 77,
-              "rating": 1.74
-            },
-            {
-              "id": "76561198053530322",
-              "name": "ZAZA_",
-              "kills": 21,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 94,
-              "kast": 86,
-              "rating": 1.5
-            },
-            {
-              "id": "76561198818222401",
-              "name": "Kyo  Ilonmax8",
-              "kills": 19,
-              "deaths": 16,
-              "assists": 0,
-              "adr": 88,
-              "kast": 73,
-              "rating": 1.24
-            },
-            {
-              "id": "76561198042805941",
-              "name": "PRADA_CODE",
-              "kills": 19,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 82,
-              "kast": 77,
-              "rating": 1.21
-            },
-            {
-              "id": "76561198128494347",
-              "name": "Игрок",
-              "kills": 15,
-              "deaths": 16,
-              "assists": 0,
-              "adr": 88,
-              "kast": 82,
-              "rating": 1.17
-            },
-            {
-              "id": "76561198283381727",
-              "name": "St1gmat",
-              "kills": 15,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 71,
-              "kast": 73,
-              "rating": 1.07
-            },
-            {
-              "id": "76561198210127765",
-              "name": "blackpolosa",
-              "kills": 16,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 91,
-              "kast": 68,
-              "rating": 1.06
-            },
-            {
-              "id": "76561199210250164",
-              "name": "s1slw",
-              "kills": 13,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 74,
-              "kast": 73,
-              "rating": 1.02
-            },
-            {
-              "id": "76561198015424675",
-              "name": "tolya800x600",
-              "kills": 10,
-              "deaths": 20,
-              "assists": 0,
-              "adr": 56,
-              "kast": 50,
-              "rating": 0.53
-            },
-            {
-              "id": "76561198272167310",
-              "name": "Изумительные Брючки.",
-              "kills": 6,
-              "deaths": 21,
-              "assists": 0,
-              "adr": 43,
-              "kast": 45,
-              "rating": 0.27
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "matchId": "13352013",
-      "tournament": "31.10.2026",
-      "date": "2026-11-02T19:39:57.238Z",
-      "maps": [
-        {
-          "map": "de_ancient",
-          "players": [
-            {
-              "id": "76561199542530681",
-              "name": "AuraTeam",
-              "kills": 22,
-              "deaths": 19,
-              "assists": 0,
-              "adr": 111,
-              "kast": 84,
-              "rating": 1.42
-            },
-            {
-              "id": "76561199109745015",
-              "name": "BB-00",
-              "kills": 22,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 121,
-              "kast": 68,
-              "rating": 1.36
-            },
-            {
-              "id": "76561198054507577",
-              "name": "kvsmstr",
-              "kills": 20,
-              "deaths": 19,
-              "assists": 0,
-              "adr": 95,
-              "kast": 80,
-              "rating": 1.28
-            },
-            {
-              "id": "76561198728309900",
-              "name": "BB-00",
-              "kills": 22,
-              "deaths": 21,
-              "assists": 0,
-              "adr": 84,
-              "kast": 72,
-              "rating": 1.19
-            },
-            {
-              "id": "76561199417613918",
-              "name": "ЯнаЦист",
-              "kills": 18,
-              "deaths": 17,
-              "assists": 0,
-              "adr": 81,
-              "kast": 76,
-              "rating": 1.16
-            },
-            {
-              "id": "76561199467682493",
-              "name": "Господин Босс",
-              "kills": 16,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 55,
-              "kast": 72,
-              "rating": 1
-            },
-            {
-              "id": "76561198090688036",
-              "name": "Kara7evich",
-              "kills": 13,
-              "deaths": 17,
-              "assists": 0,
-              "adr": 82,
-              "kast": 60,
-              "rating": 0.88
-            },
-            {
-              "id": "76561199022192304",
-              "name": "Pizdets_tip",
-              "kills": 16,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 61,
-              "kast": 60,
-              "rating": 0.87
-            },
-            {
-              "id": "76561199482946683",
-              "name": "Oleg123",
-              "kills": 14,
-              "deaths": 17,
-              "assists": 0,
-              "adr": 49,
-              "kast": 72,
-              "rating": 0.87
-            },
-            {
-              "id": "76561198681103731",
-              "name": "Анальный бур",
-              "kills": 8,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 45,
-              "kast": 72,
-              "rating": 0.64
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "matchId": "13354491",
-      "tournament": "31.10.2026",
-      "date": "2026-11-02T19:40:01.424Z",
-      "maps": [
-        {
-          "map": "de_inferno",
-          "players": [
-            {
-              "id": "76561199022192304",
-              "name": "Pizdets_tip",
-              "kills": 19,
-              "deaths": 13,
-              "assists": 0,
-              "adr": 100,
-              "kast": 76,
-              "rating": 1.49
-            },
-            {
-              "id": "76561198283381727",
-              "name": "St1gmat",
-              "kills": 15,
-              "deaths": 11,
-              "assists": 0,
-              "adr": 121,
-              "kast": 76,
-              "rating": 1.48
-            },
-            {
-              "id": "76561198872139873",
-              "name": "1lpk",
-              "kills": 14,
-              "deaths": 10,
-              "assists": 0,
-              "adr": 102,
-              "kast": 82,
-              "rating": 1.43
-            },
-            {
-              "id": "76561198053530322",
-              "name": "ZAZA_",
-              "kills": 16,
-              "deaths": 10,
-              "assists": 0,
-              "adr": 81,
-              "kast": 76,
-              "rating": 1.4
-            },
-            {
-              "id": "76561198128494347",
-              "name": "Игрок",
-              "kills": 14,
-              "deaths": 8,
-              "assists": 0,
-              "adr": 75,
-              "kast": 76,
-              "rating": 1.34
-            },
-            {
-              "id": "76561199109745015",
-              "name": "BB-00",
-              "kills": 14,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 95,
-              "kast": 59,
-              "rating": 1.08
-            },
-            {
-              "id": "76561199210250164",
-              "name": "s1slw",
-              "kills": 9,
-              "deaths": 10,
-              "assists": 0,
-              "adr": 41,
-              "kast": 65,
-              "rating": 0.81
-            },
-            {
-              "id": "76561198090688036",
-              "name": "Kara7evich",
-              "kills": 9,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 57,
-              "kast": 59,
-              "rating": 0.71
-            },
-            {
-              "id": "76561198728309900",
-              "name": "BB-00",
-              "kills": 5,
-              "deaths": 13,
-              "assists": 0,
-              "adr": 50,
-              "kast": 65,
-              "rating": 0.57
-            },
-            {
-              "id": "76561199482946683",
-              "name": "Oleg123",
-              "kills": 2,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 45,
-              "kast": 41,
-              "rating": 0.21
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "matchId": "13354626",
-      "tournament": "31.10.2026",
-      "date": "2026-11-02T19:40:21.558Z",
-      "maps": [
-        {
-          "map": "de_inferno",
-          "players": [
-            {
-              "id": "76561199542530681",
-              "name": "AuraTeam",
-              "kills": 21,
-              "deaths": 12,
-              "assists": 0,
-              "adr": 127,
-              "kast": 88,
-              "rating": 1.82
-            },
-            {
-              "id": "76561199417613918",
-              "name": "ЯнаЦист",
-              "kills": 15,
-              "deaths": 6,
-              "assists": 0,
-              "adr": 81,
-              "kast": 88,
-              "rating": 1.56
-            },
-            {
-              "id": "76561199467682493",
-              "name": "Господин Босс",
-              "kills": 16,
-              "deaths": 10,
-              "assists": 0,
-              "adr": 94,
-              "kast": 76,
-              "rating": 1.43
-            },
-            {
-              "id": "76561198054507577",
-              "name": "kvsmstr",
-              "kills": 13,
-              "deaths": 9,
-              "assists": 0,
-              "adr": 85,
-              "kast": 88,
-              "rating": 1.38
-            },
-            {
-              "id": "76561198681103731",
-              "name": "Анальный бур",
-              "kills": 9,
-              "deaths": 11,
-              "assists": 0,
-              "adr": 63,
-              "kast": 82,
-              "rating": 1.02
-            },
-            {
-              "id": "76561198210127765",
-              "name": "blackpolosa",
-              "kills": 10,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 69,
-              "kast": 71,
-              "rating": 0.89
-            },
-            {
-              "id": "76561198015424675",
-              "name": "tolya800x600",
-              "kills": 11,
-              "deaths": 16,
-              "assists": 0,
-              "adr": 78,
-              "kast": 59,
-              "rating": 0.82
-            },
-            {
-              "id": "76561198272167310",
-              "name": "Изумительные Брючки.",
-              "kills": 11,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 60,
-              "kast": 53,
-              "rating": 0.77
-            },
-            {
-              "id": "76561198042805941",
-              "name": "PRADA_CODE",
-              "kills": 8,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 61,
-              "kast": 65,
-              "rating": 0.72
-            },
-            {
-              "id": "76561198818222401",
-              "name": "Kyo  Ilonmax8",
-              "kills": 8,
-              "deaths": 16,
-              "assists": 0,
-              "adr": 47,
-              "kast": 59,
-              "rating": 0.56
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "matchId": "13357260",
-      "tournament": "31.10.2026",
-      "date": "2026-11-02T19:40:25.822Z",
-      "maps": [
-        {
-          "map": "de_dust2",
-          "players": [
-            {
-              "id": "76561198053530322",
-              "name": "ZAZA_",
-              "kills": 29,
-              "deaths": 9,
-              "assists": 0,
-              "adr": 148,
-              "kast": 95,
-              "rating": 2.31
-            },
-            {
-              "id": "76561198872139873",
-              "name": "1lpk",
-              "kills": 18,
-              "deaths": 9,
-              "assists": 0,
-              "adr": 93,
-              "kast": 79,
-              "rating": 1.52
-            },
-            {
-              "id": "76561198210127765",
-              "name": "blackpolosa",
-              "kills": 16,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 93,
-              "kast": 63,
-              "rating": 1.17
-            },
-            {
-              "id": "76561198283381727",
-              "name": "St1gmat",
-              "kills": 13,
-              "deaths": 12,
-              "assists": 0,
-              "adr": 81,
-              "kast": 74,
-              "rating": 1.13
-            },
-            {
-              "id": "76561198272167310",
-              "name": "Изумительные Брючки.",
-              "kills": 15,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 83,
-              "kast": 63,
-              "rating": 1.05
-            },
-            {
-              "id": "76561198128494347",
-              "name": "Игрок",
-              "kills": 11,
-              "deaths": 10,
-              "assists": 0,
-              "adr": 59,
-              "kast": 74,
-              "rating": 1.02
-            },
-            {
-              "id": "76561199210250164",
-              "name": "s1slw",
-              "kills": 7,
-              "deaths": 13,
-              "assists": 0,
-              "adr": 51,
-              "kast": 68,
-              "rating": 0.7
-            },
-            {
-              "id": "76561198015424675",
-              "name": "tolya800x600",
-              "kills": 9,
-              "deaths": 16,
-              "assists": 0,
-              "adr": 46,
-              "kast": 53,
-              "rating": 0.56
-            },
-            {
-              "id": "76561198042805941",
-              "name": "PRADA_CODE",
-              "kills": 7,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 40,
-              "kast": 47,
-              "rating": 0.44
-            },
-            {
-              "id": "76561198818222401",
-              "name": "Kyo  Ilonmax8",
-              "kills": 6,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 42,
-              "kast": 32,
-              "rating": 0.21
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "matchId": "13357312",
-      "tournament": "31.10.2026",
-      "date": "2026-11-02T19:40:08.831Z",
-      "maps": [
-        {
-          "map": "de_anubis",
-          "players": [
-            {
-              "id": "76561199417613918",
-              "name": "ЯнаЦист",
-              "kills": 23,
-              "deaths": 13,
-              "assists": 0,
-              "adr": 103,
-              "kast": 83,
-              "rating": 1.56
-            },
-            {
-              "id": "76561199109745015",
-              "name": "BB-00",
-              "kills": 27,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 103,
-              "kast": 67,
-              "rating": 1.54
-            },
-            {
-              "id": "76561199542530681",
-              "name": "AuraTeam",
-              "kills": 20,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 95,
-              "kast": 63,
-              "rating": 1.25
-            },
-            {
-              "id": "76561198054507577",
-              "name": "kvsmstr",
-              "kills": 18,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 89,
-              "kast": 67,
-              "rating": 1.19
-            },
-            {
-              "id": "76561199022192304",
-              "name": "Pizdets_tip",
-              "kills": 16,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 91,
-              "kast": 79,
-              "rating": 1.15
-            },
-            {
-              "id": "76561199467682493",
-              "name": "Господин Босс",
-              "kills": 15,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 65,
-              "kast": 67,
-              "rating": 0.97
-            },
-            {
-              "id": "76561198090688036",
-              "name": "Kara7evich",
-              "kills": 11,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 66,
-              "kast": 71,
-              "rating": 0.8
-            },
-            {
-              "id": "76561198728309900",
-              "name": "BB-00",
-              "kills": 11,
-              "deaths": 17,
-              "assists": 0,
-              "adr": 64,
-              "kast": 54,
-              "rating": 0.7
-            },
-            {
-              "id": "76561198681103731",
-              "name": "Анальный бур",
-              "kills": 5,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 35,
-              "kast": 63,
-              "rating": 0.43
-            },
-            {
-              "id": "76561199482946683",
-              "name": "Oleg123",
-              "kills": 5,
-              "deaths": 19,
-              "assists": 0,
-              "adr": 38,
-              "kast": 50,
-              "rating": 0.32
-            }
-          ]
-        },
-        {
-          "map": "de_inferno",
-          "players": [
-            {
-              "id": "76561198054507577",
-              "name": "kvsmstr",
-              "kills": 17,
-              "deaths": 10,
-              "assists": 0,
-              "adr": 103,
-              "kast": 95,
-              "rating": 1.61
-            },
-            {
-              "id": "76561199542530681",
-              "name": "AuraTeam",
-              "kills": 18,
-              "deaths": 11,
-              "assists": 0,
-              "adr": 103,
-              "kast": 90,
-              "rating": 1.57
-            },
-            {
-              "id": "76561199417613918",
-              "name": "ЯнаЦист",
-              "kills": 20,
-              "deaths": 10,
-              "assists": 0,
-              "adr": 105,
-              "kast": 75,
-              "rating": 1.56
-            },
-            {
-              "id": "76561199467682493",
-              "name": "Господин Босс",
-              "kills": 15,
-              "deaths": 8,
-              "assists": 0,
-              "adr": 77,
-              "kast": 75,
-              "rating": 1.31
-            },
-            {
-              "id": "76561198681103731",
-              "name": "Анальный бур",
-              "kills": 12,
-              "deaths": 10,
-              "assists": 0,
-              "adr": 61,
-              "kast": 80,
-              "rating": 1.12
-            },
-            {
-              "id": "76561198090688036",
-              "name": "Kara7evich",
-              "kills": 14,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 75,
-              "kast": 55,
-              "rating": 0.84
-            },
-            {
-              "id": "76561199022192304",
-              "name": "Pizdets_tip",
-              "kills": 13,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 63,
-              "kast": 65,
-              "rating": 0.84
-            },
-            {
-              "id": "76561199109745015",
-              "name": "BB-00",
-              "kills": 7,
-              "deaths": 17,
-              "assists": 0,
-              "adr": 73,
-              "kast": 65,
-              "rating": 0.64
-            },
-            {
-              "id": "76561198728309900",
-              "name": "BB-00",
-              "kills": 7,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 45,
-              "kast": 50,
-              "rating": 0.41
-            },
-            {
-              "id": "76561199482946683",
-              "name": "Oleg123",
-              "kills": 5,
-              "deaths": 18,
-              "assists": 0,
-              "adr": 43,
-              "kast": 55,
-              "rating": 0.37
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "matchId": "13358986",
-      "tournament": "31.10.2026",
-      "date": "2026-11-02T19:40:30.090Z",
-      "maps": [
-        {
-          "map": "de_mirage",
-          "players": [
-            {
-              "id": "76561198872139873",
-              "name": "1lpk",
-              "kills": 17,
-              "deaths": 10,
-              "assists": 0,
-              "adr": 129,
-              "kast": 94,
-              "rating": 1.79
-            },
-            {
-              "id": "76561198053530322",
-              "name": "ZAZA_",
-              "kills": 18,
-              "deaths": 9,
-              "assists": 0,
-              "adr": 100,
-              "kast": 81,
-              "rating": 1.66
-            },
-            {
-              "id": "76561199210250164",
-              "name": "s1slw",
-              "kills": 13,
-              "deaths": 8,
-              "assists": 0,
-              "adr": 66,
-              "kast": 81,
-              "rating": 1.32
-            },
-            {
-              "id": "76561198283381727",
-              "name": "St1gmat",
-              "kills": 13,
-              "deaths": 10,
-              "assists": 0,
-              "adr": 92,
-              "kast": 69,
-              "rating": 1.25
-            },
-            {
-              "id": "76561198210127765",
-              "name": "blackpolosa",
-              "kills": 13,
-              "deaths": 13,
-              "assists": 0,
-              "adr": 92,
-              "kast": 81,
-              "rating": 1.25
-            },
-            {
-              "id": "76561198015424675",
-              "name": "tolya800x600",
-              "kills": 13,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 105,
-              "kast": 75,
-              "rating": 1.21
-            },
-            {
-              "id": "76561198128494347",
-              "name": "Игрок",
-              "kills": 9,
-              "deaths": 8,
-              "assists": 0,
-              "adr": 63,
-              "kast": 75,
-              "rating": 1.05
-            },
-            {
-              "id": "76561198272167310",
-              "name": "Изумительные Брючки.",
-              "kills": 9,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 77,
-              "kast": 56,
-              "rating": 0.72
-            },
-            {
-              "id": "76561198042805941",
-              "name": "PRADA_CODE",
-              "kills": 4,
-              "deaths": 14,
-              "assists": 0,
-              "adr": 37,
-              "kast": 56,
-              "rating": 0.35
-            },
-            {
-              "id": "76561198818222401",
-              "name": "Kyo  Ilonmax8",
-              "kills": 5,
-              "deaths": 15,
-              "assists": 0,
-              "adr": 42,
-              "kast": 38,
-              "rating": 0.26
-            }
-          ]
-        }
-      ]
-    }
-  ],
   "tournaments": {
     "Все матчи": {
       "players": [
@@ -1229,7 +92,7 @@
               "rating": 1.42
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/b060cb14a8ed1f34dd3d2813bfda6269df223cc0_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=AuraTeam&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.48,
           "avgRating": 1.54,
           "avgAdr": 111,
@@ -1325,7 +188,7 @@
               "rating": 1.4
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=ZAZA_&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.6,
           "avgRating": 1.52,
           "avgAdr": 99,
@@ -1421,7 +284,7 @@
               "rating": 1.43
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=1lpk&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.57,
           "avgRating": 1.51,
           "avgAdr": 104.6,
@@ -1517,7 +380,7 @@
               "rating": 1.28
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/7803494eb2b6188dbd6cc8256710c38ebf2281a0_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=kvsmstr&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.37,
           "avgRating": 1.46,
           "avgAdr": 100.8,
@@ -1613,7 +476,7 @@
               "rating": 1.16
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/85081424d81868f047561a1986f696658c24f312_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=%D0%AF%D0%BD%D0%B0%D0%A6%D0%B8%D1%81%D1%82&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.63,
           "avgRating": 1.43,
           "avgAdr": 91.6,
@@ -1709,7 +572,7 @@
               "rating": 1
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/9520224e43bdb916daa0585c0c5e95589f86e409_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B8%D0%BD%20%D0%91%D0%BE%D1%81%D1%81&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.34,
           "avgRating": 1.26,
           "avgAdr": 80.6,
@@ -1805,7 +668,7 @@
               "rating": 1.48
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=St1gmat&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.09,
           "avgRating": 1.22,
           "avgAdr": 92.6,
@@ -1901,7 +764,7 @@
               "rating": 1.23
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/63d97d0de7bb0ac2aca644728cb88ee86b48b02f_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.13,
           "avgRating": 1.17,
           "avgAdr": 96.6,
@@ -1997,7 +860,7 @@
               "rating": 1.16
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/861419d247165c17842e5e0b8947136c1cdf9437_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=Pizdets_tip&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.95,
           "avgRating": 1.1,
           "avgAdr": 80.8,
@@ -2093,7 +956,7 @@
               "rating": 0.91
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=blackpolosa&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.91,
           "avgRating": 1.06,
           "avgAdr": 81,
@@ -2189,7 +1052,7 @@
               "rating": 1.34
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B3%D1%80%D0%BE%D0%BA&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.95,
           "avgRating": 0.98,
           "avgAdr": 65.2,
@@ -2285,7 +1148,7 @@
               "rating": 1.6
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/dbac4b11778dcf2b210deb108071cdb44088720f_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=Kara7evich&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.9,
           "avgRating": 0.97,
           "avgAdr": 74.8,
@@ -2381,7 +1244,7 @@
               "rating": 0.81
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=s1slw&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.79,
           "avgRating": 0.87,
           "avgAdr": 56.8,
@@ -2477,7 +1340,7 @@
               "rating": 1.03
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=tolya800x600&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.7,
           "avgRating": 0.83,
           "avgAdr": 74.4,
@@ -2573,7 +1436,7 @@
               "rating": 0.64
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=%D0%90%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D0%B1%D1%83%D1%80&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.64,
           "avgRating": 0.83,
           "avgAdr": 47,
@@ -2669,7 +1532,7 @@
               "rating": 1.4
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=PRADA_CODE&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.78,
           "avgRating": 0.82,
           "avgAdr": 63.4,
@@ -2765,7 +1628,7 @@
               "rating": 1.07
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B7%D1%83%D0%BC%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%91%D1%80%D1%8E%D1%87%D0%BA%D0%B8.&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.72,
           "avgRating": 0.78,
           "avgAdr": 67.4,
@@ -2861,7 +1724,7 @@
               "rating": 0.98
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/6831fc87d94f4126dafbefa466ff3a56cbe7fa6c_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.67,
           "avgRating": 0.77,
           "avgAdr": 63.4,
@@ -2957,7 +1820,7 @@
               "rating": 0.75
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=Kyo%20%20Ilonmax8&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.6,
           "avgRating": 0.6,
           "avgAdr": 55,
@@ -3053,7 +1916,7 @@
               "rating": 0.53
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/e1a875d389d3e036d0f057ba421b07dfb1ab4236_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=Oleg123&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.38,
           "avgRating": 0.46,
           "avgAdr": 44,
@@ -3072,222 +1935,242 @@
             {
               "id": "76561199542530681",
               "name": "AuraTeam",
-              "avatar": "https://avatars.steamstatic.com/b060cb14a8ed1f34dd3d2813bfda6269df223cc0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=AuraTeam&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 39,
               "deaths": 23,
               "ratingSum": 3.39,
               "kd": 1.7,
-              "avgRating": 1.7
+              "avgRating": 1.7,
+              "displayName": "AuraTeam"
             },
             {
               "id": "76561199417613918",
               "name": "ЯнаЦист",
-              "avatar": "https://avatars.steamstatic.com/85081424d81868f047561a1986f696658c24f312_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%AF%D0%BD%D0%B0%D0%A6%D0%B8%D1%81%D1%82&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 35,
               "deaths": 16,
               "ratingSum": 3.12,
               "kd": 2.19,
-              "avgRating": 1.56
+              "avgRating": 1.56,
+              "displayName": "ЯнаЦист"
             },
             {
               "id": "76561198054507577",
               "name": "kvsmstr",
-              "avatar": "https://avatars.steamstatic.com/7803494eb2b6188dbd6cc8256710c38ebf2281a0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=kvsmstr&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 30,
               "deaths": 19,
               "ratingSum": 2.99,
               "kd": 1.58,
-              "avgRating": 1.5
+              "avgRating": 1.5,
+              "displayName": "kvsmstr"
             },
             {
               "id": "76561198283381727",
               "name": "St1gmat",
-              "avatar": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=St1gmat&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 15,
               "deaths": 11,
               "ratingSum": 1.48,
               "kd": 1.36,
-              "avgRating": 1.48
+              "avgRating": 1.48,
+              "displayName": "St1gmat"
             },
             {
               "id": "76561198872139873",
               "name": "1lpk",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=1lpk&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 14,
               "deaths": 10,
               "ratingSum": 1.43,
               "kd": 1.4,
-              "avgRating": 1.43
+              "avgRating": 1.43,
+              "displayName": "1lpk"
             },
             {
               "id": "76561198053530322",
               "name": "ZAZA_",
-              "avatar": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=ZAZA_&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 16,
               "deaths": 10,
               "ratingSum": 1.4,
               "kd": 1.6,
-              "avgRating": 1.4
+              "avgRating": 1.4,
+              "displayName": "ZAZA_"
             },
             {
               "id": "76561199467682493",
               "name": "Господин Босс",
-              "avatar": "https://avatars.steamstatic.com/9520224e43bdb916daa0585c0c5e95589f86e409_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B8%D0%BD%20%D0%91%D0%BE%D1%81%D1%81&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 31,
               "deaths": 18,
               "ratingSum": 2.74,
               "kd": 1.72,
-              "avgRating": 1.37
+              "avgRating": 1.37,
+              "displayName": "Господин Босс"
             },
             {
               "id": "76561198128494347",
               "name": "Игрок",
-              "avatar": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B3%D1%80%D0%BE%D0%BA&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 14,
               "deaths": 8,
               "ratingSum": 1.34,
               "kd": 1.75,
-              "avgRating": 1.34
+              "avgRating": 1.34,
+              "displayName": "Игрок"
             },
             {
               "id": "76561199022192304",
               "name": "Pizdets_tip",
-              "avatar": "https://avatars.steamstatic.com/861419d247165c17842e5e0b8947136c1cdf9437_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Pizdets_tip&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 32,
               "deaths": 31,
               "ratingSum": 2.33,
               "kd": 1.03,
-              "avgRating": 1.17
+              "avgRating": 1.17,
+              "displayName": "Pizdets_tip"
             },
             {
               "id": "76561198681103731",
               "name": "Анальный бур",
-              "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%90%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D0%B1%D1%83%D1%80&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 21,
               "deaths": 21,
               "ratingSum": 2.14,
               "kd": 1,
-              "avgRating": 1.07
+              "avgRating": 1.07,
+              "displayName": "Анальный бур"
             },
             {
               "id": "76561198210127765",
               "name": "blackpolosa",
-              "avatar": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=blackpolosa&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 10,
               "deaths": 14,
               "ratingSum": 0.89,
               "kd": 0.71,
-              "avgRating": 0.89
+              "avgRating": 0.89,
+              "displayName": "blackpolosa"
             },
             {
               "id": "76561199109745015",
               "name": "BB-00",
-              "avatar": "https://avatars.steamstatic.com/63d97d0de7bb0ac2aca644728cb88ee86b48b02f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 21,
               "deaths": 31,
               "ratingSum": 1.7200000000000002,
               "kd": 0.68,
-              "avgRating": 0.86
+              "avgRating": 0.86,
+              "displayName": "BB-00 (5015)"
             },
             {
               "id": "76561198015424675",
               "name": "tolya800x600",
-              "avatar": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=tolya800x600&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 11,
               "deaths": 16,
               "ratingSum": 0.82,
               "kd": 0.69,
-              "avgRating": 0.82
+              "avgRating": 0.82,
+              "displayName": "tolya800x600"
             },
             {
               "id": "76561199210250164",
               "name": "s1slw",
-              "avatar": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=s1slw&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 9,
               "deaths": 10,
               "ratingSum": 0.81,
               "kd": 0.9,
-              "avgRating": 0.81
+              "avgRating": 0.81,
+              "displayName": "s1slw"
             },
             {
               "id": "76561198272167310",
               "name": "Изумительные Брючки.",
-              "avatar": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B7%D1%83%D0%BC%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%91%D1%80%D1%8E%D1%87%D0%BA%D0%B8.&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 11,
               "deaths": 14,
               "ratingSum": 0.77,
               "kd": 0.79,
-              "avgRating": 0.77
+              "avgRating": 0.77,
+              "displayName": "Изумительные Брючки."
             },
             {
               "id": "76561198090688036",
               "name": "Kara7evich",
-              "avatar": "https://avatars.steamstatic.com/dbac4b11778dcf2b210deb108071cdb44088720f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kara7evich&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 23,
               "deaths": 32,
               "ratingSum": 1.5499999999999998,
               "kd": 0.72,
-              "avgRating": 0.77
+              "avgRating": 0.77,
+              "displayName": "Kara7evich"
             },
             {
               "id": "76561198042805941",
               "name": "PRADA_CODE",
-              "avatar": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=PRADA_CODE&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 8,
               "deaths": 14,
               "ratingSum": 0.72,
               "kd": 0.57,
-              "avgRating": 0.72
+              "avgRating": 0.72,
+              "displayName": "PRADA_CODE"
             },
             {
               "id": "76561198818222401",
               "name": "Kyo  Ilonmax8",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kyo%20%20Ilonmax8&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 8,
               "deaths": 16,
               "ratingSum": 0.56,
               "kd": 0.5,
-              "avgRating": 0.56
+              "avgRating": 0.56,
+              "displayName": "Kyo  Ilonmax8"
             },
             {
               "id": "76561198728309900",
               "name": "BB-00",
-              "avatar": "https://avatars.steamstatic.com/6831fc87d94f4126dafbefa466ff3a56cbe7fa6c_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 12,
               "deaths": 31,
               "ratingSum": 0.98,
               "kd": 0.39,
-              "avgRating": 0.49
+              "avgRating": 0.49,
+              "displayName": "BB-00 (9900)"
             },
             {
               "id": "76561199482946683",
               "name": "Oleg123",
-              "avatar": "https://avatars.steamstatic.com/e1a875d389d3e036d0f057ba421b07dfb1ab4236_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Oleg123&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 7,
               "deaths": 32,
               "ratingSum": 0.58,
               "kd": 0.22,
-              "avgRating": 0.29
+              "avgRating": 0.29,
+              "displayName": "Oleg123"
             }
           ]
         },
@@ -3300,167 +2183,182 @@
             {
               "id": "76561199417613918",
               "name": "ЯнаЦист",
-              "avatar": "https://avatars.steamstatic.com/85081424d81868f047561a1986f696658c24f312_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%AF%D0%BD%D0%B0%D0%A6%D0%B8%D1%81%D1%82&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 23,
               "deaths": 13,
               "ratingSum": 1.56,
               "kd": 1.77,
-              "avgRating": 1.56
+              "avgRating": 1.56,
+              "displayName": "ЯнаЦист"
             },
             {
               "id": "76561198042805941",
               "name": "PRADA_CODE",
-              "avatar": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=PRADA_CODE&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 23,
               "deaths": 17,
               "ratingSum": 1.4,
               "kd": 1.35,
-              "avgRating": 1.4
+              "avgRating": 1.4,
+              "displayName": "PRADA_CODE"
             },
             {
               "id": "76561199109745015",
               "name": "BB-00",
-              "avatar": "https://avatars.steamstatic.com/63d97d0de7bb0ac2aca644728cb88ee86b48b02f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 46,
               "deaths": 30,
               "ratingSum": 2.77,
               "kd": 1.53,
-              "avgRating": 1.39
+              "avgRating": 1.39,
+              "displayName": "BB-00 (5015)"
             },
             {
               "id": "76561199542530681",
               "name": "AuraTeam",
-              "avatar": "https://avatars.steamstatic.com/b060cb14a8ed1f34dd3d2813bfda6269df223cc0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=AuraTeam&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 20,
               "deaths": 14,
               "ratingSum": 1.25,
               "kd": 1.43,
-              "avgRating": 1.25
+              "avgRating": 1.25,
+              "displayName": "AuraTeam"
             },
             {
               "id": "76561198090688036",
               "name": "Kara7evich",
-              "avatar": "https://avatars.steamstatic.com/dbac4b11778dcf2b210deb108071cdb44088720f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kara7evich&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 38,
               "deaths": 33,
               "ratingSum": 2.4000000000000004,
               "kd": 1.15,
-              "avgRating": 1.2
+              "avgRating": 1.2,
+              "displayName": "Kara7evich"
             },
             {
               "id": "76561198054507577",
               "name": "kvsmstr",
-              "avatar": "https://avatars.steamstatic.com/7803494eb2b6188dbd6cc8256710c38ebf2281a0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=kvsmstr&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 18,
               "deaths": 14,
               "ratingSum": 1.19,
               "kd": 1.29,
-              "avgRating": 1.19
+              "avgRating": 1.19,
+              "displayName": "kvsmstr"
             },
             {
               "id": "76561199022192304",
               "name": "Pizdets_tip",
-              "avatar": "https://avatars.steamstatic.com/861419d247165c17842e5e0b8947136c1cdf9437_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Pizdets_tip&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 32,
               "deaths": 35,
               "ratingSum": 2.3099999999999996,
               "kd": 0.91,
-              "avgRating": 1.15
+              "avgRating": 1.15,
+              "displayName": "Pizdets_tip"
             },
             {
               "id": "76561198272167310",
               "name": "Изумительные Брючки.",
-              "avatar": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B7%D1%83%D0%BC%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%91%D1%80%D1%8E%D1%87%D0%BA%D0%B8.&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 17,
               "deaths": 15,
               "ratingSum": 1.07,
               "kd": 1.13,
-              "avgRating": 1.07
+              "avgRating": 1.07,
+              "displayName": "Изумительные Брючки."
             },
             {
               "id": "76561198015424675",
               "name": "tolya800x600",
-              "avatar": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=tolya800x600&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 18,
               "deaths": 21,
               "ratingSum": 1.03,
               "kd": 0.86,
-              "avgRating": 1.03
+              "avgRating": 1.03,
+              "displayName": "tolya800x600"
             },
             {
               "id": "76561199467682493",
               "name": "Господин Босс",
-              "avatar": "https://avatars.steamstatic.com/9520224e43bdb916daa0585c0c5e95589f86e409_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B8%D0%BD%20%D0%91%D0%BE%D1%81%D1%81&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 15,
               "deaths": 15,
               "ratingSum": 0.97,
               "kd": 1,
-              "avgRating": 0.97
+              "avgRating": 0.97,
+              "displayName": "Господин Босс"
             },
             {
               "id": "76561198210127765",
               "name": "blackpolosa",
-              "avatar": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=blackpolosa&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 15,
               "deaths": 18,
               "ratingSum": 0.91,
               "kd": 0.83,
-              "avgRating": 0.91
+              "avgRating": 0.91,
+              "displayName": "blackpolosa"
             },
             {
               "id": "76561198728309900",
               "name": "BB-00",
-              "avatar": "https://avatars.steamstatic.com/6831fc87d94f4126dafbefa466ff3a56cbe7fa6c_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 24,
               "deaths": 35,
               "ratingSum": 1.68,
               "kd": 0.69,
-              "avgRating": 0.84
+              "avgRating": 0.84,
+              "displayName": "BB-00 (9900)"
             },
             {
               "id": "76561198818222401",
               "name": "Kyo  Ilonmax8",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kyo%20%20Ilonmax8&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 11,
               "deaths": 17,
               "ratingSum": 0.75,
               "kd": 0.65,
-              "avgRating": 0.75
+              "avgRating": 0.75,
+              "displayName": "Kyo  Ilonmax8"
             },
             {
               "id": "76561198681103731",
               "name": "Анальный бур",
-              "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%90%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D0%B1%D1%83%D1%80&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 5,
               "deaths": 18,
               "ratingSum": 0.43,
               "kd": 0.28,
-              "avgRating": 0.43
+              "avgRating": 0.43,
+              "displayName": "Анальный бур"
             },
             {
               "id": "76561199482946683",
               "name": "Oleg123",
-              "avatar": "https://avatars.steamstatic.com/e1a875d389d3e036d0f057ba421b07dfb1ab4236_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Oleg123&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 12,
               "deaths": 38,
               "ratingSum": 0.8500000000000001,
               "kd": 0.32,
-              "avgRating": 0.43
+              "avgRating": 0.43,
+              "displayName": "Oleg123"
             }
           ]
         },
@@ -3473,112 +2371,122 @@
             {
               "id": "76561198872139873",
               "name": "1lpk",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=1lpk&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 17,
               "deaths": 10,
               "ratingSum": 1.79,
               "kd": 1.7,
-              "avgRating": 1.79
+              "avgRating": 1.79,
+              "displayName": "1lpk"
             },
             {
               "id": "76561198053530322",
               "name": "ZAZA_",
-              "avatar": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=ZAZA_&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 18,
               "deaths": 9,
               "ratingSum": 1.66,
               "kd": 2,
-              "avgRating": 1.66
+              "avgRating": 1.66,
+              "displayName": "ZAZA_"
             },
             {
               "id": "76561199210250164",
               "name": "s1slw",
-              "avatar": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=s1slw&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 8,
               "ratingSum": 1.32,
               "kd": 1.63,
-              "avgRating": 1.32
+              "avgRating": 1.32,
+              "displayName": "s1slw"
             },
             {
               "id": "76561198283381727",
               "name": "St1gmat",
-              "avatar": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=St1gmat&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 10,
               "ratingSum": 1.25,
               "kd": 1.3,
-              "avgRating": 1.25
+              "avgRating": 1.25,
+              "displayName": "St1gmat"
             },
             {
               "id": "76561198210127765",
               "name": "blackpolosa",
-              "avatar": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=blackpolosa&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 13,
               "ratingSum": 1.25,
               "kd": 1,
-              "avgRating": 1.25
+              "avgRating": 1.25,
+              "displayName": "blackpolosa"
             },
             {
               "id": "76561198015424675",
               "name": "tolya800x600",
-              "avatar": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=tolya800x600&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 14,
               "ratingSum": 1.21,
               "kd": 0.93,
-              "avgRating": 1.21
+              "avgRating": 1.21,
+              "displayName": "tolya800x600"
             },
             {
               "id": "76561198128494347",
               "name": "Игрок",
-              "avatar": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B3%D1%80%D0%BE%D0%BA&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 9,
               "deaths": 8,
               "ratingSum": 1.05,
               "kd": 1.13,
-              "avgRating": 1.05
+              "avgRating": 1.05,
+              "displayName": "Игрок"
             },
             {
               "id": "76561198272167310",
               "name": "Изумительные Брючки.",
-              "avatar": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B7%D1%83%D0%BC%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%91%D1%80%D1%8E%D1%87%D0%BA%D0%B8.&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 9,
               "deaths": 15,
               "ratingSum": 0.72,
               "kd": 0.6,
-              "avgRating": 0.72
+              "avgRating": 0.72,
+              "displayName": "Изумительные Брючки."
             },
             {
               "id": "76561198042805941",
               "name": "PRADA_CODE",
-              "avatar": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=PRADA_CODE&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 4,
               "deaths": 14,
               "ratingSum": 0.35,
               "kd": 0.29,
-              "avgRating": 0.35
+              "avgRating": 0.35,
+              "displayName": "PRADA_CODE"
             },
             {
               "id": "76561198818222401",
               "name": "Kyo  Ilonmax8",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kyo%20%20Ilonmax8&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 5,
               "deaths": 15,
               "ratingSum": 0.26,
               "kd": 0.33,
-              "avgRating": 0.26
+              "avgRating": 0.26,
+              "displayName": "Kyo  Ilonmax8"
             }
           ]
         },
@@ -3591,112 +2499,122 @@
             {
               "id": "76561198053530322",
               "name": "ZAZA_",
-              "avatar": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=ZAZA_&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 29,
               "deaths": 9,
               "ratingSum": 2.31,
               "kd": 3.22,
-              "avgRating": 2.31
+              "avgRating": 2.31,
+              "displayName": "ZAZA_"
             },
             {
               "id": "76561198872139873",
               "name": "1lpk",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=1lpk&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 18,
               "deaths": 9,
               "ratingSum": 1.52,
               "kd": 2,
-              "avgRating": 1.52
+              "avgRating": 1.52,
+              "displayName": "1lpk"
             },
             {
               "id": "76561198210127765",
               "name": "blackpolosa",
-              "avatar": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=blackpolosa&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 16,
               "deaths": 14,
               "ratingSum": 1.17,
               "kd": 1.14,
-              "avgRating": 1.17
+              "avgRating": 1.17,
+              "displayName": "blackpolosa"
             },
             {
               "id": "76561198283381727",
               "name": "St1gmat",
-              "avatar": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=St1gmat&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 12,
               "ratingSum": 1.13,
               "kd": 1.08,
-              "avgRating": 1.13
+              "avgRating": 1.13,
+              "displayName": "St1gmat"
             },
             {
               "id": "76561198272167310",
               "name": "Изумительные Брючки.",
-              "avatar": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B7%D1%83%D0%BC%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%91%D1%80%D1%8E%D1%87%D0%BA%D0%B8.&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 15,
               "deaths": 15,
               "ratingSum": 1.05,
               "kd": 1,
-              "avgRating": 1.05
+              "avgRating": 1.05,
+              "displayName": "Изумительные Брючки."
             },
             {
               "id": "76561198128494347",
               "name": "Игрок",
-              "avatar": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B3%D1%80%D0%BE%D0%BA&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 11,
               "deaths": 10,
               "ratingSum": 1.02,
               "kd": 1.1,
-              "avgRating": 1.02
+              "avgRating": 1.02,
+              "displayName": "Игрок"
             },
             {
               "id": "76561199210250164",
               "name": "s1slw",
-              "avatar": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=s1slw&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 7,
               "deaths": 13,
               "ratingSum": 0.7,
               "kd": 0.54,
-              "avgRating": 0.7
+              "avgRating": 0.7,
+              "displayName": "s1slw"
             },
             {
               "id": "76561198015424675",
               "name": "tolya800x600",
-              "avatar": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=tolya800x600&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 9,
               "deaths": 16,
               "ratingSum": 0.56,
               "kd": 0.56,
-              "avgRating": 0.56
+              "avgRating": 0.56,
+              "displayName": "tolya800x600"
             },
             {
               "id": "76561198042805941",
               "name": "PRADA_CODE",
-              "avatar": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=PRADA_CODE&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 7,
               "deaths": 15,
               "ratingSum": 0.44,
               "kd": 0.47,
-              "avgRating": 0.44
+              "avgRating": 0.44,
+              "displayName": "PRADA_CODE"
             },
             {
               "id": "76561198818222401",
               "name": "Kyo  Ilonmax8",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kyo%20%20Ilonmax8&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 6,
               "deaths": 18,
               "ratingSum": 0.21,
               "kd": 0.33,
-              "avgRating": 0.21
+              "avgRating": 0.21,
+              "displayName": "Kyo  Ilonmax8"
             }
           ]
         },
@@ -3709,112 +2627,122 @@
             {
               "id": "76561198872139873",
               "name": "1lpk",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=1lpk&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 27,
               "deaths": 13,
               "ratingSum": 1.74,
               "kd": 2.08,
-              "avgRating": 1.74
+              "avgRating": 1.74,
+              "displayName": "1lpk"
             },
             {
               "id": "76561198053530322",
               "name": "ZAZA_",
-              "avatar": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=ZAZA_&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 21,
               "deaths": 14,
               "ratingSum": 1.5,
               "kd": 1.5,
-              "avgRating": 1.5
+              "avgRating": 1.5,
+              "displayName": "ZAZA_"
             },
             {
               "id": "76561198818222401",
               "name": "Kyo  Ilonmax8",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kyo%20%20Ilonmax8&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 19,
               "deaths": 16,
               "ratingSum": 1.24,
               "kd": 1.19,
-              "avgRating": 1.24
+              "avgRating": 1.24,
+              "displayName": "Kyo  Ilonmax8"
             },
             {
               "id": "76561198042805941",
               "name": "PRADA_CODE",
-              "avatar": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=PRADA_CODE&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 19,
               "deaths": 18,
               "ratingSum": 1.21,
               "kd": 1.06,
-              "avgRating": 1.21
+              "avgRating": 1.21,
+              "displayName": "PRADA_CODE"
             },
             {
               "id": "76561198128494347",
               "name": "Игрок",
-              "avatar": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B3%D1%80%D0%BE%D0%BA&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 15,
               "deaths": 16,
               "ratingSum": 1.17,
               "kd": 0.94,
-              "avgRating": 1.17
+              "avgRating": 1.17,
+              "displayName": "Игрок"
             },
             {
               "id": "76561198283381727",
               "name": "St1gmat",
-              "avatar": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=St1gmat&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 15,
               "deaths": 15,
               "ratingSum": 1.07,
               "kd": 1,
-              "avgRating": 1.07
+              "avgRating": 1.07,
+              "displayName": "St1gmat"
             },
             {
               "id": "76561198210127765",
               "name": "blackpolosa",
-              "avatar": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=blackpolosa&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 16,
               "deaths": 18,
               "ratingSum": 1.06,
               "kd": 0.89,
-              "avgRating": 1.06
+              "avgRating": 1.06,
+              "displayName": "blackpolosa"
             },
             {
               "id": "76561199210250164",
               "name": "s1slw",
-              "avatar": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=s1slw&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 15,
               "ratingSum": 1.02,
               "kd": 0.87,
-              "avgRating": 1.02
+              "avgRating": 1.02,
+              "displayName": "s1slw"
             },
             {
               "id": "76561198015424675",
               "name": "tolya800x600",
-              "avatar": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=tolya800x600&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 10,
               "deaths": 20,
               "ratingSum": 0.53,
               "kd": 0.5,
-              "avgRating": 0.53
+              "avgRating": 0.53,
+              "displayName": "tolya800x600"
             },
             {
               "id": "76561198272167310",
               "name": "Изумительные Брючки.",
-              "avatar": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B7%D1%83%D0%BC%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%91%D1%80%D1%8E%D1%87%D0%BA%D0%B8.&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 6,
               "deaths": 21,
               "ratingSum": 0.27,
               "kd": 0.29,
-              "avgRating": 0.27
+              "avgRating": 0.27,
+              "displayName": "Изумительные Брючки."
             }
           ]
         },
@@ -3827,112 +2755,122 @@
             {
               "id": "76561198054507577",
               "name": "kvsmstr",
-              "avatar": "https://avatars.steamstatic.com/7803494eb2b6188dbd6cc8256710c38ebf2281a0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=kvsmstr&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 17,
               "deaths": 10,
               "ratingSum": 1.84,
               "kd": 1.7,
-              "avgRating": 1.84
+              "avgRating": 1.84,
+              "displayName": "kvsmstr"
             },
             {
               "id": "76561199542530681",
               "name": "AuraTeam",
-              "avatar": "https://avatars.steamstatic.com/b060cb14a8ed1f34dd3d2813bfda6269df223cc0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=AuraTeam&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 17,
               "deaths": 10,
               "ratingSum": 1.65,
               "kd": 1.7,
-              "avgRating": 1.65
+              "avgRating": 1.65,
+              "displayName": "AuraTeam"
             },
             {
               "id": "76561199467682493",
               "name": "Господин Босс",
-              "avatar": "https://avatars.steamstatic.com/9520224e43bdb916daa0585c0c5e95589f86e409_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B8%D0%BD%20%D0%91%D0%BE%D1%81%D1%81&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 17,
               "deaths": 11,
               "ratingSum": 1.59,
               "kd": 1.55,
-              "avgRating": 1.59
+              "avgRating": 1.59,
+              "displayName": "Господин Босс"
             },
             {
               "id": "76561199417613918",
               "name": "ЯнаЦист",
-              "avatar": "https://avatars.steamstatic.com/85081424d81868f047561a1986f696658c24f312_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%AF%D0%BD%D0%B0%D0%A6%D0%B8%D1%81%D1%82&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 12,
               "deaths": 8,
               "ratingSum": 1.32,
               "kd": 1.5,
-              "avgRating": 1.32
+              "avgRating": 1.32,
+              "displayName": "ЯнаЦист"
             },
             {
               "id": "76561198283381727",
               "name": "St1gmat",
-              "avatar": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=St1gmat&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 14,
               "deaths": 16,
               "ratingSum": 1.17,
               "kd": 0.88,
-              "avgRating": 1.17
+              "avgRating": 1.17,
+              "displayName": "St1gmat"
             },
             {
               "id": "76561198872139873",
               "name": "1lpk",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=1lpk&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 12,
               "deaths": 14,
               "ratingSum": 1.09,
               "kd": 0.86,
-              "avgRating": 1.09
+              "avgRating": 1.09,
+              "displayName": "1lpk"
             },
             {
               "id": "76561198681103731",
               "name": "Анальный бур",
-              "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%90%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D0%B1%D1%83%D1%80&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 8,
               "deaths": 9,
               "ratingSum": 0.95,
               "kd": 0.89,
-              "avgRating": 0.95
+              "avgRating": 0.95,
+              "displayName": "Анальный бур"
             },
             {
               "id": "76561198053530322",
               "name": "ZAZA_",
-              "avatar": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=ZAZA_&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 7,
               "deaths": 15,
               "ratingSum": 0.75,
               "kd": 0.47,
-              "avgRating": 0.75
+              "avgRating": 0.75,
+              "displayName": "ZAZA_"
             },
             {
               "id": "76561199210250164",
               "name": "s1slw",
-              "avatar": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=s1slw&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 7,
               "deaths": 16,
               "ratingSum": 0.49,
               "kd": 0.44,
-              "avgRating": 0.49
+              "avgRating": 0.49,
+              "displayName": "s1slw"
             },
             {
               "id": "76561198128494347",
               "name": "Игрок",
-              "avatar": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B3%D1%80%D0%BE%D0%BA&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 5,
               "deaths": 15,
               "ratingSum": 0.34,
               "kd": 0.33,
-              "avgRating": 0.34
+              "avgRating": 0.34,
+              "displayName": "Игрок"
             }
           ]
         },
@@ -3945,112 +2883,122 @@
             {
               "id": "76561199542530681",
               "name": "AuraTeam",
-              "avatar": "https://avatars.steamstatic.com/b060cb14a8ed1f34dd3d2813bfda6269df223cc0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=AuraTeam&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 22,
               "deaths": 19,
               "ratingSum": 1.42,
               "kd": 1.16,
-              "avgRating": 1.42
+              "avgRating": 1.42,
+              "displayName": "AuraTeam"
             },
             {
               "id": "76561199109745015",
               "name": "BB-00",
-              "avatar": "https://avatars.steamstatic.com/63d97d0de7bb0ac2aca644728cb88ee86b48b02f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 22,
               "deaths": 18,
               "ratingSum": 1.36,
               "kd": 1.22,
-              "avgRating": 1.36
+              "avgRating": 1.36,
+              "displayName": "BB-00 (5015)"
             },
             {
               "id": "76561198054507577",
               "name": "kvsmstr",
-              "avatar": "https://avatars.steamstatic.com/7803494eb2b6188dbd6cc8256710c38ebf2281a0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=kvsmstr&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 20,
               "deaths": 19,
               "ratingSum": 1.28,
               "kd": 1.05,
-              "avgRating": 1.28
+              "avgRating": 1.28,
+              "displayName": "kvsmstr"
             },
             {
               "id": "76561198728309900",
               "name": "BB-00",
-              "avatar": "https://avatars.steamstatic.com/6831fc87d94f4126dafbefa466ff3a56cbe7fa6c_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 22,
               "deaths": 21,
               "ratingSum": 1.19,
               "kd": 1.05,
-              "avgRating": 1.19
+              "avgRating": 1.19,
+              "displayName": "BB-00 (9900)"
             },
             {
               "id": "76561199417613918",
               "name": "ЯнаЦист",
-              "avatar": "https://avatars.steamstatic.com/85081424d81868f047561a1986f696658c24f312_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%AF%D0%BD%D0%B0%D0%A6%D0%B8%D1%81%D1%82&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 18,
               "deaths": 17,
               "ratingSum": 1.16,
               "kd": 1.06,
-              "avgRating": 1.16
+              "avgRating": 1.16,
+              "displayName": "ЯнаЦист"
             },
             {
               "id": "76561199467682493",
               "name": "Господин Босс",
-              "avatar": "https://avatars.steamstatic.com/9520224e43bdb916daa0585c0c5e95589f86e409_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B8%D0%BD%20%D0%91%D0%BE%D1%81%D1%81&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 16,
               "deaths": 15,
               "ratingSum": 1,
               "kd": 1.07,
-              "avgRating": 1
+              "avgRating": 1,
+              "displayName": "Господин Босс"
             },
             {
               "id": "76561198090688036",
               "name": "Kara7evich",
-              "avatar": "https://avatars.steamstatic.com/dbac4b11778dcf2b210deb108071cdb44088720f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kara7evich&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 17,
               "ratingSum": 0.88,
               "kd": 0.76,
-              "avgRating": 0.88
+              "avgRating": 0.88,
+              "displayName": "Kara7evich"
             },
             {
               "id": "76561199022192304",
               "name": "Pizdets_tip",
-              "avatar": "https://avatars.steamstatic.com/861419d247165c17842e5e0b8947136c1cdf9437_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Pizdets_tip&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 16,
               "deaths": 18,
               "ratingSum": 0.87,
               "kd": 0.89,
-              "avgRating": 0.87
+              "avgRating": 0.87,
+              "displayName": "Pizdets_tip"
             },
             {
               "id": "76561199482946683",
               "name": "Oleg123",
-              "avatar": "https://avatars.steamstatic.com/e1a875d389d3e036d0f057ba421b07dfb1ab4236_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Oleg123&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 14,
               "deaths": 17,
               "ratingSum": 0.87,
               "kd": 0.82,
-              "avgRating": 0.87
+              "avgRating": 0.87,
+              "displayName": "Oleg123"
             },
             {
               "id": "76561198681103731",
               "name": "Анальный бур",
-              "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%90%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D0%B1%D1%83%D1%80&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 8,
               "deaths": 18,
               "ratingSum": 0.64,
               "kd": 0.44,
-              "avgRating": 0.64
+              "avgRating": 0.64,
+              "displayName": "Анальный бур"
             }
           ]
         }
@@ -4134,20 +3082,26 @@
         "maxKills": {
           "value": 29,
           "player": "ZAZA_",
+          "playerId": "76561198053530322",
           "map": "de_dust2",
-          "date": "2026-11-02T19:40:25.822Z"
+          "date": "2026-11-02T19:40:25.822Z",
+          "matchId": "13357260"
         },
         "maxDeaths": {
           "value": 21,
           "player": "Изумительные Брючки.",
+          "playerId": "76561198272167310",
           "map": "de_cache",
-          "date": "2026-11-02T19:40:17.305Z"
+          "date": "2026-11-02T19:40:17.305Z",
+          "matchId": "13352007"
         },
         "maxAdr": {
           "value": 148,
           "player": "ZAZA_",
+          "playerId": "76561198053530322",
           "map": "de_dust2",
-          "date": "2026-11-02T19:40:25.822Z"
+          "date": "2026-11-02T19:40:25.822Z",
+          "matchId": "13357260"
         }
       },
       "funStats": {
@@ -4158,15 +3112,18 @@
       "funFacts": {
         "mostStable": {
           "player": "St1gmat",
+          "playerId": "76561198283381727",
           "stdDev": 0.14
         },
         "highestPeak": {
           "player": "ZAZA_",
+          "playerId": "76561198053530322",
           "rating": 2.31,
           "map": "de_dust2"
         },
         "lowestRating": {
           "player": "Kyo  Ilonmax8",
+          "playerId": "76561198818222401",
           "rating": 0.21,
           "map": "de_dust2"
         },
@@ -4266,7 +3223,7 @@
               "rating": 1.42
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/b060cb14a8ed1f34dd3d2813bfda6269df223cc0_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=AuraTeam&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.48,
           "avgRating": 1.54,
           "avgAdr": 111,
@@ -4362,7 +3319,7 @@
               "rating": 1.4
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=ZAZA_&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.6,
           "avgRating": 1.52,
           "avgAdr": 99,
@@ -4458,7 +3415,7 @@
               "rating": 1.43
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=1lpk&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.57,
           "avgRating": 1.51,
           "avgAdr": 104.6,
@@ -4554,7 +3511,7 @@
               "rating": 1.28
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/7803494eb2b6188dbd6cc8256710c38ebf2281a0_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=kvsmstr&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.37,
           "avgRating": 1.46,
           "avgAdr": 100.8,
@@ -4650,7 +3607,7 @@
               "rating": 1.16
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/85081424d81868f047561a1986f696658c24f312_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=%D0%AF%D0%BD%D0%B0%D0%A6%D0%B8%D1%81%D1%82&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.63,
           "avgRating": 1.43,
           "avgAdr": 91.6,
@@ -4746,7 +3703,7 @@
               "rating": 1
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/9520224e43bdb916daa0585c0c5e95589f86e409_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B8%D0%BD%20%D0%91%D0%BE%D1%81%D1%81&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.34,
           "avgRating": 1.26,
           "avgAdr": 80.6,
@@ -4842,7 +3799,7 @@
               "rating": 1.48
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=St1gmat&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.09,
           "avgRating": 1.22,
           "avgAdr": 92.6,
@@ -4938,7 +3895,7 @@
               "rating": 1.23
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/63d97d0de7bb0ac2aca644728cb88ee86b48b02f_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 1.13,
           "avgRating": 1.17,
           "avgAdr": 96.6,
@@ -5034,7 +3991,7 @@
               "rating": 1.16
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/861419d247165c17842e5e0b8947136c1cdf9437_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=Pizdets_tip&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.95,
           "avgRating": 1.1,
           "avgAdr": 80.8,
@@ -5130,7 +4087,7 @@
               "rating": 0.91
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=blackpolosa&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.91,
           "avgRating": 1.06,
           "avgAdr": 81,
@@ -5226,7 +4183,7 @@
               "rating": 1.34
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B3%D1%80%D0%BE%D0%BA&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.95,
           "avgRating": 0.98,
           "avgAdr": 65.2,
@@ -5322,7 +4279,7 @@
               "rating": 1.6
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/dbac4b11778dcf2b210deb108071cdb44088720f_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=Kara7evich&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.9,
           "avgRating": 0.97,
           "avgAdr": 74.8,
@@ -5418,7 +4375,7 @@
               "rating": 0.81
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=s1slw&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.79,
           "avgRating": 0.87,
           "avgAdr": 56.8,
@@ -5514,7 +4471,7 @@
               "rating": 1.03
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=tolya800x600&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.7,
           "avgRating": 0.83,
           "avgAdr": 74.4,
@@ -5610,7 +4567,7 @@
               "rating": 0.64
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=%D0%90%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D0%B1%D1%83%D1%80&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.64,
           "avgRating": 0.83,
           "avgAdr": 47,
@@ -5706,7 +4663,7 @@
               "rating": 1.4
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=PRADA_CODE&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.78,
           "avgRating": 0.82,
           "avgAdr": 63.4,
@@ -5802,7 +4759,7 @@
               "rating": 1.07
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B7%D1%83%D0%BC%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%91%D1%80%D1%8E%D1%87%D0%BA%D0%B8.&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.72,
           "avgRating": 0.78,
           "avgAdr": 67.4,
@@ -5898,7 +4855,7 @@
               "rating": 0.98
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/6831fc87d94f4126dafbefa466ff3a56cbe7fa6c_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.67,
           "avgRating": 0.77,
           "avgAdr": 63.4,
@@ -5994,7 +4951,7 @@
               "rating": 0.75
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=Kyo%20%20Ilonmax8&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.6,
           "avgRating": 0.6,
           "avgAdr": 55,
@@ -6090,7 +5047,7 @@
               "rating": 0.53
             }
           ],
-          "avatar": "https://avatars.steamstatic.com/e1a875d389d3e036d0f057ba421b07dfb1ab4236_medium.jpg",
+          "avatar": "https://ui-avatars.com/api/?name=Oleg123&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
           "kd": 0.38,
           "avgRating": 0.46,
           "avgAdr": 44,
@@ -6109,222 +5066,242 @@
             {
               "id": "76561199542530681",
               "name": "AuraTeam",
-              "avatar": "https://avatars.steamstatic.com/b060cb14a8ed1f34dd3d2813bfda6269df223cc0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=AuraTeam&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 39,
               "deaths": 23,
               "ratingSum": 3.39,
               "kd": 1.7,
-              "avgRating": 1.7
+              "avgRating": 1.7,
+              "displayName": "AuraTeam"
             },
             {
               "id": "76561199417613918",
               "name": "ЯнаЦист",
-              "avatar": "https://avatars.steamstatic.com/85081424d81868f047561a1986f696658c24f312_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%AF%D0%BD%D0%B0%D0%A6%D0%B8%D1%81%D1%82&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 35,
               "deaths": 16,
               "ratingSum": 3.12,
               "kd": 2.19,
-              "avgRating": 1.56
+              "avgRating": 1.56,
+              "displayName": "ЯнаЦист"
             },
             {
               "id": "76561198054507577",
               "name": "kvsmstr",
-              "avatar": "https://avatars.steamstatic.com/7803494eb2b6188dbd6cc8256710c38ebf2281a0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=kvsmstr&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 30,
               "deaths": 19,
               "ratingSum": 2.99,
               "kd": 1.58,
-              "avgRating": 1.5
+              "avgRating": 1.5,
+              "displayName": "kvsmstr"
             },
             {
               "id": "76561198283381727",
               "name": "St1gmat",
-              "avatar": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=St1gmat&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 15,
               "deaths": 11,
               "ratingSum": 1.48,
               "kd": 1.36,
-              "avgRating": 1.48
+              "avgRating": 1.48,
+              "displayName": "St1gmat"
             },
             {
               "id": "76561198872139873",
               "name": "1lpk",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=1lpk&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 14,
               "deaths": 10,
               "ratingSum": 1.43,
               "kd": 1.4,
-              "avgRating": 1.43
+              "avgRating": 1.43,
+              "displayName": "1lpk"
             },
             {
               "id": "76561198053530322",
               "name": "ZAZA_",
-              "avatar": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=ZAZA_&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 16,
               "deaths": 10,
               "ratingSum": 1.4,
               "kd": 1.6,
-              "avgRating": 1.4
+              "avgRating": 1.4,
+              "displayName": "ZAZA_"
             },
             {
               "id": "76561199467682493",
               "name": "Господин Босс",
-              "avatar": "https://avatars.steamstatic.com/9520224e43bdb916daa0585c0c5e95589f86e409_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B8%D0%BD%20%D0%91%D0%BE%D1%81%D1%81&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 31,
               "deaths": 18,
               "ratingSum": 2.74,
               "kd": 1.72,
-              "avgRating": 1.37
+              "avgRating": 1.37,
+              "displayName": "Господин Босс"
             },
             {
               "id": "76561198128494347",
               "name": "Игрок",
-              "avatar": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B3%D1%80%D0%BE%D0%BA&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 14,
               "deaths": 8,
               "ratingSum": 1.34,
               "kd": 1.75,
-              "avgRating": 1.34
+              "avgRating": 1.34,
+              "displayName": "Игрок"
             },
             {
               "id": "76561199022192304",
               "name": "Pizdets_tip",
-              "avatar": "https://avatars.steamstatic.com/861419d247165c17842e5e0b8947136c1cdf9437_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Pizdets_tip&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 32,
               "deaths": 31,
               "ratingSum": 2.33,
               "kd": 1.03,
-              "avgRating": 1.17
+              "avgRating": 1.17,
+              "displayName": "Pizdets_tip"
             },
             {
               "id": "76561198681103731",
               "name": "Анальный бур",
-              "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%90%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D0%B1%D1%83%D1%80&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 21,
               "deaths": 21,
               "ratingSum": 2.14,
               "kd": 1,
-              "avgRating": 1.07
+              "avgRating": 1.07,
+              "displayName": "Анальный бур"
             },
             {
               "id": "76561198210127765",
               "name": "blackpolosa",
-              "avatar": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=blackpolosa&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 10,
               "deaths": 14,
               "ratingSum": 0.89,
               "kd": 0.71,
-              "avgRating": 0.89
+              "avgRating": 0.89,
+              "displayName": "blackpolosa"
             },
             {
               "id": "76561199109745015",
               "name": "BB-00",
-              "avatar": "https://avatars.steamstatic.com/63d97d0de7bb0ac2aca644728cb88ee86b48b02f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 21,
               "deaths": 31,
               "ratingSum": 1.7200000000000002,
               "kd": 0.68,
-              "avgRating": 0.86
+              "avgRating": 0.86,
+              "displayName": "BB-00 (5015)"
             },
             {
               "id": "76561198015424675",
               "name": "tolya800x600",
-              "avatar": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=tolya800x600&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 11,
               "deaths": 16,
               "ratingSum": 0.82,
               "kd": 0.69,
-              "avgRating": 0.82
+              "avgRating": 0.82,
+              "displayName": "tolya800x600"
             },
             {
               "id": "76561199210250164",
               "name": "s1slw",
-              "avatar": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=s1slw&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 9,
               "deaths": 10,
               "ratingSum": 0.81,
               "kd": 0.9,
-              "avgRating": 0.81
+              "avgRating": 0.81,
+              "displayName": "s1slw"
             },
             {
               "id": "76561198272167310",
               "name": "Изумительные Брючки.",
-              "avatar": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B7%D1%83%D0%BC%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%91%D1%80%D1%8E%D1%87%D0%BA%D0%B8.&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 11,
               "deaths": 14,
               "ratingSum": 0.77,
               "kd": 0.79,
-              "avgRating": 0.77
+              "avgRating": 0.77,
+              "displayName": "Изумительные Брючки."
             },
             {
               "id": "76561198090688036",
               "name": "Kara7evich",
-              "avatar": "https://avatars.steamstatic.com/dbac4b11778dcf2b210deb108071cdb44088720f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kara7evich&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 23,
               "deaths": 32,
               "ratingSum": 1.5499999999999998,
               "kd": 0.72,
-              "avgRating": 0.77
+              "avgRating": 0.77,
+              "displayName": "Kara7evich"
             },
             {
               "id": "76561198042805941",
               "name": "PRADA_CODE",
-              "avatar": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=PRADA_CODE&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 8,
               "deaths": 14,
               "ratingSum": 0.72,
               "kd": 0.57,
-              "avgRating": 0.72
+              "avgRating": 0.72,
+              "displayName": "PRADA_CODE"
             },
             {
               "id": "76561198818222401",
               "name": "Kyo  Ilonmax8",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kyo%20%20Ilonmax8&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 8,
               "deaths": 16,
               "ratingSum": 0.56,
               "kd": 0.5,
-              "avgRating": 0.56
+              "avgRating": 0.56,
+              "displayName": "Kyo  Ilonmax8"
             },
             {
               "id": "76561198728309900",
               "name": "BB-00",
-              "avatar": "https://avatars.steamstatic.com/6831fc87d94f4126dafbefa466ff3a56cbe7fa6c_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 12,
               "deaths": 31,
               "ratingSum": 0.98,
               "kd": 0.39,
-              "avgRating": 0.49
+              "avgRating": 0.49,
+              "displayName": "BB-00 (9900)"
             },
             {
               "id": "76561199482946683",
               "name": "Oleg123",
-              "avatar": "https://avatars.steamstatic.com/e1a875d389d3e036d0f057ba421b07dfb1ab4236_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Oleg123&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 7,
               "deaths": 32,
               "ratingSum": 0.58,
               "kd": 0.22,
-              "avgRating": 0.29
+              "avgRating": 0.29,
+              "displayName": "Oleg123"
             }
           ]
         },
@@ -6337,167 +5314,182 @@
             {
               "id": "76561199417613918",
               "name": "ЯнаЦист",
-              "avatar": "https://avatars.steamstatic.com/85081424d81868f047561a1986f696658c24f312_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%AF%D0%BD%D0%B0%D0%A6%D0%B8%D1%81%D1%82&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 23,
               "deaths": 13,
               "ratingSum": 1.56,
               "kd": 1.77,
-              "avgRating": 1.56
+              "avgRating": 1.56,
+              "displayName": "ЯнаЦист"
             },
             {
               "id": "76561198042805941",
               "name": "PRADA_CODE",
-              "avatar": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=PRADA_CODE&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 23,
               "deaths": 17,
               "ratingSum": 1.4,
               "kd": 1.35,
-              "avgRating": 1.4
+              "avgRating": 1.4,
+              "displayName": "PRADA_CODE"
             },
             {
               "id": "76561199109745015",
               "name": "BB-00",
-              "avatar": "https://avatars.steamstatic.com/63d97d0de7bb0ac2aca644728cb88ee86b48b02f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 46,
               "deaths": 30,
               "ratingSum": 2.77,
               "kd": 1.53,
-              "avgRating": 1.39
+              "avgRating": 1.39,
+              "displayName": "BB-00 (5015)"
             },
             {
               "id": "76561199542530681",
               "name": "AuraTeam",
-              "avatar": "https://avatars.steamstatic.com/b060cb14a8ed1f34dd3d2813bfda6269df223cc0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=AuraTeam&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 20,
               "deaths": 14,
               "ratingSum": 1.25,
               "kd": 1.43,
-              "avgRating": 1.25
+              "avgRating": 1.25,
+              "displayName": "AuraTeam"
             },
             {
               "id": "76561198090688036",
               "name": "Kara7evich",
-              "avatar": "https://avatars.steamstatic.com/dbac4b11778dcf2b210deb108071cdb44088720f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kara7evich&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 38,
               "deaths": 33,
               "ratingSum": 2.4000000000000004,
               "kd": 1.15,
-              "avgRating": 1.2
+              "avgRating": 1.2,
+              "displayName": "Kara7evich"
             },
             {
               "id": "76561198054507577",
               "name": "kvsmstr",
-              "avatar": "https://avatars.steamstatic.com/7803494eb2b6188dbd6cc8256710c38ebf2281a0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=kvsmstr&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 18,
               "deaths": 14,
               "ratingSum": 1.19,
               "kd": 1.29,
-              "avgRating": 1.19
+              "avgRating": 1.19,
+              "displayName": "kvsmstr"
             },
             {
               "id": "76561199022192304",
               "name": "Pizdets_tip",
-              "avatar": "https://avatars.steamstatic.com/861419d247165c17842e5e0b8947136c1cdf9437_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Pizdets_tip&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 32,
               "deaths": 35,
               "ratingSum": 2.3099999999999996,
               "kd": 0.91,
-              "avgRating": 1.15
+              "avgRating": 1.15,
+              "displayName": "Pizdets_tip"
             },
             {
               "id": "76561198272167310",
               "name": "Изумительные Брючки.",
-              "avatar": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B7%D1%83%D0%BC%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%91%D1%80%D1%8E%D1%87%D0%BA%D0%B8.&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 17,
               "deaths": 15,
               "ratingSum": 1.07,
               "kd": 1.13,
-              "avgRating": 1.07
+              "avgRating": 1.07,
+              "displayName": "Изумительные Брючки."
             },
             {
               "id": "76561198015424675",
               "name": "tolya800x600",
-              "avatar": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=tolya800x600&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 18,
               "deaths": 21,
               "ratingSum": 1.03,
               "kd": 0.86,
-              "avgRating": 1.03
+              "avgRating": 1.03,
+              "displayName": "tolya800x600"
             },
             {
               "id": "76561199467682493",
               "name": "Господин Босс",
-              "avatar": "https://avatars.steamstatic.com/9520224e43bdb916daa0585c0c5e95589f86e409_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B8%D0%BD%20%D0%91%D0%BE%D1%81%D1%81&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 15,
               "deaths": 15,
               "ratingSum": 0.97,
               "kd": 1,
-              "avgRating": 0.97
+              "avgRating": 0.97,
+              "displayName": "Господин Босс"
             },
             {
               "id": "76561198210127765",
               "name": "blackpolosa",
-              "avatar": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=blackpolosa&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 15,
               "deaths": 18,
               "ratingSum": 0.91,
               "kd": 0.83,
-              "avgRating": 0.91
+              "avgRating": 0.91,
+              "displayName": "blackpolosa"
             },
             {
               "id": "76561198728309900",
               "name": "BB-00",
-              "avatar": "https://avatars.steamstatic.com/6831fc87d94f4126dafbefa466ff3a56cbe7fa6c_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 24,
               "deaths": 35,
               "ratingSum": 1.68,
               "kd": 0.69,
-              "avgRating": 0.84
+              "avgRating": 0.84,
+              "displayName": "BB-00 (9900)"
             },
             {
               "id": "76561198818222401",
               "name": "Kyo  Ilonmax8",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kyo%20%20Ilonmax8&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 11,
               "deaths": 17,
               "ratingSum": 0.75,
               "kd": 0.65,
-              "avgRating": 0.75
+              "avgRating": 0.75,
+              "displayName": "Kyo  Ilonmax8"
             },
             {
               "id": "76561198681103731",
               "name": "Анальный бур",
-              "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%90%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D0%B1%D1%83%D1%80&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 5,
               "deaths": 18,
               "ratingSum": 0.43,
               "kd": 0.28,
-              "avgRating": 0.43
+              "avgRating": 0.43,
+              "displayName": "Анальный бур"
             },
             {
               "id": "76561199482946683",
               "name": "Oleg123",
-              "avatar": "https://avatars.steamstatic.com/e1a875d389d3e036d0f057ba421b07dfb1ab4236_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Oleg123&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 2,
               "kills": 12,
               "deaths": 38,
               "ratingSum": 0.8500000000000001,
               "kd": 0.32,
-              "avgRating": 0.43
+              "avgRating": 0.43,
+              "displayName": "Oleg123"
             }
           ]
         },
@@ -6510,112 +5502,122 @@
             {
               "id": "76561198872139873",
               "name": "1lpk",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=1lpk&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 17,
               "deaths": 10,
               "ratingSum": 1.79,
               "kd": 1.7,
-              "avgRating": 1.79
+              "avgRating": 1.79,
+              "displayName": "1lpk"
             },
             {
               "id": "76561198053530322",
               "name": "ZAZA_",
-              "avatar": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=ZAZA_&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 18,
               "deaths": 9,
               "ratingSum": 1.66,
               "kd": 2,
-              "avgRating": 1.66
+              "avgRating": 1.66,
+              "displayName": "ZAZA_"
             },
             {
               "id": "76561199210250164",
               "name": "s1slw",
-              "avatar": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=s1slw&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 8,
               "ratingSum": 1.32,
               "kd": 1.63,
-              "avgRating": 1.32
+              "avgRating": 1.32,
+              "displayName": "s1slw"
             },
             {
               "id": "76561198283381727",
               "name": "St1gmat",
-              "avatar": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=St1gmat&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 10,
               "ratingSum": 1.25,
               "kd": 1.3,
-              "avgRating": 1.25
+              "avgRating": 1.25,
+              "displayName": "St1gmat"
             },
             {
               "id": "76561198210127765",
               "name": "blackpolosa",
-              "avatar": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=blackpolosa&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 13,
               "ratingSum": 1.25,
               "kd": 1,
-              "avgRating": 1.25
+              "avgRating": 1.25,
+              "displayName": "blackpolosa"
             },
             {
               "id": "76561198015424675",
               "name": "tolya800x600",
-              "avatar": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=tolya800x600&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 14,
               "ratingSum": 1.21,
               "kd": 0.93,
-              "avgRating": 1.21
+              "avgRating": 1.21,
+              "displayName": "tolya800x600"
             },
             {
               "id": "76561198128494347",
               "name": "Игрок",
-              "avatar": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B3%D1%80%D0%BE%D0%BA&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 9,
               "deaths": 8,
               "ratingSum": 1.05,
               "kd": 1.13,
-              "avgRating": 1.05
+              "avgRating": 1.05,
+              "displayName": "Игрок"
             },
             {
               "id": "76561198272167310",
               "name": "Изумительные Брючки.",
-              "avatar": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B7%D1%83%D0%BC%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%91%D1%80%D1%8E%D1%87%D0%BA%D0%B8.&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 9,
               "deaths": 15,
               "ratingSum": 0.72,
               "kd": 0.6,
-              "avgRating": 0.72
+              "avgRating": 0.72,
+              "displayName": "Изумительные Брючки."
             },
             {
               "id": "76561198042805941",
               "name": "PRADA_CODE",
-              "avatar": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=PRADA_CODE&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 4,
               "deaths": 14,
               "ratingSum": 0.35,
               "kd": 0.29,
-              "avgRating": 0.35
+              "avgRating": 0.35,
+              "displayName": "PRADA_CODE"
             },
             {
               "id": "76561198818222401",
               "name": "Kyo  Ilonmax8",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kyo%20%20Ilonmax8&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 5,
               "deaths": 15,
               "ratingSum": 0.26,
               "kd": 0.33,
-              "avgRating": 0.26
+              "avgRating": 0.26,
+              "displayName": "Kyo  Ilonmax8"
             }
           ]
         },
@@ -6628,112 +5630,122 @@
             {
               "id": "76561198053530322",
               "name": "ZAZA_",
-              "avatar": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=ZAZA_&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 29,
               "deaths": 9,
               "ratingSum": 2.31,
               "kd": 3.22,
-              "avgRating": 2.31
+              "avgRating": 2.31,
+              "displayName": "ZAZA_"
             },
             {
               "id": "76561198872139873",
               "name": "1lpk",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=1lpk&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 18,
               "deaths": 9,
               "ratingSum": 1.52,
               "kd": 2,
-              "avgRating": 1.52
+              "avgRating": 1.52,
+              "displayName": "1lpk"
             },
             {
               "id": "76561198210127765",
               "name": "blackpolosa",
-              "avatar": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=blackpolosa&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 16,
               "deaths": 14,
               "ratingSum": 1.17,
               "kd": 1.14,
-              "avgRating": 1.17
+              "avgRating": 1.17,
+              "displayName": "blackpolosa"
             },
             {
               "id": "76561198283381727",
               "name": "St1gmat",
-              "avatar": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=St1gmat&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 12,
               "ratingSum": 1.13,
               "kd": 1.08,
-              "avgRating": 1.13
+              "avgRating": 1.13,
+              "displayName": "St1gmat"
             },
             {
               "id": "76561198272167310",
               "name": "Изумительные Брючки.",
-              "avatar": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B7%D1%83%D0%BC%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%91%D1%80%D1%8E%D1%87%D0%BA%D0%B8.&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 15,
               "deaths": 15,
               "ratingSum": 1.05,
               "kd": 1,
-              "avgRating": 1.05
+              "avgRating": 1.05,
+              "displayName": "Изумительные Брючки."
             },
             {
               "id": "76561198128494347",
               "name": "Игрок",
-              "avatar": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B3%D1%80%D0%BE%D0%BA&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 11,
               "deaths": 10,
               "ratingSum": 1.02,
               "kd": 1.1,
-              "avgRating": 1.02
+              "avgRating": 1.02,
+              "displayName": "Игрок"
             },
             {
               "id": "76561199210250164",
               "name": "s1slw",
-              "avatar": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=s1slw&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 7,
               "deaths": 13,
               "ratingSum": 0.7,
               "kd": 0.54,
-              "avgRating": 0.7
+              "avgRating": 0.7,
+              "displayName": "s1slw"
             },
             {
               "id": "76561198015424675",
               "name": "tolya800x600",
-              "avatar": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=tolya800x600&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 9,
               "deaths": 16,
               "ratingSum": 0.56,
               "kd": 0.56,
-              "avgRating": 0.56
+              "avgRating": 0.56,
+              "displayName": "tolya800x600"
             },
             {
               "id": "76561198042805941",
               "name": "PRADA_CODE",
-              "avatar": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=PRADA_CODE&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 7,
               "deaths": 15,
               "ratingSum": 0.44,
               "kd": 0.47,
-              "avgRating": 0.44
+              "avgRating": 0.44,
+              "displayName": "PRADA_CODE"
             },
             {
               "id": "76561198818222401",
               "name": "Kyo  Ilonmax8",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kyo%20%20Ilonmax8&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 6,
               "deaths": 18,
               "ratingSum": 0.21,
               "kd": 0.33,
-              "avgRating": 0.21
+              "avgRating": 0.21,
+              "displayName": "Kyo  Ilonmax8"
             }
           ]
         },
@@ -6746,112 +5758,122 @@
             {
               "id": "76561198872139873",
               "name": "1lpk",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=1lpk&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 27,
               "deaths": 13,
               "ratingSum": 1.74,
               "kd": 2.08,
-              "avgRating": 1.74
+              "avgRating": 1.74,
+              "displayName": "1lpk"
             },
             {
               "id": "76561198053530322",
               "name": "ZAZA_",
-              "avatar": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=ZAZA_&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 21,
               "deaths": 14,
               "ratingSum": 1.5,
               "kd": 1.5,
-              "avgRating": 1.5
+              "avgRating": 1.5,
+              "displayName": "ZAZA_"
             },
             {
               "id": "76561198818222401",
               "name": "Kyo  Ilonmax8",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kyo%20%20Ilonmax8&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 19,
               "deaths": 16,
               "ratingSum": 1.24,
               "kd": 1.19,
-              "avgRating": 1.24
+              "avgRating": 1.24,
+              "displayName": "Kyo  Ilonmax8"
             },
             {
               "id": "76561198042805941",
               "name": "PRADA_CODE",
-              "avatar": "https://avatars.steamstatic.com/543bb32f9249e6738288c0d3ac6987ee25983c41_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=PRADA_CODE&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 19,
               "deaths": 18,
               "ratingSum": 1.21,
               "kd": 1.06,
-              "avgRating": 1.21
+              "avgRating": 1.21,
+              "displayName": "PRADA_CODE"
             },
             {
               "id": "76561198128494347",
               "name": "Игрок",
-              "avatar": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B3%D1%80%D0%BE%D0%BA&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 15,
               "deaths": 16,
               "ratingSum": 1.17,
               "kd": 0.94,
-              "avgRating": 1.17
+              "avgRating": 1.17,
+              "displayName": "Игрок"
             },
             {
               "id": "76561198283381727",
               "name": "St1gmat",
-              "avatar": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=St1gmat&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 15,
               "deaths": 15,
               "ratingSum": 1.07,
               "kd": 1,
-              "avgRating": 1.07
+              "avgRating": 1.07,
+              "displayName": "St1gmat"
             },
             {
               "id": "76561198210127765",
               "name": "blackpolosa",
-              "avatar": "https://avatars.steamstatic.com/bf719c2db021fc946c789c29688028eff6c21c1d_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=blackpolosa&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 16,
               "deaths": 18,
               "ratingSum": 1.06,
               "kd": 0.89,
-              "avgRating": 1.06
+              "avgRating": 1.06,
+              "displayName": "blackpolosa"
             },
             {
               "id": "76561199210250164",
               "name": "s1slw",
-              "avatar": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=s1slw&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 15,
               "ratingSum": 1.02,
               "kd": 0.87,
-              "avgRating": 1.02
+              "avgRating": 1.02,
+              "displayName": "s1slw"
             },
             {
               "id": "76561198015424675",
               "name": "tolya800x600",
-              "avatar": "https://avatars.steamstatic.com/e6002233f1cb198b215d061f299973b3d6b5e7bb_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=tolya800x600&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 10,
               "deaths": 20,
               "ratingSum": 0.53,
               "kd": 0.5,
-              "avgRating": 0.53
+              "avgRating": 0.53,
+              "displayName": "tolya800x600"
             },
             {
               "id": "76561198272167310",
               "name": "Изумительные Брючки.",
-              "avatar": "https://avatars.steamstatic.com/0b654d5d5a3d967ec6e57f6ce1f9751afb34f876_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B7%D1%83%D0%BC%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%91%D1%80%D1%8E%D1%87%D0%BA%D0%B8.&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 6,
               "deaths": 21,
               "ratingSum": 0.27,
               "kd": 0.29,
-              "avgRating": 0.27
+              "avgRating": 0.27,
+              "displayName": "Изумительные Брючки."
             }
           ]
         },
@@ -6864,112 +5886,122 @@
             {
               "id": "76561198054507577",
               "name": "kvsmstr",
-              "avatar": "https://avatars.steamstatic.com/7803494eb2b6188dbd6cc8256710c38ebf2281a0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=kvsmstr&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 17,
               "deaths": 10,
               "ratingSum": 1.84,
               "kd": 1.7,
-              "avgRating": 1.84
+              "avgRating": 1.84,
+              "displayName": "kvsmstr"
             },
             {
               "id": "76561199542530681",
               "name": "AuraTeam",
-              "avatar": "https://avatars.steamstatic.com/b060cb14a8ed1f34dd3d2813bfda6269df223cc0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=AuraTeam&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 17,
               "deaths": 10,
               "ratingSum": 1.65,
               "kd": 1.7,
-              "avgRating": 1.65
+              "avgRating": 1.65,
+              "displayName": "AuraTeam"
             },
             {
               "id": "76561199467682493",
               "name": "Господин Босс",
-              "avatar": "https://avatars.steamstatic.com/9520224e43bdb916daa0585c0c5e95589f86e409_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B8%D0%BD%20%D0%91%D0%BE%D1%81%D1%81&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 17,
               "deaths": 11,
               "ratingSum": 1.59,
               "kd": 1.55,
-              "avgRating": 1.59
+              "avgRating": 1.59,
+              "displayName": "Господин Босс"
             },
             {
               "id": "76561199417613918",
               "name": "ЯнаЦист",
-              "avatar": "https://avatars.steamstatic.com/85081424d81868f047561a1986f696658c24f312_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%AF%D0%BD%D0%B0%D0%A6%D0%B8%D1%81%D1%82&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 12,
               "deaths": 8,
               "ratingSum": 1.32,
               "kd": 1.5,
-              "avgRating": 1.32
+              "avgRating": 1.32,
+              "displayName": "ЯнаЦист"
             },
             {
               "id": "76561198283381727",
               "name": "St1gmat",
-              "avatar": "https://avatars.steamstatic.com/f3969414dd55c094bcd0d169f604c37bbfad6476_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=St1gmat&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 14,
               "deaths": 16,
               "ratingSum": 1.17,
               "kd": 0.88,
-              "avgRating": 1.17
+              "avgRating": 1.17,
+              "displayName": "St1gmat"
             },
             {
               "id": "76561198872139873",
               "name": "1lpk",
-              "avatar": "https://avatars.steamstatic.com/1fa48f3adeb9594213eb5579244b70f7430ff46e_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=1lpk&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 12,
               "deaths": 14,
               "ratingSum": 1.09,
               "kd": 0.86,
-              "avgRating": 1.09
+              "avgRating": 1.09,
+              "displayName": "1lpk"
             },
             {
               "id": "76561198681103731",
               "name": "Анальный бур",
-              "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%90%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D0%B1%D1%83%D1%80&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 8,
               "deaths": 9,
               "ratingSum": 0.95,
               "kd": 0.89,
-              "avgRating": 0.95
+              "avgRating": 0.95,
+              "displayName": "Анальный бур"
             },
             {
               "id": "76561198053530322",
               "name": "ZAZA_",
-              "avatar": "https://avatars.steamstatic.com/8e19abf6c9c8e16578c3b8877c4187176bf202c2_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=ZAZA_&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 7,
               "deaths": 15,
               "ratingSum": 0.75,
               "kd": 0.47,
-              "avgRating": 0.75
+              "avgRating": 0.75,
+              "displayName": "ZAZA_"
             },
             {
               "id": "76561199210250164",
               "name": "s1slw",
-              "avatar": "https://avatars.steamstatic.com/aa0116480b634ee43fd274dd56838ca16d920469_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=s1slw&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 7,
               "deaths": 16,
               "ratingSum": 0.49,
               "kd": 0.44,
-              "avgRating": 0.49
+              "avgRating": 0.49,
+              "displayName": "s1slw"
             },
             {
               "id": "76561198128494347",
               "name": "Игрок",
-              "avatar": "https://avatars.steamstatic.com/08399b1a2597ae6fd8867ab58cbc65c75bad1a22_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%98%D0%B3%D1%80%D0%BE%D0%BA&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 5,
               "deaths": 15,
               "ratingSum": 0.34,
               "kd": 0.33,
-              "avgRating": 0.34
+              "avgRating": 0.34,
+              "displayName": "Игрок"
             }
           ]
         },
@@ -6982,112 +6014,122 @@
             {
               "id": "76561199542530681",
               "name": "AuraTeam",
-              "avatar": "https://avatars.steamstatic.com/b060cb14a8ed1f34dd3d2813bfda6269df223cc0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=AuraTeam&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 22,
               "deaths": 19,
               "ratingSum": 1.42,
               "kd": 1.16,
-              "avgRating": 1.42
+              "avgRating": 1.42,
+              "displayName": "AuraTeam"
             },
             {
               "id": "76561199109745015",
               "name": "BB-00",
-              "avatar": "https://avatars.steamstatic.com/63d97d0de7bb0ac2aca644728cb88ee86b48b02f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 22,
               "deaths": 18,
               "ratingSum": 1.36,
               "kd": 1.22,
-              "avgRating": 1.36
+              "avgRating": 1.36,
+              "displayName": "BB-00 (5015)"
             },
             {
               "id": "76561198054507577",
               "name": "kvsmstr",
-              "avatar": "https://avatars.steamstatic.com/7803494eb2b6188dbd6cc8256710c38ebf2281a0_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=kvsmstr&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 20,
               "deaths": 19,
               "ratingSum": 1.28,
               "kd": 1.05,
-              "avgRating": 1.28
+              "avgRating": 1.28,
+              "displayName": "kvsmstr"
             },
             {
               "id": "76561198728309900",
               "name": "BB-00",
-              "avatar": "https://avatars.steamstatic.com/6831fc87d94f4126dafbefa466ff3a56cbe7fa6c_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=BB-00&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 22,
               "deaths": 21,
               "ratingSum": 1.19,
               "kd": 1.05,
-              "avgRating": 1.19
+              "avgRating": 1.19,
+              "displayName": "BB-00 (9900)"
             },
             {
               "id": "76561199417613918",
               "name": "ЯнаЦист",
-              "avatar": "https://avatars.steamstatic.com/85081424d81868f047561a1986f696658c24f312_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%AF%D0%BD%D0%B0%D0%A6%D0%B8%D1%81%D1%82&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 18,
               "deaths": 17,
               "ratingSum": 1.16,
               "kd": 1.06,
-              "avgRating": 1.16
+              "avgRating": 1.16,
+              "displayName": "ЯнаЦист"
             },
             {
               "id": "76561199467682493",
               "name": "Господин Босс",
-              "avatar": "https://avatars.steamstatic.com/9520224e43bdb916daa0585c0c5e95589f86e409_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B8%D0%BD%20%D0%91%D0%BE%D1%81%D1%81&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 16,
               "deaths": 15,
               "ratingSum": 1,
               "kd": 1.07,
-              "avgRating": 1
+              "avgRating": 1,
+              "displayName": "Господин Босс"
             },
             {
               "id": "76561198090688036",
               "name": "Kara7evich",
-              "avatar": "https://avatars.steamstatic.com/dbac4b11778dcf2b210deb108071cdb44088720f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Kara7evich&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 13,
               "deaths": 17,
               "ratingSum": 0.88,
               "kd": 0.76,
-              "avgRating": 0.88
+              "avgRating": 0.88,
+              "displayName": "Kara7evich"
             },
             {
               "id": "76561199022192304",
               "name": "Pizdets_tip",
-              "avatar": "https://avatars.steamstatic.com/861419d247165c17842e5e0b8947136c1cdf9437_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Pizdets_tip&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 16,
               "deaths": 18,
               "ratingSum": 0.87,
               "kd": 0.89,
-              "avgRating": 0.87
+              "avgRating": 0.87,
+              "displayName": "Pizdets_tip"
             },
             {
               "id": "76561199482946683",
               "name": "Oleg123",
-              "avatar": "https://avatars.steamstatic.com/e1a875d389d3e036d0f057ba421b07dfb1ab4236_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=Oleg123&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 14,
               "deaths": 17,
               "ratingSum": 0.87,
               "kd": 0.82,
-              "avgRating": 0.87
+              "avgRating": 0.87,
+              "displayName": "Oleg123"
             },
             {
               "id": "76561198681103731",
               "name": "Анальный бур",
-              "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_medium.jpg",
+              "avatar": "https://ui-avatars.com/api/?name=%D0%90%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D0%B1%D1%83%D1%80&background=4d6bfe&color=fff&size=128&bold=true&rounded=true",
               "matches": 1,
               "kills": 8,
               "deaths": 18,
               "ratingSum": 0.64,
               "kd": 0.44,
-              "avgRating": 0.64
+              "avgRating": 0.64,
+              "displayName": "Анальный бур"
             }
           ]
         }
@@ -7171,20 +6213,26 @@
         "maxKills": {
           "value": 29,
           "player": "ZAZA_",
+          "playerId": "76561198053530322",
           "map": "de_dust2",
-          "date": "2026-11-02T19:40:25.822Z"
+          "date": "2026-11-02T19:40:25.822Z",
+          "matchId": "13357260"
         },
         "maxDeaths": {
           "value": 21,
           "player": "Изумительные Брючки.",
+          "playerId": "76561198272167310",
           "map": "de_cache",
-          "date": "2026-11-02T19:40:17.305Z"
+          "date": "2026-11-02T19:40:17.305Z",
+          "matchId": "13352007"
         },
         "maxAdr": {
           "value": 148,
           "player": "ZAZA_",
+          "playerId": "76561198053530322",
           "map": "de_dust2",
-          "date": "2026-11-02T19:40:25.822Z"
+          "date": "2026-11-02T19:40:25.822Z",
+          "matchId": "13357260"
         }
       },
       "funStats": {
@@ -7195,15 +6243,18 @@
       "funFacts": {
         "mostStable": {
           "player": "St1gmat",
+          "playerId": "76561198283381727",
           "stdDev": 0.14
         },
         "highestPeak": {
           "player": "ZAZA_",
+          "playerId": "76561198053530322",
           "rating": 2.31,
           "map": "de_dust2"
         },
         "lowestRating": {
           "player": "Kyo  Ilonmax8",
+          "playerId": "76561198818222401",
           "rating": 0.21,
           "map": "de_dust2"
         },

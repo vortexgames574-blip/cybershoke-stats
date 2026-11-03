@@ -103,6 +103,17 @@ function calculateStats(matches, steamAvatars) {
     } else p.displayName = p.name;
   });
 
+  // Рекорды вычислялись до присвоения displayName — подтягиваем канонические имена.
+  // Иначе в блоках «Рекорды за карту» и в модалке рекорда будет сырое имя ("BB-00"),
+  // которое затем неотличимо от других игроков с таким же ником.
+  const displayNameById = new Map(players.map(p => [p.id, p.displayName]));
+  for (const key of ['maxKills', 'maxDeaths', 'maxAdr']) {
+    const rec = records[key];
+    if (rec && rec.playerId && displayNameById.has(rec.playerId)) {
+      rec.player = displayNameById.get(rec.playerId);
+    }
+  }
+
   players.forEach(p => {
       const mp = p.matches, ar = p.avgRating || 0;
       if (mp < 3) {
@@ -125,9 +136,15 @@ function calculateStats(matches, steamAvatars) {
       const topPlayers = Array.from(data.playersMap.values())
         .map(pl => ({ ...pl, kd: pl.deaths > 0 ? +(pl.kills / pl.deaths).toFixed(2) : pl.kills, avgRating: pl.matches > 0 ? +(pl.ratingSum / pl.matches).toFixed(2) : 0 }))
         .sort((a,b) => b.avgRating - a.avgRating);
+      // displayName нужен, чтобы в модалке карты правильно отображались игроки
+      // с дублирующимися никами (BB-00 × 3). Иначе показывались бы одинаково.
       const updatedTop = topPlayers.map(tp => {
           const found = players.find(p => p.id === tp.id);
-          return { ...tp, avatar: found ? found.avatar : '' };
+          return {
+            ...tp,
+            avatar: found ? found.avatar : '',
+            displayName: found ? found.displayName : tp.name,
+          };
       });
       return { map, matches: data.matches, avgKd: data.totalDeaths > 0 ? +(data.totalKills / data.totalDeaths).toFixed(2) : data.totalKills, avgRating: data.ratingCount > 0 ? +(data.ratingSum / data.ratingCount).toFixed(2) : 0, topPlayers: updatedTop };
   }).sort((a,b) => b.matches - a.matches);

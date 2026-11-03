@@ -31,6 +31,7 @@
 
   function photoUrl(file) {
     if (!file) return '';
+    // Поддерживает Base64 (data:image/...), ссылки и локальные файлы
     if (/^(https?:|data:|blob:)/i.test(file)) return file;
     return PHOTO_BASE + String(file).replace(/^\/+/, '');
   }
@@ -51,7 +52,6 @@
 
   function isAdminMode() {
     try {
-      // .has('admin') сработает и для ?admin, и для ?admin=1
       if (new URLSearchParams(location.search).has('admin')) {
         localStorage.setItem(ADMIN_FLAG_KEY, '1');
         return true;
@@ -256,7 +256,7 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
       return true;
     } catch (e) {
-      alert('Не удалось сохранить: ' + e.message + '\nВозможно, переполнен localStorage.');
+      alert('Не удалось сохранить: ' + e.message + '\n\nСкорее всего, вы добавили слишком много тяжелых фотографий и переполнили память браузера. Попробуйте удалить старые фотографии из хронологии.');
       return false;
     }
   };

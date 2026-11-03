@@ -30,7 +30,7 @@
 
   function getStatsPlayers() {
     try {
-      if (typeof currentStats === 'undefined' || !currentStats) return [];
+      if (!currentStats) return [];
       return Array.isArray(currentStats.players) ? currentStats.players : [];
     } catch (e) { return []; }
   }
@@ -46,6 +46,39 @@
     } catch (e) {
       return [];
     }
+  }
+
+  // Функция для сжатия изображения и перевода в Base64
+  function resizeImage(file, maxWidth = 1200, maxHeight = 675) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let { width, height } = img;
+          
+          // Пропорциональное уменьшение
+          if (width > maxWidth || height > maxHeight) {
+            const ratio = Math.min(maxWidth / width, maxHeight / height);
+            width *= ratio;
+            height *= ratio;
+          }
+          
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Конвертируем в JPEG с качеством 85% для меньшего веса
+          resolve(canvas.toDataURL('image/jpeg', 0.85));
+        };
+        img.onerror = () => reject(new Error('Не удалось прочитать изображение'));
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error('Ошибка загрузки файла'));
+      reader.readAsDataURL(file);
+    });
   }
 
   function ensureModal() {
@@ -74,8 +107,7 @@
         </div>
         <p class="wa-note" style="margin-top:10px;">
           Первый турнир в списке — большой блок на главной, остальные уходят в хронологию.
-          Стрелки ↑↓ меняют порядок. После правок нажмите «Скачать winners.json» и замените
-          файл <code>docs/data/winners.json</code> в проекте, затем закоммитьте.
+          После правок нажмите «Скачать winners.json» и замените файл <code>docs/data/winners.json</code> в проекте, затем закоммитьте.
         </p>
       </div>
     `;
@@ -190,13 +222,14 @@
         <input type="url" id="wa-url" value="${esc(t.url || '')}" placeholder="https://cybershoke.net/...">
       </div>
       <div class="wa-field">
-        <label>Фото команды — имя файла из папки <code>docs/img/winners/</code></label>
+        <label>Фото команды</label>
         <div class="wa-photo">
           ${photoPreviewHtml(t.teamPhoto)}
           <div style="display:flex; flex-direction:column; gap:6px; flex:1;">
-            <input type="text" id="wa-photo-name" value="${esc(t.teamPhoto || '')}" placeholder="team-2026-autumn.jpg">
-            <button class="btn-outline" id="wa-photo-clear" style="font-size:0.8rem; align-self:flex-start;">Очистить фото</button>
-            <span class="wa-note">Файл с этим именем должен лежать в <code>docs/img/winners/</code>. Регистр важен: <code>Team.jpg</code> ≠ <code>team.jpg</code>.</span>
+            <input type="file" id="wa-photo-file" accept="image/*" style="display:none;">
+            <button class="btn-outline" id="wa-upload-btn" style="font-size:0.8rem; align-self:flex-start;">Загрузить с компьютера</button>
+            <button class="btn-outline danger" id="wa-photo-clear" style="font-size:0.8rem; align-self:flex-start; color: #ef4444; border-color: #ef4444;">Очистить фото</button>
+            <span class="wa-note" id="wa-photo-status">Фото автоматически сожмется и сохранится прямо в файл JSON.</span>
           </div>
         </div>
       </div>
@@ -217,7 +250,6 @@
     t.date = document.getElementById('wa-date')?.value || '';
     t.finalScore = (document.getElementById('wa-score')?.value || '').trim();
     t.url = (document.getElementById('wa-url')?.value || '').trim();
-    t.teamPhoto = (document.getElementById('wa-photo-name')?.value || '').trim();
 
     const rows = document.querySelectorAll('#wa-players .wa-player-row');
     const statsPlayers = getStatsPlayers();
@@ -285,16 +317,33 @@
       });
     });
 
-    const photoName = document.getElementById('wa-photo-name');
-    if (photoName) photoName.addEventListener('input', () => {
-      readFormIntoDraft();
-      const preview = document.querySelector('.wa-photo-preview');
-      if (preview) preview.outerHTML = photoPreviewHtml(draft[activeIdx].teamPhoto);
-    });
+    // --- ЛОГИКА ЗАГРУЗКИ ФОТО ---
+    const uploadBtn = document.getElementById('wa-upload-btn');
+    const fileInput = document.getElementById('wa-photo-file');
+    
+    if (uploadBtn && fileInput) {
+      uploadBtn.addEventListener('click', () => fileInput.click());
+      
+      fileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const status = document.getElementById('wa-photo-status');
+        if (status) status.innerText = 'Сжатие и загрузка...';
+        
+        try {
+          const base64 = await resizeImage(file);
+          draft[activeIdx].teamPhoto = base64; // Сохраняем прямо в объект турнира
+          renderForm(); // Перерисовываем форму, чтобы обновилось превью
+        } catch (err) {
+          alert('Ошибка при обработке фото: ' + err.message);
+          if (status) status.innerText = 'Фото автоматически сожмется...';
+        }
+      });
+    }
 
     const photoClear = document.getElementById('wa-photo-clear');
     if (photoClear) photoClear.addEventListener('click', () => {
-      readFormIntoDraft();
       draft[activeIdx].teamPhoto = '';
       renderForm();
     });

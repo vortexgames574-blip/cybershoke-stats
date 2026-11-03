@@ -49,6 +49,14 @@ async function main() {
     console.log(`[${i + 1}/${lines.length}] Открываем ${url} (Турнир: ${tournamentName}) ...`);
     const collectedMaps = new Map();
 
+    // Отпечатки ВСЕХ уже собранных составов (id+kills+deaths всех 10 игроков).
+    // Защита от несыгранных карт: Cybershoke иногда возвращает данные уже
+    // собранной карты при клике по карте, которую не играли (особенно в Bo3).
+    // Раньше ловили только соседние дубли (previousSignature), теперь — любые.
+    const seenSignatures = new Set();
+    const signatureOf = (players) =>
+      players.map(p => `${p.id}_${p.kills}_${p.deaths}`).sort().join('|');
+
     try {
       await page.addInitScript(() => {
         window.__CAPTURED_API = [];
@@ -84,6 +92,7 @@ async function main() {
                   for (const m of maps) {
                       if (!collectedMaps.has(m.map)) {
                           collectedMaps.set(m.map, m);
+                          seenSignatures.add(signatureOf(m.players));
                           console.log(`    [${m.map}] УСПЕХ (авто)! Игроков: ${m.players.length}`);
                       }
                   }
@@ -96,8 +105,6 @@ async function main() {
         const matches = text.match(/(de_[a-z0-9_]+|cs_[a-z0-9_]+)/g);
         return matches ? [...new Set(matches)] : [];
       });
-
-      let previousSignature = ''; // <--- ЗАЩИТА ОТ НЕСЫГРАННЫХ КАРТ
 
       for (const mapName of mapNames) {
         if (collectedMaps.has(mapName)) continue;
@@ -125,17 +132,16 @@ async function main() {
               const players = extractPlayersStrict(parsed);
               
               if (players.length > 0) {
-                // ГЕНЕРИРУЕМ УНИКАЛЬНЫЙ ОТПЕЧАТОК (ID + K + D всех игроков)
-                const currentSignature = players.map(p => `${p.id}_${p.kills}_${p.deaths}`).sort().join('|');
+                const currentSignature = signatureOf(players);
 
-                // Если отпечаток совпадает с предыдущей картой — это фейк (несыгранная карта)
-                if (currentSignature === previousSignature) {
-                    console.log(`    [${mapName}] ПРОПУЩЕНО (карта не игралась, данные идентичны).`);
+                // Если такой состав уже собран — это фейк (несыгранная карта / дубль).
+                if (seenSignatures.has(currentSignature)) {
+                    console.log(`    [${mapName}] ПРОПУЩЕНО (состав уже собран — карта не игралась).`);
                     continue;
                 }
 
                 collectedMaps.set(mapName, { map: mapName, players });
-                previousSignature = currentSignature; // Запоминаем отпечаток
+                seenSignatures.add(currentSignature);
                 console.log(`    [${mapName}] УСПЕХ! Игроков: ${players.length}`);
               }
             } catch (e) {}
