@@ -19,7 +19,28 @@ body { font-family: 'Inter', system-ui, sans-serif; background-color: var(--bg-m
 
 .app-container { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
 .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; gap: 10px; flex-wrap: wrap; }
-.logo-text { font-size: 1.4rem; font-weight: 800; letter-spacing: 1px; color: #fff; }
+
+/* СТИЛИ ЛОГОТИПА GEIMERI */
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo-text { 
+  font-size: 1.6rem; 
+  font-weight: 900; 
+  letter-spacing: 2px; 
+  background: linear-gradient(90deg, #4d6bfe, #10b981); 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+  text-transform: uppercase;
+}
+.logo-badge {
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
 .header-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .meta-info { font-size: 0.85rem; color: var(--text-muted); }
 .select-tournament { background: var(--bg-main); border: 1px solid var(--border); color: #fff; padding: 6px 12px; border-radius: 6px; outline: none; cursor: pointer; transition: border-color 0.2s; max-width: 100%; }
@@ -213,17 +234,12 @@ body.beginner-mode .metric-explanation { display: block; }
 .balance-share-actions { grid-column: 1 / -1; display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
 .balance-share-actions .btn-outline { flex: 1; min-width: 120px; }
 
-/* --- TOAST УВЕДОМЛЕНИЯ --- */
 #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
 .toast { background: var(--bg-card); border: 1px solid var(--border); border-left: 4px solid var(--accent); color: var(--text-main); padding: 12px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: translateX(120%); animation: slideInToast 0.3s forwards, fadeOutToast 0.3s 3s forwards; pointer-events: auto; }
 .toast.error { border-left-color: #ef4444; }
 .toast.success { border-left-color: #10b981; }
 @keyframes slideInToast { to { transform: translateX(0); } }
 @keyframes fadeOutToast { to { opacity: 0; transform: translateY(10px); } }
-
-/* ==================================================== */
-/* ==================== АДАПТИВ ======================= */
-/* ==================================================== */
 
 @media (max-width: 1024px) {
   .grid-2col { grid-template-columns: 1fr; }
@@ -275,7 +291,7 @@ body.beginner-mode .metric-explanation { display: block; }
 }
 
 @media (max-width: 480px) {
-  .logo-text { font-size: 1.2rem; }
+  .logo-text { font-size: 1.3rem; }
   .profile-stats-grid { grid-template-columns: repeat(2, 1fr); }
   .stats-table th, .stats-table td { font-size: 0.75rem; padding: 8px 6px; }
   .player-avatar { width: 22px; height: 22px; }

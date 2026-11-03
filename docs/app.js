@@ -443,7 +443,7 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
   ctx.font = '500 14px Inter, system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
-  ctx.fillText('vortexgames574-blip.github.io/cybershoke-stats', W / 2, H - 40);
+  ctx.fillText('GEIMERI • CS2 STATS', W / 2, H - 40);
   ctx.textAlign = 'left';
 
   return canvas;

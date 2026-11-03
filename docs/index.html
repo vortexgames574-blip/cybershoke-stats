@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CS2 Stats | Cybershoke</title>
+  <title>GEIMERI | CS2 Stats</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="winners.css">
   <link rel="manifest" href="manifest.json">
@@ -14,14 +14,17 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="bg-animation"></div>
 
   <div class="app-container">
     <header class="header">
-      <div class="logo"><span class="logo-text">CS2 STATS</span></div>
+      <div class="logo">
+        <span class="logo-text">GEIMERI</span>
+        <span class="logo-badge">CS2</span>
+      </div>
       <div class="header-controls">
         <select id="tournament-select" class="select-tournament"></select>
         <div id="meta-info" class="meta-info">Загрузка...</div>
@@ -226,10 +229,8 @@
         <button id="faceit-btn" class="btn-primary" style="background: #ff5500; flex: 1;">FACEIT</button>
       </div>
       
-      <!-- Линейный график -->
       <div class="profile-chart-container"><canvas id="prof-chart"></canvas></div>
       
-      <!-- РАДАР-ГРАФИК -->
       <div style="height: 250px; margin-bottom: 24px; max-width: 400px; margin-left: auto; margin-right: auto;">
         <canvas id="prof-radar-chart"></canvas>
       </div>
@@ -259,7 +260,7 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА МАТЧА (НОВАЯ) -->
+  <!-- МОДАЛКА МАТЧА -->
   <div id="match-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeMatchDetails()">&times;</span>
