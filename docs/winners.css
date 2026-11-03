@@ -260,3 +260,41 @@
 .tl-body .winners-actions a {
   font-size: 0.85rem;
 }
+
+/* Кнопки перестановки турниров в редакторе */
+.wa-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wa-li-move {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+.wa-move {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--border, #262f40);
+  border-radius: 6px;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.wa-move:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.wa-move:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
