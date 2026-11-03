@@ -71,7 +71,7 @@
         <div class="grid-2col">
           <div class="col-left">
             <section class="glass-card interactive-card" data-aos="fade-up">
-              <div class="card-header"><h2>Пьедестал</h2><span class="header-hint">Топ-3 по рейтингу</span></div>
+              <div class="card-header"><h2>Пьедестал</h2><span class="header-hint">Топ-3 по ELO</span></div>
               <div class="podium-grid" id="podium-container"></div>
             </section>
             <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="100">
@@ -114,6 +114,7 @@
                 <div class="controls">
                   <input type="text" id="filter-name" class="input-search" placeholder="Поиск...">
                   <select id="sort-by" class="select-sort">
+                    <option value="elo">По ELO</option>
                     <option value="rating">По рейтингу</option>
                     <option value="kd">По K/D</option>
                     <option value="adr">По ADR</option>
@@ -123,7 +124,7 @@
               </div>
               <div class="table-container">
                 <table class="stats-table" id="players-table">
-                  <thead><tr><th>Игрок</th><th>Форма</th><th>Карты</th><th>K/D</th><th>Рейтинг</th></tr></thead>
+                  <thead><tr><th>Игрок</th><th>ELO</th><th>Форма</th><th>Карты</th><th>K/D</th><th>Рейтинг</th></tr></thead>
                   <tbody></tbody>
                 </table>
               </div>
@@ -238,7 +239,12 @@
       <div class="profile-history">
         <h3>История матчей</h3>
         <div class="table-container" style="max-height: 300px; overflow-y: auto;">
-          <table class="stats-table"><thead><tr><th>Дата</th><th>Карта</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Рейтинг</th></tr></thead><tbody id="prof-match-history"></tbody></table>
+          <table class="stats-table">
+            <thead>
+              <tr><th>Дата</th><th>Карта</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Рейтинг</th><th>ELO</th></tr>
+            </thead>
+            <tbody id="prof-match-history"></tbody>
+          </table>
         </div>
       </div>
     </div>

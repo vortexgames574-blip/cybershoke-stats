@@ -8,7 +8,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MATCHES_DIR = path.join(__dirname, 'data', 'matches');
 const OUTPUT_FILE = path.join(__dirname, 'docs', 'data', 'stats.json');
 
-// Если ключа нет, скрипт будет парсить публичные профили
 const STEAM_API_KEY = 'ТВОЙ_КЛЮЧ_ЗДЕСЬ';
 
 function num(val) {
@@ -19,8 +18,6 @@ function num(val) {
 
 async function fetchSteamAvatars(steamIds) {
   const avatars = new Map();
-  
-  // 1. Если есть официальный API ключ
   if (STEAM_API_KEY && STEAM_API_KEY !== 'ТВОЙ_КЛЮЧ_ЗДЕСЬ') {
     const chunks = [];
     for (let i = 0; i < steamIds.length; i += 100) chunks.push(steamIds.slice(i, i + 100));
@@ -29,16 +26,13 @@ async function fetchSteamAvatars(steamIds) {
         const res = await fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_API_KEY}&steamids=${chunk.join(',')}`);
         if (res.ok) {
           const data = await res.json();
-          if (data.response?.players) {
-            for (const p of data.response.players) avatars.set(p.steamid, p.avatarmedium);
-          }
+          if (data.response?.players) for (const p of data.response.players) avatars.set(p.steamid, p.avatarmedium);
         }
       } catch (err) { console.error('Steam API Error:', err.message); }
     }
     return avatars;
   }
 
-  // 2. Если ключа нет, парсим XML профили (без ключа)
   console.log('API ключ не найден. Парсим публичные профили Steam...');
   for (const id of steamIds) {
     try {
@@ -46,17 +40,20 @@ async function fetchSteamAvatars(steamIds) {
       if (res.ok) {
         const text = await res.text();
         const match = text.match(/<avatarMedium><!\[CDATA\[(.*?)\]\]><\/avatarMedium>/i);
-        if (match && match[1]) {
-          avatars.set(id, match[1]);
-        }
+        if (match && match[1]) avatars.set(id, match[1]);
       }
-    } catch (err) {
-      console.error(`Не удалось получить аватар для ${id}:`, err.message);
-    }
-    // Пауза 150мс, чтобы Steam не забанил за частые запросы
+    } catch (err) {}
     await new Promise(r => setTimeout(r, 150));
   }
   return avatars;
+}
+
+function getRank(elo) {
+  if (elo < 800) return { name: 'Silver', color: '#8b96a5', icon: 'shield' };
+  if (elo < 1200) return { name: 'Gold', color: '#f59e0b', icon: 'shield-check' };
+  if (elo < 1600) return { name: 'Platinum', color: '#10b981', icon: 'shield-plus' };
+  if (elo < 2000) return { name: 'Diamond', color: '#4d6bfe', icon: 'gem' };
+  return { name: 'GEIMERI', color: '#ef4444', icon: 'crown' };
 }
 
 function calculateStats(matches, steamAvatars) {
@@ -71,22 +68,24 @@ function calculateStats(matches, steamAvatars) {
     maxAdr: { value: 0, player: '', playerId: '', map: '', date: '', matchId: '' }
   };
 
-  const sortedMatches = [...matches].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sortedMatches = [...matches].sort((a, b) => new Date(a.date) - new Date(b.date));
 
   for (const match of sortedMatches) {
     const maps = match.maps || [];
     recentMatches.push({ matchId: match.matchId, url: match.url, date: match.date, maps: maps.map(m => m.map) });
     totalMapsPlayed += maps.length;
+    
     for (const mapData of maps) {
       const mapName = mapData.map || 'unknown';
       if (!mapStatsRaw[mapName]) {
           mapStatsRaw[mapName] = { matches: 0, totalKills: 0, totalDeaths: 0, ratingSum: 0, ratingCount: 0, playersMap: new Map() };
       }
       mapStatsRaw[mapName].matches += 1;
+      
       for (const p of mapData.players) {
         const pid = p.id;
         if (!playerMap.has(pid)) {
-          playerMap.set(pid, { id: pid, name: p.name, lastPlayed: match.date, matches: 0, kills: 0, deaths: 0, assists: 0, adrSum: 0, adrCount: 0, kastSum: 0, kastCount: 0, ratingSum: 0, ratingCount: 0, history: [], matchHistory: [] });
+          playerMap.set(pid, { id: pid, name: p.name, lastPlayed: match.date, matches: 0, kills: 0, deaths: 0, assists: 0, adrSum: 0, adrCount: 0, kastSum: 0, kastCount: 0, ratingSum: 0, ratingCount: 0, history: [], matchHistory: [], elo: 1000 });
         }
         const st = playerMap.get(pid);
         if (new Date(match.date) >= new Date(st.lastPlayed)) { st.name = p.name; st.lastPlayed = match.date; }
@@ -97,7 +96,16 @@ function calculateStats(matches, steamAvatars) {
         st.kills += k; st.deaths += d; st.assists += a;
         mapStatsRaw[mapName].totalKills += k; mapStatsRaw[mapName].totalDeaths += d;
         totalKillsAll += k; totalDeathsAll += d;
+        
         const adrVal = num(p.adr), kastVal = num(p.kast), ratingVal = num(p.rating);
+        
+        // РАСЧЕТ ELO
+        let eloChange = 0;
+        if (ratingVal !== null) {
+          eloChange = Math.round((ratingVal - 1.0) * 50);
+          st.elo += eloChange;
+        }
+
         if (k > records.maxKills.value) records.maxKills = { value: k, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
         if (d > records.maxDeaths.value) records.maxDeaths = { value: d, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
         if (adrVal !== null && adrVal > records.maxAdr.value) records.maxAdr = { value: adrVal, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
@@ -110,15 +118,27 @@ function calculateStats(matches, steamAvatars) {
         if (kastVal !== null) { st.kastSum += kastVal; st.kastCount += 1; }
         if (ratingVal !== null) { st.ratingSum += ratingVal; st.ratingCount += 1; st.history.push({ date: match.date, rating: ratingVal }); }
         
-        st.matchHistory.push({ date: match.date, matchId: match.matchId, map: mapData.map, kills: k, deaths: d, assists: a, adr: adrVal, kast: kastVal, rating: ratingVal });
+        st.matchHistory.push({ date: match.date, matchId: match.matchId, map: mapData.map, kills: k, deaths: d, assists: a, adr: adrVal, kast: kastVal, rating: ratingVal, eloChange: eloChange });
       }
     }
   }
 
   const getAvatar = (id, name) => steamAvatars.get(String(id)) || `https://ui-avatars.com/api/?name=${encodeURIComponent(name || '?')}&background=4d6bfe&color=fff&size=128&bold=true&rounded=true`;
+  
   const players = Array.from(playerMap.values()).map(p => {
     const kd = p.deaths > 0 ? +(p.kills / p.deaths).toFixed(2) : p.kills;
-    return { ...p, avatar: getAvatar(p.id, p.name), kd: kd, avgRating: p.ratingCount > 0 ? +(p.ratingSum / p.ratingCount).toFixed(2) : null, avgAdr: p.adrCount > 0 ? +(p.adrSum / p.adrCount).toFixed(1) : null, avgKast: p.kastCount > 0 ? +(p.kastSum / p.kastCount).toFixed(1) : null };
+    const rank = getRank(p.elo);
+    return { 
+      ...p, 
+      avatar: getAvatar(p.id, p.name), 
+      kd: kd, 
+      avgRating: p.ratingCount > 0 ? +(p.ratingSum / p.ratingCount).toFixed(2) : null, 
+      avgAdr: p.adrCount > 0 ? +(p.adrSum / p.adrCount).toFixed(1) : null, 
+      avgKast: p.kastCount > 0 ? +(p.kastSum / p.kastCount).toFixed(1) : null,
+      rankName: rank.name,
+      rankColor: rank.color,
+      rankIcon: rank.icon
+    };
   });
 
   const nameCounts = {};
@@ -154,7 +174,7 @@ function calculateStats(matches, steamAvatars) {
       else p.form = 'stable';
   });
 
-  players.sort((a, b) => (b.avgRating ?? b.kd) - (a.avgRating ?? a.kd));
+  players.sort((a, b) => b.elo - a.elo);
 
   const formattedMapStats = Object.entries(mapStatsRaw).map(([map, data]) => {
       const topPlayers = Array.from(data.playersMap.values())
@@ -196,7 +216,7 @@ function calculateStats(matches, steamAvatars) {
   return { 
     players, 
     mapStats: formattedMapStats, 
-    recentMatches: recentMatches.slice(0, 10), 
+    recentMatches: recentMatches.slice(-10).reverse(), 
     records, 
     funStats: { totalHours: Math.round(totalMapsPlayed * 40 / 60), totalKills: totalKillsAll, totalDeaths: totalDeathsAll },
     funFacts: { mostStable, highestPeak, lowestRating, favoriteMap }
