@@ -164,14 +164,15 @@ function initDraft() {
 
     let pool = [];
     if (isShuffle) {
-      // Берем топ-24 игроков, трясем их и выбираем 16 случайных. Капитаны не меняются.
-      const topPool = sorted.slice(0, Math.min(24, sorted.length));
+      // Берем топ-30 игроков (или сколько есть)
+      const topPool = sorted.slice(0, Math.min(30, sorted.length));
+      // Полностью перемешиваем
       topPool.sort(() => Math.random() - 0.5);
+      // Берем случайных 16
       pool = topPool.slice(0, 16);
-      // Жадный алгоритм ожидает сортировку по убыванию, возвращаем порядок
-      pool.sort((a, b) => b.score - a.score);
+      // ВАЖНО: НЕ сортируем обратно, чтобы алгоритм раздавал в случайном порядке
     } else {
-      // Обычная сборка: берём просто топ-16
+      // Обычная сборка: берём просто топ-16 (по силе)
       pool = sorted.slice(0, 16);
     }
 
@@ -343,7 +344,7 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
 
   const colY = 230;
   const boxW = 520;
-  const boxH = 420; // Увеличили высоту панели под 5 игроков
+  const boxH = 420;
   const gapX = 40;
   const gapY = 30;
   const startX = 60;
