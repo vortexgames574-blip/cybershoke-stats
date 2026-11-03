@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CS2 Stats | Cybershoke</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="winners.css">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0b0e14">
   
@@ -46,7 +47,8 @@
     </section>
 
     <nav class="tabs-nav">
-      <button class="tab-btn active" data-tab="overview"><i data-lucide="layout-dashboard"></i> Обзор</button>
+      <button class="tab-btn active" data-tab="home"><i data-lucide="home"></i> Главная</button>
+      <button class="tab-btn" data-tab="overview"><i data-lucide="layout-dashboard"></i> Обзор</button>
       <button class="tab-btn" data-tab="players"><i data-lucide="users"></i> Игроки</button>
       <button class="tab-btn" data-tab="maps"><i data-lucide="map"></i> Карты</button>
       <button class="tab-btn" data-tab="balancer"><i data-lucide="git-merge"></i> Балансировщик 5х5</button>
@@ -54,8 +56,15 @@
     </nav>
 
     <main class="main-content">
+      <!-- ГЛАВНАЯ -->
+      <div class="tab-content active" id="tab-home">
+        <section class="glass-card interactive-card">
+          <div id="home-winners-root"></div>
+        </section>
+      </div>
+
       <!-- ОБЗОР -->
-      <div class="tab-content active" id="tab-overview">
+      <div class="tab-content" id="tab-overview">
         <div class="grid-2col">
           <div class="col-left">
             <section class="glass-card interactive-card" data-aos="fade-up">
@@ -312,5 +321,6 @@
   </div>
 
   <script src="app.js"></script>
+  <script src="winners.js" defer></script>
 </body>
 </html>

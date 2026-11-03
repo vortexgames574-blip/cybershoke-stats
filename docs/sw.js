@@ -1,8 +1,16 @@
-const CACHE_NAME = 'cs2-stats-v5'; // Меняем версию кэша
+const CACHE_NAME = 'cs2-stats-v6'; // Меняем версию кэша
 
 self.addEventListener('install', (e) => {
   self.skipWaiting(); // Принудительно активируем новый SW
-  e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(['./', './index.html', './style.css', './app.js'])));
+  e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll([
+    './',
+    './index.html',
+    './style.css',
+    './app.js',
+    './winners.css',
+    './winners.js',
+    './data/winners.json'
+  ])));
 });
 
 self.addEventListener('activate', (e) => {
@@ -20,8 +28,9 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  // Для данных (stats.json) всегда идем в сеть, кэшируем только если офлайн
-  if (e.request.url.includes('stats.json')) {
+  // Данные (stats.json, winners.json) всегда берём из сети, кэш — только как фолбэк офлайн.
+  // Эти файлы ты правишь руками, поэтому сеть должна иметь приоритет.
+  if (e.request.url.includes('stats.json') || e.request.url.includes('winners.json')) {
     e.respondWith(
       fetch(e.request).catch(() => caches.match(e.request))
     );

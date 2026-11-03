@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Cybershoke Autumn Cup 2026",
+    "date": "2026-10-25",
+    "finalScore": "2 : 1",
+    "url": "https://cybershoke.net/ru/tournament/example",
+    "teamPhoto": "team-2026-autumn.jpg",
+    "players": [
+      { "playerId": "", "name": "Игрок 1", "role": "Капитан" },
+      { "playerId": "", "name": "Игрок 2", "role": "Снайпер" },
+      { "playerId": "", "name": "Игрок 3", "role": "Рифлер" },
+      { "playerId": "", "name": "Игрок 4", "role": "Рифлер" },
+      { "playerId": "", "name": "Игрок 5", "role": "Саппорт" }
+    ]
+  },
+  {
+    "title": "Cybershoke Summer Cup 2026",
+    "date": "2026-07-12",
+    "finalScore": "2 : 0",
+    "url": "https://cybershoke.net/ru/tournament/example-summer",
+    "teamPhoto": "team-2026-summer.jpg",
+    "players": [
+      { "playerId": "", "name": "Игрок 1", "role": "Капитан" },
+      { "playerId": "", "name": "Игрок 6", "role": "Снайпер" },
+      { "playerId": "", "name": "Игрок 7", "role": "Рифлер" },
+      { "playerId": "", "name": "Игрок 8", "role": "Рифлер" },
+      { "playerId": "", "name": "Игрок 9", "role": "Саппорт" }
+    ]
+  }
+]

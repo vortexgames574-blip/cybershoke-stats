@@ -1,0 +1,262 @@
+/* docs/winners.css — главная: блок последнего турнира + хронология победителей. */
+
+#tab-home .winners-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ===== Последний турнир ===== */
+.winners-current {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.winners-hero {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--border, #262f40);
+  border-radius: 12px;
+  background: var(--bg-main);
+}
+
+.winners-hero img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.winners-hero-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.winners-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+}
+
+.winners-title {
+  margin: 0;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.winners-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.winners-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: 1px solid rgba(77, 107, 254, 0.35);
+  border-radius: 999px;
+  background: rgba(77, 107, 254, 0.12);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ===== Ники-чипсы (общие для текущего и для хронологии) ===== */
+.winners-players {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .winners-players { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .winners-players { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.winner-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border, #262f40);
+  border-radius: 10px;
+  background: var(--bg-main);
+  transition: border-color 0.15s ease;
+}
+
+.winner-chip.link { cursor: pointer; }
+.winner-chip.link:hover { border-color: var(--accent); }
+
+.winner-chip .nick {
+  overflow: hidden;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.winner-chip.link:hover .nick { color: var(--accent); }
+
+.winner-chip .role {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.winners-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.winners-empty {
+  padding: 24px 0;
+  color: var(--text-muted);
+}
+
+/* ===== Хронология ===== */
+.winners-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.winners-timeline-title {
+  margin: 0;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.timeline-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0 0 0 24px;
+  list-style: none;
+}
+
+.timeline-list::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 6px;
+  width: 2px;
+  background: var(--border, #262f40);
+}
+
+.timeline-item {
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: -24px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: var(--bg-main);
+  transform: translateX(1px);
+}
+
+.timeline-item details {
+  border: 1px solid var(--border, #262f40);
+  border-radius: 10px;
+  background: var(--bg-main);
+  overflow: hidden;
+}
+
+.timeline-item details[open] {
+  border-color: rgba(77, 107, 254, 0.45);
+}
+
+.timeline-item summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 12px 14px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.timeline-item summary::-webkit-details-marker { display: none; }
+
+.timeline-item summary::after {
+  content: '▾';
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  transition: transform 0.15s ease;
+}
+
+.timeline-item details[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.tl-date {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tl-title {
+  overflow: hidden;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tl-score {
+  padding: 2px 10px;
+  border: 1px solid rgba(77, 107, 254, 0.35);
+  border-radius: 999px;
+  background: rgba(77, 107, 254, 0.12);
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.tl-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 14px 14px;
+}
+
+.tl-body .winners-hero {
+  aspect-ratio: 16 / 9;
+}
+
+.tl-body .winners-actions a {
+  font-size: 0.85rem;
+}
