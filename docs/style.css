@@ -196,8 +196,6 @@ body.beginner-mode .metric-explanation { display: block; }
 
 @media (max-width: 1024px) {
   .grid-2col { grid-template-columns: 1fr; }
-  .draft-4teams-grid { grid-template-columns: 1fr 1fr; }
-  .draft-pool-col { grid-column: span 2; order: -1; margin-bottom: 15px; }
 }
 @media (max-width: 768px) {
   .tabs-nav { flex-wrap: wrap; }
@@ -205,5 +203,4 @@ body.beginner-mode .metric-explanation { display: block; }
   .profile-stats-grid { grid-template-columns: repeat(3, 1fr); }
   .podium-grid { grid-template-columns: 1fr; align-items: stretch; }
   .podium-card.podium-1 { order: -1; }
-  .draft-pool-list { grid-template-columns: 1fr; }
 }

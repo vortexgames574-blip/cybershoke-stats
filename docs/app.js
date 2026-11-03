@@ -259,8 +259,8 @@ function openProfile(playerId) {
   document.getElementById('prof-rating').innerText = p.avgRating ?? '—';
   document.getElementById('prof-adr').innerText = p.avgAdr ?? '—';
   document.getElementById('prof-kast').innerText = p.avgKast ?? '—';
-  
-  // Кнопка FACEIT (поиск по Steam ID)
+
+  // Кнопка FACEIT
   const faceitBtn = document.getElementById('faceit-btn');
   if (faceitBtn) {
     faceitBtn.onclick = async () => {
