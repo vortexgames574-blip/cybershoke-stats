@@ -135,8 +135,8 @@ function initDraft() {
 
   const opts = currentStats.players
     .slice()
-    .sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0))
-    .map(p => `<option value="${p.id}">${displayName(p)} (${p.avgRating ?? p.kd})</option>`)
+    .sort((a, b) => (b.elo ?? 1000) - (a.elo ?? 1000))
+    .map(p => `<option value="${p.id}">${displayName(p)} (${p.elo ?? 1000} ELO)</option>`)
     .join('');
   
   [c1, c2, c3, c4].forEach((sel, i) => {
@@ -159,51 +159,70 @@ function initDraft() {
     const allPlayers = currentStats.players.filter(p => !capIds.includes(p.id));
     const scoredPool = allPlayers.map(p => ({ ...p, score: playerCompositeScore(p, weights) }));
     
-    // Сортируем ВСЕХ игроков по силе (нужно для идеальной сборки)
     const sorted = scoredPool.slice().sort((a, b) => b.score - a.score);
 
-    let pool = [];
-    if (isShuffle) {
-      // Берем топ-30 игроков (или сколько есть на сервере)
-      const topPool = sorted.slice(0, Math.min(30, sorted.length));
-      // Случайно перемешиваем
-      topPool.sort(() => Math.random() - 0.5);
-      // Берем случайных 16
-      pool = topPool.slice(0, 16);
-      // ВАЖНО: Мы НЕ сортируем пул обратно. Отдаем в случайном порядке.
-    } else {
-      // Идеальная сборка: берем просто топ-16 (по силе)
-      pool = sorted.slice(0, 16);
-    }
+    const buildTeamsLogic = (pool, caps) => {
+      const teams = caps.map(c => {
+        const capScore = playerCompositeScore(c, weights);
+        return { captain: c, captainScore: capScore, players: [], sumScore: capScore };
+      });
 
-    const teams = captains.map(c => {
-      const capScore = playerCompositeScore(c, weights);
-      return { captain: c, captainScore: capScore, players: [], sumScore: capScore };
-    });
-
-    let poolIdx = 0;
-    while (poolIdx < pool.length) {
-      let weakestIdx = -1;
-      let minScore = Infinity;
-      
-      // Ищем самую слабую команду, в которой МЕНЬШЕ 4 игроков (чтобы было по 5 с капитаном)
-      for (let i = 0; i < teams.length; i++) {
-        if (teams[i].players.length < 4 && teams[i].sumScore < minScore) {
-          minScore = teams[i].sumScore;
-          weakestIdx = i;
+      let poolIdx = 0;
+      while (poolIdx < pool.length) {
+        let weakestIdx = -1;
+        let minScore = Infinity;
+        for (let i = 0; i < teams.length; i++) {
+          if (teams[i].players.length < 4 && teams[i].sumScore < minScore) {
+            minScore = teams[i].sumScore;
+            weakestIdx = i;
+          }
         }
+        if (weakestIdx === -1) break;
+        const player = pool[poolIdx++];
+        teams[weakestIdx].players.push(player);
+        teams[weakestIdx].sumScore += player.score;
+      }
+      return teams;
+    };
+
+    let finalTeams = [];
+    let finalSpread = 0;
+
+    if (isShuffle) {
+      const largePool = sorted.slice(0, Math.min(30, sorted.length));
+      let candidates = [];
+      
+      // Делаем 300 симуляций
+      for (let i = 0; i < 300; i++) {
+        // Берем случайных 16 из топа
+        const shuffledPlayers = [...largePool].sort(() => Math.random() - 0.5);
+        const pool = shuffledPlayers.slice(0, 16);
+        
+        // ВАЖНО: Сортируем выбранных 16 игроков по силе! Иначе жадный алгоритм сломается.
+        pool.sort((a, b) => b.score - a.score);
+        
+        // Перемешиваем капитанов
+        const shuffledCaptains = [...captains].sort(() => Math.random() - 0.5);
+        
+        const teams = buildTeamsLogic(pool, shuffledCaptains);
+        const sums = teams.map(t => t.sumScore);
+        const spread = Math.max(...sums) - Math.min(...sums);
+        candidates.push({ teams, spread });
       }
       
-      if (weakestIdx === -1) break; // Все команды укомплектованы
-      
-      const player = pool[poolIdx++];
-      teams[weakestIdx].players.push(player);
-      teams[weakestIdx].sumScore += player.score;
+      candidates.sort((a, b) => a.spread - b.spread);
+      const bestOptions = candidates.slice(0, 10);
+      const selected = bestOptions[Math.floor(Math.random() * bestOptions.length)];
+      finalTeams = selected.teams;
+      finalSpread = selected.spread;
+    } else {
+      const pool = sorted.slice(0, 16);
+      finalTeams = buildTeamsLogic(pool, captains);
+      const sums = finalTeams.map(t => t.sumScore);
+      finalSpread = Math.max(...sums) - Math.min(...sums);
     }
 
-    const sums = teams.map(t => t.sumScore);
-    const spread = Math.max(...sums) - Math.min(...sums);
-    const q = balanceQuality(spread);
+    const q = balanceQuality(finalSpread);
 
     resultDiv.style.display = 'grid';
     
@@ -214,9 +233,9 @@ function initDraft() {
 
     resultDiv.innerHTML = `
       <div class="draft-quality-row">
-        <span class="quality-badge ${q.key}">${q.label} · разброс Σ ${spread.toFixed(2)}</span>
+        <span class="quality-badge ${q.key}">${q.label} · разброс Σ ${finalSpread.toFixed(2)}</span>
       </div>
-      ${teams.map((team, i) => {
+      ${finalTeams.map((team, i) => {
         const capAva = team.captain.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(team.captain.name)}&background=ffd700&color=000`;
         return `
           <div class="draft-team-result">
@@ -241,7 +260,7 @@ function initDraft() {
     };
 
     const tournamentName = document.getElementById('tournament-select').value || 'Все матчи';
-    const cardCanvas = drawDraftCard({ teams, spread, quality: q, tournamentName });
+    const cardCanvas = drawDraftCard({ teams: finalTeams, spread: finalSpread, quality: q, tournamentName });
 
     cardCanvas.toBlob((blob) => {
       if (!blob) return;
@@ -288,13 +307,8 @@ function initDraft() {
     }, 'image/png');
   };
 
-  // Обычная сборка (идеальный баланс)
   buildBtn.onclick = () => executeDraft(false);
-
-  // Перемешать (меняем игроков, кэпы остаются)
-  if (shuffleBtn) {
-    shuffleBtn.onclick = () => executeDraft(true);
-  }
+  if (shuffleBtn) shuffleBtn.onclick = () => executeDraft(true);
 }
 
 function drawDraftCard({ teams, spread, quality, tournamentName }) {
@@ -479,7 +493,7 @@ function renderPodium() {
       <div class="podium-rank">${ranks[i]}</div>
       <img src="${p.avatar}" class="podium-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
       <div class="podium-name">${displayName(p)}</div>
-      <div class="podium-rating">${p.avgRating ?? p.kd}</div>
+      <div class="podium-rating" style="color: ${p.rankColor || 'var(--accent)'};">${p.elo ?? 1000} <span style="font-size: 0.7rem;">ELO</span></div>
     </div>`;
   }).join('');
 }
@@ -580,7 +594,8 @@ function renderPlayersTable() {
       if (sortKey === 'deaths') return b.deaths - a.deaths;
       if (sortKey === 'kd') return b.kd - a.kd;
       if (sortKey === 'adr') return (b.avgAdr ?? 0) - (a.avgAdr ?? 0);
-      return (b.avgRating ?? 0) - (a.avgRating ?? 0);
+      if (sortKey === 'rating') return (b.avgRating ?? 0) - (a.avgRating ?? 0);
+      return (b.elo ?? 1000) - (a.elo ?? 1000); 
     });
     tbody.innerHTML = players.map((p) => {
       let formText = '';
@@ -590,6 +605,7 @@ function renderPlayersTable() {
       else formText = '<span style="color: var(--text-muted);">Стабильно</span>';
       return `<tr>
         <td><div class="player-cell"><img src="${p.avatar}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><div><strong class="player-link" onclick="openProfile('${p.id}')">${displayName(p)}</strong></div></div></td>
+        <td><span style="color: ${p.rankColor || 'var(--accent)'}; font-weight: bold;">${p.elo ?? 1000}</span></td>
         <td>${formText}</td><td>${p.matches}</td><td><strong>${p.kd}</strong></td><td style="color: var(--accent); font-weight: 600;">${p.avgRating ?? '—'}</td>
       </tr>`;
     }).join('');
@@ -732,7 +748,9 @@ function openProfile(playerId) {
   const img = document.getElementById('prof-avatar');
   img.src = p.avatar;
   img.onerror = function() { this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true&size=128`; };
-  document.getElementById('prof-name').innerText = displayName(p);
+  
+  document.getElementById('prof-name').innerHTML = `${displayName(p)} <span style="font-size: 0.8rem; padding: 2px 6px; border-radius: 4px; background: ${p.rankColor || '#4d6bfe'}33; color: ${p.rankColor || '#4d6bfe'}; border: 1px solid ${p.rankColor || '#4d6bfe'}; margin-left: 8px; white-space: nowrap;">${p.elo ?? 1000} ELO</span>`;
+  
   document.getElementById('prof-matches').innerText = p.matches;
   document.getElementById('prof-kd').innerText = p.kd;
   document.getElementById('prof-rating').innerText = p.avgRating ?? '—';
@@ -787,8 +805,11 @@ function openProfile(playerId) {
   
   tbody.innerHTML = history.map(h => {
     const d = new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+    let eloHtml = '<span style="color:var(--text-muted);">0</span>';
+    if (h.eloChange > 0) eloHtml = `<span style="color:#10b981; font-weight:bold;">+${h.eloChange}</span>`;
+    if (h.eloChange < 0) eloHtml = `<span style="color:#ef4444; font-weight:bold;">${h.eloChange}</span>`;
     return `<tr class="match-history-row" style="cursor:pointer;" onclick="openMatchDetails('${h.matchId}')">
-      <td>${d}</td><td>${h.map}</td><td>${h.kills}</td><td>${h.deaths}</td><td>${h.assists}</td><td>${h.adr ?? '—'}</td><td>${h.kast ?? '—'}</td><td style="color: var(--accent); font-weight: 600;">${h.rating ?? '—'}</td>
+      <td>${d}</td><td>${h.map}</td><td>${h.kills}</td><td>${h.deaths}</td><td>${h.assists}</td><td>${h.adr ?? '—'}</td><td>${h.kast ?? '—'}</td><td style="color: var(--accent); font-weight: 600;">${h.rating ?? '—'}</td><td>${eloHtml}</td>
     </tr>`;
   }).join('');
 

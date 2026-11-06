@@ -1,4 +1,4 @@
-// collect.js — ИСПРАВЛЕННЫЙ (С защитой от несыгранных карт в Bo3)
+// collect.js — ИСПРАВЛЕННЫЙ (С защитой от несыгранных карт в Bo3 и умным выбором финального пакета данных)
 import { chromium } from 'playwright';
 import fs from 'fs-extra';
 import path from 'path';
@@ -49,10 +49,6 @@ async function main() {
     console.log(`[${i + 1}/${lines.length}] Открываем ${url} (Турнир: ${tournamentName}) ...`);
     const collectedMaps = new Map();
 
-    // Отпечатки ВСЕХ уже собранных составов (id+kills+deaths всех 10 игроков).
-    // Защита от несыгранных карт: Cybershoke иногда возвращает данные уже
-    // собранной карты при клике по карте, которую не играли (особенно в Bo3).
-    // Раньше ловили только соседние дубли (previousSignature), теперь — любые.
     const seenSignatures = new Set();
     const signatureOf = (players) =>
       players.map(p => `${p.id}_${p.kills}_${p.deaths}`).sort().join('|');
@@ -126,7 +122,26 @@ async function main() {
           const capturedData = await page.evaluate(() => window.__CAPTURED_API);
           
           if (capturedData.length > 0) {
-            const rawJson = capturedData[capturedData.length - 1]; 
+            // УМНЫЙ ВЫБОР: Ищем пакет данных, где сумма K+D максимальна (это финал игры)
+            let bestPayload = null;
+            let maxScore = -1;
+
+            for (const raw of capturedData) {
+              try {
+                const parsed = JSON.parse(raw);
+                const players = extractPlayersStrict(parsed);
+                if (players.length === 10) {
+                   const totalScore = players.reduce((sum, p) => sum + p.kills + p.deaths, 0);
+                   if (totalScore > maxScore) {
+                     maxScore = totalScore;
+                     bestPayload = raw;
+                   }
+                }
+              } catch(e) {}
+            }
+
+            const rawJson = bestPayload || capturedData[capturedData.length - 1]; 
+            
             try {
               const parsed = JSON.parse(rawJson);
               const players = extractPlayersStrict(parsed);
@@ -134,7 +149,6 @@ async function main() {
               if (players.length > 0) {
                 const currentSignature = signatureOf(players);
 
-                // Если такой состав уже собран — это фейк (несыгранная карта / дубль).
                 if (seenSignatures.has(currentSignature)) {
                     console.log(`    [${mapName}] ПРОПУЩЕНО (состав уже собран — карта не игралась).`);
                     continue;
