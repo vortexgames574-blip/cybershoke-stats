@@ -192,16 +192,11 @@ function initDraft() {
       const largePool = sorted.slice(0, Math.min(30, sorted.length));
       let candidates = [];
       
-      // Делаем 300 симуляций
       for (let i = 0; i < 300; i++) {
-        // Берем случайных 16 из топа
         const shuffledPlayers = [...largePool].sort(() => Math.random() - 0.5);
         const pool = shuffledPlayers.slice(0, 16);
-        
-        // ВАЖНО: Сортируем выбранных 16 игроков по силе! Иначе жадный алгоритм сломается.
         pool.sort((a, b) => b.score - a.score);
         
-        // Перемешиваем капитанов
         const shuffledCaptains = [...captains].sort(() => Math.random() - 0.5);
         
         const teams = buildTeamsLogic(pool, shuffledCaptains);
@@ -1538,25 +1533,55 @@ function initBalancer() {
 }
 
 // ============ ОБРАТНАЯ СВЯЗЬ ============
+const WEB3FORMS_KEY = '63a38abb-99fc-422e-b49f-14da4dc31f3d';
+
 document.getElementById('feedback-btn').onclick = () => {
   document.getElementById('feedback-modal').style.display = 'block';
 };
 window.closeFeedback = () => {
   document.getElementById('feedback-modal').style.display = 'none';
 };
-document.getElementById('send-feedback-btn').onclick = () => {
+
+document.getElementById('send-feedback-btn').onclick = async () => {
+  const name = document.getElementById('feedback-name').value.trim() || 'Аноним';
   const text = document.getElementById('feedback-text').value.trim();
-  if (!text) return showToast('Введите текст', 'error');
   
+  if (!text) return showToast('Введите текст сообщения', 'error');
+  
+  const btn = document.getElementById('send-feedback-btn');
+  const prevText = btn.innerText;
+  btn.innerText = 'Отправка...';
+  btn.disabled = true;
+
   try {
-    const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
-    feedbacks.push({ text, date: new Date().toISOString() });
-    localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
-    showToast('Спасибо! Отзыв сохранен.', 'success');
-    document.getElementById('feedback-text').value = '';
-    closeFeedback();
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: '🎮 GEIMERI CS2 — новый отзыв с сайта',
+        from_name: 'GEIMERI CS2 Stats',
+        'Ник игрока': name,
+        'Сообщение': text
+      })
+    });
+
+    const data = await res.json();
+    
+    if (data.success) {
+      showToast('Отправлено! Спасибо за фидбек.', 'success');
+      document.getElementById('feedback-text').value = '';
+      document.getElementById('feedback-name').value = '';
+      closeFeedback();
+    } else {
+      throw new Error(data.message || 'Ошибка отправки');
+    }
   } catch (e) {
-    showToast('Ошибка при сохранении', 'error');
+    showToast('Не удалось отправить. Попробуйте позже.', 'error');
+    console.error(e);
+  } finally {
+    btn.innerText = prevText;
+    btn.disabled = false;
   }
 };
 

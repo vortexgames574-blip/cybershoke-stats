@@ -40,12 +40,12 @@
     <section class="metric-explanation" id="beginner-block">
       <h3>Что значит каждая метрика?</h3>
       <div class="metric-grid">
+        <div class="metric-item"><b>ELO</b><br>Твой глобальный рейтинг. Зависит от качества твоей игры. Старт: 1000.</div>
         <div class="metric-item"><b>K/D</b><br>Отношение убийств к смертям. 1.0 — средний, выше — лучше.</div>
         <div class="metric-item"><b>Рейтинг</b><br>Оценка (как на HLTV). 1.0 — средний, 1.2+ — сильный.</div>
         <div class="metric-item"><b>ADR</b><br>Средний урон за раунд. 60 — мало, 80 — норма, 100+ — отлично.</div>
         <div class="metric-item"><b>KAST</b><br>% раундов, где ты убил, помог или выжил. 70%+ — хорошо.</div>
         <div class="metric-item"><b>Форма</b><br>Тренд последних 3 матчей: в форме, стабильно или спад.</div>
-        <div class="metric-item"><b>Карты</b><br>Сколько карт сыграно. Одна карта может быть частью матча.</div>
       </div>
     </section>
 
@@ -71,7 +71,7 @@
         <div class="grid-2col">
           <div class="col-left">
             <section class="glass-card interactive-card" data-aos="fade-up">
-              <div class="card-header"><h2>Пьедестал</h2><span class="header-hint">Топ-3 по рейтингу</span></div>
+              <div class="card-header"><h2>Пьедестал</h2><span class="header-hint">Топ-3 по ELO</span></div>
               <div class="podium-grid" id="podium-container"></div>
             </section>
             <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="100">
@@ -339,8 +339,11 @@
     <div class="modal-content glass-card" style="max-width: 500px;">
       <span class="close-btn" onclick="closeFeedback()">&times;</span>
       <div class="card-header"><h2>Обратная связь</h2></div>
-      <p class="text-muted mb-10">Напишите, что можно улучшить или что сломалось. Отзыв уйдет анонимно.</p>
-      <textarea id="feedback-text" class="input-search" style="width: 100%; height: 120px; resize: vertical;" placeholder="Ваш отзыв..."></textarea>
+      <p class="text-muted mb-10">Напиши, что сломалось или что можно улучшить. Сообщение прилетит админу на почту.</p>
+      
+      <input type="text" id="feedback-name" class="input-search" style="width: 100%; margin-bottom: 10px;" placeholder="Твой ник (чтобы знал, кто пишет)">
+      <textarea id="feedback-text" class="input-search" style="width: 100%; height: 120px; resize: vertical; margin-bottom: 10px;" placeholder="Суть проблемы или предложения..."></textarea>
+      
       <button id="send-feedback-btn" class="btn-primary mt-20">Отправить</button>
     </div>
   </div>
