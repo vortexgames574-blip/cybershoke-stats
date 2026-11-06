@@ -12,7 +12,7 @@
           "name": "AuraTeam",
           "kills": 21,
           "deaths": 12,
-          "assists": 0,
+          "assists": 3,
           "adr": 127,
           "kast": 88,
           "rating": 1.82
@@ -22,7 +22,7 @@
           "name": "ЯнаЦист",
           "kills": 15,
           "deaths": 6,
-          "assists": 0,
+          "assists": 4,
           "adr": 81,
           "kast": 88,
           "rating": 1.56
@@ -32,7 +32,7 @@
           "name": "Господин Босс",
           "kills": 16,
           "deaths": 10,
-          "assists": 0,
+          "assists": 2,
           "adr": 94,
           "kast": 76,
           "rating": 1.43
@@ -42,7 +42,7 @@
           "name": "kvsmstr",
           "kills": 13,
           "deaths": 9,
-          "assists": 0,
+          "assists": 5,
           "adr": 85,
           "kast": 88,
           "rating": 1.38
@@ -52,7 +52,7 @@
           "name": "Анальный бур",
           "kills": 9,
           "deaths": 11,
-          "assists": 0,
+          "assists": 8,
           "adr": 63,
           "kast": 82,
           "rating": 1.02
@@ -60,9 +60,9 @@
         {
           "id": "76561198210127765",
           "name": "blackpolosa",
-          "kills": 10,
-          "deaths": 14,
-          "assists": 0,
+          "kills": 9,
+          "deaths": 13,
+          "assists": 3,
           "adr": 69,
           "kast": 71,
           "rating": 0.89
@@ -72,7 +72,7 @@
           "name": "tolya800x600",
           "kills": 11,
           "deaths": 16,
-          "assists": 0,
+          "assists": 3,
           "adr": 78,
           "kast": 59,
           "rating": 0.82
@@ -82,7 +82,7 @@
           "name": "Изумительные Брючки.",
           "kills": 11,
           "deaths": 14,
-          "assists": 0,
+          "assists": 1,
           "adr": 60,
           "kast": 53,
           "rating": 0.77
@@ -92,7 +92,7 @@
           "name": "PRADA_CODE",
           "kills": 8,
           "deaths": 14,
-          "assists": 0,
+          "assists": 4,
           "adr": 61,
           "kast": 65,
           "rating": 0.72
@@ -102,7 +102,7 @@
           "name": "Kyo  Ilonmax8",
           "kills": 8,
           "deaths": 16,
-          "assists": 0,
+          "assists": 2,
           "adr": 47,
           "kast": 59,
           "rating": 0.56

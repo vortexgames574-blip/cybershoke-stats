@@ -12,7 +12,7 @@
           "name": "ZAZA_",
           "kills": 29,
           "deaths": 9,
-          "assists": 0,
+          "assists": 2,
           "adr": 148,
           "kast": 95,
           "rating": 2.31
@@ -22,7 +22,7 @@
           "name": "1lpk",
           "kills": 18,
           "deaths": 9,
-          "assists": 0,
+          "assists": 5,
           "adr": 93,
           "kast": 79,
           "rating": 1.52
@@ -32,7 +32,7 @@
           "name": "blackpolosa",
           "kills": 16,
           "deaths": 14,
-          "assists": 0,
+          "assists": 3,
           "adr": 93,
           "kast": 63,
           "rating": 1.17
@@ -42,7 +42,7 @@
           "name": "St1gmat",
           "kills": 13,
           "deaths": 12,
-          "assists": 0,
+          "assists": 3,
           "adr": 81,
           "kast": 74,
           "rating": 1.13
@@ -62,7 +62,7 @@
           "name": "Игрок",
           "kills": 11,
           "deaths": 10,
-          "assists": 0,
+          "assists": 2,
           "adr": 59,
           "kast": 74,
           "rating": 1.02
@@ -72,7 +72,7 @@
           "name": "s1slw",
           "kills": 7,
           "deaths": 13,
-          "assists": 0,
+          "assists": 5,
           "adr": 51,
           "kast": 68,
           "rating": 0.7
@@ -91,8 +91,8 @@
           "id": "76561198042805941",
           "name": "PRADA_CODE",
           "kills": 7,
-          "deaths": 15,
-          "assists": 0,
+          "deaths": 14,
+          "assists": 3,
           "adr": 40,
           "kast": 47,
           "rating": 0.44
@@ -101,8 +101,8 @@
           "id": "76561198818222401",
           "name": "Kyo  Ilonmax8",
           "kills": 6,
-          "deaths": 18,
-          "assists": 0,
+          "deaths": 17,
+          "assists": 2,
           "adr": 42,
           "kast": 32,
           "rating": 0.21
