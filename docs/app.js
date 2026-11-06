@@ -499,10 +499,10 @@ function renderRecentMatches() {
   if (currentStats.recentMatches.length === 0) { container.innerHTML = '<p style="color:var(--text-muted);">Матчей пока нет</p>'; return; }
   container.innerHTML = currentStats.recentMatches.map(m => {
     const date = new Date(m.date).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-    return `<a href="${m.url}" target="_blank" class="recent-match-item">
+    return `<div class="recent-match-item" onclick="openMatchDetails('${m.matchId}')" style="cursor:pointer;">
       <div class="recent-match-left"><span class="recent-match-date">${date}</span><span class="recent-match-maps">${m.maps.join(' · ')}</span></div>
-      <div class="recent-match-right"><span>Открыть</span><span style="font-size: 1.2rem;">→</span></div>
-    </a>`;
+      <div class="recent-match-right"><span>Подробнее</span><span style="font-size: 1.2rem;">→</span></div>
+    </div>`;
   }).join('');
 }
 
@@ -1585,16 +1585,15 @@ document.getElementById('send-feedback-btn').onclick = async () => {
   }
 };
 
-// ============ РЕЖИМ НОВИЧКА ============
+// ============ РЕЖИМ НОВИЧКА (ВЕДЕТ В FAQ) ============
 function initBeginnerMode() {
   const btn = document.getElementById('beginner-toggle');
   if (!btn) return;
-  const isActive = localStorage.getItem('beginnerMode') === '1';
-  if (isActive) { document.body.classList.add('beginner-mode'); btn.classList.add('active'); }
+  
   btn.onclick = () => {
-    const active = document.body.classList.toggle('beginner-mode');
-    localStorage.setItem('beginnerMode', active ? '1' : '0');
-    btn.classList.toggle('active', active);
+    const faqTabBtn = document.querySelector('[data-tab="faq"]');
+    if (faqTabBtn) faqTabBtn.click();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 }
 

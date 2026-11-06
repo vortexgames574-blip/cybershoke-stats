@@ -56,6 +56,7 @@
       <button class="tab-btn" data-tab="maps"><i data-lucide="map"></i> Карты</button>
       <button class="tab-btn" data-tab="balancer"><i data-lucide="git-merge"></i> Балансировщик 5х5</button>
       <button class="tab-btn" data-tab="draft"><i data-lucide="users"></i> Драфт 4х</button>
+      <button class="tab-btn" data-tab="faq"><i data-lucide="help-circle"></i> FAQ</button>
     </nav>
 
     <main class="main-content">
@@ -204,6 +205,58 @@
           <button id="reset-teams-btn" class="btn-outline mt-20" style="width: 100%; display: none;">Сбросить</button>
 
           <div id="draft-result" class="draft-result-grid" style="display: none; margin-top: 20px;"></div>
+        </section>
+      </div>
+
+      <!-- FAQ -->
+      <div class="tab-content" id="tab-faq">
+        <section class="glass-card interactive-card" style="max-width: 900px; margin: 0 auto;">
+          <div class="card-header"><h2>Часто задаваемые вопросы (FAQ)</h2></div>
+          <p class="text-muted mb-10">Если нашел баг или что-то не работает — жми кнопку «Связь» в шапке сайта.</p>
+
+          <div class="faq-list">
+            <details class="faq-item">
+              <summary>Как начисляется ELO?</summary>
+              <div class="faq-content">
+                Мы используем систему Performance-based ELO. Ты начинаешь с 1000 очков. Если твой личный рейтинг за игру (Rating) выше 1.0 — ты забираешь ELO. Если ниже — теряешь. При этом работает «динамический K-фактор»: чем больше матчей ты сыграл, тем меньше ELO ты получаешь/теряешь за каждую следующую игру. Это защищает топ от «инфляции» и не дает новичкам улететь в космос за 2 хороших матча.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Почему балансировщик иногда кидает двух снайперов в одну команду?</summary>
+              <div class="faq-content">
+                Балансировщик старается сделать команды максимально равными по суммарному композитному скору (Рейтинг + K/D + ADR + KAST). Роли (Плейстайлы) — это лишь дополнительный штраф. Если два сильных игрока с ролью «Снайпер» вместе дают идеальный математический баланс против другой команды, алгоритм закроет глаза на роли, чтобы не было разгрома.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Почему в Драфте 4х кнопка «Перемешать» иногда выдает тот же состав?</summary>
+              <div class="faq-content">
+                Кнопка «Перемешать» делает 300 симуляций: берет случайных 16 игроков из топа, случайно перемешивает капитанов и ищет лучший баланс. Затем она выбирает один из 10 лучших вариантов случайным образом. Если у вас мало активных игроков (меньше 24-х), то алгоритму просто не из кого выбирать, и он вынужден использовать одних и тех же людей. Чем больше людей в базе, тем уникальнее будут составы.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Почему в профиле 21 смерть, а в демке 20?</summary>
+              <div class="faq-content">
+                Это баг самого API Cybershoke. Иногда их сервера неправильно считают тимкиллы, смерти от бомбы или суициды. Мы забираем ровно те цифры, которые отдает сайт Cybershoke. Если хотите идеальную стату — напишите через форму «Связь», указав ID матча и ник, мы поправим цифру вручную.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Как часто обновляется статистика?</summary>
+              <div class="faq-content">
+                Новые матчи добавляются вручную админом (собираются скриптом). Обычно это происходит раз в день или после вечерних каток. Если матч сыгран, но его нет на сайте — не паникуй, скоро появится.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Что такое KAST и почему он важен?</summary>
+              <div class="faq-content">
+                KAST — это процент раундов, в которых ты либо сделал килл (K), либо отдал ассист (A), либо выжил (S), либо был разменян (T - traded). 70%+ — это хороший показатель. Он показывает, приносишь ли ты пользу команде, даже если не набиваешь много фрагов.
+              </div>
+            </details>
+          </div>
         </section>
       </div>
     </main>

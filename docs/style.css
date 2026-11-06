@@ -241,6 +241,17 @@ body.beginner-mode .metric-explanation { display: block; }
 @keyframes slideInToast { to { transform: translateX(0); } }
 @keyframes fadeOutToast { to { opacity: 0; transform: translateY(10px); } }
 
+/* --- FAQ АККОРДЕОН --- */
+.faq-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+.faq-item { background: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: border-color 0.2s; }
+.faq-item[open] { border-color: var(--accent); }
+.faq-item summary { padding: 16px; font-weight: 600; font-size: 1rem; color: #fff; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+.faq-item summary:hover { background: var(--bg-hover); }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: '▼'; font-size: 0.7rem; color: var(--text-muted); transition: transform 0.2s; }
+.faq-item[open] summary::after { transform: rotate(180deg); color: var(--accent); }
+.faq-content { padding: 0 16px 16px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; border-top: 1px solid var(--border); padding-top: 12px; animation: fadeIn 0.3s ease-out; }
+
 @media (max-width: 1024px) {
   .grid-2col { grid-template-columns: 1fr; }
   .col-right { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
