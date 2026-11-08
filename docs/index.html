@@ -173,12 +173,22 @@
         </section>
       </div>
 
-      <!-- ДРАФТ 4x -->
+      <!-- ДРАФТ 4x С ЛОББИ -->
       <div class="tab-content" id="tab-draft">
-        <section class="glass-card interactive-card" style="max-width: 800px; margin: 0 auto;">
+        <section class="glass-card interactive-card" style="max-width: 900px; margin: 0 auto;">
           <div class="card-header"><h2>Создать 4 команды</h2></div>
-          <p class="text-muted mb-10">Выберите 4 капитанов. Остальные игроки распределятся автоматически по композитному скору (тем же весам, что в балансировщике) — алгоритмом "жадный выбор".</p>
+          <p class="text-muted mb-10">Сначала добавьте участников на этот турнир (выбирая из базы или вписывая новые ники). Затем выберите капитанов и соберите команды.</p>
           
+          <div style="background: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+              <input type="text" id="draft-search" class="input-search" placeholder="Начни вводить ник из базы или впиши новый..." style="flex: 1;">
+              <button id="draft-add-btn" class="btn-primary" style="width: auto; padding: 0 20px;">Добавить</button>
+            </div>
+            <div id="draft-participants-list" style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <!-- Сюда будут падать добавленные игроки -->
+            </div>
+          </div>
+
           <div class="draft-captain-grid">
             <div class="draft-captain-slot">
               <label>Капитан 1</label>
@@ -230,9 +240,9 @@
             </details>
 
             <details class="faq-item">
-              <summary>Почему в Драфте 4х кнопка «Перемешать» иногда выдает тот же состав?</summary>
+              <summary>Как работает Драфт 4х с Лобби?</summary>
               <div class="faq-content">
-                Кнопка «Перемешать» делает 300 симуляций: берет случайных 16 игроков из топа, случайно перемешивает капитанов и ищет лучший баланс. Затем она выбирает один из 10 лучших вариантов случайным образом. Если у вас мало активных игроков (меньше 24-х), то алгоритму просто не из кого выбирать, и он вынужден использовать одних и тех же людей. Чем больше людей в базе, тем уникальнее будут составы.
+                В Драфте 4х есть поле для добавления участников. Вы вписываете ники тех, кто играет именно сейчас. Если игрока нет в базе статистики (новичок), система создаст его профиль со средними показателями. Драфт будет собирать команды строго из этого списка.
               </div>
             </details>
 

@@ -126,6 +126,8 @@ function renderAll() {
 }
 
 // ============ ДРАФТ 4x С ГЕНЕРАЦИЕЙ КАРТИНКИ ============
+let draftParticipants = [];
+
 function initDraft() {
   const c1 = document.getElementById('cap-1');
   const c2 = document.getElementById('cap-2');
@@ -133,16 +135,70 @@ function initDraft() {
   const c4 = document.getElementById('cap-4');
   if (!c1) return;
 
-  const opts = currentStats.players
-    .slice()
-    .sort((a, b) => (b.elo ?? 1000) - (a.elo ?? 1000))
-    .map(p => `<option value="${p.id}">${displayName(p)} (${p.elo ?? 1000} ELO)</option>`)
-    .join('');
+  const searchInput = document.getElementById('draft-search');
+  const addBtn = document.getElementById('draft-add-btn');
+  const listDiv = document.getElementById('draft-participants-list');
   
-  [c1, c2, c3, c4].forEach((sel, i) => {
-    sel.innerHTML = `<option value="">— выберите —</option>` + opts;
-    if (currentStats.players.length > i) sel.selectedIndex = i + 1;
-  });
+  const renderParticipants = () => {
+    listDiv.innerHTML = draftParticipants.map(p => `
+      <div style="background: var(--bg-hover); border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; display: flex; align-items: center; gap: 8px; font-size: 0.85rem;">
+        <img src="${p.avatar}" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover;">
+        <span>${displayName(p)}</span>
+        <span style="color: var(--text-muted); font-size: 0.7rem;">${p.isGuest ? 'Новичок' : (p.avgRating || '—')}</span>
+        <button onclick="removeDraftParticipant('${p.id}')" style="background: none; border: none; color: #ef4444; cursor: pointer; font-weight: bold; font-size: 1rem; line-height: 1;">&times;</button>
+      </div>
+    `).join('');
+    
+    const opts = draftParticipants
+      .slice()
+      .sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0))
+      .map(p => `<option value="${p.id}">${displayName(p)} (${p.avgRating ?? p.kd ?? '?'})</option>`)
+      .join('');
+    
+    [c1, c2, c3, c4].forEach((sel, i) => {
+      const prevVal = sel.value;
+      sel.innerHTML = `<option value="">— выберите —</option>` + opts;
+      if (prevVal && draftParticipants.find(p => p.id === prevVal)) sel.value = prevVal;
+      else if (draftParticipants.length > i) sel.selectedIndex = i + 1;
+    });
+  };
+
+  window.removeDraftParticipant = (id) => {
+    draftParticipants = draftParticipants.filter(p => p.id !== id);
+    renderParticipants();
+  };
+
+  const addParticipant = () => {
+    const rawName = searchInput.value.trim();
+    if (!rawName) return;
+    
+    const existing = currentStats.players.find(p => 
+      p.name.toLowerCase() === rawName.toLowerCase() || 
+      displayName(p).toLowerCase() === rawName.toLowerCase()
+    );
+
+    if (existing) {
+      if (draftParticipants.find(p => p.id === existing.id)) return showToast('Этот игрок уже в списке', 'error');
+      draftParticipants.push(existing);
+    } else {
+      const guestId = 'guest_' + Date.now();
+      draftParticipants.push({
+        id: guestId,
+        name: rawName,
+        displayName: rawName,
+        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(rawName)}&background=4d6bfe&color=fff&rounded=true`,
+        avgRating: 1.0, kd: 1.0, avgAdr: 75, avgKast: 70,
+        isGuest: true
+      });
+    }
+    searchInput.value = '';
+    renderParticipants();
+  };
+
+  addBtn.onclick = addParticipant;
+  searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addParticipant(); });
+
+  renderParticipants();
 
   const buildBtn = document.getElementById('build-teams-btn');
   const shuffleBtn = document.getElementById('shuffle-teams-btn');
@@ -150,13 +206,17 @@ function initDraft() {
   const resultDiv = document.getElementById('draft-result');
 
   const executeDraft = (isShuffle = false) => {
+    if (draftParticipants.length < 20) {
+      return showToast(`Для 4х команд по 5 человек нужно минимум 20 игроков. Сейчас добавлено: ${draftParticipants.length}`, 'error');
+    }
+
     const capIds = [c1.value, c2.value, c3.value, c4.value].filter(Boolean);
     if (capIds.length !== 4) return showToast('Выберите 4 капитана', 'error');
     if (new Set(capIds).size !== 4) return showToast('Капитаны не должны повторяться', 'error');
 
     const weights = getBalancerWeights();
-    const captains = capIds.map(id => currentStats.players.find(p => p.id === id)).filter(Boolean);
-    const allPlayers = currentStats.players.filter(p => !capIds.includes(p.id));
+    const captains = capIds.map(id => draftParticipants.find(p => p.id === id)).filter(Boolean);
+    const allPlayers = draftParticipants.filter(p => !capIds.includes(p.id));
     const scoredPool = allPlayers.map(p => ({ ...p, score: playerCompositeScore(p, weights) }));
     
     const sorted = scoredPool.slice().sort((a, b) => b.score - a.score);
@@ -187,16 +247,13 @@ function initDraft() {
 
     let finalTeams = [];
     let finalSpread = 0;
+    const playersToPick = 16;
 
     if (isShuffle) {
-      const largePool = sorted.slice(0, Math.min(30, sorted.length));
       let candidates = [];
-      
       for (let i = 0; i < 300; i++) {
-        const shuffledPlayers = [...largePool].sort(() => Math.random() - 0.5);
-        const pool = shuffledPlayers.slice(0, 16);
-        pool.sort((a, b) => b.score - a.score);
-        
+        const shuffledPlayers = [...allPlayers].sort(() => Math.random() - 0.5);
+        const pool = shuffledPlayers.slice(0, playersToPick).sort((a, b) => b.score - a.score);
         const shuffledCaptains = [...captains].sort(() => Math.random() - 0.5);
         
         const teams = buildTeamsLogic(pool, shuffledCaptains);
@@ -204,14 +261,13 @@ function initDraft() {
         const spread = Math.max(...sums) - Math.min(...sums);
         candidates.push({ teams, spread });
       }
-      
       candidates.sort((a, b) => a.spread - b.spread);
       const bestOptions = candidates.slice(0, 10);
       const selected = bestOptions[Math.floor(Math.random() * bestOptions.length)];
       finalTeams = selected.teams;
       finalSpread = selected.spread;
     } else {
-      const pool = sorted.slice(0, 16);
+      const pool = sorted.slice(0, playersToPick);
       finalTeams = buildTeamsLogic(pool, captains);
       const sums = finalTeams.map(t => t.sumScore);
       finalSpread = Math.max(...sums) - Math.min(...sums);
@@ -220,7 +276,6 @@ function initDraft() {
     const q = balanceQuality(finalSpread);
 
     resultDiv.style.display = 'grid';
-    
     resultDiv.querySelectorAll('.balance-card-preview, .balance-share-actions').forEach(el => {
       if (el.dataset && el.dataset.url) URL.revokeObjectURL(el.dataset.url);
       el.remove();
@@ -254,13 +309,12 @@ function initDraft() {
       resetBtn.style.display = 'none';
     };
 
-    const tournamentName = document.getElementById('tournament-select').value || 'Все матчи';
+    const tournamentName = document.getElementById('tournament-select').value || 'Турнир';
     const cardCanvas = drawDraftCard({ teams: finalTeams, spread: finalSpread, quality: q, tournamentName });
 
     cardCanvas.toBlob((blob) => {
       if (!blob) return;
       const url = URL.createObjectURL(blob);
-
       const preview = document.createElement('div');
       preview.className = 'balance-card-preview';
       preview.dataset.url = url;
@@ -285,19 +339,6 @@ function initDraft() {
         document.body.removeChild(a);
       };
       actions.appendChild(dlBtn);
-
-      const file = new File([blob], 'draft.png', { type: 'image/png' });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        const shareBtn2 = document.createElement('button');
-        shareBtn2.className = 'btn-outline';
-        shareBtn2.style.flex = '1';
-        shareBtn2.innerText = 'Поделиться';
-        shareBtn2.onclick = async () => {
-          try { await navigator.share({ files: [file], title: 'Драфт команд', text: 'Драфт для CS2' }); } catch (e) {}
-        };
-        actions.appendChild(shareBtn2);
-      }
-
       resultDiv.appendChild(actions);
     }, 'image/png');
   };
@@ -337,7 +378,7 @@ function drawDraftCard({ teams, spread, quality, tournamentName }) {
   ctx.fillStyle = MUTED;
   ctx.font = '500 16px Inter, system-ui, sans-serif';
   ctx.textAlign = 'right';
-  ctx.fillText(tournamentName || 'Все матчи', W - 60, 56);
+  ctx.fillText(tournamentName || 'Турнир', W - 60, 56);
   ctx.fillText('Сгенерировано ' + new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }), W - 60, 80);
   
   ctx.strokeStyle = BORDER;
