@@ -95,6 +95,8 @@ function initTabs() {
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = document.querySelectorAll('.tab-content');
 
+  if (!tabs.length || !contents.length) return;
+
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const target = tab.dataset.tab;
@@ -215,7 +217,7 @@ function renderPodium() {
   }).join('');
 }
 
-// ===== ПОСЛЕДНИЕ МАТЧИ (модалка) =====
+// ===== ПОСЛЕДНИЕ МАТЧИ =====
 function renderRecentMatches() {
   const container = document.getElementById('recent-matches-container');
   if (!container || !currentStats.recentMatches) return;
@@ -569,7 +571,6 @@ function openProfile(playerId) {
     </tr>`;
   }).join('');
 
-  // Line chart
   const canvas = document.getElementById('prof-chart');
   if (profChart) { profChart.destroy(); profChart = null; }
   if (p.history && p.history.length > 1) {
@@ -597,7 +598,6 @@ function openProfile(playerId) {
     });
   }
 
-  // Radar
   const radarCanvas = document.getElementById('prof-radar-chart');
   if (radarCanvas) {
     if (profRadarChart) { profRadarChart.destroy(); profRadarChart = null; }
@@ -735,4 +735,798 @@ function mapPlayerCompositeScore(player, mapEntry, w) {
 function getPlaystyle(p) {
   if (!p || p.matches < 3) return 'Универсал';
   const adr = p.avgAdr || 0;
-  const kd = p.kd || 0
+  const kd = p.kd || 0;
+  const kast = p.avgKast || 0;
+  if (adr >= 85 && kd >= 1.1) return 'Фраггер';
+  if (kast >= 75 && adr <= 70) return 'Саппорт';
+  if (kd >= 1.25 && adr >= 75) return 'Снайпер';
+  return 'Универсал';
+}
+
+function combinations(arr, k) {
+  if (k === 0) return [[]];
+  if (arr.length === 0) return [];
+  const [first, ...rest] = arr;
+  const withFirst = combinations(rest, k - 1).map(c => [first, ...c]);
+  const withoutFirst = combinations(rest, k);
+  return [...withFirst, ...withoutFirst];
+}
+
+function findBestTeams(playersWithScores) {
+  if (playersWithScores.length !== 10) return null;
+  const half = 5;
+  const EPS = 0.02;
+  let best = null;
+  const playersWithRoles = playersWithScores.map(p => ({ ...p, role: getPlaystyle(p) }));
+
+  for (const teamA of combinations(playersWithRoles, half)) {
+    const setA = new Set(teamA.map(p => p.id));
+    const teamB = playersWithRoles.filter(p => !setA.has(p.id));
+
+    const sumA = teamA.reduce((s, p) => s + p.score, 0);
+    const sumB = teamB.reduce((s, p) => s + p.score, 0);
+    const diff = Math.abs(sumA - sumB);
+
+    let rolePenalty = 0;
+    ['Фраггер', 'Снайпер', 'Саппорт'].forEach(role => {
+      const countA = teamA.filter(p => p.role === role).length;
+      const countB = teamB.filter(p => p.role === role).length;
+      if (countA !== countB) rolePenalty += Math.abs(countA - countB) * 0.15;
+    });
+
+    const effectiveDiff = diff + rolePenalty;
+    const maxGap = Math.abs(Math.max(...teamA.map(p => p.score)) - Math.max(...teamB.map(p => p.score)));
+    const minGap = Math.abs(Math.min(...teamA.map(p => p.score)) - Math.min(...teamB.map(p => p.score)));
+    const kdA = teamA.reduce((s, p) => s + (p.kd ?? 0), 0);
+    const kdB = teamB.reduce((s, p) => s + (p.kd ?? 0), 0);
+    const adrA = teamA.reduce((s, p) => s + (p.avgAdr ?? 0), 0);
+    const adrB = teamB.reduce((s, p) => s + (p.avgAdr ?? 0), 0);
+
+    const candidate = { teamA, teamB, sumA, sumB, diff: effectiveDiff, realDiff: diff, maxGap, minGap, kdA, kdB, adrA, adrB, rolePenalty };
+
+    if (!best) { best = candidate; continue; }
+    if (effectiveDiff < best.diff - EPS) { best = candidate; continue; }
+    if (Math.abs(effectiveDiff - best.diff) <= EPS) {
+      if (maxGap < best.maxGap - EPS) { best = candidate; continue; }
+      if (Math.abs(maxGap - best.maxGap) <= EPS && minGap < best.minGap) {
+        best = candidate;
+      }
+    }
+  }
+  return best;
+}
+
+function balanceQuality(diff) {
+  if (diff <= 0.05) return { key: 'perfect', label: 'Идеально' };
+  if (diff <= 0.15) return { key: 'good', label: 'Отлично' };
+  if (diff <= 0.30) return { key: 'ok', label: 'Приемлемо' };
+  return { key: 'bad', label: 'Слабо' };
+}
+
+function drawTeamColumn(ctx, title, players, sumScore, x, y, w, accentColor) {
+  const TEXT = '#f0f3f8', MUTED = '#8b96a5', BORDER = '#262f40', PANEL = '#151a25';
+
+  ctx.fillStyle = PANEL;
+  roundRectPath(ctx, x, y, w, 480, 12);
+  ctx.fill();
+  ctx.strokeStyle = BORDER;
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  const innerX = x + 24, innerY = y + 24;
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = TEXT;
+  ctx.font = '700 22px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText(title, innerX, innerY);
+
+  ctx.fillStyle = accentColor;
+  ctx.textAlign = 'right';
+  ctx.fillText('Σ ' + sumScore.toFixed(2), x + w - 24, innerY);
+  ctx.textAlign = 'left';
+
+  ctx.strokeStyle = BORDER;
+  ctx.beginPath();
+  ctx.moveTo(innerX, innerY + 44);
+  ctx.lineTo(x + w - 24, innerY + 44);
+  ctx.stroke();
+
+  const sorted = [...players].sort((a, b) => b.score - a.score);
+  let py = innerY + 72;
+  for (const p of sorted) {
+    const nameStr = String(displayName(p) || '?');
+    const initial = nameStr.slice(0, 1).toUpperCase();
+
+    ctx.fillStyle = accentColor + '33';
+    ctx.beginPath();
+    ctx.arc(innerX + 24, py + 16, 20, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = accentColor;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    ctx.fillStyle = accentColor;
+    ctx.font = '700 18px Inter, system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(initial, innerX + 24, py + 17);
+
+    let name = nameStr;
+    if (name.length > 26) name = name.slice(0, 24) + '…';
+    ctx.fillStyle = TEXT;
+    ctx.font = '600 16px Inter, system-ui, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(name, innerX + 60, py + 16);
+
+    ctx.fillStyle = MUTED;
+    ctx.textAlign = 'right';
+    ctx.fillText(p.score.toFixed(2), x + w - 24, py + 16);
+    ctx.textAlign = 'left';
+    py += 64;
+  }
+}
+
+function drawBalanceCard({ teamA, teamB, sumA, sumB, diff, quality, deltaKd, deltaAdr, tournamentName }) {
+  const W = 1200, H = 800;
+  const canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  const BG = '#0b0e14', TEXT = '#f0f3f8', MUTED = '#8b96a5', BORDER = '#262f40', ACCENT = '#4d6bfe';
+
+  ctx.fillStyle = BG;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.strokeStyle = 'rgba(77,107,254,0.06)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  ctx.fillStyle = TEXT;
+  ctx.font = '800 28px Inter, system-ui, sans-serif';
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'left';
+  ctx.fillText('CS2 STATS', 60, 56);
+
+  ctx.fillStyle = MUTED;
+  ctx.font = '500 16px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText(tournamentName || 'Все матчи', W - 60, 56);
+  ctx.fillText('Состав ' + new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }), W - 60, 80);
+  ctx.textAlign = 'left';
+
+  ctx.strokeStyle = BORDER;
+  ctx.beginPath(); ctx.moveTo(60, 130); ctx.lineTo(W - 60, 130); ctx.stroke();
+
+  const qColor = quality.key === 'perfect' ? '#10b981' : quality.key === 'good' ? ACCENT : quality.key === 'ok' ? '#f59e0b' : '#ef4444';
+  const badgeText = quality.label + ' · Δscore ' + diff.toFixed(2);
+  ctx.font = '600 14px Inter, system-ui, sans-serif';
+  const badgeW = ctx.measureText(badgeText).width + 28;
+  const badgeH = 32;
+  ctx.fillStyle = qColor + '26';
+  roundRectPath(ctx, 60, 158, badgeW, badgeH, 6);
+  ctx.fill();
+  ctx.strokeStyle = qColor + '4d';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  ctx.fillStyle = qColor;
+  ctx.textBaseline = 'middle';
+  ctx.fillText(badgeText, 74, 158 + badgeH / 2);
+
+  ctx.fillStyle = MUTED;
+  ctx.font = '500 14px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('Δ K/D ' + deltaKd.toFixed(2) + '   ·   Δ ADR ' + deltaAdr.toFixed(1), W - 60, 158 + badgeH / 2);
+  ctx.textAlign = 'left';
+
+  drawTeamColumn(ctx, 'Команда А', teamA, sumA, 60, 230, 520, ACCENT);
+  drawTeamColumn(ctx, 'Команда Б', teamB, sumB, 620, 230, 520, '#10b981');
+
+  ctx.fillStyle = MUTED;
+  ctx.font = '500 14px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('vortexgames574-blip.github.io/cybershoke-stats', W / 2, H - 50);
+  ctx.textAlign = 'left';
+
+  return canvas;
+}
+
+function roundRectPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function buildShareText(best, quality, deltaKd, deltaAdr, tournamentName, weights) {
+  const lines = [];
+  lines.push('Состав CS2 · ' + tournamentName);
+  lines.push(quality.label + ' · Δscore ' + best.diff.toFixed(2) + ' · Δ K/D ' + deltaKd.toFixed(2) + ' · Δ ADR ' + deltaAdr.toFixed(1));
+  lines.push('');
+  lines.push('Команда А (Σ ' + best.sumA.toFixed(2) + '):');
+  for (const p of [...best.teamA].sort((a, b) => b.score - a.score)) {
+    lines.push('  · ' + displayName(p) + ' — ' + p.score.toFixed(2) + ` [${p.role}]`);
+  }
+  lines.push('');
+  lines.push('Команда Б (Σ ' + best.sumB.toFixed(2) + '):');
+  for (const p of [...best.teamB].sort((a, b) => b.score - a.score)) {
+    lines.push('  · ' + displayName(p) + ' — ' + p.score.toFixed(2) + ` [${p.role}]`);
+  }
+  return lines.join('\n');
+}
+
+async function copyTextToClipboard(text) {
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (e) {}
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch (e) { return false; }
+}
+
+function initBalancer() {
+  const openBtn = document.getElementById('open-balancer-btn');
+  const modal = document.getElementById('balancer-modal');
+  const searchInput = document.getElementById('player-search');
+  const grid = document.getElementById('players-grid');
+  const countLabel = document.getElementById('selected-count');
+  const balanceBtn = document.getElementById('balance-btn');
+  const randomBtn = document.getElementById('random-btn');
+  const clearBtn = document.getElementById('clear-btn');
+  const resultDiv = document.getElementById('balance-result');
+  const mapActions = document.getElementById('map-actions');
+  const mapResult = document.getElementById('map-result');
+  const savedSection = document.getElementById('saved-teams-section');
+  const savedContent = document.getElementById('saved-teams-content');
+  if (!openBtn) return;
+
+  const sliderRating = document.getElementById('weight-rating');
+  const sliderKd = document.getElementById('weight-kd');
+  const sliderAdr = document.getElementById('weight-adr');
+  const sliderKast = document.getElementById('weight-kast');
+  const valRating = document.getElementById('weight-rating-val');
+  const valKd = document.getElementById('weight-kd-val');
+  const valAdr = document.getElementById('weight-adr-val');
+  const valKast = document.getElementById('weight-kast-val');
+  const resetWeightsBtn = document.getElementById('reset-weights-btn');
+
+  let currentWeights = getBalancerWeights();
+
+  function syncSliderUI() {
+    if (sliderRating) sliderRating.value = currentWeights.rating;
+    if (sliderKd) sliderKd.value = currentWeights.kd;
+    if (sliderAdr) sliderAdr.value = currentWeights.adr;
+    if (sliderKast) sliderKast.value = currentWeights.kast;
+    const n = normalizeWeights(currentWeights);
+    if (valRating) valRating.innerText = Math.round(n.rating * 100) + '%';
+    if (valKd) valKd.innerText = Math.round(n.kd * 100) + '%';
+    if (valAdr) valAdr.innerText = Math.round(n.adr * 100) + '%';
+    if (valKast) valKast.innerText = Math.round(n.kast * 100) + '%';
+  }
+
+  function applySliders() {
+    currentWeights = {
+      rating: parseFloat(sliderRating?.value ?? BALANCER_DEFAULTS.rating),
+      kd: parseFloat(sliderKd?.value ?? BALANCER_DEFAULTS.kd),
+      adr: parseFloat(sliderAdr?.value ?? BALANCER_DEFAULTS.adr),
+      kast: parseFloat(sliderKast?.value ?? BALANCER_DEFAULTS.kast)
+    };
+    saveBalancerWeights(currentWeights);
+    syncSliderUI();
+  }
+
+  if (sliderRating) sliderRating.addEventListener('input', applySliders);
+  if (sliderKd) sliderKd.addEventListener('input', applySliders);
+  if (sliderAdr) sliderAdr.addEventListener('input', applySliders);
+  if (sliderKast) sliderKast.addEventListener('input', applySliders);
+
+  if (resetWeightsBtn) resetWeightsBtn.onclick = () => {
+    currentWeights = { ...BALANCER_DEFAULTS };
+    saveBalancerWeights(currentWeights);
+    syncSliderUI();
+  };
+  syncSliderUI();
+
+  openBtn.onclick = () => {
+    modal.style.display = 'block';
+    selectedPlayers = [];
+    searchInput.value = '';
+    resultDiv.classList.remove('show');
+    resultDiv.innerHTML = '';
+    mapActions.classList.remove('show');
+    mapResult.innerHTML = '';
+    currentWeights = getBalancerWeights();
+    syncSliderUI();
+    updateUI();
+    drawGrid();
+    loadSaved();
+  };
+  window.closeBalancer = () => { modal.style.display = 'none'; };
+
+  function drawGrid() {
+    if (!grid) return;
+    const q = searchInput.value;
+    grid.innerHTML = currentStats.players.filter(p => matchesFilter(p, q)).map(p => {
+      const sel = selectedPlayers.find(sp => sp.id === p.id);
+      const role = getPlaystyle(p);
+      let roleColor = 'var(--text-muted)';
+      if (role === 'Фраггер') roleColor = '#ef4444';
+      if (role === 'Снайпер') roleColor = '#f59e0b';
+      if (role === 'Саппорт') roleColor = '#10b981';
+
+      return `<div class="player-card ${sel ? 'selected' : ''}" onclick="togglePlayer('${escapeHtml(p.id)}')">
+        <img src="${escapeHtml(p.avatar)}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
+        <div class="card-name">${escapeHtml(displayName(p))}</div>
+        <div class="card-rating">${escapeHtml(p.avgRating ?? p.kd)}</div>
+        <div style="font-size:0.65rem; font-weight:bold; color:${roleColor}">${role}</div>
+      </div>`;
+    }).join('');
+  }
+
+  window.togglePlayer = (id) => {
+    const idx = selectedPlayers.findIndex(p => p.id === id);
+    if (idx > -1) selectedPlayers.splice(idx, 1);
+    else {
+      if (selectedPlayers.length >= 10) {
+        countLabel.style.color = '#ef4444';
+        showToast('Максимум 10 игроков', 'error');
+        setTimeout(() => { countLabel.style.color = 'var(--accent)'; }, 500);
+        return;
+      }
+      const p = currentStats.players.find(p => p.id === id);
+      if (p) selectedPlayers.push(p);
+    }
+    updateUI();
+    drawGrid();
+  };
+
+  function updateUI() {
+    countLabel.innerText = `Выбрано: ${selectedPlayers.length} / 10`;
+    balanceBtn.disabled = selectedPlayers.length !== 10;
+    if (selectedPlayers.length === 10) mapActions.classList.add('show');
+    else { mapActions.classList.remove('show'); mapResult.innerHTML = ''; }
+    if (selectedPlayers.length !== 10) resultDiv.classList.remove('show');
+  }
+
+  searchInput.addEventListener('input', drawGrid);
+
+  randomBtn.onclick = () => {
+    const sh = [...currentStats.players].sort(() => Math.random() - 0.5);
+    selectedPlayers = sh.slice(0, Math.min(10, sh.length));
+    updateUI(); drawGrid();
+  };
+  clearBtn.onclick = () => { selectedPlayers = []; mapResult.innerHTML = ''; updateUI(); drawGrid(); };
+
+  balanceBtn.onclick = () => {
+    if (selectedPlayers.length !== 10) return;
+    const pool = selectedPlayers.map(p => ({ ...p, score: playerCompositeScore(p, currentWeights) }));
+    const best = findBestTeams(pool);
+    if (!best) return;
+
+    const q = balanceQuality(best.realDiff);
+    const deltaKd = Math.abs((best.kdA - best.kdB) / 5);
+    const deltaAdr = Math.abs((best.adrA - best.adrB) / 5);
+
+    resultDiv.querySelectorAll('.balance-card-preview, .balance-share-actions').forEach(el => {
+      if (el.dataset && el.dataset.url) URL.revokeObjectURL(el.dataset.url);
+      el.remove();
+    });
+
+    const renderTeamBox = (name, team, sum) => `
+      <div class="team-box"><h3>${name} <span>Σ ${sum.toFixed(2)}</span></h3>
+      <ul>${[...team].sort((a, b) => b.score - a.score).map(p => `
+        <li>
+          <div class="t-player">
+            <img src="${escapeHtml(p.avatar)}">
+            <div><div>${escapeHtml(displayName(p))}</div><div style="font-size:0.65rem; color:var(--text-muted);">${p.role}</div></div>
+          </div>
+          <span>${p.score.toFixed(2)}</span>
+        </li>`).join('')}</ul></div>
+    `;
+
+    resultDiv.innerHTML = `
+      <div class="balance-header-row">
+        <span class="quality-badge ${q.key}">${q.label} · Δscore ${best.realDiff.toFixed(2)}</span>
+        <span class="delta-row-inline">
+          <span>Δ K/D <b>${deltaKd.toFixed(2)}</b></span>
+          <span>Δ ADR <b>${deltaAdr.toFixed(1)}</b></span>
+        </span>
+      </div>
+      ${renderTeamBox('Команда А', best.teamA, best.sumA)}
+      ${renderTeamBox('Команда Б', best.teamB, best.sumB)}
+    `;
+    resultDiv.classList.add('show');
+    savedSection.classList.remove('show');
+
+    try {
+      localStorage.setItem(getSavedKey(), JSON.stringify({
+        teamA: best.teamA.map(p => ({ name: p.displayName || p.name, rating: p.score, avatar: p.avatar })),
+        teamB: best.teamB.map(p => ({ name: p.displayName || p.name, rating: p.score, avatar: p.avatar })),
+        savedAt: new Date().toISOString(),
+        weights: currentWeights
+      }));
+    } catch (e) {}
+
+    const tournamentName = document.getElementById('tournament-select').value || 'Все матчи';
+    const cardCanvas = drawBalanceCard({ teamA: best.teamA, teamB: best.teamB, sumA: best.sumA, sumB: best.sumB, diff: best.realDiff, quality: q, deltaKd, deltaAdr, tournamentName });
+
+    cardCanvas.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const preview = document.createElement('div');
+      preview.className = 'balance-card-preview';
+      preview.dataset.url = url;
+      preview.innerHTML = `<img src="${url}" alt="Карточка состава">`;
+      resultDiv.appendChild(preview);
+
+      const actions = document.createElement('div');
+      actions.className = 'balance-share-actions';
+
+      const dlBtn = document.createElement('button');
+      dlBtn.className = 'btn-outline';
+      dlBtn.style.flex = '1';
+      dlBtn.innerText = 'Скачать PNG';
+      dlBtn.onclick = () => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'balance-' + (tournamentName.replace(/[^\wа-я-]+/gi, '_')) + '-' + Date.now() + '.png';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      };
+      actions.appendChild(dlBtn);
+
+      const file = new File([blob], 'balance.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        const shareBtn2 = document.createElement('button');
+        shareBtn2.className = 'btn-outline';
+        shareBtn2.style.flex = '1';
+        shareBtn2.innerText = 'Поделиться';
+        shareBtn2.onclick = async () => {
+          try { await navigator.share({ files: [file], title: 'Состав команд', text: 'Состав для CS2' }); } catch (e) {}
+        };
+        actions.appendChild(shareBtn2);
+      }
+
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'btn-outline';
+      copyBtn.style.flex = '1';
+      copyBtn.innerText = 'Скопировать текст';
+      copyBtn.onclick = async () => {
+        const text = buildShareText(best, q, deltaKd, deltaAdr, tournamentName, currentWeights);
+        const ok = await copyTextToClipboard(text);
+        copyBtn.innerText = ok ? '✓ Скопировано' : 'Не удалось';
+        setTimeout(() => { copyBtn.innerText = 'Скопировать текст'; }, 1800);
+      };
+      actions.appendChild(copyBtn);
+
+      resultDiv.appendChild(actions);
+    }, 'image/png');
+  };
+
+  document.getElementById('random-map-btn').onclick = () => {
+    const names = currentStats.mapStats.map(m => m.map);
+    if (!names.length) return;
+    mapResult.innerHTML = `<div class="team-box" style="text-align:center;"><p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:6px;">Случайная карта:</p><h2 style="color:#4d6bfe; font-size:1.5rem; margin:0;">${escapeHtml(names[Math.floor(Math.random() * names.length)])}</h2></div>`;
+  };
+
+  document.getElementById('balanced-map-btn').onclick = () => {
+    let best = null;
+    for (const ms of currentStats.mapStats) {
+      const pool = [];
+      let ok = true;
+      for (const p of selectedPlayers) {
+        const tp = ms.topPlayers.find(t => t.id === p.id);
+        if (!tp) { ok = false; break; }
+        pool.push({ ...p, score: mapPlayerCompositeScore(p, tp, currentWeights) });
+      }
+      if (!ok || pool.length !== 10) continue;
+      const split = findBestTeams(pool);
+      if (!split) continue;
+      const candidate = { map: ms.map, matches: ms.matches, diff: split.diff, realDiff: split.realDiff, sumA: split.sumA, sumB: split.sumB };
+      if (!best) { best = candidate; continue; }
+      const EPS = 0.02;
+      if (split.diff < best.diff - EPS || (Math.abs(split.diff - best.diff) <= EPS && ms.matches > best.matches)) {
+        best = candidate;
+      }
+    }
+    if (!best) {
+      mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color:#ef4444;"><p style="color:#ef4444; font-size:0.85rem;">Нет карты, где играли все 10 игроков</p></div>`;
+      return;
+    }
+    mapResult.innerHTML = `<div class="team-box" style="text-align:center; border-color:#10b981;"><p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:6px;">Оптимальная карта:</p><h2 style="color:#10b981; font-size:1.5rem; margin:0 0 8px 0;">${escapeHtml(best.map)}</h2><p style="font-size:0.8rem; color:var(--text-muted);">Δscore: <b style="color:#10b981;">${best.realDiff.toFixed(2)}</b> · матчей: ${best.matches}</p></div>`;
+  };
+
+  document.getElementById('clear-saved-btn').onclick = () => {
+    localStorage.removeItem(getSavedKey());
+    savedSection.classList.remove('show');
+    savedContent.innerHTML = '';
+  };
+
+  function loadSaved() {
+    try {
+      const raw = localStorage.getItem(getSavedKey());
+      if (!raw) { savedSection.classList.remove('show'); return; }
+      const d = JSON.parse(raw);
+      const sA = d.teamA.reduce((s, p) => s + (p.rating || 0), 0);
+      const sB = d.teamB.reduce((s, p) => s + (p.rating || 0), 0);
+      savedContent.innerHTML = `<div class="balance-result-modal show" style="margin-top:0;">
+        <div class="team-box"><h3>Сохранено: Команда А <span>Σ ${sA.toFixed(2)}</span></h3><ul>${d.teamA.map(p => `<li><div class="t-player"><img src="${escapeHtml(p.avatar)}">${escapeHtml(aliasText(p.name))}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div>
+        <div class="team-box"><h3>Сохранено: Команда Б <span>Σ ${sB.toFixed(2)}</span></h3><ul>${d.teamB.map(p => `<li><div class="t-player"><img src="${escapeHtml(p.avatar)}">${escapeHtml(aliasText(p.name))}</div><span>${p.rating.toFixed(2)}</span></li>`).join('')}</ul></div>
+      </div>`;
+      savedSection.classList.add('show');
+    } catch (e) {}
+  }
+}
+
+// ===== ДРАФТ 4х =====
+function initDraft() {
+  const c1 = document.getElementById('cap-1');
+  const c2 = document.getElementById('cap-2');
+  const c3 = document.getElementById('cap-3');
+  const c4 = document.getElementById('cap-4');
+  if (!c1) return;
+
+  const searchInput = document.getElementById('draft-search');
+  const addBtn = document.getElementById('draft-add-btn');
+  const listDiv = document.getElementById('draft-participants-list');
+
+  const renderParticipants = () => {
+    listDiv.innerHTML = draftParticipants.map(p => `
+      <div style="background:var(--bg-hover); border:1px solid var(--border); padding:4px 10px; border-radius:20px; display:flex; align-items:center; gap:8px; font-size:0.85rem;">
+        <img src="${escapeHtml(p.avatar)}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
+        <span>${escapeHtml(displayName(p))}</span>
+        <span style="color:var(--text-muted); font-size:0.7rem;">${p.isGuest ? 'Новичок' : escapeHtml(p.avgRating || '—')}</span>
+        <button onclick="removeDraftParticipant('${escapeHtml(p.id)}')" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold; font-size:1rem; line-height:1;">&times;</button>
+      </div>
+    `).join('');
+
+    const opts = draftParticipants
+      .slice()
+      .sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0))
+      .map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(displayName(p))} (${escapeHtml(p.avgRating ?? p.kd ?? '?')})</option>`)
+      .join('');
+
+    [c1, c2, c3, c4].forEach((sel, i) => {
+      const prevVal = sel.value;
+      sel.innerHTML = `<option value="">— выберите —</option>` + opts;
+      if (prevVal && draftParticipants.find(p => p.id === prevVal)) sel.value = prevVal;
+      else if (draftParticipants.length > i) sel.selectedIndex = i + 1;
+    });
+  };
+
+  window.removeDraftParticipant = (id) => {
+    draftParticipants = draftParticipants.filter(p => p.id !== id);
+    renderParticipants();
+  };
+
+  const addParticipant = () => {
+    const rawName = searchInput.value.trim();
+    if (!rawName) return;
+
+    const existing = currentStats.players.find(p =>
+      p.name.toLowerCase() === rawName.toLowerCase() ||
+      displayName(p).toLowerCase() === rawName.toLowerCase()
+    );
+
+    if (existing) {
+      if (draftParticipants.find(p => p.id === existing.id)) return showToast('Этот игрок уже в списке', 'error');
+      draftParticipants.push(existing);
+    } else {
+      const guestId = 'guest_' + Date.now();
+      draftParticipants.push({
+        id: guestId,
+        name: rawName,
+        displayName: rawName,
+        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(rawName)}&background=4d6bfe&color=fff&rounded=true`,
+        avgRating: 1.0, kd: 1.0, avgAdr: 75, avgKast: 70,
+        isGuest: true
+      });
+    }
+    searchInput.value = '';
+    renderParticipants();
+  };
+
+  addBtn.onclick = addParticipant;
+  searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addParticipant(); });
+
+  renderParticipants();
+
+  const buildBtn = document.getElementById('build-teams-btn');
+  const shuffleBtn = document.getElementById('shuffle-teams-btn');
+  const resetBtn = document.getElementById('reset-teams-btn');
+  const resultDiv = document.getElementById('draft-result');
+
+  const executeDraft = (isShuffle = false) => {
+    if (draftParticipants.length < 20) {
+      return showToast(`Нужно минимум 20 игроков. Сейчас: ${draftParticipants.length}`, 'error');
+    }
+
+    const capIds = [c1.value, c2.value, c3.value, c4.value].filter(Boolean);
+    if (capIds.length !== 4) return showToast('Выберите 4 капитана', 'error');
+    if (new Set(capIds).size !== 4) return showToast('Капитаны не должны повторяться', 'error');
+
+    const weights = getBalancerWeights();
+    const captains = capIds.map(id => draftParticipants.find(p => p.id === id)).filter(Boolean);
+    const allPlayers = draftParticipants.filter(p => !capIds.includes(p.id));
+    const scoredPool = allPlayers.map(p => ({ ...p, score: playerCompositeScore(p, weights) }));
+    const sorted = scoredPool.slice().sort((a, b) => b.score - a.score);
+
+    const buildTeamsLogic = (pool, caps) => {
+      const teams = caps.map(c => {
+        const capScore = playerCompositeScore(c, weights);
+        return { captain: c, captainScore: capScore, players: [], sumScore: capScore };
+      });
+      let poolIdx = 0;
+      while (poolIdx < pool.length) {
+        let weakestIdx = -1, minScore = Infinity;
+        for (let i = 0; i < teams.length; i++) {
+          if (teams[i].players.length < 4 && teams[i].sumScore < minScore) {
+            minScore = teams[i].sumScore;
+            weakestIdx = i;
+          }
+        }
+        if (weakestIdx === -1) break;
+        const player = pool[poolIdx++];
+        teams[weakestIdx].players.push(player);
+        teams[weakestIdx].sumScore += player.score;
+      }
+      return teams;
+    };
+
+    let finalTeams = [];
+    let finalSpread = 0;
+    const playersToPick = 16;
+
+    if (isShuffle) {
+      let candidates = [];
+      for (let i = 0; i < 300; i++) {
+        const shuffledPlayers = [...allPlayers].sort(() => Math.random() - 0.5);
+        const pool = shuffledPlayers.slice(0, playersToPick).sort((a, b) => b.score - a.score);
+        const shuffledCaptains = [...captains].sort(() => Math.random() - 0.5);
+        const teams = buildTeamsLogic(pool, shuffledCaptains);
+        const sums = teams.map(t => t.sumScore);
+        const spread = Math.max(...sums) - Math.min(...sums);
+        candidates.push({ teams, spread });
+      }
+      candidates.sort((a, b) => a.spread - b.spread);
+      const bestOptions = candidates.slice(0, 10);
+      const selected = bestOptions[Math.floor(Math.random() * bestOptions.length)];
+      finalTeams = selected.teams;
+      finalSpread = selected.spread;
+    } else {
+      const pool = sorted.slice(0, playersToPick);
+      finalTeams = buildTeamsLogic(pool, captains);
+      const sums = finalTeams.map(t => t.sumScore);
+      finalSpread = Math.max(...sums) - Math.min(...sums);
+    }
+
+    const q = balanceQuality(finalSpread);
+    resultDiv.style.display = 'grid';
+    resultDiv.querySelectorAll('.balance-card-preview, .balance-share-actions').forEach(el => {
+      if (el.dataset && el.dataset.url) URL.revokeObjectURL(el.dataset.url);
+      el.remove();
+    });
+
+    resultDiv.innerHTML = `
+      <div class="draft-quality-row">
+        <span class="quality-badge ${q.key}">${q.label} · разброс Σ ${finalSpread.toFixed(2)}</span>
+      </div>
+      ${finalTeams.map((team, i) => {
+        const capAva = team.captain.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(team.captain.name)}&background=ffd700&color=000`;
+        return `
+          <div class="draft-team-result">
+            <h3>Команда ${i + 1} <span class="draft-team-avg">Σ ${team.sumScore.toFixed(2)}</span></h3>
+            <ul>
+              <li><img src="${escapeHtml(capAva)}"> <b>${escapeHtml(displayName(team.captain))}</b> <span style="color:#ffd700;font-size:0.7rem;margin-left:auto;">К · ${team.captainScore.toFixed(2)}</span></li>
+              ${team.players.map(p => {
+                const ava = p.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
+                return `<li><img src="${escapeHtml(ava)}"> ${escapeHtml(displayName(p))} <span style="margin-left:auto;color:var(--text-muted);font-size:0.75rem;">${p.score.toFixed(2)}</span></li>`;
+              }).join('')}
+            </ul>
+          </div>
+        `;
+      }).join('')}
+    `;
+
+    resetBtn.style.display = 'block';
+    resetBtn.onclick = () => {
+      resultDiv.style.display = 'none';
+      resultDiv.innerHTML = '';
+      resetBtn.style.display = 'none';
+    };
+  };
+
+  buildBtn.onclick = () => executeDraft(false);
+  if (shuffleBtn) shuffleBtn.onclick = () => executeDraft(true);
+}
+
+// ===== ОБРАТНАЯ СВЯЗЬ =====
+const WEB3FORMS_KEY = '63a38abb-99fc-422e-b49f-14da4dc31f3d';
+
+document.getElementById('feedback-btn').onclick = () => {
+  document.getElementById('feedback-modal').style.display = 'block';
+};
+window.closeFeedback = () => {
+  document.getElementById('feedback-modal').style.display = 'none';
+};
+
+document.getElementById('send-feedback-btn').onclick = async () => {
+  const name = document.getElementById('feedback-name').value.trim() || 'Аноним';
+  const text = document.getElementById('feedback-text').value.trim();
+  if (!text) return showToast('Введите текст сообщения', 'error');
+
+  const btn = document.getElementById('send-feedback-btn');
+  const prevText = btn.innerText;
+  btn.innerText = 'Отправка...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: '🎮 GEIMERI CS2 — новый отзыв с сайта',
+        from_name: 'GEIMERI CS2 Stats',
+        'Ник игрока': name,
+        'Сообщение': text
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Отправлено! Спасибо за фидбек.', 'success');
+      document.getElementById('feedback-text').value = '';
+      document.getElementById('feedback-name').value = '';
+      closeFeedback();
+    } else {
+      throw new Error(data.message || 'Ошибка отправки');
+    }
+  } catch (e) {
+    showToast('Не удалось отправить. Попробуйте позже.', 'error');
+    console.error(e);
+  } finally {
+    btn.innerText = prevText;
+    btn.disabled = false;
+  }
+};
+
+// ===== ГИД → FAQ =====
+function initBeginnerMode() {
+  const btn = document.getElementById('beginner-toggle');
+  if (!btn) return;
+  btn.onclick = () => {
+    const faqTabBtn = document.querySelector('[data-tab="faq"]');
+    if (faqTabBtn) faqTabBtn.click();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.AOS) AOS.init({ duration: 600, once: true });
+  if (window.lucide) lucide.createIcons();
+  initTabs();
+  loadData();
+  initBalancer();
+  initBeginnerMode();
+});
