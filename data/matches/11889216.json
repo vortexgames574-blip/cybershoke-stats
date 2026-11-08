@@ -1,0 +1,113 @@
+{
+  "matchId": "11889216",
+  "url": "https://cybershoke.net/ru/match/11889216",
+  "tournament": "18.09.2026",
+  "date": "2026-11-08T16:22:44.871Z",
+  "maps": [
+    {
+      "map": "de_inferno",
+      "players": [
+        {
+          "id": "76561198252013498",
+          "name": "vlas99",
+          "kills": 27,
+          "deaths": 12,
+          "assists": 0,
+          "adr": 124,
+          "kast": 90,
+          "rating": 1.99
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "kills": 18,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 108,
+          "kast": 70,
+          "rating": 1.3
+        },
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "kills": 17,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 80,
+          "kast": 80,
+          "rating": 1.29
+        },
+        {
+          "id": "76561198090688036",
+          "name": "Kara7evich",
+          "kills": 12,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 80,
+          "kast": 85,
+          "rating": 1.12
+        },
+        {
+          "id": "76561198984765872",
+          "name": "molodoiebatel",
+          "kills": 12,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 63,
+          "kast": 80,
+          "rating": 0.99
+        },
+        {
+          "id": "76561198059120185",
+          "name": "Instructor",
+          "kills": 13,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 81,
+          "kast": 65,
+          "rating": 0.97
+        },
+        {
+          "id": "76561198158360502",
+          "name": "✪ AlikD*ck ✪",
+          "kills": 12,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 71,
+          "kast": 70,
+          "rating": 0.94
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "kills": 13,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 57,
+          "kast": 60,
+          "rating": 0.85
+        },
+        {
+          "id": "76561198261421853",
+          "name": "0n3_vs_4ll",
+          "kills": 11,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 71,
+          "kast": 60,
+          "rating": 0.81
+        },
+        {
+          "id": "76561198197222927",
+          "name": "goodipAN",
+          "kills": 6,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 38,
+          "kast": 65,
+          "rating": 0.64
+        }
+      ]
+    }
+  ]
+}

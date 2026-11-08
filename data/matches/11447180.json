@@ -1,0 +1,113 @@
+{
+  "matchId": "11447180",
+  "url": "https://cybershoke.net/ru/match/11447180",
+  "tournament": "04.09.2026",
+  "date": "2026-11-08T16:22:19.154Z",
+  "maps": [
+    {
+      "map": "de_dust2",
+      "players": [
+        {
+          "id": "76561199109745015",
+          "name": "q1nce",
+          "kills": 28,
+          "deaths": 8,
+          "assists": 0,
+          "adr": 162,
+          "kast": 82,
+          "rating": 2.4
+        },
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "kills": 17,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 116,
+          "kast": 153,
+          "rating": 2.03
+        },
+        {
+          "id": "76561198090688036",
+          "name": "Kara7evich",
+          "kills": 16,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 94,
+          "kast": 94,
+          "rating": 1.55
+        },
+        {
+          "id": "76561198059120185",
+          "name": "Decoy",
+          "kills": 11,
+          "deaths": 12,
+          "assists": 0,
+          "adr": 81,
+          "kast": 82,
+          "rating": 1.14
+        },
+        {
+          "id": "76561198587515885",
+          "name": "RJ",
+          "kills": 10,
+          "deaths": 9,
+          "assists": 0,
+          "adr": 63,
+          "kast": 82,
+          "rating": 1.11
+        },
+        {
+          "id": "76561198272167310",
+          "name": "Пикулинни Браветти.",
+          "kills": 7,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 53,
+          "kast": 129,
+          "rating": 1.05
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "kills": 14,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 80,
+          "kast": 65,
+          "rating": 1.03
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "kills": 4,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 37,
+          "kast": 106,
+          "rating": 0.66
+        },
+        {
+          "id": "76561198158360502",
+          "name": "✪ AlikD*ck ✪",
+          "kills": 4,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 45,
+          "kast": 76,
+          "rating": 0.64
+        },
+        {
+          "id": "76561198681103731",
+          "name": "Анальный бур",
+          "kills": 6,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 55,
+          "kast": 65,
+          "rating": 0.63
+        }
+      ]
+    }
+  ]
+}

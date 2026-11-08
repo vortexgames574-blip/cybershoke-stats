@@ -1,0 +1,113 @@
+{
+  "matchId": "11894296",
+  "url": "https://cybershoke.net/ru/match/11894296",
+  "tournament": "18.09.2026",
+  "date": "2026-11-08T16:22:57.959Z",
+  "maps": [
+    {
+      "map": "de_anubis",
+      "players": [
+        {
+          "id": "76561198090688036",
+          "name": "Kara7evich",
+          "kills": 24,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 110,
+          "kast": 79,
+          "rating": 1.54
+        },
+        {
+          "id": "76561199037388895",
+          "name": "asdssasds",
+          "kills": 22,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 85,
+          "kast": 71,
+          "rating": 1.37
+        },
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "kills": 21,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 99,
+          "kast": 75,
+          "rating": 1.35
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "kills": 16,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 73,
+          "kast": 75,
+          "rating": 1.12
+        },
+        {
+          "id": "76561199430091221",
+          "name": "St1tch",
+          "kills": 17,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 85,
+          "kast": 67,
+          "rating": 1.08
+        },
+        {
+          "id": "76561198984765872",
+          "name": "molodoiebatel",
+          "kills": 16,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 72,
+          "kast": 58,
+          "rating": 0.93
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "kills": 15,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 62,
+          "kast": 58,
+          "rating": 0.86
+        },
+        {
+          "id": "76561198015424675",
+          "name": "БОТ Tolya",
+          "kills": 14,
+          "deaths": 19,
+          "assists": 0,
+          "adr": 67,
+          "kast": 54,
+          "rating": 0.76
+        },
+        {
+          "id": "76561198261421853",
+          "name": "0n3_vs_4ll",
+          "kills": 10,
+          "deaths": 19,
+          "assists": 0,
+          "adr": 63,
+          "kast": 67,
+          "rating": 0.72
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "kills": 8,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 43,
+          "kast": 67,
+          "rating": 0.63
+        }
+      ]
+    }
+  ]
+}

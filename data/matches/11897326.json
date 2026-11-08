@@ -1,0 +1,113 @@
+{
+  "matchId": "11897326",
+  "url": "https://cybershoke.net/ru/match/11897326",
+  "tournament": "18.09.2026",
+  "date": "2026-11-08T16:23:02.313Z",
+  "maps": [
+    {
+      "map": "de_anubis",
+      "players": [
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "kills": 22,
+          "deaths": 7,
+          "assists": 0,
+          "adr": 118,
+          "kast": 94,
+          "rating": 2.04
+        },
+        {
+          "id": "76561198059120185",
+          "name": "Instructor",
+          "kills": 18,
+          "deaths": 6,
+          "assists": 0,
+          "adr": 125,
+          "kast": 100,
+          "rating": 1.95
+        },
+        {
+          "id": "76561198252013498",
+          "name": "vlas99",
+          "kills": 16,
+          "deaths": 7,
+          "assists": 0,
+          "adr": 81,
+          "kast": 94,
+          "rating": 1.61
+        },
+        {
+          "id": "76561198158360502",
+          "name": "✪ AlikD*ck ✪",
+          "kills": 15,
+          "deaths": 8,
+          "assists": 0,
+          "adr": 82,
+          "kast": 100,
+          "rating": 1.58
+        },
+        {
+          "id": "76561198197222927",
+          "name": "goodipAN",
+          "kills": 6,
+          "deaths": 9,
+          "assists": 0,
+          "adr": 54,
+          "kast": 94,
+          "rating": 0.98
+        },
+        {
+          "id": "76561198818222401",
+          "name": "Kyo  Ilonmax8",
+          "kills": 12,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 92,
+          "kast": 53,
+          "rating": 0.88
+        },
+        {
+          "id": "76561198872139873",
+          "name": "1lpk",
+          "kills": 12,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 67,
+          "kast": 53,
+          "rating": 0.84
+        },
+        {
+          "id": "76561198888817693",
+          "name": "kyoKANDELAKI",
+          "kills": 7,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 55,
+          "kast": 59,
+          "rating": 0.56
+        },
+        {
+          "id": "76561199113096937",
+          "name": "valtermalter",
+          "kills": 3,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 43,
+          "kast": 35,
+          "rating": 0.13
+        },
+        {
+          "id": "76561199144510024",
+          "name": "63dealer",
+          "kills": 3,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 29,
+          "kast": 29,
+          "rating": 0.07
+        }
+      ]
+    }
+  ]
+}

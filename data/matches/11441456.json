@@ -1,0 +1,113 @@
+{
+  "matchId": "11441456",
+  "url": "https://cybershoke.net/ru/match/11441456",
+  "tournament": "04.09.2026",
+  "date": "2026-11-08T16:22:06.428Z",
+  "maps": [
+    {
+      "map": "de_anubis",
+      "players": [
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "kills": 14,
+          "deaths": 0,
+          "assists": 0,
+          "adr": 77,
+          "kast": 300,
+          "rating": 3.07
+        },
+        {
+          "id": "76561198283381727",
+          "name": "St1gmat",
+          "kills": 20,
+          "deaths": 12,
+          "assists": 0,
+          "adr": 86,
+          "kast": 143,
+          "rating": 1.9
+        },
+        {
+          "id": "76561199109745015",
+          "name": "q1nce",
+          "kills": 22,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 106,
+          "kast": 86,
+          "rating": 1.63
+        },
+        {
+          "id": "76561198888817693",
+          "name": "everything from memory",
+          "kills": 20,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 82,
+          "kast": 76,
+          "rating": 1.34
+        },
+        {
+          "id": "76561198090688036",
+          "name": "Kara7evich",
+          "kills": 20,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 77,
+          "kast": 71,
+          "rating": 1.31
+        },
+        {
+          "id": "76561198015424675",
+          "name": "БОТ Tolya",
+          "kills": 15,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 82,
+          "kast": 81,
+          "rating": 1.18
+        },
+        {
+          "id": "76561198039138241",
+          "name": "AlexMax",
+          "kills": 7,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 63,
+          "kast": 133,
+          "rating": 1.17
+        },
+        {
+          "id": "76561198059120185",
+          "name": "Decoy",
+          "kills": 9,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 26,
+          "kast": 114,
+          "rating": 0.95
+        },
+        {
+          "id": "76561198587515885",
+          "name": "RJ",
+          "kills": 12,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 48,
+          "kast": 62,
+          "rating": 0.77
+        },
+        {
+          "id": "76561198158360502",
+          "name": "✪ AlikD*ck ✪",
+          "kills": 8,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 38,
+          "kast": 86,
+          "rating": 0.71
+        }
+      ]
+    }
+  ]
+}

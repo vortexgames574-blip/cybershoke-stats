@@ -1,0 +1,113 @@
+{
+  "matchId": "11904601",
+  "url": "https://cybershoke.net/ru/match/11904601",
+  "tournament": "18.09.2026",
+  "date": "2026-11-08T16:23:15.435Z",
+  "maps": [
+    {
+      "map": "de_dust2",
+      "players": [
+        {
+          "id": "76561198872139873",
+          "name": "1lpk",
+          "kills": 24,
+          "deaths": 8,
+          "assists": 0,
+          "adr": 126,
+          "kast": 89,
+          "rating": 2.01
+        },
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "kills": 17,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 114,
+          "kast": 84,
+          "rating": 1.38
+        },
+        {
+          "id": "76561199113096937",
+          "name": "valtermalter",
+          "kills": 15,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 85,
+          "kast": 84,
+          "rating": 1.36
+        },
+        {
+          "id": "76561198818222401",
+          "name": "Kyo  Ilonmax8",
+          "kills": 13,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 96,
+          "kast": 79,
+          "rating": 1.14
+        },
+        {
+          "id": "76561198888817693",
+          "name": "kyoKANDELAKI",
+          "kills": 12,
+          "deaths": 12,
+          "assists": 0,
+          "adr": 63,
+          "kast": 89,
+          "rating": 1.14
+        },
+        {
+          "id": "76561199037388895",
+          "name": "MUA",
+          "kills": 12,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 73,
+          "kast": 63,
+          "rating": 0.92
+        },
+        {
+          "id": "76561199144510024",
+          "name": "63dealer",
+          "kills": 9,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 66,
+          "kast": 79,
+          "rating": 0.89
+        },
+        {
+          "id": "76561198015424675",
+          "name": "tolya800x600",
+          "kills": 12,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 73,
+          "kast": 47,
+          "rating": 0.72
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "kills": 9,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 59,
+          "kast": 63,
+          "rating": 0.71
+        },
+        {
+          "id": "76561199430091221",
+          "name": "St1tch",
+          "kills": 7,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 62,
+          "kast": 53,
+          "rating": 0.5
+        }
+      ]
+    }
+  ]
+}

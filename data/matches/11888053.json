@@ -1,0 +1,113 @@
+{
+  "matchId": "11888053",
+  "url": "https://cybershoke.net/ru/match/11888053",
+  "tournament": "18.09.2026",
+  "date": "2026-11-08T16:22:36.263Z",
+  "maps": [
+    {
+      "map": "de_mirage",
+      "players": [
+        {
+          "id": "76561198872139873",
+          "name": "1lpk",
+          "kills": 21,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 106,
+          "kast": 95,
+          "rating": 1.79
+        },
+        {
+          "id": "76561199144510024",
+          "name": "63dealer",
+          "kills": 17,
+          "deaths": 12,
+          "assists": 0,
+          "adr": 108,
+          "kast": 95,
+          "rating": 1.58
+        },
+        {
+          "id": "76561198849641921",
+          "name": "suffixx",
+          "kills": 19,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 117,
+          "kast": 79,
+          "rating": 1.54
+        },
+        {
+          "id": "76561199113096937",
+          "name": "valtermalter",
+          "kills": 16,
+          "deaths": 9,
+          "assists": 0,
+          "adr": 74,
+          "kast": 84,
+          "rating": 1.4
+        },
+        {
+          "id": "76561198843347969",
+          "name": "sandor",
+          "kills": 15,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 74,
+          "kast": 68,
+          "rating": 1.13
+        },
+        {
+          "id": "76561198818222401",
+          "name": "Kyo  Ilonmax8",
+          "kills": 12,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 68,
+          "kast": 79,
+          "rating": 1.11
+        },
+        {
+          "id": "76561198888817693",
+          "name": "kyoKANDELAKI",
+          "kills": 11,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 66,
+          "kast": 68,
+          "rating": 0.93
+        },
+        {
+          "id": "76561198272167310",
+          "name": "Пикулинни Браветти.",
+          "kills": 7,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 51,
+          "kast": 53,
+          "rating": 0.45
+        },
+        {
+          "id": "76561198681103731",
+          "name": "Анальный бур",
+          "kills": 6,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 43,
+          "kast": 53,
+          "rating": 0.4
+        },
+        {
+          "id": "76561198587515885",
+          "name": "RJ",
+          "kills": 5,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 48,
+          "kast": 42,
+          "rating": 0.25
+        }
+      ]
+    }
+  ]
+}

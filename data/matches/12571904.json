@@ -1,0 +1,218 @@
+{
+  "matchId": "12571904",
+  "url": "https://cybershoke.net/ru/match/12571904",
+  "tournament": "09.10.2026",
+  "date": "2026-11-08T16:24:01.423Z",
+  "maps": [
+    {
+      "map": "de_ancient",
+      "players": [
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "kills": 25,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 109,
+          "kast": 86,
+          "rating": 1.75
+        },
+        {
+          "id": "76561198849641921",
+          "name": "suffixx",
+          "kills": 24,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 106,
+          "kast": 86,
+          "rating": 1.63
+        },
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "kills": 20,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 107,
+          "kast": 90,
+          "rating": 1.54
+        },
+        {
+          "id": "76561198059120185",
+          "name": "Instructor",
+          "kills": 18,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 105,
+          "kast": 67,
+          "rating": 1.21
+        },
+        {
+          "id": "76561198587515885",
+          "name": "RJ",
+          "kills": 14,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 73,
+          "kast": 76,
+          "rating": 1.14
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "kills": 16,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 82,
+          "kast": 67,
+          "rating": 1.07
+        },
+        {
+          "id": "76561198015424675",
+          "name": "tolya800x600",
+          "kills": 11,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 59,
+          "kast": 81,
+          "rating": 0.95
+        },
+        {
+          "id": "76561198394184895",
+          "name": "muts1",
+          "kills": 13,
+          "deaths": 19,
+          "assists": 0,
+          "adr": 65,
+          "kast": 71,
+          "rating": 0.86
+        },
+        {
+          "id": "76561198974803862",
+          "name": "prefixx",
+          "kills": 10,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 62,
+          "kast": 67,
+          "rating": 0.73
+        },
+        {
+          "id": "76561198681103731",
+          "name": "Анальный бур",
+          "kills": 4,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 27,
+          "kast": 38,
+          "rating": 0.17
+        }
+      ]
+    },
+    {
+      "map": "de_cache",
+      "players": [
+        {
+          "id": "76561198849641921",
+          "name": "suffixx",
+          "kills": 27,
+          "deaths": 19,
+          "assists": 0,
+          "adr": 121,
+          "kast": 160,
+          "rating": 2.17
+        },
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "kills": 25,
+          "deaths": 19,
+          "assists": 0,
+          "adr": 96,
+          "kast": 88,
+          "rating": 1.49
+        },
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "kills": 21,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 97,
+          "kast": 88,
+          "rating": 1.39
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "kills": 22,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 95,
+          "kast": 80,
+          "rating": 1.38
+        },
+        {
+          "id": "76561198059120185",
+          "name": "Instructor",
+          "kills": 22,
+          "deaths": 20,
+          "assists": 0,
+          "adr": 79,
+          "kast": 76,
+          "rating": 1.21
+        },
+        {
+          "id": "76561198974803862",
+          "name": "prefixx",
+          "kills": 17,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 85,
+          "kast": 68,
+          "rating": 1.05
+        },
+        {
+          "id": "76561198015424675",
+          "name": "tolya800x600",
+          "kills": 14,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 65,
+          "kast": 68,
+          "rating": 0.92
+        },
+        {
+          "id": "76561198587515885",
+          "name": "RJ",
+          "kills": 14,
+          "deaths": 22,
+          "assists": 0,
+          "adr": 72,
+          "kast": 68,
+          "rating": 0.83
+        },
+        {
+          "id": "76561198681103731",
+          "name": "Анальный бур",
+          "kills": 9,
+          "deaths": 20,
+          "assists": 0,
+          "adr": 52,
+          "kast": 64,
+          "rating": 0.61
+        },
+        {
+          "id": "76561198394184895",
+          "name": "muts1",
+          "kills": 9,
+          "deaths": 21,
+          "assists": 0,
+          "adr": 45,
+          "kast": 52,
+          "rating": 0.46
+        }
+      ]
+    }
+  ]
+}

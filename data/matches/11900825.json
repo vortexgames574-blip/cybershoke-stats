@@ -1,0 +1,113 @@
+{
+  "matchId": "11900825",
+  "url": "https://cybershoke.net/ru/match/11900825",
+  "tournament": "18.09.2026",
+  "date": "2026-11-08T16:23:11.129Z",
+  "maps": [
+    {
+      "map": "de_ancient",
+      "players": [
+        {
+          "id": "76561199109745015",
+          "name": "q1nce",
+          "kills": 22,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 108,
+          "kast": 74,
+          "rating": 1.5
+        },
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "kills": 20,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 100,
+          "kast": 87,
+          "rating": 1.43
+        },
+        {
+          "id": "76561198365875812",
+          "name": "АЙБОЛИТ",
+          "kills": 20,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 103,
+          "kast": 78,
+          "rating": 1.33
+        },
+        {
+          "id": "76561198252013498",
+          "name": "vlas99",
+          "kills": 19,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 77,
+          "kast": 83,
+          "rating": 1.29
+        },
+        {
+          "id": "76561198197222927",
+          "name": "goodipAN",
+          "kills": 13,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 78,
+          "kast": 78,
+          "rating": 0.99
+        },
+        {
+          "id": "76561199467682493",
+          "name": "Господин Босс",
+          "kills": 14,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 72,
+          "kast": 70,
+          "rating": 0.96
+        },
+        {
+          "id": "76561198158360502",
+          "name": "✪ AlikD*ck ✪",
+          "kills": 13,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 58,
+          "kast": 70,
+          "rating": 0.88
+        },
+        {
+          "id": "76561198016993317",
+          "name": "АНТОН ЮРИЧ",
+          "kills": 11,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 69,
+          "kast": 74,
+          "rating": 0.85
+        },
+        {
+          "id": "76561199220313813",
+          "name": "Правда?",
+          "kills": 11,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 35,
+          "kast": 78,
+          "rating": 0.82
+        },
+        {
+          "id": "76561198059120185",
+          "name": "Instructor",
+          "kills": 11,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 58,
+          "kast": 70,
+          "rating": 0.78
+        }
+      ]
+    }
+  ]
+}

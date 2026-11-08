@@ -1,0 +1,113 @@
+{
+  "matchId": "11906960",
+  "url": "https://cybershoke.net/ru/match/11906960",
+  "tournament": "18.09.2026",
+  "date": "2026-11-08T16:23:29.142Z",
+  "maps": [
+    {
+      "map": "de_dust2",
+      "players": [
+        {
+          "id": "76561198252013498",
+          "name": "vlas99",
+          "kills": 19,
+          "deaths": 6,
+          "assists": 0,
+          "adr": 114,
+          "kast": 94,
+          "rating": 1.89
+        },
+        {
+          "id": "76561198059120185",
+          "name": "Instructor",
+          "kills": 20,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 109,
+          "kast": 89,
+          "rating": 1.71
+        },
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "kills": 18,
+          "deaths": 12,
+          "assists": 0,
+          "adr": 115,
+          "kast": 83,
+          "rating": 1.58
+        },
+        {
+          "id": "76561198872139873",
+          "name": "1lpk",
+          "kills": 13,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 105,
+          "kast": 72,
+          "rating": 1.16
+        },
+        {
+          "id": "76561199113096937",
+          "name": "valtermalter",
+          "kills": 13,
+          "deaths": 16,
+          "assists": 0,
+          "adr": 74,
+          "kast": 78,
+          "rating": 1.05
+        },
+        {
+          "id": "76561198197222927",
+          "name": "goodipAN",
+          "kills": 10,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 56,
+          "kast": 89,
+          "rating": 0.97
+        },
+        {
+          "id": "76561198158360502",
+          "name": "✪ AlikD*ck ✪",
+          "kills": 9,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 70,
+          "kast": 78,
+          "rating": 0.95
+        },
+        {
+          "id": "76561198888817693",
+          "name": "kyoKANDELAKI",
+          "kills": 13,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 77,
+          "kast": 61,
+          "rating": 0.86
+        },
+        {
+          "id": "76561198818222401",
+          "name": "Kyo  Ilonmax8",
+          "kills": 10,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 66,
+          "kast": 61,
+          "rating": 0.68
+        },
+        {
+          "id": "76561199144510024",
+          "name": "63dealer",
+          "kills": 5,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 39,
+          "kast": 56,
+          "rating": 0.33
+        }
+      ]
+    }
+  ]
+}

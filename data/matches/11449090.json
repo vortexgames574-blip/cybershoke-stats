@@ -1,0 +1,113 @@
+{
+  "matchId": "11449090",
+  "url": "https://cybershoke.net/ru/match/11449090",
+  "tournament": "04.09.2026",
+  "date": "2026-11-08T16:22:27.631Z",
+  "maps": [
+    {
+      "map": "de_mirage",
+      "players": [
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "kills": 26,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 123,
+          "kast": 165,
+          "rating": 2.26
+        },
+        {
+          "id": "76561198283381727",
+          "name": "St1gmat",
+          "kills": 23,
+          "deaths": 13,
+          "assists": 0,
+          "adr": 69,
+          "kast": 148,
+          "rating": 1.94
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "kills": 15,
+          "deaths": 0,
+          "assists": 0,
+          "adr": 74,
+          "kast": 100,
+          "rating": 1.59
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "kills": 22,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 88,
+          "kast": 74,
+          "rating": 1.34
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "kills": 20,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 84,
+          "kast": 74,
+          "rating": 1.22
+        },
+        {
+          "id": "76561198888817693",
+          "name": "everything from memory",
+          "kills": 20,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 78,
+          "kast": 61,
+          "rating": 1.12
+        },
+        {
+          "id": "76561198015424675",
+          "name": "БОТ Tolya",
+          "kills": 15,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 61,
+          "kast": 70,
+          "rating": 0.96
+        },
+        {
+          "id": "76561198039138241",
+          "name": "AlexMax",
+          "kills": 11,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 57,
+          "kast": 74,
+          "rating": 0.81
+        },
+        {
+          "id": "76561198681103731",
+          "name": "Анальный бур",
+          "kills": 8,
+          "deaths": 20,
+          "assists": 0,
+          "adr": 54,
+          "kast": 52,
+          "rating": 0.47
+        },
+        {
+          "id": "76561198272167310",
+          "name": "Пикулинни Браветти.",
+          "kills": 8,
+          "deaths": 23,
+          "assists": 0,
+          "adr": 55,
+          "kast": 48,
+          "rating": 0.38
+        }
+      ]
+    }
+  ]
+}

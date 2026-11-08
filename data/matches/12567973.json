@@ -1,0 +1,113 @@
+{
+  "matchId": "12567973",
+  "url": "https://cybershoke.net/ru/match/12567973",
+  "tournament": "09.10.2026",
+  "date": "2026-11-08T16:23:47.830Z",
+  "maps": [
+    {
+      "map": "de_ancient",
+      "players": [
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "kills": 25,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 143,
+          "kast": 94,
+          "rating": 2.17
+        },
+        {
+          "id": "76561198587515885",
+          "name": "RJ",
+          "kills": 16,
+          "deaths": 8,
+          "assists": 0,
+          "adr": 90,
+          "kast": 88,
+          "rating": 1.57
+        },
+        {
+          "id": "76561198015424675",
+          "name": "tolya800x600",
+          "kills": 15,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 93,
+          "kast": 82,
+          "rating": 1.4
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "kills": 14,
+          "deaths": 19,
+          "assists": 0,
+          "adr": 106,
+          "kast": 82,
+          "rating": 1.16
+        },
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "kills": 11,
+          "deaths": 12,
+          "assists": 0,
+          "adr": 72,
+          "kast": 88,
+          "rating": 1.15
+        },
+        {
+          "id": "76561198283381727",
+          "name": "St1gmat",
+          "kills": 14,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 87,
+          "kast": 65,
+          "rating": 1.11
+        },
+        {
+          "id": "76561198090688036",
+          "name": "Kara7evich",
+          "kills": 11,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 77,
+          "kast": 82,
+          "rating": 1.06
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "kills": 6,
+          "deaths": 11,
+          "assists": 0,
+          "adr": 47,
+          "kast": 82,
+          "rating": 0.81
+        },
+        {
+          "id": "76561198272167310",
+          "name": "Джуззи.",
+          "kills": 6,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 34,
+          "kast": 65,
+          "rating": 0.52
+        },
+        {
+          "id": "76561199144510024",
+          "name": "63dealer",
+          "kills": 7,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 54,
+          "kast": 47,
+          "rating": 0.47
+        }
+      ]
+    }
+  ]
+}

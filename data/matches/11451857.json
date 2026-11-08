@@ -1,0 +1,113 @@
+{
+  "matchId": "11451857",
+  "url": "https://cybershoke.net/ru/match/11451857",
+  "tournament": "04.09.2026",
+  "date": "2026-11-08T16:22:31.988Z",
+  "maps": [
+    {
+      "map": "de_dust2",
+      "players": [
+        {
+          "id": "76561198283381727",
+          "name": "St1gmat",
+          "kills": 23,
+          "deaths": 0,
+          "assists": 0,
+          "adr": 93,
+          "kast": 100,
+          "rating": 1.92
+        },
+        {
+          "id": "76561199109745015",
+          "name": "q1nce",
+          "kills": 19,
+          "deaths": 0,
+          "assists": 0,
+          "adr": 84,
+          "kast": 100,
+          "rating": 1.75
+        },
+        {
+          "id": "76561198587515885",
+          "name": "RJ",
+          "kills": 19,
+          "deaths": 15,
+          "assists": 0,
+          "adr": 58,
+          "kast": 150,
+          "rating": 1.7
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "kills": 22,
+          "deaths": 19,
+          "assists": 0,
+          "adr": 78,
+          "kast": 133,
+          "rating": 1.68
+        },
+        {
+          "id": "76561198090688036",
+          "name": "Kara7evich",
+          "kills": 26,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 95,
+          "kast": 79,
+          "rating": 1.49
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "kills": 17,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 56,
+          "kast": 117,
+          "rating": 1.32
+        },
+        {
+          "id": "76561198888817693",
+          "name": "everything from memory",
+          "kills": 18,
+          "deaths": 19,
+          "assists": 0,
+          "adr": 84,
+          "kast": 79,
+          "rating": 1.15
+        },
+        {
+          "id": "76561198158360502",
+          "name": "✪ AlikD*ck ✪",
+          "kills": 7,
+          "deaths": 17,
+          "assists": 0,
+          "adr": 29,
+          "kast": 142,
+          "rating": 1.08
+        },
+        {
+          "id": "76561198015424675",
+          "name": "БОТ Tolya",
+          "kills": 18,
+          "deaths": 21,
+          "assists": 0,
+          "adr": 61,
+          "kast": 67,
+          "rating": 0.95
+        },
+        {
+          "id": "76561198039138241",
+          "name": "AlexMax",
+          "kills": 9,
+          "deaths": 18,
+          "assists": 0,
+          "adr": 43,
+          "kast": 50,
+          "rating": 0.51
+        }
+      ]
+    }
+  ]
+}
