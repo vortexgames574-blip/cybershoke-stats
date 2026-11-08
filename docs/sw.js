@@ -1,4 +1,4 @@
-const CACHE_NAME = 'geimeri-stats-v24'; // ВАЖНО: ПОДНИМАЙ ВЕРСИЮ ПРИ КАЖДОМ ОБНОВЛЕНИИ!
+const CACHE_NAME = 'geimeri-stats-v25'; // ВАЖНО: ПОДНИМАЙ ВЕРСИЮ ПРИ КАЖДОМ ОБНОВЛЕНИИ!
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
