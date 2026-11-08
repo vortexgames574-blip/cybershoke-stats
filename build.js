@@ -152,13 +152,13 @@ async function fetchSteamAvatars(steamIds) {
   return result;
 }
 
-// ==== РАНГ ====
+// ==== РАНГИ И ЦВЕТА ====
 function getRank(elo) {
-  if (elo < 800) return { name: 'Silver', color: '#8b96a5', icon: 'shield' };
-  if (elo < 1200) return { name: 'Gold', color: '#f59e0b', icon: 'shield-check' };
-  if (elo < 1600) return { name: 'Platinum', color: '#10b981', icon: 'shield-plus' };
-  if (elo < 2000) return { name: 'Diamond', color: '#4d6bfe', icon: 'gem' };
-  return { name: 'GEIMERI', color: '#ef4444', icon: 'crown' };
+  if (elo < 1000) return { name: 'Silver', color: '#8b96a5', icon: 'shield' };       // Серый
+  if (elo < 1100) return { name: 'Green', color: '#10b981', icon: 'shield-check' };  // Зеленый
+  if (elo < 1200) return { name: 'Blue', color: '#4d6bfe', icon: 'shield-plus' };    // Синий
+  if (elo < 1300) return { name: 'Purple', color: '#a855f7', icon: 'gem' };          // Фиолетовый
+  return { name: 'GEIMERI', color: '#ef4444', icon: 'crown' };                      // Красный
 }
 
 // ==== РАСЧЁТ СТАТИСТИКИ ====
@@ -230,21 +230,23 @@ function calculateStats(matches, steamAvatars) {
 
         const adrVal = num(p.adr), kastVal = num(p.kast), ratingVal = num(p.rating);
 
-        // === ПРОКСИ-РЕЙТИНГ (если нет настоящего Rating) ===
+        // === ПРОКСИ-РЕЙТИНГ (K/D + БОНУС ЗА ФРАГИ) ===
         let perf = ratingVal;
         if (perf === null) {
           const kd = d > 0 ? k / d : (k > 0 ? 2.0 : 1.0);
-          perf = Math.min(3.0, 0.5 + kd * 0.5);
+          let proxyRating = 0.5 + kd * 0.5;
+          if (k > 15) proxyRating += (k - 15) * 0.02;
+          perf = Math.min(3.0, proxyRating);
         }
         
-        // === ФИКС ДЛИННЫХ ЧИСЕЛ (округляем до 2 знаков) ===
         if (perf !== null) perf = +(Number(perf).toFixed(2));
 
         // === ELO ===
         let eloChange = 0;
         if (perf !== null) {
-          const K = Math.max(5, 50 - (st.matches * 1.5));
-          eloChange = Math.round(K * (perf - 1.0) * 2);
+          const K = Math.max(5, 32 - (st.matches * 1.5));
+          eloChange = Math.round(K * (perf - 1.0) * 1.5);
+          eloChange = Math.max(-35, Math.min(35, eloChange));
           st.elo += eloChange;
         }
 
@@ -325,22 +327,6 @@ function calculateStats(matches, steamAvatars) {
     }
   }
 
-  players.forEach(p => {
-    const mp = p.matches, ar = p.avgRating || 0;
-    if (mp < 3) {
-      if (mp === 0) p.form = 'new';
-      else if (ar >= 1.2) p.form = 'hot';
-      else if (ar <= 0.8) p.form = 'cold';
-      else p.form = 'stable';
-      return;
-    }
-    const hist = [...p.matchHistory].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
-    const rec = hist.reduce((sum, h) => sum + (h.rating || 0), 0) / hist.length;
-    if (rec > ar * 1.1) p.form = 'hot';
-    else if (rec < ar * 0.9) p.form = 'cold';
-    else p.form = 'stable';
-  });
-
   players.sort((a, b) => b.elo - a.elo);
 
   const formattedMapStats = Object.entries(mapStatsRaw).map(([map, data]) => {
@@ -394,6 +380,7 @@ function calculateStats(matches, steamAvatars) {
   return {
     players, mapStats: formattedMapStats,
     recentMatches: recentMatches.slice(-10).reverse(),
+    totalMatches: matches.length,
     records,
     funStats: {
       totalHours: Math.round(totalMapsPlayed * 40 / 60),

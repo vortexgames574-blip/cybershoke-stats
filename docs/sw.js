@@ -1,5 +1,5 @@
-// Service worker — офлайн-кэш основных ресурсов
-const CACHE_NAME = 'geimeri-stats-v29'; // Подняли версию, чтобы сбросить старый кэш
+// sw.js
+const CACHE_NAME = 'geimeri-stats-v30'; // <--- ПОДНЯЛИ ВЕРСИЮ
 const ASSETS = [
   './',
   './index.html',
@@ -32,7 +32,6 @@ self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
 
   // НЕ КЭШИРУЕМ ЧУЖИЕ САЙТЫ (CDN скрипты, шрифты, аватарки Steam)
-  // Это исправляет ошибку Failed to execute 'clone' on 'Response'
   if (!e.request.url.startsWith(self.location.origin)) return;
 
   // Стата — сначала сеть, потом кэш
@@ -44,9 +43,7 @@ self.addEventListener('fetch', (e) => {
           try {
             const clone = res.clone();
             caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-          } catch (err) {
-            console.warn('Не удалось клонировать ответ', err);
-          }
+          } catch (err) {}
           return res;
         })
         .catch(() => caches.match(e.request))
@@ -64,9 +61,7 @@ self.addEventListener('fetch', (e) => {
         try {
           const clone = res.clone();
           caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-        } catch (err) {
-          console.warn('Не удалось клонировать ответ', err);
-        }
+        } catch (err) {}
         return res;
       });
     })
