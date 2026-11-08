@@ -2,110 +2,120 @@
   "matchId": "12563429",
   "url": "https://cybershoke.net/ru/match/12563429",
   "tournament": "09.10.2026",
-  "date": "2026-11-08T16:23:43.268Z",
+  "date": "2026-11-08T17:20:38.496Z",
   "maps": [
     {
       "map": "de_dust2",
       "players": [
         {
-          "id": "76561199109745015",
-          "name": "q1nce",
-          "kills": 24,
-          "deaths": 16,
-          "assists": 0,
-          "adr": 109,
-          "kast": 82,
-          "rating": 1.59
-        },
-        {
-          "id": "76561198843347969",
-          "name": "sandor",
-          "kills": 22,
-          "deaths": 17,
-          "assists": 0,
-          "adr": 91,
-          "kast": 77,
-          "rating": 1.39
-        },
-        {
           "id": "76561198283381727",
-          "name": "St1gmat",
+          "name": "Unknown",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
           "kills": 20,
           "deaths": 15,
-          "assists": 0,
-          "adr": 105,
-          "kast": 73,
-          "rating": 1.38
-        },
-        {
-          "id": "76561198053530322",
-          "name": "ZAZA_",
-          "kills": 19,
-          "deaths": 12,
-          "assists": 0,
-          "adr": 84,
-          "kast": 77,
-          "rating": 1.37
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198090688036",
           "name": "Kara7evich",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/9.png",
           "kills": 18,
           "deaths": 17,
-          "assists": 0,
-          "adr": 87,
-          "kast": 73,
-          "rating": 1.19
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198272167310",
+          "name": "Изумительные Брючки.",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 15,
+          "deaths": 16,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561199144510024",
           "name": "63dealer",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
           "kills": 16,
           "deaths": 17,
-          "assists": 0,
-          "adr": 72,
-          "kast": 77,
-          "rating": 1.1
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
-          "id": "76561198272167310",
-          "name": "Джуззи.",
-          "kills": 15,
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/9.png",
+          "kills": 19,
+          "deaths": 12,
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199109745015",
+          "name": "q1nce_",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
+          "kills": 24,
           "deaths": 16,
-          "assists": 0,
-          "adr": 74,
-          "kast": 68,
-          "rating": 1.01
+          "assists": 9,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198016993317",
           "name": "АНТОН ЮРИЧ",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
           "kills": 12,
           "deaths": 16,
-          "assists": 0,
-          "adr": 78,
-          "kast": 73,
-          "rating": 0.96
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
-          "id": "76561199467682493",
-          "name": "Господин Босс",
-          "kills": 11,
-          "deaths": 19,
-          "assists": 0,
-          "adr": 69,
-          "kast": 64,
-          "rating": 0.74
+          "id": "76561198843347969",
+          "name": "sandor",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/10.png",
+          "kills": 22,
+          "deaths": 17,
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561199113096937",
           "name": "valtermalter",
+          "avatar": "https://avatars.steamstatic.com/f5bb41d387777f4b32bba4a3d2018ec9f7a8960d_full.jpg",
           "kills": 6,
           "deaths": 20,
-          "assists": 0,
-          "adr": 39,
-          "kast": 64,
-          "rating": 0.43
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199467682493",
+          "name": "Господин Босс",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
+          "kills": 11,
+          "deaths": 19,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
         }
       ]
     }

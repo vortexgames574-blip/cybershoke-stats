@@ -2,110 +2,120 @@
   "matchId": "11889216",
   "url": "https://cybershoke.net/ru/match/11889216",
   "tournament": "18.09.2026",
-  "date": "2026-11-08T16:22:44.871Z",
+  "date": "2026-11-08T17:18:26.344Z",
   "maps": [
     {
       "map": "de_inferno",
       "players": [
         {
-          "id": "76561198252013498",
-          "name": "vlas99",
-          "kills": 27,
-          "deaths": 12,
-          "assists": 0,
-          "adr": 124,
-          "kast": 90,
-          "rating": 1.99
-        },
-        {
           "id": "76561198053530322",
           "name": "ZAZA_",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
           "kills": 18,
           "deaths": 16,
-          "assists": 0,
-          "adr": 108,
-          "kast": 70,
-          "rating": 1.3
-        },
-        {
-          "id": "76561199542530681",
-          "name": "AuraTeam",
-          "kills": 17,
-          "deaths": 14,
-          "assists": 0,
-          "adr": 80,
-          "kast": 80,
-          "rating": 1.29
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198090688036",
           "name": "Kara7evich",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/6.png",
           "kills": 12,
           "deaths": 14,
-          "assists": 0,
-          "adr": 80,
-          "kast": 85,
-          "rating": 1.12
-        },
-        {
-          "id": "76561198984765872",
-          "name": "molodoiebatel",
-          "kills": 12,
-          "deaths": 15,
-          "assists": 0,
-          "adr": 63,
-          "kast": 80,
-          "rating": 0.99
-        },
-        {
-          "id": "76561198059120185",
-          "name": "Instructor",
-          "kills": 13,
-          "deaths": 16,
-          "assists": 0,
-          "adr": 81,
-          "kast": 65,
-          "rating": 0.97
-        },
-        {
-          "id": "76561198158360502",
-          "name": "✪ AlikD*ck ✪",
-          "kills": 12,
-          "deaths": 15,
-          "assists": 0,
-          "adr": 71,
-          "kast": 70,
-          "rating": 0.94
+          "assists": 10,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198042805941",
           "name": "PRADA_CODE",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
           "kills": 13,
           "deaths": 15,
-          "assists": 0,
-          "adr": 57,
-          "kast": 60,
-          "rating": 0.85
+          "assists": 2,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198984765872",
+          "name": "molodoiebatel",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/1.png",
+          "kills": 12,
+          "deaths": 15,
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198261421853",
           "name": "0n3_vs_4ll",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/2.png",
           "kills": 11,
           "deaths": 16,
-          "assists": 0,
-          "adr": 71,
-          "kast": 60,
-          "rating": 0.81
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
+          "kills": 17,
+          "deaths": 14,
+          "assists": 8,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198252013498",
+          "name": "vlas99",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/8.png",
+          "kills": 27,
+          "deaths": 12,
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198059120185",
+          "name": "Instructor",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/6.png",
+          "kills": 13,
+          "deaths": 16,
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198158360502",
+          "name": "✪ AlikD*ck ✪",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 12,
+          "deaths": 15,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198197222927",
           "name": "goodipAN",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
           "kills": 6,
           "deaths": 11,
-          "assists": 0,
-          "adr": 38,
-          "kast": 65,
-          "rating": 0.64
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
         }
       ]
     }

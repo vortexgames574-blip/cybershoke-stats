@@ -2,110 +2,120 @@
   "matchId": "11888221",
   "url": "https://cybershoke.net/ru/match/11888221",
   "tournament": "18.09.2026",
-  "date": "2026-11-08T16:22:40.565Z",
+  "date": "2026-11-08T17:18:16.174Z",
   "maps": [
     {
       "map": "de_mirage",
       "players": [
         {
-          "id": "76561199109745015",
-          "name": "q1nce",
-          "kills": 21,
-          "deaths": 11,
-          "assists": 0,
-          "adr": 102,
-          "kast": 80,
-          "rating": 1.59
-        },
-        {
-          "id": "76561199467682493",
-          "name": "Господин Босс",
-          "kills": 18,
-          "deaths": 15,
-          "assists": 0,
-          "adr": 112,
-          "kast": 85,
-          "rating": 1.45
-        },
-        {
-          "id": "76561198365875812",
-          "name": "АЙБОЛИТ",
-          "kills": 17,
-          "deaths": 11,
-          "assists": 0,
-          "adr": 89,
-          "kast": 80,
-          "rating": 1.39
-        },
-        {
-          "id": "76561198728309900",
-          "name": "BB-00",
-          "kills": 16,
-          "deaths": 15,
-          "assists": 0,
-          "adr": 106,
-          "kast": 65,
-          "rating": 1.21
-        },
-        {
-          "id": "76561199037388895",
-          "name": "asdssasds",
-          "kills": 15,
-          "deaths": 15,
-          "assists": 0,
-          "adr": 59,
-          "kast": 65,
-          "rating": 0.98
-        },
-        {
-          "id": "76561198016993317",
-          "name": "АНТОН ЮРИЧ",
-          "kills": 12,
-          "deaths": 14,
-          "assists": 0,
-          "adr": 57,
-          "kast": 65,
-          "rating": 0.87
-        },
-        {
           "id": "76561198015424675",
-          "name": "БОТ Tolya",
+          "name": "tolya800x600",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
           "kills": 10,
-          "deaths": 16,
-          "assists": 0,
-          "adr": 67,
-          "kast": 70,
-          "rating": 0.83
+          "deaths": 15,
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561199022192304",
           "name": "Pizdets_tip",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/8.png",
           "kills": 10,
           "deaths": 16,
-          "assists": 0,
-          "adr": 69,
-          "kast": 60,
-          "rating": 0.74
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561199430091221",
           "name": "St1tch",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
           "kills": 9,
           "deaths": 14,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199037388895",
+          "name": "MUA",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
+          "kills": 15,
+          "deaths": 14,
+          "assists": 1,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 16,
+          "deaths": 15,
+          "assists": 8,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199109745015",
+          "name": "q1nce_",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
+          "kills": 21,
+          "deaths": 10,
           "assists": 0,
-          "adr": 53,
-          "kast": 65,
-          "rating": 0.74
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198016993317",
+          "name": "АНТОН ЮРИЧ",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/5.png",
+          "kills": 12,
+          "deaths": 13,
+          "assists": 1,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561199220313813",
-          "name": "Правда?",
+          "name": "mode: reason_",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
           "kills": 6,
+          "deaths": 13,
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198365875812",
+          "name": "АЙБОЛИТ",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/8.png",
+          "kills": 17,
+          "deaths": 10,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199467682493",
+          "name": "Господин Босс",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
+          "kills": 18,
           "deaths": 14,
-          "assists": 0,
-          "adr": 53,
-          "kast": 75,
-          "rating": 0.69
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
         }
       ]
     }

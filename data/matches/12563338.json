@@ -2,110 +2,120 @@
   "matchId": "12563338",
   "url": "https://cybershoke.net/ru/match/12563338",
   "tournament": "09.10.2026",
-  "date": "2026-11-08T16:23:38.678Z",
+  "date": "2026-11-08T17:20:28.327Z",
   "maps": [
     {
       "map": "de_inferno",
       "players": [
         {
-          "id": "76561198849641921",
-          "name": "suffixx",
-          "kills": 47,
-          "deaths": 26,
-          "assists": 0,
-          "adr": 127,
-          "kast": 83,
-          "rating": 1.84
-        },
-        {
-          "id": "76561199022192304",
-          "name": "Pizdets_tip",
-          "kills": 34,
-          "deaths": 25,
-          "assists": 0,
-          "adr": 106,
-          "kast": 83,
-          "rating": 1.49
-        },
-        {
-          "id": "76561199542530681",
-          "name": "AuraTeam",
-          "kills": 34,
-          "deaths": 25,
-          "assists": 0,
-          "adr": 92,
-          "kast": 78,
-          "rating": 1.39
-        },
-        {
           "id": "76561198015424675",
           "name": "tolya800x600",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
           "kills": 33,
           "deaths": 26,
-          "assists": 0,
-          "adr": 103,
-          "kast": 72,
-          "rating": 1.36
-        },
-        {
-          "id": "76561198394184895",
-          "name": "muts1",
-          "kills": 25,
-          "deaths": 25,
-          "assists": 0,
-          "adr": 75,
-          "kast": 72,
-          "rating": 1.08
-        },
-        {
-          "id": "76561198042805941",
-          "name": "PRADA_CODE",
-          "kills": 20,
-          "deaths": 23,
-          "assists": 0,
-          "adr": 44,
-          "kast": 81,
-          "rating": 0.94
-        },
-        {
-          "id": "76561198974803862",
-          "name": "prefixx",
-          "kills": 22,
-          "deaths": 28,
-          "assists": 0,
-          "adr": 66,
-          "kast": 64,
-          "rating": 0.88
-        },
-        {
-          "id": "76561198059120185",
-          "name": "Instructor",
-          "kills": 19,
-          "deaths": 31,
-          "assists": 0,
-          "adr": 66,
-          "kast": 53,
-          "rating": 0.68
+          "assists": 13,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198587515885",
           "name": "RJ",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
           "kills": 14,
           "deaths": 26,
-          "assists": 0,
-          "adr": 50,
-          "kast": 67,
-          "rating": 0.68
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 20,
+          "deaths": 23,
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/8.png",
+          "kills": 34,
+          "deaths": 25,
+          "assists": 12,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/9.png",
+          "kills": 34,
+          "deaths": 25,
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198849641921",
+          "name": "suffixx",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
+          "kills": 47,
+          "deaths": 26,
+          "assists": 10,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198394184895",
+          "name": "muts1",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 25,
+          "deaths": 25,
+          "assists": 10,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198059120185",
+          "name": "Instructor",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/8.png",
+          "kills": 19,
+          "deaths": 31,
+          "assists": 8,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198974803862",
+          "name": "prefixx",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/9.png",
+          "kills": 22,
+          "deaths": 28,
+          "assists": 10,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198681103731",
           "name": "Анальный бур",
+          "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_full.jpg",
           "kills": 9,
           "deaths": 29,
-          "assists": 0,
-          "adr": 39,
-          "kast": 58,
-          "rating": 0.41
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
         }
       ]
     }

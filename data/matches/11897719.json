@@ -2,7 +2,7 @@
   "matchId": "11897719",
   "url": "https://cybershoke.net/ru/match/11897719",
   "tournament": "18.09.2026",
-  "date": "2026-11-08T16:23:06.686Z",
+  "date": "2026-11-08T17:19:17.169Z",
   "maps": [
     {
       "map": "de_inferno",
@@ -10,102 +10,112 @@
         {
           "id": "76561198849641921",
           "name": "suffixx",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
           "kills": 26,
-          "deaths": 9,
-          "assists": 0,
-          "adr": 132,
-          "kast": 89,
-          "rating": 2.09
+          "deaths": 8,
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
-          "id": "76561198984765872",
-          "name": "molodoiebatel",
-          "kills": 21,
-          "deaths": 14,
-          "assists": 0,
-          "adr": 125,
-          "kast": 79,
-          "rating": 1.62
+          "id": "76561198272167310",
+          "name": "Изумительные Брючки.",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
+          "kills": 8,
+          "deaths": 13,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198843347969",
           "name": "sandor",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/10.png",
           "kills": 14,
-          "deaths": 13,
-          "assists": 0,
-          "adr": 78,
-          "kast": 84,
-          "rating": 1.24
-        },
-        {
-          "id": "76561198090688036",
-          "name": "Kara7evich",
-          "kills": 15,
-          "deaths": 15,
-          "assists": 0,
-          "adr": 94,
-          "kast": 79,
-          "rating": 1.23
+          "deaths": 12,
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198587515885",
           "name": "RJ",
+          "avatar": "https://avatars.steamstatic.com/51c75b4ca05977a2ed3a8002417b4b6cc7472a6e_full.jpg",
           "kills": 12,
-          "deaths": 13,
-          "assists": 0,
-          "adr": 84,
-          "kast": 74,
-          "rating": 1.09
-        },
-        {
-          "id": "76561198053530322",
-          "name": "ZAZA_",
-          "kills": 14,
-          "deaths": 16,
-          "assists": 0,
-          "adr": 84,
-          "kast": 74,
-          "rating": 1.08
+          "deaths": 12,
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198681103731",
           "name": "Анальный бур",
+          "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_full.jpg",
           "kills": 12,
-          "deaths": 15,
-          "assists": 0,
-          "adr": 71,
-          "kast": 74,
-          "rating": 0.99
-        },
-        {
-          "id": "76561198261421853",
-          "name": "0n3_vs_4ll",
-          "kills": 7,
           "deaths": 14,
-          "assists": 0,
-          "adr": 54,
-          "kast": 63,
-          "rating": 0.64
-        },
-        {
-          "id": "76561198272167310",
-          "name": "Пикулинни Браветти.",
-          "kills": 8,
-          "deaths": 14,
-          "assists": 0,
-          "adr": 58,
-          "kast": 53,
-          "rating": 0.63
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198042805941",
           "name": "PRADA_CODE",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
           "kills": 1,
-          "deaths": 17,
-          "assists": 0,
-          "adr": 34,
-          "kast": 63,
-          "rating": 0.27
+          "deaths": 16,
+          "assists": 2,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/9.png",
+          "kills": 14,
+          "deaths": 15,
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198984765872",
+          "name": "molodoiebatel",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/1.png",
+          "kills": 21,
+          "deaths": 14,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198090688036",
+          "name": "Kara7evich",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/6.png",
+          "kills": 15,
+          "deaths": 14,
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198261421853",
+          "name": "0n3_vs_4ll",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/2.png",
+          "kills": 7,
+          "deaths": 13,
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
         }
       ]
     }

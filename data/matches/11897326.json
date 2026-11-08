@@ -2,7 +2,7 @@
   "matchId": "11897326",
   "url": "https://cybershoke.net/ru/match/11897326",
   "tournament": "18.09.2026",
-  "date": "2026-11-08T16:23:02.313Z",
+  "date": "2026-11-08T17:19:07.016Z",
   "maps": [
     {
       "map": "de_anubis",
@@ -10,102 +10,112 @@
         {
           "id": "76561199542530681",
           "name": "AuraTeam",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
           "kills": 22,
           "deaths": 7,
-          "assists": 0,
-          "adr": 118,
-          "kast": 94,
-          "rating": 2.04
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198059120185",
           "name": "Instructor",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/6.png",
           "kills": 18,
           "deaths": 6,
-          "assists": 0,
-          "adr": 125,
-          "kast": 100,
-          "rating": 1.95
-        },
-        {
-          "id": "76561198252013498",
-          "name": "vlas99",
-          "kills": 16,
-          "deaths": 7,
-          "assists": 0,
-          "adr": 81,
-          "kast": 94,
-          "rating": 1.61
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198158360502",
           "name": "✪ AlikD*ck ✪",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
           "kills": 15,
           "deaths": 8,
-          "assists": 0,
-          "adr": 82,
-          "kast": 100,
-          "rating": 1.58
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198252013498",
+          "name": "vlas99",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/8.png",
+          "kills": 16,
+          "deaths": 7,
+          "assists": 2,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198197222927",
           "name": "goodipAN",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
           "kills": 6,
           "deaths": 9,
-          "assists": 0,
-          "adr": 54,
-          "kast": 94,
-          "rating": 0.98
-        },
-        {
-          "id": "76561198818222401",
-          "name": "Kyo  Ilonmax8",
-          "kills": 12,
-          "deaths": 16,
-          "assists": 0,
-          "adr": 92,
-          "kast": 53,
-          "rating": 0.88
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198872139873",
           "name": "1lpk",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
           "kills": 12,
           "deaths": 14,
-          "assists": 0,
-          "adr": 67,
-          "kast": 53,
-          "rating": 0.84
+          "assists": 1,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198818222401",
+          "name": "Ilonmax8",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/5.png",
+          "kills": 12,
+          "deaths": 16,
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198888817693",
-          "name": "kyoKANDELAKI",
+          "name": "right nipple",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
           "kills": 7,
-          "deaths": 16,
-          "assists": 0,
-          "adr": 55,
-          "kast": 59,
-          "rating": 0.56
-        },
-        {
-          "id": "76561199113096937",
-          "name": "valtermalter",
-          "kills": 3,
-          "deaths": 16,
-          "assists": 0,
-          "adr": 43,
-          "kast": 35,
-          "rating": 0.13
+          "deaths": 15,
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561199144510024",
           "name": "63dealer",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
           "kills": 3,
           "deaths": 15,
-          "assists": 0,
-          "adr": 29,
-          "kast": 29,
-          "rating": 0.07
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199113096937",
+          "name": "valtermalter",
+          "avatar": "https://avatars.steamstatic.com/f5bb41d387777f4b32bba4a3d2018ec9f7a8960d_full.jpg",
+          "kills": 3,
+          "deaths": 16,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
         }
       ]
     }

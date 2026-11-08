@@ -2,110 +2,120 @@
   "matchId": "12558289",
   "url": "https://cybershoke.net/ru/match/12558289",
   "tournament": "09.10.2026",
-  "date": "2026-11-08T16:23:33.622Z",
+  "date": "2026-11-08T17:20:18.165Z",
   "maps": [
     {
       "map": "de_anubis",
       "players": [
         {
-          "id": "76561199022192304",
-          "name": "Pizdets_tip",
-          "kills": 20,
-          "deaths": 8,
-          "assists": 0,
-          "adr": 120,
-          "kast": 94,
-          "rating": 1.92
-        },
-        {
-          "id": "76561199542530681",
-          "name": "AuraTeam",
-          "kills": 21,
-          "deaths": 8,
-          "assists": 0,
-          "adr": 111,
-          "kast": 88,
-          "rating": 1.89
-        },
-        {
           "id": "76561198015424675",
           "name": "tolya800x600",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
           "kills": 14,
           "deaths": 8,
-          "assists": 0,
-          "adr": 101,
-          "kast": 76,
-          "rating": 1.42
-        },
-        {
-          "id": "76561198843347969",
-          "name": "sandor",
-          "kills": 16,
-          "deaths": 13,
-          "assists": 0,
-          "adr": 100,
-          "kast": 71,
-          "rating": 1.32
-        },
-        {
-          "id": "76561198042805941",
-          "name": "PRADA_CODE",
-          "kills": 10,
-          "deaths": 9,
-          "assists": 0,
-          "adr": 50,
-          "kast": 82,
-          "rating": 1.06
-        },
-        {
-          "id": "76561199467682493",
-          "name": "Господин Босс",
-          "kills": 11,
-          "deaths": 14,
-          "assists": 0,
-          "adr": 70,
-          "kast": 59,
-          "rating": 0.85
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198587515885",
           "name": "RJ",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
           "kills": 5,
           "deaths": 11,
-          "assists": 0,
-          "adr": 48,
-          "kast": 88,
-          "rating": 0.81
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 10,
+          "deaths": 9,
+          "assists": 2,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/8.png",
+          "kills": 20,
+          "deaths": 8,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/9.png",
+          "kills": 18,
+          "deaths": 7,
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561199109745015",
-          "name": "q1nce",
+          "name": "q1nce_",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
           "kills": 6,
           "deaths": 14,
-          "assists": 0,
-          "adr": 62,
-          "kast": 71,
-          "rating": 0.68
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561198016993317",
           "name": "АНТОН ЮРИЧ",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
           "kills": 7,
           "deaths": 15,
-          "assists": 0,
-          "adr": 53,
-          "kast": 41,
-          "rating": 0.44
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
         },
         {
           "id": "76561199113096937",
           "name": "valtermalter",
+          "avatar": "https://avatars.steamstatic.com/f5bb41d387777f4b32bba4a3d2018ec9f7a8960d_full.jpg",
           "kills": 3,
           "deaths": 14,
-          "assists": 0,
-          "adr": 20,
-          "kast": 29,
-          "rating": 0.06
+          "assists": 1,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198843347969",
+          "name": "sandor",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/10.png",
+          "kills": 16,
+          "deaths": 13,
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199467682493",
+          "name": "Господин Босс",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
+          "kills": 11,
+          "deaths": 14,
+          "assists": 2,
+          "adr": null,
+          "kast": null,
+          "rating": null
         }
       ]
     }
