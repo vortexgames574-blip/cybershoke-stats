@@ -1,0 +1,123 @@
+{
+  "matchId": "11904601",
+  "url": "https://cybershoke.net/ru/match/11904601",
+  "tournament": "18.09.2026",
+  "date": "2026-11-08T17:19:37.521Z",
+  "maps": [
+    {
+      "map": "de_dust2",
+      "players": [
+        {
+          "id": "76561198015424675",
+          "name": "tolya800x600",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
+          "kills": 12,
+          "deaths": 16,
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199430091221",
+          "name": "St1tch",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
+          "kills": 7,
+          "deaths": 16,
+          "assists": 2,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199037388895",
+          "name": "MUA",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
+          "kills": 11,
+          "deaths": 12,
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/8.png",
+          "kills": 17,
+          "deaths": 15,
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 9,
+          "deaths": 14,
+          "assists": 2,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198872139873",
+          "name": "1lpk",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
+          "kills": 24,
+          "deaths": 7,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198818222401",
+          "name": "Ilonmax8",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/5.png",
+          "kills": 13,
+          "deaths": 14,
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198888817693",
+          "name": "right nipple",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
+          "kills": 12,
+          "deaths": 12,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199144510024",
+          "name": "63dealer",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
+          "kills": 9,
+          "deaths": 15,
+          "assists": 8,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199113096937",
+          "name": "valtermalter",
+          "avatar": "https://avatars.steamstatic.com/f5bb41d387777f4b32bba4a3d2018ec9f7a8960d_full.jpg",
+          "kills": 15,
+          "deaths": 10,
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        }
+      ]
+    }
+  ]
+}
