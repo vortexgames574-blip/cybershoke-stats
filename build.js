@@ -64,7 +64,7 @@ async function loadAvatarCache() {
 }
 async function saveAvatarCache(cache) {
   await fs.ensureDir(path.dirname(CACHE_FILE));
-  await fs.writeJson(CACHE_FILE, cache, { spaces: 2 });
+  await fs.writeJson(cache, cache, { spaces: 2 });
 }
 function isCacheFresh(entry) {
   if (!entry || !entry.updatedAt) return false;
@@ -202,13 +202,21 @@ function calculateStats(matches, steamAvatars) {
         }
         if (perf !== null) perf = +(Number(perf).toFixed(2));
 
+        // === НОВАЯ СИСТЕМА РАСЧЕТА ELO ===
         let eloChange = 0;
         if (perf !== null) {
-          const K = Math.max(5, 32 - (st.matches * 1.5));
+          // K-фактор: стартует с 40, плавно падает до 20, но не ниже.
+          const K = Math.max(20, 40 - (st.matches * 2));
+          
+          // Считаем сырое изменение ELO (1.0 = 0 очков. 1.5 = +15, 2.0 = +30)
           eloChange = Math.round(K * (perf - 1.0) * 1.5);
-          eloChange = Math.max(-35, Math.min(35, eloChange));
+          
+          // Ограничиваем максимальный прирост/потерю за карту (до +/- 40)
+          eloChange = Math.max(-40, Math.min(40, eloChange));
+          
           st.elo += eloChange;
         }
+        // ===================================
 
         if (k <= 50 && k > records.maxKills.value) records.maxKills = { value: k, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
         if (d <= 50 && d > records.maxDeaths.value) records.maxDeaths = { value: d, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
