@@ -13,6 +13,7 @@ const OUTPUT_FILE = path.join(__dirname, 'docs', 'data', 'stats.json');
 const STEAM_API_KEY = process.env.STEAM_API_KEY || '';
 const CACHE_TTL_DAYS = 30;
 
+// ==== ЛОГГЕР ====
 const logLines = [];
 function log(level, msg) {
   const line = `[${new Date().toISOString()}] [${level.toUpperCase()}] ${msg}`;
@@ -25,20 +26,30 @@ async function flushLog() {
   await fs.appendFile(path.join(LOGS_DIR, fname), logLines.join('\n') + '\n');
 }
 
+// ==== ЧИСЛА ====
 function num(val) {
   if (val === null || val === undefined || val === '') return null;
   const n = Number(val);
   return isNaN(n) ? null : n;
 }
 
+// ==== ВАЛИДАЦИЯ КАРТЫ ====
 function validateMap(mapData) {
-  if (!mapData || !Array.isArray(mapData.players)) return { ok: false };
-  if (mapData.players.length !== 10) return { ok: false };
-  if (mapData._warning) return { ok: false };
+  if (!mapData || !Array.isArray(mapData.players)) {
+    return { ok: false, reason: 'нет массива players' };
+  }
+  if (mapData.players.length !== 10) {
+    return { ok: false, reason: `игроков ${mapData.players.length}, ожидалось 10` };
+  }
+  if (mapData._warning) {
+    return { ok: false, reason: 'помечена _warning в collect.js' };
+  }
 
   const totalK = mapData.players.reduce((s, p) => s + (Number(p.kills) || 0), 0);
   const totalD = mapData.players.reduce((s, p) => s + (Number(p.deaths) || 0), 0);
-  if (totalK > 500 || totalD > 500) return { ok: false };
+
+  if (totalK > 500) return { ok: false, reason: `суммарные kills ${totalK} > 500` };
+  if (totalD > 500) return { ok: false, reason: `суммарные deaths ${totalD} > 500` };
 
   for (const p of mapData.players) {
     const k = Number(p.kills) || 0;
@@ -48,14 +59,24 @@ function validateMap(mapData) {
     const kast = num(p.kast);
     const rating = num(p.rating);
 
-    if (k > 60 || d > 60 || a > 40) return { ok: false };
-    if (adr !== null && (adr < 5 || adr > 300)) return { ok: false };
-    if (kast !== null && (kast < 5 || kast > 100)) return { ok: false };
-    if (rating !== null && (rating < 0.02 || rating > 4.0)) return { ok: false };
+    if (k > 60) return { ok: false, reason: `у ${p.name || p.id} kills ${k} > 60` };
+    if (d > 60) return { ok: false, reason: `у ${p.name || p.id} deaths ${d} > 60` };
+    if (a > 40) return { ok: false, reason: `у ${p.name || p.id} assists ${a} > 40` };
+    if (adr !== null && (adr < 5 || adr > 300)) {
+      return { ok: false, reason: `у ${p.name || p.id} ADR ${adr} вне [5, 300]` };
+    }
+    if (kast !== null && (kast < 5 || kast > 100)) {
+      return { ok: false, reason: `у ${p.name || p.id} KAST ${kast} вне [5, 100]` };
+    }
+    if (rating !== null && (rating < 0.02 || rating > 4.0)) {
+      return { ok: false, reason: `у ${p.name || p.id} Rating ${rating} вне [0.02, 4.0]` };
+    }
   }
+
   return { ok: true };
 }
 
+// ==== АВАТАРКИ STEAM (с кэшем) ====
 async function loadAvatarCache() {
   if (await fs.pathExists(CACHE_FILE)) {
     try { return await fs.readJson(CACHE_FILE); } catch (e) {}
@@ -64,11 +85,12 @@ async function loadAvatarCache() {
 }
 async function saveAvatarCache(cache) {
   await fs.ensureDir(path.dirname(CACHE_FILE));
-  await fs.writeJson(cache, cache, { spaces: 2 });
+  await fs.writeJson(CACHE_FILE, cache, { spaces: 2 });
 }
 function isCacheFresh(entry) {
   if (!entry || !entry.updatedAt) return false;
-  return ((Date.now() - entry.updatedAt) / (1000 * 60 * 60 * 24)) < CACHE_TTL_DAYS;
+  const ageDays = (Date.now() - entry.updatedAt) / (1000 * 60 * 60 * 24);
+  return ageDays < CACHE_TTL_DAYS;
 }
 
 async function fetchSteamAvatars(steamIds) {
@@ -78,11 +100,15 @@ async function fetchSteamAvatars(steamIds) {
 
   for (const id of steamIds) {
     const entry = cache[id];
-    if (isCacheFresh(entry)) result.set(id, entry.avatar);
-    else toFetch.push(id);
+    if (isCacheFresh(entry)) {
+      result.set(id, entry.avatar);
+    } else {
+      toFetch.push(id);
+    }
   }
 
   log('info', `Аватарок из кэша: ${result.size}, нужно обновить: ${toFetch.length}`);
+
   if (toFetch.length === 0) return result;
 
   if (STEAM_API_KEY) {
@@ -90,7 +116,8 @@ async function fetchSteamAvatars(steamIds) {
     for (let i = 0; i < toFetch.length; i += 100) chunks.push(toFetch.slice(i, i + 100));
     for (const chunk of chunks) {
       try {
-        const res = await fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_API_KEY}&steamids=${chunk.join(',')}`);
+        const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_API_KEY}&steamids=${chunk.join(',')}`;
+        const res = await fetch(url);
         if (res.ok) {
           const data = await res.json();
           if (data.response?.players) {
@@ -125,14 +152,16 @@ async function fetchSteamAvatars(steamIds) {
   return result;
 }
 
+// ==== РАНГИ И ЦВЕТА ====
 function getRank(elo) {
-  if (elo < 1000) return { name: 'Silver', color: '#8b96a5', icon: 'shield' };
-  if (elo < 1100) return { name: 'Green', color: '#10b981', icon: 'shield-check' };
-  if (elo < 1200) return { name: 'Blue', color: '#4d6bfe', icon: 'shield-plus' };
-  if (elo < 1300) return { name: 'Purple', color: '#a855f7', icon: 'gem' };
-  return { name: 'GEIMERI', color: '#ef4444', icon: 'crown' };
+  if (elo < 1000) return { name: 'Silver', color: '#8b96a5', icon: 'shield' };       // Серый
+  if (elo < 1100) return { name: 'Green', color: '#10b981', icon: 'shield-check' };  // Зеленый
+  if (elo < 1200) return { name: 'Blue', color: '#4d6bfe', icon: 'shield-plus' };    // Синий
+  if (elo < 1300) return { name: 'Purple', color: '#a855f7', icon: 'gem' };          // Фиолетовый
+  return { name: 'GEIMERI', color: '#ef4444', icon: 'crown' };                      // Красный
 }
 
+// ==== РАСЧЁТ СТАТИСТИКИ ====
 function calculateStats(matches, steamAvatars) {
   const playerMap = new Map();
   const mapStatsRaw = {};
@@ -150,20 +179,26 @@ function calculateStats(matches, steamAvatars) {
 
   for (const match of sortedMatches) {
     const maps = match.maps || [];
-    recentMatches.push({ matchId: match.matchId, url: match.url, date: match.date, maps: maps.map(m => m.map) });
+    recentMatches.push({
+      matchId: match.matchId, url: match.url, date: match.date,
+      maps: maps.map(m => m.map)
+    });
     totalMapsPlayed += maps.length;
 
     for (const mapData of maps) {
       const check = validateMap(mapData);
       if (!check.ok) {
         skippedMaps++;
-        log('warn', `Пропущена карта ${mapData.map} в матче ${match.matchId}`);
+        log('warn', `Пропущена карта ${mapData.map} в матче ${match.matchId}: ${check.reason}`);
         continue;
       }
 
       const mapName = mapData.map || 'unknown';
       if (!mapStatsRaw[mapName]) {
-        mapStatsRaw[mapName] = { matches: 0, totalKills: 0, totalDeaths: 0, ratingSum: 0, ratingCount: 0, playersMap: new Map() };
+        mapStatsRaw[mapName] = {
+          matches: 0, totalKills: 0, totalDeaths: 0,
+          ratingSum: 0, ratingCount: 0, playersMap: new Map()
+        };
       }
       mapStatsRaw[mapName].matches += 1;
 
@@ -173,7 +208,9 @@ function calculateStats(matches, steamAvatars) {
           playerMap.set(pid, {
             id: pid, name: p.name, lastPlayed: match.date,
             matches: 0, kills: 0, deaths: 0, assists: 0,
-            adrSum: 0, adrCount: 0, kastSum: 0, kastCount: 0, ratingSum: 0, ratingCount: 0,
+            adrSum: 0, adrCount: 0,
+            kastSum: 0, kastCount: 0,
+            ratingSum: 0, ratingCount: 0,
             history: [], matchHistory: [], elo: 1000
           });
         }
@@ -193,6 +230,7 @@ function calculateStats(matches, steamAvatars) {
 
         const adrVal = num(p.adr), kastVal = num(p.kast), ratingVal = num(p.rating);
 
+        // === ПРОКСИ-РЕЙТИНГ (K/D + БОНУС ЗА ФРАГИ) ===
         let perf = ratingVal;
         if (perf === null) {
           const kd = d > 0 ? k / d : (k > 0 ? 2.0 : 1.0);
@@ -200,27 +238,27 @@ function calculateStats(matches, steamAvatars) {
           if (k > 15) proxyRating += (k - 15) * 0.02;
           perf = Math.min(3.0, proxyRating);
         }
+        
         if (perf !== null) perf = +(Number(perf).toFixed(2));
 
-        // === НОВАЯ СИСТЕМА РАСЧЕТА ELO ===
+        // === ELO ===
         let eloChange = 0;
         if (perf !== null) {
-          // K-фактор: стартует с 40, плавно падает до 20, но не ниже.
-          const K = Math.max(20, 40 - (st.matches * 2));
-          
-          // Считаем сырое изменение ELO (1.0 = 0 очков. 1.5 = +15, 2.0 = +30)
+          const K = Math.max(5, 32 - (st.matches * 1.5));
           eloChange = Math.round(K * (perf - 1.0) * 1.5);
-          
-          // Ограничиваем максимальный прирост/потерю за карту (до +/- 40)
-          eloChange = Math.max(-40, Math.min(40, eloChange));
-          
+          eloChange = Math.max(-35, Math.min(35, eloChange));
           st.elo += eloChange;
         }
-        // ===================================
 
-        if (k <= 50 && k > records.maxKills.value) records.maxKills = { value: k, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
-        if (d <= 50 && d > records.maxDeaths.value) records.maxDeaths = { value: d, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
-        if (adrVal !== null && adrVal <= 250 && adrVal > records.maxAdr.value) records.maxAdr = { value: adrVal, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
+        if (k <= 50 && k > records.maxKills.value) {
+          records.maxKills = { value: k, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
+        }
+        if (d <= 50 && d > records.maxDeaths.value) {
+          records.maxDeaths = { value: d, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
+        }
+        if (adrVal !== null && adrVal <= 250 && adrVal > records.maxAdr.value) {
+          records.maxAdr = { value: adrVal, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
+        }
 
         if (perf !== null) {
           mapStatsRaw[mapName].ratingSum += perf;
@@ -252,7 +290,9 @@ function calculateStats(matches, steamAvatars) {
 
   if (skippedMaps > 0) log('warn', `Всего пропущено карт: ${skippedMaps}`);
 
-  const getAvatar = (id, name) => steamAvatars.get(String(id)) || `https://ui-avatars.com/api/?name=${encodeURIComponent(name || '?')}&background=4d6bfe&color=fff&size=128&bold=true&rounded=true`;
+  const getAvatar = (id, name) =>
+    steamAvatars.get(String(id)) ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(name || '?')}&background=4d6bfe&color=fff&size=128&bold=true&rounded=true`;
 
   const players = Array.from(playerMap.values()).map(p => {
     const kd = p.deaths > 0 ? +(p.kills / p.deaths).toFixed(2) : p.kills;
@@ -282,17 +322,21 @@ function calculateStats(matches, steamAvatars) {
   const displayNameById = new Map(players.map(p => [p.id, p.displayName]));
   for (const key of ['maxKills', 'maxDeaths', 'maxAdr']) {
     const rec = records[key];
-    if (rec && rec.playerId && displayNameById.has(rec.playerId)) rec.player = displayNameById.get(rec.playerId);
+    if (rec && rec.playerId && displayNameById.has(rec.playerId)) {
+      rec.player = displayNameById.get(rec.playerId);
+    }
   }
 
   players.sort((a, b) => b.elo - a.elo);
 
   const formattedMapStats = Object.entries(mapStatsRaw).map(([map, data]) => {
-    const topPlayers = Array.from(data.playersMap.values()).map(pl => ({
+    const topPlayers = Array.from(data.playersMap.values())
+      .map(pl => ({
         ...pl,
         kd: pl.deaths > 0 ? +(pl.kills / pl.deaths).toFixed(2) : pl.kills,
         avgRating: pl.matches > 0 ? +(pl.ratingSum / pl.matches).toFixed(2) : 0
-      })).sort((a, b) => b.avgRating - a.avgRating);
+      }))
+      .sort((a, b) => b.avgRating - a.avgRating);
 
     const updatedTop = topPlayers.map(tp => {
       const found = players.find(p => p.id === tp.id);
@@ -338,14 +382,17 @@ function calculateStats(matches, steamAvatars) {
     recentMatches: recentMatches.slice(-10).reverse(),
     totalMatches: matches.length,
     records,
-    funStats: { totalHours: Math.round(totalMapsPlayed * 40 / 60), totalKills: totalKillsAll, totalDeaths: totalDeathsAll },
+    funStats: {
+      totalHours: Math.round(totalMapsPlayed * 40 / 60),
+      totalKills: totalKillsAll, totalDeaths: totalDeathsAll
+    },
     funFacts: { mostStable, highestPeak, lowestRating, favoriteMap }
   };
 }
 
 async function main() {
   await fs.ensureDir(path.dirname(OUTPUT_FILE));
-  const files = (await fs.readdir(MATCHES_DIR)).filter(f => f.endsWith('.json') && !f.includes('_awpy'));
+  const files = (await fs.readdir(MATCHES_DIR)).filter(f => f.endsWith('.json'));
   if (files.length === 0) {
     log('error', 'Нет матчей в data/matches/');
     await flushLog();
@@ -374,25 +421,6 @@ async function main() {
   }
 
   log('info', `Всего матчей: ${allMatches.length}, игроков: ${allSteamIds.size}`);
-  
-  // ПОДСТАВЛЯЕМ ПРОКСИ-РЕЙТИНГ В СЫРЫЕ МАТЧИ (если демки не было)
-  for (const match of allMatches) {
-    if (!match.maps) continue;
-    for (const map of match.maps) {
-      if (!map.players) continue;
-      for (const p of map.players) {
-        if (p.rating === null || p.rating === undefined) {
-          const k = Number(p.kills) || 0;
-          const d = Number(p.deaths) || 0;
-          const kd = d > 0 ? k / d : (k > 0 ? 2.0 : 1.0);
-          let proxyRating = 0.5 + kd * 0.5;
-          if (k > 15) proxyRating += (k - 15) * 0.02;
-          p.rating = +Math.min(3.0, proxyRating).toFixed(2);
-        }
-      }
-    }
-  }
-
   log('info', 'Запрашиваем аватарки...');
   const steamAvatars = await fetchSteamAvatars([...allSteamIds]);
 

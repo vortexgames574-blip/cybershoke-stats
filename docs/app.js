@@ -17,7 +17,6 @@ let profRadarChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 let draftParticipants = [];
-let previousTabBeforeFaq = 'overview';
 
 // ===== УТИЛИТЫ =====
 function escapeHtml(str) {
@@ -101,14 +100,6 @@ function initTabs() {
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const target = tab.dataset.tab;
-      
-      if (target !== 'faq') {
-        const currentActive = document.querySelector('.tab-btn.active');
-        if (currentActive && currentActive.dataset.tab !== 'faq') {
-          previousTabBeforeFaq = currentActive.dataset.tab;
-        }
-      }
-
       tabs.forEach(t => t.classList.remove('active'));
       contents.forEach(c => c.classList.remove('active'));
       tab.classList.add('active');
@@ -129,7 +120,7 @@ function initTabs() {
 // ===== ЗАГРУЗКА =====
 async function loadData(retry = 2) {
   try {
-    const res = await fetch('data/stats.json', { cache: 'no-store' });
+    const res = await fetch('data/stats.json');
     if (!res.ok) throw new Error(`stats.json не найден (HTTP ${res.status})`);
     const text = await res.text();
     if (!text) throw new Error('stats.json пустой (запустите npm run build)');
@@ -138,20 +129,15 @@ async function loadData(retry = 2) {
     if (!statsData.tournaments) throw new Error('Нет поля tournaments');
 
     const select = document.getElementById('tournament-select');
-    let keys = Object.keys(statsData.tournaments);
-    
-    if (keys.length > 1 && keys.includes('Все матчи')) {
-      keys = keys.filter(k => k !== 'Все матчи');
-    }
-    
+    const keys = Object.keys(statsData.tournaments);
     select.innerHTML = keys.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
 
     const savedT = getFilter('tournament');
-    if (savedT && statsData.tournaments[savedT] && keys.includes(savedT)) {
+    if (savedT && statsData.tournaments[savedT]) {
       select.value = savedT;
       currentStats = statsData.tournaments[savedT];
     } else {
-      currentStats = statsData.tournaments[keys[0]];
+      currentStats = statsData.tournaments['Все матчи'];
     }
 
     select.addEventListener('change', (e) => {
@@ -443,7 +429,7 @@ function openMatchDetails(matchId) {
               ${players.map(p => {
                 const playerObj = currentStats.players.find(sp => sp.id === p.id) || p;
                 const ava = playerObj.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
-                return `<tr style="cursor:pointer;" onclick="closeMatchDetails(); openProfile('${escapeHtml(p.id)}');">
+                return `<tr>
                   <td><div class="player-cell"><img src="${escapeHtml(ava)}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><strong>${escapeHtml(displayName(p))}</strong></div></td>
                   <td>${p.kills}</td><td>${p.deaths}</td><td>${p.assists}</td>
                   <td>${escapeHtml(p.adr ?? '—')}</td><td>${escapeHtml(p.kast ?? '—')}</td><td style="color:#10b981; font-weight:600;">${escapeHtml(p.rating ?? '—')}</td>
@@ -1333,31 +1319,25 @@ function initDraft() {
     const rawName = searchInput.value.trim();
     if (!rawName) return;
 
-    const names = rawName.split(/[,;\n]+/).map(n => n.trim()).filter(Boolean);
-    
-    names.forEach(name => {
-      const existing = currentStats.players.find(p =>
-        p.name.toLowerCase() === name.toLowerCase() ||
-        displayName(p).toLowerCase() === name.toLowerCase()
-      );
+    const existing = currentStats.players.find(p =>
+      p.name.toLowerCase() === rawName.toLowerCase() ||
+      displayName(p).toLowerCase() === rawName.toLowerCase()
+    );
 
-      if (existing) {
-        if (!draftParticipants.find(p => p.id === existing.id)) {
-          draftParticipants.push(existing);
-        }
-      } else {
-        const guestId = 'guest_' + Date.now() + Math.random().toString(36).substr(2, 5);
-        draftParticipants.push({
-          id: guestId,
-          name: name,
-          displayName: name,
-          avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4d6bfe&color=fff&rounded=true`,
-          avgRating: 1.0, kd: 1.0, avgAdr: 75, avgKast: 70,
-          isGuest: true
-        });
-      }
-    });
-
+    if (existing) {
+      if (draftParticipants.find(p => p.id === existing.id)) return showToast('Этот игрок уже в списке', 'error');
+      draftParticipants.push(existing);
+    } else {
+      const guestId = 'guest_' + Date.now();
+      draftParticipants.push({
+        id: guestId,
+        name: rawName,
+        displayName: rawName,
+        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(rawName)}&background=4d6bfe&color=fff&rounded=true`,
+        avgRating: 1.0, kd: 1.0, avgAdr: 75, avgKast: 70,
+        isGuest: true
+      });
+    }
     searchInput.value = '';
     renderParticipants();
   };
@@ -1531,15 +1511,8 @@ function initBeginnerMode() {
   const btn = document.getElementById('beginner-toggle');
   if (!btn) return;
   btn.onclick = () => {
-    const currentActive = document.querySelector('.tab-btn.active');
     const faqTabBtn = document.querySelector('[data-tab="faq"]');
-    
-    if (currentActive && currentActive.dataset.tab === 'faq') {
-      const prevTabBtn = document.querySelector(`[data-tab="${previousTabBeforeFaq}"]`);
-      if (prevTabBtn) prevTabBtn.click();
-    } else {
-      if (faqTabBtn) faqTabBtn.click();
-    }
+    if (faqTabBtn) faqTabBtn.click();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 }
@@ -1552,23 +1525,3 @@ document.addEventListener('DOMContentLoaded', () => {
   initBalancer();
   initBeginnerMode();
 });
-
-// ===== АВТООБНОВЛЕНИЕ САЙТА (ДОБАВЛЕНО В КОНЕЦ) =====
-if ('serviceWorker' in navigator) {
-  let refreshing = false;
-  
-  // Слушаем событие, когда новый Service Worker готов
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (!refreshing) {
-      refreshing = true;
-      window.location.reload(); // Мгновенно перезагружаем страницу
-    }
-  });
-
-  // Каждые 60 секунд проверяем на сервере, нет ли обновлений
-  setInterval(() => {
-    navigator.serviceWorker.getRegistration().then(reg => {
-      if (reg) reg.update();
-    });
-  }, 60000);
-}

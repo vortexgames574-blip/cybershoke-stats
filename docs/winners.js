@@ -1,4 +1,9 @@
-/* docs/winners.js — главная: последний турнир + хронология победителей. */
+/* docs/winners.js — главная: последний турнир + хронология победителей.
+   Источник данных:
+     - обычный режим: docs/data/winners.json
+     - режим редактирования (?admin): localStorage winnersDraft_v1
+   Редактор живёт в docs/winners-admin.js.
+*/
 (() => {
   'use strict';
 
@@ -26,6 +31,7 @@
 
   function photoUrl(file) {
     if (!file) return '';
+    // Поддерживает Base64 (data:image/...), ссылки и локальные файлы
     if (/^(https?:|data:|blob:)/i.test(file)) return file;
     return PHOTO_BASE + String(file).replace(/^\/+/, '');
   }

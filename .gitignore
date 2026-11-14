@@ -1,8 +1,0 @@
-# Мусор для Git
-node_modules/
-venv/
-demos/
-data/matches/*_awpy.json
-logs/
-.env
-.DS_Store
