@@ -1,0 +1,113 @@
+{
+  "matchId": "13790347",
+  "url": "https://cybershoke.net/ru/match/13790347",
+  "tournament": "13.11.2026",
+  "date": "2026-11-14T13:40:35.240Z",
+  "maps": [
+    {
+      "map": "de_mirage",
+      "players": [
+        {
+          "id": "76561199109745010",
+          "name": "q1nce_",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 37,
+          "deaths": 20,
+          "assists": 4,
+          "adr": 112.75,
+          "kast": 75
+        },
+        {
+          "id": "76561198849641920",
+          "name": "suffixx",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 29,
+          "deaths": 17,
+          "assists": 7,
+          "adr": 104.78571319580078,
+          "kast": 71.42857360839844
+        },
+        {
+          "id": "76561199022192300",
+          "name": "Pizdets_tip",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 23,
+          "deaths": 19,
+          "assists": 4,
+          "adr": 87.5,
+          "kast": 78.57142639160156
+        },
+        {
+          "id": "76561198053530320",
+          "name": "ZAZA_",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 21,
+          "deaths": 21,
+          "assists": 7,
+          "adr": 82.67857360839844,
+          "kast": 71.42857360839844
+        },
+        {
+          "id": "76561199144510020",
+          "name": "63dealer",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 21,
+          "deaths": 23,
+          "assists": 4,
+          "adr": 85.60713958740234,
+          "kast": 67.85713958740234
+        },
+        {
+          "id": "76561198158360500",
+          "name": "✪ AlikD*ck ✪",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 19,
+          "deaths": 19,
+          "assists": 6,
+          "adr": 72.78571319580078,
+          "kast": 71.42857360839844
+        },
+        {
+          "id": "76561198015424670",
+          "name": "tolya800x600",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 14,
+          "deaths": 17,
+          "assists": 4,
+          "adr": 57.89285659790039,
+          "kast": 64.28571319580078
+        },
+        {
+          "id": "76561199482946690",
+          "name": "Oleg123",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 14,
+          "deaths": 22,
+          "assists": 3,
+          "adr": 55.46428680419922,
+          "kast": 71.42857360839844
+        },
+        {
+          "id": "76561198394184900",
+          "name": "muts1",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 13,
+          "deaths": 20,
+          "assists": 10,
+          "adr": 67.64286041259766,
+          "kast": 71.42857360839844
+        },
+        {
+          "id": "76561198587515890",
+          "name": "RJ",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 10,
+          "deaths": 23,
+          "assists": 6,
+          "adr": 41.60714340209961,
+          "kast": 60.71428680419922
+        }
+      ]
+    }
+  ]
+}

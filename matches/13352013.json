@@ -1,0 +1,113 @@
+{
+  "matchId": "13352013",
+  "url": "https://cybershoke.net/ru/match/13352013",
+  "tournament": "31.10.2026",
+  "date": "2026-11-06T00:12:01.373Z",
+  "maps": [
+    {
+      "map": "de_ancient",
+      "players": [
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "kills": 22,
+          "deaths": 19,
+          "assists": 9,
+          "adr": 111,
+          "kast": 84,
+          "rating": 1.42
+        },
+        {
+          "id": "76561199109745015",
+          "name": "BB-00",
+          "kills": 22,
+          "deaths": 17,
+          "assists": 10,
+          "adr": 121,
+          "kast": 68,
+          "rating": 1.36
+        },
+        {
+          "id": "76561198054507577",
+          "name": "kvsmstr",
+          "kills": 20,
+          "deaths": 19,
+          "assists": 10,
+          "adr": 95,
+          "kast": 80,
+          "rating": 1.28
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "kills": 22,
+          "deaths": 20,
+          "assists": 5,
+          "adr": 84,
+          "kast": 72,
+          "rating": 1.19
+        },
+        {
+          "id": "76561199417613918",
+          "name": "ЯнаЦист",
+          "kills": 18,
+          "deaths": 17,
+          "assists": 5,
+          "adr": 81,
+          "kast": 76,
+          "rating": 1.16
+        },
+        {
+          "id": "76561199467682493",
+          "name": "Господин Босс",
+          "kills": 16,
+          "deaths": 15,
+          "assists": 1,
+          "adr": 55,
+          "kast": 72,
+          "rating": 1
+        },
+        {
+          "id": "76561198090688036",
+          "name": "Kara7evich",
+          "kills": 13,
+          "deaths": 16,
+          "assists": 9,
+          "adr": 82,
+          "kast": 60,
+          "rating": 0.88
+        },
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "kills": 15,
+          "deaths": 16,
+          "assists": 1,
+          "adr": 61,
+          "kast": 60,
+          "rating": 0.87
+        },
+        {
+          "id": "76561199482946683",
+          "name": "Oleg123",
+          "kills": 14,
+          "deaths": 16,
+          "assists": 2,
+          "adr": 49,
+          "kast": 72,
+          "rating": 0.87
+        },
+        {
+          "id": "76561198681103731",
+          "name": "Анальный бур",
+          "kills": 8,
+          "deaths": 18,
+          "assists": 4,
+          "adr": 45,
+          "kast": 72,
+          "rating": 0.64
+        }
+      ]
+    }
+  ]
+}

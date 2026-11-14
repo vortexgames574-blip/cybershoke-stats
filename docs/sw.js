@@ -1,69 +1,59 @@
 // sw.js
-const CACHE_NAME = 'geimeri-stats-v40'; // <--- ПОДНЯЛИ ВЕРСИЮ
-const ASSETS = [
+const CACHE_NAME = 'cs-stats-v1'; // Меняйте версию при каждом обновлении
+const urlsToCache = [
   './',
   './index.html',
-  './style.css',
-  './app.js',
-  './winners.css',
-  './winners.js',
-  './winners-admin.js',
-  './data/stats.json',
-  './manifest.json'
+  // Добавьте сюда пути к вашим CSS и JS файлам, если они есть
+  // './style.css',
+  // './app.js'
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(c => c.addAll(ASSETS).catch(() => {}))
+// Установка: кэшируем основные файлы и сразу активируем новый SW
+self.addEventListener('install', (event) => {
+  self.skipWaiting(); // Принудительно активируем новый Service Worker
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
   );
-  self.skipWaiting();
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    )
-  );
-  self.clients.claim();
-});
-
-self.addEventListener('fetch', (e) => {
-  if (e.request.method !== 'GET') return;
-
-  // НЕ КЭШИРУЕМ ЧУЖИЕ САЙТЫ (CDN скрипты, шрифты, аватарки Steam)
-  if (!e.request.url.startsWith(self.location.origin)) return;
-
-  // Стата — сначала сеть, потом кэш
-  if (e.request.url.includes('/data/stats.json')) {
-    e.respondWith(
-      fetch(e.request)
-        .then(res => {
-          if (!res || !res.ok) return res;
-          try {
-            const clone = res.clone();
-            caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-          } catch (err) {}
-          return res;
+// Активация: удаляем старые кэши и захватываем контроль над страницей
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName); // Чистим старое
+          }
         })
-        .catch(() => caches.match(e.request))
+      );
+    }).then(() => self.clients.claim()) // Захватываем контроль немедленно
+  );
+});
+
+// Стратегия "Сначала сеть, потом кэш" для HTML и JSON данных
+self.addEventListener('fetch', (event) => {
+  // Для запросов к данным (JSON) всегда идём в сеть
+  if (event.request.url.endsWith('.json') || event.request.url.includes('/data/')) {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(event.request))
     );
     return;
   }
 
-  // Остальное (свои файлы) — cache-first
-  e.respondWith(
-    caches.match(e.request).then(cached => {
-      if (cached) return cached;
-      
-      return fetch(e.request).then(res => {
-        if (!res || !res.ok) return res;
-        try {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-        } catch (err) {}
-        return res;
-      });
-    })
+  // Для остальных запросов: пробуем сеть, при неудаче — кэш
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        // Если ответ успешный, клонируем его в кэш
+        if (response && response.status === 200) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });

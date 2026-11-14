@@ -1,0 +1,113 @@
+{
+  "matchId": "13352007",
+  "url": "https://cybershoke.net/ru/match/13352007",
+  "tournament": "31.10.2026",
+  "date": "2026-11-06T00:12:21.513Z",
+  "maps": [
+    {
+      "map": "de_cache",
+      "players": [
+        {
+          "id": "76561198872139873",
+          "name": "1lpk",
+          "kills": 27,
+          "deaths": 13,
+          "assists": 2,
+          "adr": 112,
+          "kast": 77,
+          "rating": 1.74
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "kills": 21,
+          "deaths": 14,
+          "assists": 5,
+          "adr": 94,
+          "kast": 86,
+          "rating": 1.5
+        },
+        {
+          "id": "76561198818222401",
+          "name": "Kyo  Ilonmax8",
+          "kills": 19,
+          "deaths": 16,
+          "assists": 2,
+          "adr": 88,
+          "kast": 73,
+          "rating": 1.24
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "kills": 19,
+          "deaths": 18,
+          "assists": 2,
+          "adr": 82,
+          "kast": 77,
+          "rating": 1.21
+        },
+        {
+          "id": "76561198128494347",
+          "name": "Игрок",
+          "kills": 15,
+          "deaths": 16,
+          "assists": 5,
+          "adr": 88,
+          "kast": 82,
+          "rating": 1.17
+        },
+        {
+          "id": "76561198283381727",
+          "name": "St1gmat",
+          "kills": 15,
+          "deaths": 15,
+          "assists": 5,
+          "adr": 71,
+          "kast": 73,
+          "rating": 1.07
+        },
+        {
+          "id": "76561198210127765",
+          "name": "blackpolosa",
+          "kills": 16,
+          "deaths": 18,
+          "assists": 5,
+          "adr": 91,
+          "kast": 68,
+          "rating": 1.06
+        },
+        {
+          "id": "76561199210250164",
+          "name": "s1slw",
+          "kills": 13,
+          "deaths": 15,
+          "assists": 9,
+          "adr": 74,
+          "kast": 73,
+          "rating": 1.02
+        },
+        {
+          "id": "76561198015424675",
+          "name": "tolya800x600",
+          "kills": 10,
+          "deaths": 20,
+          "assists": 3,
+          "adr": 56,
+          "kast": 50,
+          "rating": 0.53
+        },
+        {
+          "id": "76561198272167310",
+          "name": "Изумительные Брючки.",
+          "kills": 6,
+          "deaths": 21,
+          "assists": 4,
+          "adr": 43,
+          "kast": 45,
+          "rating": 0.27
+        }
+      ]
+    }
+  ]
+}

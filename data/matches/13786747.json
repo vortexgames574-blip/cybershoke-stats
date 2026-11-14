@@ -1,0 +1,113 @@
+{
+  "matchId": "13786747",
+  "url": "https://cybershoke.net/ru/match/13786747",
+  "tournament": "13.11.2026",
+  "date": "2026-11-14T13:40:50.230Z",
+  "maps": [
+    {
+      "map": "de_inferno",
+      "players": [
+        {
+          "id": "76561198054507580",
+          "name": "kvsmstr",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 21,
+          "deaths": 15,
+          "assists": 5,
+          "adr": 94.65217590332031,
+          "kast": 78.26087188720703
+        },
+        {
+          "id": "76561198872139870",
+          "name": "1lpk",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 21,
+          "deaths": 13,
+          "assists": 8,
+          "adr": 103.08695983886719,
+          "kast": 73.91304016113281
+        },
+        {
+          "id": "76561198042805940",
+          "name": "PRADA_CODE",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 18,
+          "deaths": 16,
+          "assists": 2,
+          "adr": 72.47826385498047,
+          "kast": 65.21739196777344
+        },
+        {
+          "id": "76561198090688030",
+          "name": "Kara7evich",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 17,
+          "deaths": 15,
+          "assists": 4,
+          "adr": 67.08695983886719,
+          "kast": 73.91304016113281
+        },
+        {
+          "id": "76561198843347970",
+          "name": "sandor",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 16,
+          "deaths": 14,
+          "assists": 6,
+          "adr": 85.13043212890625,
+          "kast": 73.91304016113281
+        },
+        {
+          "id": "76561198197222930",
+          "name": "goodipAN",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 15,
+          "deaths": 13,
+          "assists": 4,
+          "adr": 57.565216064453125,
+          "kast": 78.26087188720703
+        },
+        {
+          "id": "76561199542530690",
+          "name": "AuraTeam",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 14,
+          "deaths": 18,
+          "assists": 9,
+          "adr": 81.43478393554688,
+          "kast": 73.91304016113281
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 11,
+          "deaths": 14,
+          "assists": 5,
+          "adr": 52.826087951660156,
+          "kast": 73.91304016113281
+        },
+        {
+          "id": "76561198283381730",
+          "name": "LITE | St1gmat",
+          "avatar": null,
+          "kills": 10,
+          "deaths": 18,
+          "assists": 6,
+          "adr": 61,
+          "kast": 60.869564056396484
+        },
+        {
+          "id": "76561198272167310",
+          "name": "Изумительные Брючки.",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 2,
+          "deaths": 12,
+          "assists": 4,
+          "adr": 27.826086044311523,
+          "kast": 73.91304016113281
+        }
+      ]
+    }
+  ]
+}

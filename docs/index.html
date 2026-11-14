@@ -393,5 +393,34 @@
   <script src="app.js"></script>
   <script src="winners.js" defer></script>
   <script src="winners-admin.js" defer></script>
+
+  <!-- СКРИПТ АВТООБНОВЛЕНИЯ САЙТА -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      let refreshing = false;
+
+      // Слушаем смену контроллера (когда новый SW активировался)
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return; // Защита от цикла перезагрузок
+        refreshing = true;
+        window.location.reload(); // Автоматически перезагружаем страницу
+      });
+
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((registration) => {
+            console.log('Service Worker успешно зарегистрирован:', registration.scope);
+            
+            // Проверяем обновления на сервере каждые 5 минут
+            setInterval(() => {
+              registration.update().catch(err => console.log('Ошибка проверки обновлений SW:', err));
+            }, 5 * 60 * 1000);
+          })
+          .catch((error) => {
+            console.log('Ошибка регистрации Service Worker:', error);
+          });
+      });
+    }
+  </script>
 </body>
 </html>

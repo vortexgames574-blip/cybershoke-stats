@@ -1,0 +1,113 @@
+{
+  "matchId": "13782277",
+  "url": "https://cybershoke.net/ru/match/13782277",
+  "tournament": "13.11.2026",
+  "date": "2026-11-14T13:40:42.464Z",
+  "maps": [
+    {
+      "map": "de_inferno",
+      "players": [
+        {
+          "id": "76561198283381730",
+          "name": "LITE | St1gmat",
+          "avatar": null,
+          "kills": 24,
+          "deaths": 14,
+          "assists": 8,
+          "adr": 121.28571319580078,
+          "kast": 80.95238494873047
+        },
+        {
+          "id": "76561198843347970",
+          "name": "sandor",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 20,
+          "deaths": 11,
+          "assists": 6,
+          "adr": 91.52381134033203,
+          "kast": 85.71428680419922
+        },
+        {
+          "id": "76561198015424670",
+          "name": "tolya800x600",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 19,
+          "deaths": 16,
+          "assists": 6,
+          "adr": 96.85713958740234,
+          "kast": 71.42857360839844
+        },
+        {
+          "id": "76561199022192300",
+          "name": "Pizdets_tip",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 18,
+          "deaths": 15,
+          "assists": 1,
+          "adr": 86.61904907226562,
+          "kast": 66.66667175292969
+        },
+        {
+          "id": "76561198054507580",
+          "name": "kvsmstr",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 17,
+          "deaths": 14,
+          "assists": 11,
+          "adr": 94.28571319580078,
+          "kast": 76.19047546386719
+        },
+        {
+          "id": "76561198849641920",
+          "name": "suffixx",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 13,
+          "deaths": 15,
+          "assists": 8,
+          "adr": 85.04762268066406,
+          "kast": 71.42857360839844
+        },
+        {
+          "id": "76561198197222930",
+          "name": "goodipAN",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 11,
+          "deaths": 15,
+          "assists": 5,
+          "adr": 51.619049072265625,
+          "kast": 66.66667175292969
+        },
+        {
+          "id": "76561199144510020",
+          "name": "63dealer",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 11,
+          "deaths": 18,
+          "assists": 4,
+          "adr": 60.380950927734375,
+          "kast": 66.66667175292969
+        },
+        {
+          "id": "76561198158360500",
+          "name": "✪ AlikD*ck ✪",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 9,
+          "deaths": 17,
+          "assists": 2,
+          "adr": 44.095237731933594,
+          "kast": 57.142860412597656
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 9,
+          "deaths": 16,
+          "assists": 4,
+          "adr": 54,
+          "kast": 61.904762268066406
+        }
+      ]
+    }
+  ]
+}

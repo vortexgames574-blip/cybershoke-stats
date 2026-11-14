@@ -416,6 +416,7 @@ function openMatchDetails(matchId) {
   let contentHtml = '';
   for (const mapData of match.maps) {
     const players = [...mapData.players].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    
     contentHtml += `
       <div style="margin-bottom:24px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:8px;">
@@ -427,12 +428,36 @@ function openMatchDetails(matchId) {
             <thead><tr><th>Игрок</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Rating</th></tr></thead>
             <tbody>
               ${players.map(p => {
-                const playerObj = currentStats.players.find(sp => sp.id === p.id) || p;
+                const playerObj = currentStats.players.find(sp => 
+                  String(sp.id) === String(p.id) || 
+                  sp.name.toLowerCase() === p.name.toLowerCase()
+                ) || p;
+                
+                const finalId = playerObj.id;
                 const ava = playerObj.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
+                
+                const isClickable = finalId && !String(finalId).startsWith('name_');
+                const clickAction = isClickable ? `onclick="openProfile('${escapeHtml(finalId)}')"` : '';
+                const cursorStyle = isClickable ? 'cursor:pointer;' : '';
+
+                // ОКРУГЛЯЕМ ЗНАЧЕНИЯ
+                const adrStr = p.adr ? Number(p.adr).toFixed(1) : '—';
+                const kastStr = p.kast ? Math.round(p.kast) : '—';
+                const ratingStr = p.rating ? Number(p.rating).toFixed(2) : '—';
+
                 return `<tr>
-                  <td><div class="player-cell"><img src="${escapeHtml(ava)}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><strong>${escapeHtml(displayName(p))}</strong></div></td>
-                  <td>${p.kills}</td><td>${p.deaths}</td><td>${p.assists}</td>
-                  <td>${escapeHtml(p.adr ?? '—')}</td><td>${escapeHtml(p.kast ?? '—')}</td><td style="color:#10b981; font-weight:600;">${escapeHtml(p.rating ?? '—')}</td>
+                  <td>
+                    <div class="player-cell" style="${cursorStyle}" ${clickAction}>
+                      <img src="${escapeHtml(ava)}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
+                      <strong class="${isClickable ? 'player-link' : ''}">${escapeHtml(displayName(p))}</strong>
+                    </div>
+                  </td>
+                  <td>${p.kills}</td>
+                  <td>${p.deaths}</td>
+                  <td>${p.assists}</td>
+                  <td>${adrStr}</td>
+                  <td>${kastStr}</td>
+                  <td style="color:#10b981; font-weight:600;">${ratingStr}</td>
                 </tr>`;
               }).join('')}
             </tbody>
@@ -548,20 +573,27 @@ function openProfile(playerId) {
 
   const tbody = document.getElementById('prof-match-history');
   const history = [...(p.matchHistory || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
+  
   tbody.innerHTML = history.map(h => {
     const d = new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
     let eloHtml = '<span style="color:var(--text-muted);">0</span>';
     if (h.eloChange > 0) eloHtml = `<span style="color:#10b981; font-weight:bold;">+${h.eloChange}</span>`;
     if (h.eloChange < 0) eloHtml = `<span style="color:#ef4444; font-weight:bold;">${h.eloChange}</span>`;
+
+    // ОКРУГЛЯЕМ ЗНАЧЕНИЯ В ИСТОРИИ МАТЧЕЙ
+    const adrStr = h.adr ? Number(h.adr).toFixed(1) : '—';
+    const kastStr = h.kast ? Math.round(h.kast) : '—';
+    const ratingStr = h.rating ? Number(h.rating).toFixed(2) : '—';
+
     return `<tr class="match-history-row" style="cursor:pointer;" onclick="openMatchDetails('${escapeHtml(h.matchId)}')">
       <td>${escapeHtml(d)}</td>
       <td>${escapeHtml(h.map)}</td>
       <td>${h.kills}</td>
       <td>${h.deaths}</td>
       <td>${h.assists}</td>
-      <td>${escapeHtml(h.adr ?? '—')}</td>
-      <td>${escapeHtml(h.kast ?? '—')}</td>
-      <td style="color:var(--accent); font-weight:600;">${escapeHtml(h.rating ?? '—')}</td>
+      <td>${adrStr}</td>
+      <td>${kastStr}</td>
+      <td style="color:var(--accent); font-weight:600;">${ratingStr}</td>
       <td>${eloHtml}</td>
     </tr>`;
   }).join('');
