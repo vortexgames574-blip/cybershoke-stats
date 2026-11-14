@@ -10,6 +10,7 @@
     "serve": "npx serve docs"
   },
   "dependencies": {
+    "adm-zip": "^0.5.10",
     "fs-extra": "^11.2.0",
     "node-fetch": "^3.3.2",
     "playwright": "^1.42.0"
