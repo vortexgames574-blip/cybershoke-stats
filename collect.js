@@ -1,46 +1,67 @@
-<<<<<<< HEAD
-// collect.js — ПАРСИНГ DOM СТРАНИЦЫ МАТЧА (правильные K/D/A, включая ассисты)
-=======
-// collect.js — DOM + Скачивание демки через клик по кнопке
->>>>>>> parent of 9c1f963 (123)
+// collect.js — Скачивание демки (ZIP/BZ2) + Парсинг awpy + Склейка с DOM
 import { chromium } from 'playwright';
 import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execFile } from 'child_process';
+import { promisify } from 'util';
+import AdmZip from 'adm-zip';
 
+const execFileAsync = promisify(execFile);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MATCHES_FILE = path.join(__dirname, 'data', 'matches.txt');
 const MATCHES_DIR = path.join(__dirname, 'data', 'matches');
+const DEMOS_DIR = path.join(__dirname, 'demos');
+const EXTRACTED_DIR = path.join(DEMOS_DIR, 'extracted');
+
+const isWin = process.platform === 'win32';
+const pythonEnv = {
+  ...process.env,
+  PYTHONIOENCODING: 'utf-8',
+  PYTHONUTF8: '1'
+};
+
+function extractDemoIfNeeded(filePath) {
+  if (!fs.existsSync(filePath)) return null;
+  const buffer = Buffer.alloc(4);
+  const fd = fs.openSync(filePath, 'r');
+  fs.readSync(fd, buffer, 0, 4, 0);
+  fs.closeSync(fd);
+
+  if (buffer[0] === 0x50 && buffer[1] === 0x4B && buffer[2] === 0x03 && buffer[3] === 0x04) {
+    console.log(`  [*] Файл является ZIP-архивом. Распаковываем...`);
+    try {
+      const zip = new AdmZip(filePath);
+      const demEntry = zip.getEntries().find(entry => entry.entryName.endsWith('.dem'));
+      if (!demEntry) return null;
+
+      fs.ensureDirSync(EXTRACTED_DIR);
+      const extractedPath = path.join(EXTRACTED_DIR, path.basename(demEntry.entryName));
+      zip.extractEntryTo(demEntry, EXTRACTED_DIR, false, true);
+      console.log(`  [+] Извлечен файл: ${extractedPath}`);
+      return extractedPath;
+    } catch (err) {
+      console.error(`  [!] Ошибка распаковки ZIP:`, err.message);
+      return null;
+    }
+  }
+  return filePath;
+}
 
 async function main() {
   await fs.ensureDir(MATCHES_DIR);
-<<<<<<< HEAD
-=======
   await fs.ensureDir(DEMOS_DIR);
+  await fs.ensureDir(EXTRACTED_DIR);
   
-  if (!await fs.pathExists(MATCHES_FILE)) {
-    console.log(`Файл ${MATCHES_FILE} не найден!`);
-    return;
-  }
+  if (!await fs.pathExists(MATCHES_FILE)) return;
 
->>>>>>> parent of 9c1f963 (123)
   const lines = (await fs.readFile(MATCHES_FILE, 'utf-8'))
-    .split('\n')
-    .map(l => l.trim())
-    .filter(l => l && !l.startsWith('#'));
+    .split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#'));
 
-<<<<<<< HEAD
-  if (lines.length === 0) return console.log('Нет ссылок.');
-=======
   if (lines.length === 0) return console.log('Нет ссылок в matches.txt.');
->>>>>>> parent of 9c1f963 (123)
-  console.log(`Найдено ${lines.length} строк.`);
+  console.log(`Найдено ${lines.length} строк для обработки.`);
 
-  const browser = await chromium.launch({
-    channel: 'chrome',
-    headless: false,
-    args: ['--start-maximized']
-  });
+  const browser = await chromium.launch({ channel: 'chrome', headless: false, args: ['--start-maximized'] });
   const context = await browser.newContext({ viewport: null });
   const page = await context.newPage();
 
@@ -60,257 +81,203 @@ async function main() {
 
     const outFile = path.join(MATCHES_DIR, `${matchId}.json`);
 
-    // Пропускаем уже собранные
     if (await fs.pathExists(outFile)) {
-      try {
-        const existing = await fs.readJson(outFile);
-        if (existing && existing.maps && existing.maps.length > 0) {
-          console.log(`[${i + 1}/${lines.length}] Матч ${matchId} уже собран. Пропускаем.`);
-          continue;
-        }
-      } catch (e) {}
+      console.log(`[${i + 1}/${lines.length}] Матч ${matchId} уже собран. Пропускаем.`);
+      continue;
     }
 
-    console.log(`[${i + 1}/${lines.length}] Открываем ${url} (Турнир: ${tournamentName}) ...`);
+    console.log(`\n[${i + 1}/${lines.length}] Обрабатываем ${url} (Турнир: ${tournamentName}) ...`);
 
     const collectedMaps = [];
     const seenMapSignatures = new Set();
-<<<<<<< HEAD
+    let awpyJsonPath = path.join(MATCHES_DIR, `${matchId}_awpy.json`);
+    
+    const pythonExe = isWin ? path.join(__dirname, 'venv', 'Scripts', 'python.exe') : path.join(__dirname, 'venv', 'bin', 'python');
+    const scriptPath = path.join(__dirname, 'parse_demo.py');
 
     try {
-      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-      await page.waitForTimeout(6000);
+      const localDemoBz2 = path.join(DEMOS_DIR, `${matchId}.dem.bz2`);
+      const localDemoZip = path.join(DEMOS_DIR, `${matchId}.zip`);
+      const localDemoDem = path.join(DEMOS_DIR, `${matchId}.dem`);
+      
+      let demoToParse = null;
 
-      // 1. Находим все названия карт
-=======
-    let awpyJsonPath = null;
+      if (await fs.pathExists(localDemoBz2)) demoToParse = extractDemoIfNeeded(localDemoBz2);
+      else if (await fs.pathExists(localDemoZip)) demoToParse = extractDemoIfNeeded(localDemoZip);
+      else if (await fs.pathExists(localDemoDem)) demoToParse = localDemoDem;
 
-    try {
-      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-      await page.waitForTimeout(4000);
-
-      // 1. ИЩЕМ КНОПКУ И СКАЧИВАЕМ ДЕМКУ (один раз на матч)
-      const hasDemoBtn = await page.evaluate(() => {
-        return Array.from(document.querySelectorAll('button, a')).some(b => b.textContent.includes('Скачать демо'));
-      });
-
-      if (hasDemoBtn) {
-        console.log(`  Найдена кнопка "Скачать демо". Пробуем скачать...`);
+      if (demoToParse) {
+        console.log(`  Запускаем awpy для локальной демки...`);
         try {
-          // Ждем события скачивания с таймаутом 15 секунд
-          const [download] = await Promise.all([
-            page.waitForEvent('download', { timeout: 15000 }).catch(() => null),
-            page.evaluate(() => {
-              const btn = Array.from(document.querySelectorAll('button, a')).find(b => b.textContent.includes('Скачать демо'));
-              if (btn) btn.click();
-            })
-          ]);
-
-          if (download) {
-            const demoPath = path.join(DEMOS_DIR, `${matchId}.dem.bz2`);
-            await download.saveAs(demoPath);
-            console.log(`  Демка успешно скачана!`);
-
-            // Запускаем awpy
-            awpyJsonPath = path.join(MATCHES_DIR, `${matchId}_awpy.json`);
-            console.log(`  Запускаем awpy для парсинга демки...`);
-            
-            const isWin = process.platform === 'win32';
-            const pythonExe = isWin ? path.join(__dirname, 'venv', 'Scripts', 'python.exe') : path.join(__dirname, 'venv', 'bin', 'python');
-            const scriptPath = path.join(__dirname, 'parse_demo.py');
-
-            await execAsync(`"${pythonExe}" "${scriptPath}" "${demoPath}" "${awpyJsonPath}"`);
-            console.log(`  Awpy успешно отработал.`);
-          } else {
-            console.log(`  Клик был, но скачивание не началось (возможно, нужна авторизация или демка недоступна).`);
-          }
+          const { stdout, stderr } = await execFileAsync(pythonExe, [scriptPath, demoToParse, awpyJsonPath], { encoding: 'utf8', env: pythonEnv });
+          if (stdout) console.log(`    [awpy] ${stdout.trim().replace(/\n/g, '\n    [awpy] ')}`);
+          if (stderr) console.error(`    [awpy error] ${stderr.trim()}`);
         } catch (err) {
-          console.error(`  Ошибка при скачивании/парсинге демки:`, err.message);
+          console.error(`  [!] Ошибка Python:\n${err.stdout || err.message}\n${err.stderr || ''}`);
         }
       } else {
-        console.log(`  Кнопка "Скачать демо" не найдена на странице.`);
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await page.waitForTimeout(5000);
+
+        const btnInfo = await page.evaluate(() => {
+          const elements = Array.from(document.querySelectorAll('button, a, div, span'));
+          for (const el of elements) {
+            const text = (el.textContent || '').toLowerCase().trim();
+            if (text.includes('скачать демо') || text.includes('скачать .dem') || text === 'демо' || text === 'скачать') {
+              if (el.tagName === 'BUTTON' || el.tagName === 'A' || el.onclick) return { found: true };
+            }
+          }
+          return { found: false };
+        });
+
+        if (btnInfo.found) {
+          console.log(`  Найдена кнопка "Скачать демо". Пробуем скачать...`);
+          try {
+            const [download] = await Promise.all([
+              page.waitForEvent('download', { timeout: 20000 }).catch(() => null),
+              page.evaluate(() => {
+                const btn = Array.from(document.querySelectorAll('button, a')).find(b => (b.textContent || '').toLowerCase().includes('демо') || (b.textContent || '').toLowerCase().includes('.dem'));
+                if (btn) btn.click();
+              })
+            ]);
+
+            if (download) {
+              const demoPath = path.join(DEMOS_DIR, `${matchId}.zip`);
+              await download.saveAs(demoPath);
+              console.log(`  Файл успешно скачан!`);
+              const extractedPath = extractDemoIfNeeded(demoPath);
+              
+              if (extractedPath) {
+                console.log(`  Запускаем awpy...`);
+                try {
+                  const { stdout, stderr } = await execFileAsync(pythonExe, [scriptPath, extractedPath, awpyJsonPath], { encoding: 'utf8', env: pythonEnv });
+                  if (stdout) console.log(`    [awpy] ${stdout.trim().replace(/\n/g, '\n    [awpy] ')}`);
+                  if (stderr) console.error(`    [awpy error] ${stderr.trim()}`);
+                } catch (err) {
+                  console.error(`  [!] Ошибка Python:\n${err.stdout || err.message}\n${err.stderr || ''}`);
+                }
+              }
+            }
+          } catch (err) {
+            console.error(`  Ошибка при скачивании:`, err.message);
+          }
+        }
       }
 
-      // Загружаем данные от awpy, если они есть
       let awpyData = null;
-      if (awpyJsonPath && fs.existsSync(awpyJsonPath)) {
-        try {
-          awpyData = fs.readJsonSync(awpyJsonPath);
-        } catch (e) {}
+      if (await fs.pathExists(awpyJsonPath)) {
+        try { awpyData = await fs.readJson(awpyJsonPath); } catch (e) {}
       }
 
-      // 2. ПАРСИМ КАРТЫ
->>>>>>> parent of 9c1f963 (123)
+      if (page.url() !== url) {
+         await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+         await page.waitForTimeout(3000);
+      }
+
       const mapNames = await page.evaluate(() => {
         const text = document.body.innerText;
         const matches = text.match(/(de_[a-z0-9_]+|cs_[a-z0-9_]+)/g);
         return matches ? [...new Set(matches)] : [];
       });
 
+      if (mapNames.length === 0 && awpyData) {
+        const awpyMaps = [...new Set(awpyData.map(p => p.map_name))].filter(Boolean);
+        if (awpyMaps.length > 0) mapNames.push(...awpyMaps);
+        else mapNames.push("unknown_map");
+      } else if (mapNames.length === 0) {
+        mapNames.push("unknown_map");
+      }
+
       for (const mapName of mapNames) {
         if (collectedMaps.some(m => m.map === mapName)) continue;
 
-        const clicked = await page.evaluate((name) => {
-          const el = Array.from(document.querySelectorAll('*')).find(e =>
-            e.textContent.trim().toLowerCase() === name.toLowerCase() &&
-            e.children.length === 0
-          );
-          if (el) { el.click(); return true; }
-          return false;
-        }, mapName);
-
-<<<<<<< HEAD
-        if (!clicked) {
-          console.log(`  [${mapName}] Не найден элемент для клика. Пропускаем.`);
-          continue;
-        }
-
-        console.log(`  Клик по [${mapName}], ждём загрузки...`);
-        await page.waitForTimeout(4000);
-
-        // 2. Парсим DOM: игроки с K/D/A
-        const players = await page.evaluate(() => {
+        const domPlayers = await page.evaluate(() => {
           const result = [];
-          const seenIds = new Set();
-
-          const allElements = document.querySelectorAll('div, span, td, b, strong');
-=======
-        if (!clicked) continue;
-
-        console.log(`  Клик по [${mapName}], ждём загрузки...`);
-        await page.waitForTimeout(3000);
-
-        const players = await page.evaluate(() => {
-          const result = [];
-          const seenIds = new Set();
-          const allElements = document.querySelectorAll('div, span, td, b, strong');
-
->>>>>>> parent of 9c1f963 (123)
-          for (const el of allElements) {
-            const text = el.textContent.replace(/\s+/g, ' ').trim();
-            if (!/^\d+\/\d+\/\d+$/.test(text)) continue;
-
-            let container = el;
-            let profileLink = null;
-            while (container && container !== document.body) {
-              const links = container.querySelectorAll('a[href*="/profile/"]');
-              if (links.length > 0) {
-<<<<<<< HEAD
-                profileLink = Array.from(links).find(a => {
-                  const href = a.getAttribute('href') || '';
-                  return /\/profile\/\d+/.test(href);
-                });
-=======
-                profileLink = Array.from(links).find(a => /\/profile\/\d+/.test(a.getAttribute('href') || ''));
->>>>>>> parent of 9c1f963 (123)
-                if (profileLink) break;
-              }
-              container = container.parentElement;
-            }
-
-            if (!profileLink) continue;
-
-            const href = profileLink.getAttribute('href');
+          const links = document.querySelectorAll('a[href*="/profile/"]');
+          for (const link of links) {
+            const href = link.getAttribute('href');
             const idMatch = href.match(/\/profile\/(\d+)/);
             if (!idMatch) continue;
             const id = idMatch[1];
-            if (seenIds.has(id)) continue;
-
-<<<<<<< HEAD
-            const nameLink = Array.from(container.querySelectorAll('a[href*="/profile/"]'))
-              .find(a => a.textContent.trim().length > 0);
-=======
-            const nameLink = Array.from(container.querySelectorAll('a[href*="/profile/"]')).find(a => a.textContent.trim().length > 0);
->>>>>>> parent of 9c1f963 (123)
-            const name = nameLink ? nameLink.textContent.trim() : 'St1gmat';
-            const avatar = container.querySelector('img')?.getAttribute('src') || null;
-
-            const [kills, deaths, assists] = text.split('/').map(Number);
-
-            seenIds.add(id);
-            result.push({
-              id, name, avatar,
-              kills, deaths, assists,
-              adr: null, kast: null, rating: null
-            });
+            const name = link.textContent.trim();
+            if (!name) continue;
+            
+            let container = link.parentElement;
+            let avatar = null;
+            for (let i=0; i<5 && container; i++) {
+              if (container.querySelector('img')) { avatar = container.querySelector('img').getAttribute('src'); break; }
+              container = container.parentElement;
+            }
+            if (!result.some(p => p.id === id)) result.push({ id, name, avatar });
           }
-
           return result;
         });
 
-        if (players.length === 0) {
-<<<<<<< HEAD
-          console.log(`  [${mapName}] Не удалось найти игроков в DOM. Пропускаем.`);
-          continue;
-        }
+        let players = [];
 
-        const signature = players.map(p => `${p.id}_${p.kills}_${p.deaths}`).sort().join('|');
-        if (seenMapSignatures.has(signature)) {
-          console.log(`  [${mapName}] ПРОПУЩЕНО (состав уже собран).`);
-          continue;
-        }
-
-        seenMapSignatures.add(signature);
-        collectedMaps.push({ map: mapName, players });
-        console.log(`  [${mapName}] УСПЕХ! Игроков: ${players.length}`);
-=======
-          console.log(`  [${mapName}] Игроки в DOM не найдены. Пропускаем.`);
-          continue;
-        }
-
-        const signature = players.map(p => `${p.id}_${p.kills}_${p.deaths}`).sort().join('|');
-        if (seenMapSignatures.has(signature)) continue;
-
-        seenMapSignatures.add(signature);
-
-        // 3. ОБЪЕДИНЯЕМ С ДАННЫМИ ИЗ AWP (если есть)
         if (awpyData && Array.isArray(awpyData)) {
-          let matched = 0;
-          players.forEach(dp => {
-            // Ищем по нику или по карте
-            const ap = awpyData.find(a => 
-              (a.map_name && a.map_name.toLowerCase() === mapName.toLowerCase()) && 
-              (String(a.steamid) === String(dp.id) || String(a.name).toLowerCase().trim() === dp.name.toLowerCase().trim())
-            ) || awpyData.find(a => 
-              String(a.steamid) === String(dp.id) || String(a.name).toLowerCase().trim() === dp.name.toLowerCase().trim()
+          let mapAwpyData = awpyData.filter(a => a.map_name && a.map_name.toLowerCase() === mapName.toLowerCase());
+          if (mapAwpyData.length === 0) mapAwpyData = awpyData;
+
+          mapAwpyData.forEach(ap => {
+            const apSteamId = ap.steamid ? String(ap.steamid) : null;
+            const cleanApName = ap.name ? String(ap.name).replace(/^.*\|\s*/, '').trim() : '';
+
+            let dp = domPlayers.find(p => apSteamId && String(p.id) === apSteamId);
+            if (!dp) dp = domPlayers.find(p => 
+              p.name.toLowerCase() === cleanApName.toLowerCase() || 
+              p.name.toLowerCase() === String(ap.name).toLowerCase().trim()
+            );
+            if (!dp) dp = domPlayers.find(p => 
+              (cleanApName && cleanApName.toLowerCase().includes(p.name.toLowerCase())) || 
+              p.name.toLowerCase().includes(cleanApName.toLowerCase())
             );
 
-            if (ap) {
-              if (ap.adr != null) dp.adr = +Number(ap.adr).toFixed(1);
-              if (ap.kast != null) dp.kast = +Number(ap.kast).toFixed(1);
-              if (ap.rating != null) dp.rating = +Number(ap.rating).toFixed(2);
-              matched++;
+            let finalId = apSteamId;
+            if (!finalId || finalId === '0' || finalId === 'None') {
+              finalId = dp ? String(dp.id) : String(ap.name || 'Unknown');
             }
+
+            players.push({
+              id: finalId,
+              name: dp ? dp.name : (ap.name || 'Unknown'),
+              avatar: dp ? dp.avatar : null,
+              kills: ap.kills || 0,
+              deaths: ap.deaths || 0,
+              assists: ap.assists || 0,
+              adr: ap.adr, 
+              kast: ap.kast, 
+              rating: ap.rating
+            });
           });
-          if (matched > 0) console.log(`  [${mapName}] Объединено с awpy: ${matched} игроков.`);
+          if (players.length > 0) console.log(`  [${mapName}] Данные склеены: ${players.length} игроков.`);
+        } else {
+          players = domPlayers.map(dp => ({ ...dp, kills: 0, deaths: 0, assists: 0, adr: null, kast: null, rating: null }));
         }
 
-        collectedMaps.push({ map: mapName, players });
->>>>>>> parent of 9c1f963 (123)
+        if (players.length > 0) {
+          const signature = players.map(p => `${p.id}_${p.kills}_${p.deaths}`).sort().join('|');
+          if (!seenMapSignatures.has(signature)) {
+            seenMapSignatures.add(signature);
+            collectedMaps.push({ map: mapName, players });
+          }
+        }
       }
 
       if (collectedMaps.length > 0) {
-        await fs.writeJson(
-          outFile,
-          {
-            matchId, url,
-            tournament: tournamentName,
-            date: new Date().toISOString(),
-            maps: collectedMaps
-          },
-          { spaces: 2 }
-        );
-        console.log(`  Файл сохранён: ${matchId}.json (карт: ${collectedMaps.length})`);
+        await fs.writeJson(outFile, { matchId, url, tournament: tournamentName, date: new Date().toISOString(), maps: collectedMaps }, { spaces: 2 });
+        console.log(`  [+] Файл сохранён: ${matchId}.json`);
       } else {
-        console.log(`  Не удалось собрать ни одной карты для ${matchId}`);
+        console.log(`  [-] Не удалось собрать ни одной карты.`);
       }
+
     } catch (err) {
-      console.error(`  Ошибка:`, err.message);
+      console.error(`  [!] Ошибка:`, err.message);
     }
   }
 
   await browser.close();
-  console.log('Сбор завершён!');
+  console.log('\nСбор завершён!');
 }
 
 function extractMatchId(url) {
