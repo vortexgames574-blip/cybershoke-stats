@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = 'geimeri-stats-v30'; // <--- ПОДНЯЛИ ВЕРСИЮ
+const CACHE_NAME = 'geimeri-stats-v32'; // <--- ВАЖНО: Меняй версию при каждом обновлении!
 const ASSETS = [
   './',
   './index.html',
@@ -8,42 +8,42 @@ const ASSETS = [
   './winners.css',
   './winners.js',
   './winners-admin.js',
-  './data/stats.json',
   './manifest.json'
 ];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then(c => c.addAll(ASSETS).catch(() => {}))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    )
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
-
-  // НЕ КЭШИРУЕМ ЧУЖИЕ САЙТЫ (CDN скрипты, шрифты, аватарки Steam)
   if (!e.request.url.startsWith(self.location.origin)) return;
 
-  // Стата — сначала сеть, потом кэш
-  if (e.request.url.includes('/data/stats.json')) {
+  // JSON всегда берем из сети, чтобы данные были свежими
+  if (e.request.url.includes('/data/stats.json') || e.request.url.includes('/data/winners.json')) {
     e.respondWith(
       fetch(e.request)
-        .then(res => {
+        .then((res) => {
           if (!res || !res.ok) return res;
-          try {
-            const clone = res.clone();
-            caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-          } catch (err) {}
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then((c) => c.put(e.request, clone));
           return res;
         })
         .catch(() => caches.match(e.request))
@@ -51,17 +51,14 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // Остальное (свои файлы) — cache-first
+  // Остальное - cache-first
   e.respondWith(
-    caches.match(e.request).then(cached => {
+    caches.match(e.request).then((cached) => {
       if (cached) return cached;
-      
-      return fetch(e.request).then(res => {
+      return fetch(e.request).then((res) => {
         if (!res || !res.ok) return res;
-        try {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-        } catch (err) {}
+        const clone = res.clone();
+        caches.open(CACHE_NAME).then((c) => c.put(e.request, clone));
         return res;
       });
     })

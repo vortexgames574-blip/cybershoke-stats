@@ -17,7 +17,7 @@ let profRadarChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 let draftParticipants = [];
-let previousTabBeforeFaq = 'overview'; // ИСПРАВЛЕНО: Храним вкладку для кнопки "Гид"
+let previousTabBeforeFaq = 'overview';
 
 // ===== УТИЛИТЫ =====
 function escapeHtml(str) {
@@ -102,7 +102,6 @@ function initTabs() {
     tab.addEventListener('click', () => {
       const target = tab.dataset.tab;
       
-      // ИСПРАВЛЕНО: Запоминаем вкладку перед переходом в FAQ
       if (target !== 'faq') {
         const currentActive = document.querySelector('.tab-btn.active');
         if (currentActive && currentActive.dataset.tab !== 'faq') {
@@ -130,7 +129,7 @@ function initTabs() {
 // ===== ЗАГРУЗКА =====
 async function loadData(retry = 2) {
   try {
-    const res = await fetch('data/stats.json');
+    const res = await fetch('data/stats.json', { cache: 'no-store' });
     if (!res.ok) throw new Error(`stats.json не найден (HTTP ${res.status})`);
     const text = await res.text();
     if (!text) throw new Error('stats.json пустой (запустите npm run build)');
@@ -141,7 +140,6 @@ async function loadData(retry = 2) {
     const select = document.getElementById('tournament-select');
     let keys = Object.keys(statsData.tournaments);
     
-    // ИСПРАВЛЕНО: Убираем "Все матчи" из выпадающего списка, если есть другие турниры
     if (keys.length > 1 && keys.includes('Все матчи')) {
       keys = keys.filter(k => k !== 'Все матчи');
     }
@@ -445,7 +443,6 @@ function openMatchDetails(matchId) {
               ${players.map(p => {
                 const playerObj = currentStats.players.find(sp => sp.id === p.id) || p;
                 const ava = playerObj.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
-                // ИСПРАВЛЕНО: Добавлен onclick для перехода в профиль при клике на строку
                 return `<tr style="cursor:pointer;" onclick="closeMatchDetails(); openProfile('${escapeHtml(p.id)}');">
                   <td><div class="player-cell"><img src="${escapeHtml(ava)}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><strong>${escapeHtml(displayName(p))}</strong></div></td>
                   <td>${p.kills}</td><td>${p.deaths}</td><td>${p.assists}</td>
@@ -697,7 +694,6 @@ window.onclick = function (event) {
 };
 
 // ===== БАЛАНСИРОВЩИК =====
-// (Оставил без изменений, логика работает)
 function getSavedKey() {
   const sel = document.getElementById('tournament-select');
   return `savedTeams_${sel ? sel.value : 'default'}`;
@@ -1333,7 +1329,6 @@ function initDraft() {
     renderParticipants();
   };
 
-  // ИСПРАВЛЕНО: Поддержка ввода через запятую или перенос строки
   const addParticipant = () => {
     const rawName = searchInput.value.trim();
     if (!rawName) return;
@@ -1532,7 +1527,6 @@ document.getElementById('send-feedback-btn').onclick = async () => {
 };
 
 // ===== ГИД → FAQ =====
-// ИСПРАВЛЕНО: Возврат на предыдущую вкладку
 function initBeginnerMode() {
   const btn = document.getElementById('beginner-toggle');
   if (!btn) return;
@@ -1541,11 +1535,9 @@ function initBeginnerMode() {
     const faqTabBtn = document.querySelector('[data-tab="faq"]');
     
     if (currentActive && currentActive.dataset.tab === 'faq') {
-      // Если мы в FAQ, возвращаемся на предыдущую вкладку
       const prevTabBtn = document.querySelector(`[data-tab="${previousTabBeforeFaq}"]`);
       if (prevTabBtn) prevTabBtn.click();
     } else {
-      // Иначе идем в FAQ
       if (faqTabBtn) faqTabBtn.click();
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1560,3 +1552,23 @@ document.addEventListener('DOMContentLoaded', () => {
   initBalancer();
   initBeginnerMode();
 });
+
+// ===== АВТООБНОВЛЕНИЕ САЙТА (ДОБАВЛЕНО В КОНЕЦ) =====
+if ('serviceWorker' in navigator) {
+  let refreshing = false;
+  
+  // Слушаем событие, когда новый Service Worker готов
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!refreshing) {
+      refreshing = true;
+      window.location.reload(); // Мгновенно перезагружаем страницу
+    }
+  });
+
+  // Каждые 60 секунд проверяем на сервере, нет ли обновлений
+  setInterval(() => {
+    navigator.serviceWorker.getRegistration().then(reg => {
+      if (reg) reg.update();
+    });
+  }, 60000);
+}
