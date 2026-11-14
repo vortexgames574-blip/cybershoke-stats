@@ -1,0 +1,123 @@
+{
+  "matchId": "11891701",
+  "url": "https://cybershoke.net/ru/match/11891701",
+  "tournament": "18.09.2026",
+  "date": "2026-11-08T17:18:36.507Z",
+  "maps": [
+    {
+      "map": "de_dust2",
+      "players": [
+        {
+          "id": "76561198015424675",
+          "name": "tolya800x600",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
+          "kills": 9,
+          "deaths": 17,
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 8,
+          "deaths": 17,
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/8.png",
+          "kills": 18,
+          "deaths": 14,
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199430091221",
+          "name": "St1tch",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
+          "kills": 6,
+          "deaths": 15,
+          "assists": 1,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199037388895",
+          "name": "MUA",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
+          "kills": 10,
+          "deaths": 15,
+          "assists": 2,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198272167310",
+          "name": "Изумительные Брючки.",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
+          "kills": 15,
+          "deaths": 11,
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198681103731",
+          "name": "Анальный бур",
+          "avatar": "https://avatars.steamstatic.com/223552981f404181495a99c93e375a29df6d467f_full.jpg",
+          "kills": 5,
+          "deaths": 11,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198587515885",
+          "name": "RJ",
+          "avatar": "https://avatars.steamstatic.com/51c75b4ca05977a2ed3a8002417b4b6cc7472a6e_full.jpg",
+          "kills": 12,
+          "deaths": 10,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198849641921",
+          "name": "suffixx",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/10.png",
+          "kills": 29,
+          "deaths": 7,
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198843347969",
+          "name": "sandor",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/10.png",
+          "kills": 17,
+          "deaths": 12,
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        }
+      ]
+    }
+  ]
+}

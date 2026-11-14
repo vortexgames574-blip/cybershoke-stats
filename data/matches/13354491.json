@@ -1,0 +1,113 @@
+{
+  "matchId": "13354491",
+  "url": "https://cybershoke.net/ru/match/13354491",
+  "tournament": "31.10.2026",
+  "date": "2026-11-06T00:12:05.565Z",
+  "maps": [
+    {
+      "map": "de_inferno",
+      "players": [
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "kills": 18,
+          "deaths": 12,
+          "assists": 0,
+          "adr": 100,
+          "kast": 76,
+          "rating": 1.49
+        },
+        {
+          "id": "76561198283381727",
+          "name": "St1gmat",
+          "kills": 15,
+          "deaths": 11,
+          "assists": 10,
+          "adr": 121,
+          "kast": 76,
+          "rating": 1.48
+        },
+        {
+          "id": "76561198872139873",
+          "name": "1lpk",
+          "kills": 14,
+          "deaths": 10,
+          "assists": 7,
+          "adr": 102,
+          "kast": 82,
+          "rating": 1.43
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "kills": 16,
+          "deaths": 10,
+          "assists": 4,
+          "adr": 81,
+          "kast": 76,
+          "rating": 1.4
+        },
+        {
+          "id": "76561198128494347",
+          "name": "Игрок",
+          "kills": 14,
+          "deaths": 8,
+          "assists": 3,
+          "adr": 75,
+          "kast": 76,
+          "rating": 1.34
+        },
+        {
+          "id": "76561199109745015",
+          "name": "BB-00",
+          "kills": 14,
+          "deaths": 14,
+          "assists": 4,
+          "adr": 95,
+          "kast": 59,
+          "rating": 1.08
+        },
+        {
+          "id": "76561199210250164",
+          "name": "s1slw",
+          "kills": 9,
+          "deaths": 10,
+          "assists": 0,
+          "adr": 41,
+          "kast": 65,
+          "rating": 0.81
+        },
+        {
+          "id": "76561198090688036",
+          "name": "Kara7evich",
+          "kills": 9,
+          "deaths": 14,
+          "assists": 2,
+          "adr": 57,
+          "kast": 59,
+          "rating": 0.71
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "kills": 5,
+          "deaths": 13,
+          "assists": 4,
+          "adr": 50,
+          "kast": 65,
+          "rating": 0.57
+        },
+        {
+          "id": "76561199482946683",
+          "name": "Oleg123",
+          "kills": 2,
+          "deaths": 14,
+          "assists": 5,
+          "adr": 45,
+          "kast": 41,
+          "rating": 0.21
+        }
+      ]
+    }
+  ]
+}

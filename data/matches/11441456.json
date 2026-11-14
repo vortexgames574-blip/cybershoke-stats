@@ -1,0 +1,123 @@
+{
+  "matchId": "11441456",
+  "url": "https://cybershoke.net/ru/match/11441456",
+  "tournament": "04.09.2026",
+  "date": "2026-11-08T17:16:54.891Z",
+  "maps": [
+    {
+      "map": "de_anubis",
+      "players": [
+        {
+          "id": "76561198283381727",
+          "name": "Unknown",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
+          "kills": 20,
+          "deaths": 12,
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198888817693",
+          "name": "right nipple",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 20,
+          "deaths": 15,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/5.png",
+          "kills": 14,
+          "deaths": 14,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198015424675",
+          "name": "tolya800x600",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/8.png",
+          "kills": 15,
+          "deaths": 15,
+          "assists": 8,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198039138241",
+          "name": "AlexMax",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 7,
+          "deaths": 15,
+          "assists": 7,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198587515885",
+          "name": "RJ",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
+          "kills": 12,
+          "deaths": 16,
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198158360502",
+          "name": "✪ AlikD*ck ✪",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 8,
+          "deaths": 17,
+          "assists": 0,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199109745015",
+          "name": "q1nce_",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/9.png",
+          "kills": 22,
+          "deaths": 13,
+          "assists": 6,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198090688036",
+          "name": "Kara7evich",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
+          "kills": 20,
+          "deaths": 14,
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198059120185",
+          "name": "Instructor",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
+          "kills": 9,
+          "deaths": 16,
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        }
+      ]
+    }
+  ]
+}

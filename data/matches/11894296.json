@@ -1,0 +1,123 @@
+{
+  "matchId": "11894296",
+  "url": "https://cybershoke.net/ru/match/11894296",
+  "tournament": "18.09.2026",
+  "date": "2026-11-08T17:18:56.872Z",
+  "maps": [
+    {
+      "map": "de_anubis",
+      "players": [
+        {
+          "id": "76561198015424675",
+          "name": "tolya800x600",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
+          "kills": 14,
+          "deaths": 19,
+          "assists": 2,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199430091221",
+          "name": "St1tch",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/3.png",
+          "kills": 17,
+          "deaths": 17,
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199022192304",
+          "name": "Pizdets_tip",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/8.png",
+          "kills": 20,
+          "deaths": 15,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 8,
+          "deaths": 16,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561199037388895",
+          "name": "MUA",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/7.png",
+          "kills": 22,
+          "deaths": 13,
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "avatar": "https://cloud.cybershoke.net/pages/matches/icons/white-crown.svg",
+          "kills": 16,
+          "deaths": 14,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198042805941",
+          "name": "PRADA_CODE",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/4.png",
+          "kills": 15,
+          "deaths": 17,
+          "assists": 4,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198984765872",
+          "name": "molodoiebatel",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/1.png",
+          "kills": 16,
+          "deaths": 17,
+          "assists": 3,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198261421853",
+          "name": "0n3_vs_4ll",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/2.png",
+          "kills": 10,
+          "deaths": 19,
+          "assists": 8,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        },
+        {
+          "id": "76561198090688036",
+          "name": "Kara7evich",
+          "avatar": "https://cloud.cybershoke.net/img/ranks/faceit/6.png",
+          "kills": 24,
+          "deaths": 15,
+          "assists": 5,
+          "adr": null,
+          "kast": null,
+          "rating": null
+        }
+      ]
+    }
+  ]
+}

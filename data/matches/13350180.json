@@ -1,0 +1,113 @@
+{
+  "matchId": "13350180",
+  "url": "https://cybershoke.net/ru/match/13350180",
+  "tournament": "31.10.2026",
+  "date": "2026-11-06T00:12:17.188Z",
+  "maps": [
+    {
+      "map": "de_nuke",
+      "players": [
+        {
+          "id": "76561198054507577",
+          "name": "kvsmstr",
+          "kills": 17,
+          "deaths": 9,
+          "assists": 5,
+          "adr": 132,
+          "kast": 100,
+          "rating": 1.84
+        },
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "kills": 17,
+          "deaths": 10,
+          "assists": 5,
+          "adr": 119,
+          "kast": 81,
+          "rating": 1.65
+        },
+        {
+          "id": "76561199467682493",
+          "name": "Господин Босс",
+          "kills": 17,
+          "deaths": 11,
+          "assists": 4,
+          "adr": 112,
+          "kast": 81,
+          "rating": 1.59
+        },
+        {
+          "id": "76561199417613918",
+          "name": "ЯнаЦист",
+          "kills": 12,
+          "deaths": 7,
+          "assists": 1,
+          "adr": 88,
+          "kast": 81,
+          "rating": 1.32
+        },
+        {
+          "id": "76561198283381727",
+          "name": "St1gmat",
+          "kills": 14,
+          "deaths": 15,
+          "assists": 3,
+          "adr": 98,
+          "kast": 75,
+          "rating": 1.17
+        },
+        {
+          "id": "76561198872139873",
+          "name": "1lpk",
+          "kills": 12,
+          "deaths": 13,
+          "assists": 4,
+          "adr": 87,
+          "kast": 75,
+          "rating": 1.09
+        },
+        {
+          "id": "76561198681103731",
+          "name": "Анальный бур",
+          "kills": 8,
+          "deaths": 8,
+          "assists": 2,
+          "adr": 31,
+          "kast": 88,
+          "rating": 0.95
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "kills": 7,
+          "deaths": 14,
+          "assists": 4,
+          "adr": 72,
+          "kast": 75,
+          "rating": 0.75
+        },
+        {
+          "id": "76561199210250164",
+          "name": "s1slw",
+          "kills": 7,
+          "deaths": 15,
+          "assists": 2,
+          "adr": 52,
+          "kast": 56,
+          "rating": 0.49
+        },
+        {
+          "id": "76561198128494347",
+          "name": "Игрок",
+          "kills": 5,
+          "deaths": 14,
+          "assists": 2,
+          "adr": 41,
+          "kast": 50,
+          "rating": 0.34
+        }
+      ]
+    }
+  ]
+}
