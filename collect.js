@@ -3,11 +3,11 @@ import { chromium } from 'playwright';
 import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { exec } from 'child_process'; // Изменено: используем exec вместо execFile
+import { exec } from 'child_process';
 import { promisify } from 'util';
 import AdmZip from 'adm-zip';
 
-const execAsync = promisify(exec); // Изменено
+const execAsync = promisify(exec);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MATCHES_FILE = path.join(__dirname, 'data', 'matches.txt');
 const MATCHES_DIR = path.join(__dirname, 'data', 'matches');
@@ -21,9 +21,61 @@ const pythonEnv = {
   PYTHONUTF8: '1'
 };
 
-// Функция для проверки и распаковки ZIP
+// Ультимативная функция поиска даты (ищет в сыром HTML)
+async function extractMatchDate(page) {
+  try {
+    // Ждем, пока страница полностью прогрузится (включая скрипты)
+    await page.waitForLoadState('networkidle').catch(() => {});
+    await page.waitForTimeout(2000);
+
+    const content = await page.content();
+
+    // 1. Ищем ISO формат (обычно в скрытых JSON данных)
+    // Пример: "date":"2026-11-14T18:51:00"
+    const isoMatch = content.match(/"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/);
+    if (isoMatch && isoMatch[1]) {
+      const d = new Date(isoMatch[1]);
+      if (!isNaN(d.getTime())) return d.toISOString();
+    }
+
+    // 2. Ищем формат "ГГГГ-ММ-ДД ЧЧ:ММ" или "ДД.ММ.ГГГГ ЧЧ:ММ" в тексте
+    // Пример: "2026-11-14 18:51" или "14.11.2026, 18:51"
+    const textMatch = content.match(/(\d{4}-\d{2}-\d{2})[T\s](\d{2}:\d{2})/) || 
+                      content.match(/(\d{2}\.\d{2}\.\d{4})[\s,]+(\d{2}:\d{2})/);
+                      
+    if (textMatch) {
+      let datePart = textMatch[1];
+      const timePart = textMatch[2];
+      
+      // Если дата в формате ДД.ММ.ГГГГ, конвертируем в ГГГГ-ММ-ДД для JS
+      if (datePart.includes('.')) {
+        const [d, m, y] = datePart.split('.');
+        datePart = `${y}-${m}-${d}`;
+      }
+      
+      const d = new Date(`${datePart}T${timePart}:00`);
+      if (!isNaN(d.getTime())) return d.toISOString();
+    }
+
+    // 3. Ищем просто дату без времени (ставим полдень)
+    const dateOnlyMatch = content.match(/"(\d{4}-\d{2}-\d{2})/);
+    if (dateOnlyMatch && dateOnlyMatch[1]) {
+       const d = new Date(`${dateOnlyMatch[1]}T12:00:00`);
+       if (!isNaN(d.getTime())) return d.toISOString();
+    }
+
+  } catch (e) {
+    console.error('  [!] Ошибка извлечения даты:', e.message);
+  }
+  
+  // Если вообще ничего не нашли
+  console.warn('  [!] Не удалось найти дату матча в HTML. Используется текущее время.');
+  return new Date().toISOString();
+}
+
+// Извлекает ВСЕ .dem файлы из архива
 function extractDemoIfNeeded(filePath) {
-  if (!fs.existsSync(filePath)) return null;
+  if (!fs.existsSync(filePath)) return [];
 
   const buffer = Buffer.alloc(4);
   const fd = fs.openSync(filePath, 'r');
@@ -35,20 +87,26 @@ function extractDemoIfNeeded(filePath) {
     console.log(`  [*] Файл является ZIP-архивом. Распаковываем...`);
     try {
       const zip = new AdmZip(filePath);
-      const demEntry = zip.getEntries().find(entry => entry.entryName.endsWith('.dem'));
-      if (!demEntry) return null;
+      const demEntries = zip.getEntries().filter(entry => entry.entryName.endsWith('.dem'));
+      if (demEntries.length === 0) return [];
 
       fs.ensureDirSync(EXTRACTED_DIR);
-      const extractedPath = path.join(EXTRACTED_DIR, path.basename(demEntry.entryName));
-      zip.extractEntryTo(demEntry, EXTRACTED_DIR, false, true);
-      console.log(`  [+] Извлечен файл: ${extractedPath}`);
-      return extractedPath;
+      const extractedPaths = [];
+      
+      for (const demEntry of demEntries) {
+        const extractedPath = path.join(EXTRACTED_DIR, path.basename(demEntry.entryName));
+        zip.extractEntryTo(demEntry, EXTRACTED_DIR, false, true);
+        console.log(`  [+] Извлечен файл: ${extractedPath}`);
+        extractedPaths.push(extractedPath);
+      }
+      
+      return extractedPaths;
     } catch (err) {
       console.error(`  [!] Ошибка распаковки ZIP:`, err.message);
-      return null;
+      return [];
     }
   }
-  return filePath;
+  return [filePath];
 }
 
 async function main() {
@@ -99,11 +157,9 @@ async function main() {
     const pythonExe = isWin ? path.join(__dirname, 'venv', 'Scripts', 'python.exe') : path.join(__dirname, 'venv', 'bin', 'python');
     const scriptPath = path.join(__dirname, 'parse_demo.py');
 
-    // Проверка наличия Python перед запуском
     if (!fs.existsSync(pythonExe)) {
       console.error(`\n  [!] КРИТИЧЕСКАЯ ОШИБКА: Python не найден по пути: ${pythonExe}`);
-      console.error(`  [!] Убедитесь, что виртуальное окружение создано (команда: python -m venv venv) и зависимости установлены.\n`);
-      continue; // Пропускаем этот матч, переходим к следующему
+      continue;
     }
 
     try {
@@ -111,26 +167,48 @@ async function main() {
       const localDemoZip = path.join(DEMOS_DIR, `${matchId}.zip`);
       const localDemoDem = path.join(DEMOS_DIR, `${matchId}.dem`);
       
-      let demoToParse = null;
+      let demosToParse = [];
 
-      if (await fs.pathExists(localDemoBz2)) demoToParse = extractDemoIfNeeded(localDemoBz2);
-      else if (await fs.pathExists(localDemoZip)) demoToParse = extractDemoIfNeeded(localDemoZip);
-      else if (await fs.pathExists(localDemoDem)) demoToParse = localDemoDem;
+      if (await fs.pathExists(localDemoBz2)) demosToParse = extractDemoIfNeeded(localDemoBz2);
+      else if (await fs.pathExists(localDemoZip)) demosToParse = extractDemoIfNeeded(localDemoZip);
+      else if (await fs.pathExists(localDemoDem)) demosToParse = [localDemoDem];
 
-      if (demoToParse) {
-        console.log(`  Запускаем awpy для локальной демки...`);
-        try {
-          // Собираем команду в строку с кавычками для корректной работы в Windows shell
-          const cmd = `"${pythonExe}" "${scriptPath}" "${demoToParse}" "${awpyJsonPath}"`;
-          const { stdout, stderr } = await execAsync(cmd, { encoding: 'utf8', env: pythonEnv, maxBuffer: 1024 * 1024 * 10 });
+      // Если нашли демки локально
+      if (demosToParse.length > 0) {
+        console.log(`  Найдено демок для парсинга: ${demosToParse.length}`);
+        let combinedAwpyData = [];
+
+        for (const demoPath of demosToParse) {
+          console.log(`  Запускаем awpy для: ${path.basename(demoPath)}...`);
+          const tempAwpyPath = path.join(MATCHES_DIR, `${matchId}_awpy_${path.basename(demoPath, '.dem')}.json`);
           
-          if (stdout) console.log(`    [awpy] ${stdout.trim().replace(/\n/g, '\n    [awpy] ')}`);
-          if (stderr) console.error(`    [awpy error] ${stderr.trim()}`);
-        } catch (err) {
-          console.error(`  [!] Ошибка Python:\n${err.stdout || err.message}\n${err.stderr || ''}`);
+          try {
+            const cmd = `"${pythonExe}" "${scriptPath}" "${demoPath}" "${tempAwpyPath}"`;
+            const { stdout, stderr } = await execAsync(cmd, { encoding: 'utf8', env: pythonEnv, maxBuffer: 1024 * 1024 * 10 });
+            
+            if (stdout) console.log(`    [awpy] ${stdout.trim().replace(/\n/g, '\n    [awpy] ')}`);
+            if (stderr) console.error(`    [awpy error] ${stderr.trim()}`);
+            
+            if (await fs.pathExists(tempAwpyPath)) {
+              try {
+                const data = await fs.readJson(tempAwpyPath);
+                if (Array.isArray(data)) combinedAwpyData.push(...data);
+                await fs.remove(tempAwpyPath);
+              } catch (e) {
+                console.error(`  [!] Ошибка чтения JSON от awpy:`, e.message);
+              }
+            }
+          } catch (err) {
+            console.error(`  [!] Ошибка Python:\n${err.stdout || err.message}\n${err.stderr || ''}`);
+          }
         }
+
+        if (combinedAwpyData.length > 0) {
+          await fs.writeJson(awpyJsonPath, combinedAwpyData, { spaces: 2 });
+        }
+
       } else {
-        // Качаем с сайта
+        // Скачиваем с сайта
         await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await page.waitForTimeout(5000);
 
@@ -160,19 +238,33 @@ async function main() {
               const demoPath = path.join(DEMOS_DIR, `${matchId}.zip`);
               await download.saveAs(demoPath);
               console.log(`  Файл успешно скачан!`);
-              const extractedPath = extractDemoIfNeeded(demoPath);
               
-              if (extractedPath) {
-                console.log(`  Запускаем awpy...`);
+              const demosToParseDownload = extractDemoIfNeeded(demoPath);
+              let combinedAwpyDataDownload = [];
+              
+              for (const demoPath of demosToParseDownload) {
+                console.log(`  Запускаем awpy для: ${path.basename(demoPath)}...`);
+                const tempAwpyPath = path.join(MATCHES_DIR, `${matchId}_awpy_${path.basename(demoPath, '.dem')}.json`);
+                
                 try {
-                  const cmd = `"${pythonExe}" "${scriptPath}" "${extractedPath}" "${awpyJsonPath}"`;
+                  const cmd = `"${pythonExe}" "${scriptPath}" "${demoPath}" "${tempAwpyPath}"`;
                   const { stdout, stderr } = await execAsync(cmd, { encoding: 'utf8', env: pythonEnv, maxBuffer: 1024 * 1024 * 10 });
                   
                   if (stdout) console.log(`    [awpy] ${stdout.trim().replace(/\n/g, '\n    [awpy] ')}`);
                   if (stderr) console.error(`    [awpy error] ${stderr.trim()}`);
-                } catch (err) {
-                  console.error(`  [!] Ошибка Python:\n${err.stdout || err.message}\n${err.stderr || ''}`);
-                }
+                  
+                  if (await fs.pathExists(tempAwpyPath)) {
+                    try {
+                      const data = await fs.readJson(tempAwpyPath);
+                      if (Array.isArray(data)) combinedAwpyDataDownload.push(...data);
+                      await fs.remove(tempAwpyPath);
+                    } catch (e) {}
+                  }
+                } catch (err) {}
+              }
+              
+              if (combinedAwpyDataDownload.length > 0) {
+                await fs.writeJson(awpyJsonPath, combinedAwpyDataDownload, { spaces: 2 });
               }
             }
           } catch (err) {
@@ -191,24 +283,29 @@ async function main() {
          await page.waitForTimeout(3000);
       }
 
-      const mapNames = await page.evaluate(() => {
-        const text = document.body.innerText;
-        const matches = text.match(/(de_[a-z0-9_]+|cs_[a-z0-9_]+)/g);
-        return matches ? [...new Set(matches)] : [];
-      });
+      // Извлекаем реальное время матча
+      const matchDate = await extractMatchDate(page);
+      console.log(`  [*] Время матча: ${new Date(matchDate).toLocaleString('ru-RU')}`);
 
-      if (mapNames.length === 0 && awpyData) {
-        const awpyMaps = [...new Set(awpyData.map(p => p.map_name))].filter(Boolean);
-        if (awpyMaps.length > 0) mapNames.push(...awpyMaps);
-        else mapNames.push("unknown_map");
-      } else if (mapNames.length === 0) {
+      // === ИСПРАВЛЕНИЕ ДУБЛИКАТОВ КАРТ ===
+      let mapNames = [];
+      if (awpyData && Array.isArray(awpyData) && awpyData.length > 0) {
+        mapNames = [...new Set(awpyData.map(p => p.map_name).filter(Boolean))];
+      } else {
+        mapNames = await page.evaluate(() => {
+          const text = document.body.innerText;
+          const matches = text.match(/(de_[a-z0-9_]+|cs_[a-z0-9_]+)/g);
+          return matches ? [...new Set(matches)] : [];
+        });
+      }
+
+      if (mapNames.length === 0) {
         mapNames.push("unknown_map");
       }
 
       for (const mapName of mapNames) {
         if (collectedMaps.some(m => m.map === mapName)) continue;
 
-        // Вытаскиваем ВСЕ профили со страницы (не только с K/D/A)
         const domPlayers = await page.evaluate(() => {
           const result = [];
           const links = document.querySelectorAll('a[href*="/profile/"]');
@@ -235,14 +332,16 @@ async function main() {
 
         if (awpyData && Array.isArray(awpyData)) {
           let mapAwpyData = awpyData.filter(a => a.map_name && a.map_name.toLowerCase() === mapName.toLowerCase());
-          if (mapAwpyData.length === 0) mapAwpyData = awpyData;
+          
+          if (mapAwpyData.length === 0) {
+            console.log(`  [-] Карта ${mapName} не найдена в демках. Пропускаем.`);
+            continue;
+          }
 
           mapAwpyData.forEach(ap => {
             const apSteamId = ap.steamid ? String(ap.steamid) : null;
-            // Чистим ник от тегов (например, "LITE | St1gmat" -> "St1gmat")
             const cleanApName = ap.name ? String(ap.name).replace(/^.*\|\s*/, '').trim() : '';
 
-            // Ищем по SteamID, затем по нику
             let dp = domPlayers.find(p => apSteamId && String(p.id) === apSteamId);
             if (!dp) dp = domPlayers.find(p => 
               p.name.toLowerCase() === cleanApName.toLowerCase() || 
@@ -285,7 +384,7 @@ async function main() {
       }
 
       if (collectedMaps.length > 0) {
-        await fs.writeJson(outFile, { matchId, url, tournament: tournamentName, date: new Date().toISOString(), maps: collectedMaps }, { spaces: 2 });
+        await fs.writeJson(outFile, { matchId, url, tournament: tournamentName, date: matchDate, maps: collectedMaps }, { spaces: 2 });
         console.log(`  [+] Файл сохранён: ${matchId}.json`);
       } else {
         console.log(`  [-] Не удалось собрать ни одной карты.`);

@@ -1,6 +1,6 @@
 [
   {
-    "steamid": 76561198054507577,
+    "steamid": 76561198054507580,
     "name": "kvsmstr",
     "rounds_played": 23,
     "kills": 21,
@@ -32,7 +32,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561198872139873,
+    "steamid": 76561198872139870,
     "name": "LITE | 1lpk",
     "rounds_played": 23,
     "kills": 21,
@@ -64,7 +64,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561198042805941,
+    "steamid": 76561198042805940,
     "name": "PRADA_CODE",
     "rounds_played": 23,
     "kills": 18,
@@ -96,7 +96,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561198090688036,
+    "steamid": 76561198090688030,
     "name": "Kara7evich",
     "rounds_played": 23,
     "kills": 17,
@@ -128,7 +128,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561198843347969,
+    "steamid": 76561198843347970,
     "name": "sandor",
     "rounds_played": 23,
     "kills": 16,
@@ -160,7 +160,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561198197222927,
+    "steamid": 76561198197222930,
     "name": "goodipAN",
     "rounds_played": 23,
     "kills": 15,
@@ -192,7 +192,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561199542530681,
+    "steamid": 76561199542530690,
     "name": "LITE | AuraTeam",
     "rounds_played": 23,
     "kills": 14,
@@ -256,7 +256,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561198283381727,
+    "steamid": 76561198283381730,
     "name": "LITE | St1gmat",
     "rounds_played": 23,
     "kills": 10,
@@ -264,7 +264,7 @@
     "assists": 6,
     "flash_assists": 0,
     "headshot_kills": 5,
-    "headshot_pct": 50.0,
+    "headshot_pct": 50,
     "opening_kills": 0,
     "opening_deaths": 1,
     "traded_deaths": 2,
@@ -273,7 +273,7 @@
     "multikill_4k": 0,
     "multikill_5k": 0,
     "kast": 60.869564056396484,
-    "adr": 61.0,
+    "adr": 61,
     "clutches_played": 6,
     "clutches_won": 0,
     "clutch_1v1": 0,
@@ -296,7 +296,7 @@
     "assists": 4,
     "flash_assists": 0,
     "headshot_kills": 1,
-    "headshot_pct": 50.0,
+    "headshot_pct": 50,
     "opening_kills": 0,
     "opening_deaths": 3,
     "traded_deaths": 3,

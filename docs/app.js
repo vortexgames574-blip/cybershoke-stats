@@ -29,6 +29,31 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+// Функция для получения картинки карты
+function getMapImage(mapName) {
+  if (!mapName) return '';
+  // Базовый URL с картинками карт CS2
+  const baseUrl = 'https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/images/maps/';
+  const normalized = mapName.toLowerCase().trim();
+  
+  // Словарь для карт, у которых названия файлов отличаются
+  const mapAliases = {
+    'de_dust2': 'de_dust2.png',
+    'de_mirage': 'de_mirage.png',
+    'de_inferno': 'de_inferno.png',
+    'de_nuke': 'de_nuke.png',
+    'de_overpass': 'de_overpass.png',
+    'de_ancient': 'de_ancient.png',
+    'de_anubis': 'de_anubis.png',
+    'de_vertigo': 'de_vertigo.png',
+    'de_train': 'de_train.png',
+    'cs_office': 'cs_office.png',
+    'cs_italy': 'cs_italy.png'
+  };
+
+  return baseUrl + (mapAliases[normalized] || `${normalized}.png`);
+}
+
 function showToast(message, type = 'info') {
   let container = document.getElementById('toast-container');
   if (!container) {
@@ -213,12 +238,12 @@ function renderPodium() {
       <div class="podium-rank">${ranks[i]}</div>
       <img src="${avatar}" class="podium-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
       <div class="podium-name">${safeName}</div>
-      <div class="podium-rating" style="color:${escapeHtml(p.rankColor || 'var(--accent)')};">${p.elo ?? 1000} <span style="font-size:0.7rem;">ELO</span></div>
+      <div class="podium-rating" style="color:${escapeHtml(p.rankColor || 'var(--accent)')};">${p.avgRating ?? '—'} <span style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">Рейтинг</span></div>
     </div>`;
   }).join('');
 }
 
-// ===== ПОСЛЕДНИЕ МАТЧИ =====
+// ===== ПОСЛЕДНИЕ МАТЧИ (С КАРТИНКАМИ) =====
 function renderRecentMatches() {
   const container = document.getElementById('recent-matches-container');
   if (!container || !currentStats.recentMatches) return;
@@ -226,13 +251,26 @@ function renderRecentMatches() {
     container.innerHTML = '<p style="color:var(--text-muted);">Матчей пока нет</p>';
     return;
   }
+  
   container.innerHTML = currentStats.recentMatches.map(m => {
-    const date = new Date(m.date).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-    const maps = (m.maps || []).map(mm => escapeHtml(mm)).join(' · ');
+    // Оставляем только дату (без времени)
+    const date = new Date(m.date).toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' });
+    
+    // Генерируем HTML для каждой карты с картинкой
+    const mapsHtml = (m.maps || []).map(mapName => {
+      const imgUrl = getMapImage(mapName);
+      return `
+        <div class="map-badge">
+          <img src="${imgUrl}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(mapName)}&background=262f40&color=fff&rounded=true&size=32'">
+          <span>${escapeHtml(mapName)}</span>
+        </div>
+      `;
+    }).join('');
+
     return `<div class="recent-match-item" onclick="openMatchDetails('${escapeHtml(m.matchId)}')" style="cursor:pointer;">
       <div class="recent-match-left">
         <span class="recent-match-date">${escapeHtml(date)}</span>
-        <span class="recent-match-maps">${maps}</span>
+        <div class="recent-match-maps">${mapsHtml}</div>
       </div>
       <div class="recent-match-right"><span>Подробнее</span><span style="font-size:1.2rem;">→</span></div>
     </div>`;
@@ -328,8 +366,7 @@ function renderPlayersTable() {
       if (sortKey === 'deaths') return b.deaths - a.deaths;
       if (sortKey === 'kd') return b.kd - a.kd;
       if (sortKey === 'adr') return (b.avgAdr ?? 0) - (a.avgAdr ?? 0);
-      if (sortKey === 'rating') return (b.avgRating ?? 0) - (a.avgRating ?? 0);
-      return (b.elo ?? 1000) - (a.elo ?? 1000);
+      return (b.avgRating ?? 0) - (a.avgRating ?? 0);
     });
     
     tbody.innerHTML = players.map((p) => {
@@ -338,10 +375,10 @@ function renderPlayersTable() {
           <img src="${escapeHtml(p.avatar)}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
           <div><strong class="player-link" onclick="openProfile('${escapeHtml(p.id)}')">${escapeHtml(displayName(p))}</strong></div>
         </div></td>
-        <td><span style="color:${escapeHtml(p.rankColor || 'var(--accent)')}; font-weight:bold;">${p.elo ?? 1000}</span></td>
+        <td><span style="color:${escapeHtml(p.rankColor || 'var(--accent)')}; font-weight:bold;">${p.avgRating ?? '—'}</span></td>
         <td>${p.matches}</td>
         <td><strong>${escapeHtml(p.kd)}</strong></td>
-        <td style="color:var(--accent); font-weight:600;">${escapeHtml(p.avgRating ?? '—')}</td>
+        <td style="color:var(--accent); font-weight:600;">${escapeHtml(p.avgAdr ?? '—')}</td>
       </tr>`;
     }).join('');
   }
@@ -440,7 +477,6 @@ function openMatchDetails(matchId) {
                 const clickAction = isClickable ? `onclick="openProfile('${escapeHtml(finalId)}')"` : '';
                 const cursorStyle = isClickable ? 'cursor:pointer;' : '';
 
-                // ОКРУГЛЯЕМ ЗНАЧЕНИЯ
                 const adrStr = p.adr ? Number(p.adr).toFixed(1) : '—';
                 const kastStr = p.kast ? Math.round(p.kast) : '—';
                 const ratingStr = p.rating ? Number(p.rating).toFixed(2) : '—';
@@ -509,6 +545,7 @@ function initDuel() {
 function openProfile(playerId) {
   const p = currentStats.players.find(pl => pl.id === playerId);
   if (!p) return;
+  
   const img = document.getElementById('prof-avatar');
   img.src = p.avatar;
   img.onerror = function () {
@@ -516,13 +553,25 @@ function openProfile(playerId) {
   };
 
   document.getElementById('prof-name').innerHTML = `${escapeHtml(displayName(p))}
-    <span style="font-size:0.8rem; padding:2px 6px; border-radius:4px; background:${escapeHtml(p.rankColor || '#4d6bfe')}33; color:${escapeHtml(p.rankColor || '#4d6bfe')}; border:1px solid ${escapeHtml(p.rankColor || '#4d6bfe')}; margin-left:8px; white-space:nowrap;">${p.elo ?? 1000} ELO</span>`;
+    <span style="font-size:0.8rem; padding:2px 6px; border-radius:4px; background:${escapeHtml(p.rankColor || '#4d6bfe')}33; color:${escapeHtml(p.rankColor || '#4d6bfe')}; border:1px solid ${escapeHtml(p.rankColor || '#4d6bfe')}; margin-left:8px; white-space:nowrap;">${p.avgRating ?? '—'} Рейтинг</span>`;
 
   document.getElementById('prof-matches').innerText = p.matches;
-  document.getElementById('prof-kd').innerText = p.kd;
   document.getElementById('prof-rating').innerText = p.avgRating ?? '—';
+  document.getElementById('prof-kd').innerText = p.kd;
   document.getElementById('prof-adr').innerText = p.avgAdr ?? '—';
   document.getElementById('prof-kast').innerText = p.avgKast ?? '—';
+
+  const steamBtn = document.getElementById('steam-btn');
+  if (steamBtn) {
+    if (p.id && String(p.id).length > 10) {
+      steamBtn.style.display = 'inline-block';
+      steamBtn.onclick = () => {
+        window.open(`https://steamcommunity.com/profiles/${p.id}`, '_blank');
+      };
+    } else {
+      steamBtn.style.display = 'none';
+    }
+  }
 
   const faceitBtn = document.getElementById('faceit-btn');
   if (faceitBtn) {
@@ -575,12 +624,9 @@ function openProfile(playerId) {
   const history = [...(p.matchHistory || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
   
   tbody.innerHTML = history.map(h => {
-    const d = new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-    let eloHtml = '<span style="color:var(--text-muted);">0</span>';
-    if (h.eloChange > 0) eloHtml = `<span style="color:#10b981; font-weight:bold;">+${h.eloChange}</span>`;
-    if (h.eloChange < 0) eloHtml = `<span style="color:#ef4444; font-weight:bold;">${h.eloChange}</span>`;
-
-    // ОКРУГЛЯЕМ ЗНАЧЕНИЯ В ИСТОРИИ МАТЧЕЙ
+    // В истории матчей в профиле тоже можно убрать время, оставив только дату
+    const d = new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    
     const adrStr = h.adr ? Number(h.adr).toFixed(1) : '—';
     const kastStr = h.kast ? Math.round(h.kast) : '—';
     const ratingStr = h.rating ? Number(h.rating).toFixed(2) : '—';
@@ -594,7 +640,6 @@ function openProfile(playerId) {
       <td>${adrStr}</td>
       <td>${kastStr}</td>
       <td style="color:var(--accent); font-weight:600;">${ratingStr}</td>
-      <td>${eloHtml}</td>
     </tr>`;
   }).join('');
 

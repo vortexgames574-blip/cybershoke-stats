@@ -1,6 +1,6 @@
 [
   {
-    "steamid": 76561198090688036,
+    "steamid": 76561198090688030,
     "name": "Kara7evich",
     "rounds_played": 36,
     "kills": 38,
@@ -32,7 +32,7 @@
     "map_name": "de_cache"
   },
   {
-    "steamid": 76561198053530322,
+    "steamid": 76561198053530320,
     "name": "ZAZA_",
     "rounds_played": 36,
     "kills": 37,
@@ -64,7 +64,7 @@
     "map_name": "de_cache"
   },
   {
-    "steamid": 76561198872139873,
+    "steamid": 76561198872139870,
     "name": "LITE | 1lpk",
     "rounds_played": 36,
     "kills": 37,
@@ -96,7 +96,7 @@
     "map_name": "de_cache"
   },
   {
-    "steamid": 76561199109745015,
+    "steamid": 76561199109745010,
     "name": "q1nce_",
     "rounds_played": 36,
     "kills": 30,
@@ -128,7 +128,7 @@
     "map_name": "de_cache"
   },
   {
-    "steamid": 76561198983961745,
+    "steamid": 76561198983961740,
     "name": "Адмирал Борщенко",
     "rounds_played": 36,
     "kills": 27,
@@ -160,7 +160,7 @@
     "map_name": "de_cache"
   },
   {
-    "steamid": 76561199542530681,
+    "steamid": 76561199542530690,
     "name": "LITE | AuraTeam",
     "rounds_played": 36,
     "kills": 27,
@@ -192,7 +192,7 @@
     "map_name": "de_cache"
   },
   {
-    "steamid": 76561198042805941,
+    "steamid": 76561198042805940,
     "name": "PRADA_CODE",
     "rounds_played": 36,
     "kills": 23,
@@ -208,7 +208,7 @@
     "multikill_3k": 2,
     "multikill_4k": 0,
     "multikill_5k": 0,
-    "kast": 75.0,
+    "kast": 75,
     "adr": 68.33333587646484,
     "clutches_played": 2,
     "clutches_won": 0,
@@ -224,7 +224,7 @@
     "map_name": "de_cache"
   },
   {
-    "steamid": 76561198394184895,
+    "steamid": 76561198394184900,
     "name": "muts1",
     "rounds_played": 36,
     "kills": 21,
@@ -288,7 +288,7 @@
     "map_name": "de_cache"
   },
   {
-    "steamid": 76561198587515885,
+    "steamid": 76561198587515890,
     "name": "LITE | RJ",
     "rounds_played": 36,
     "kills": 20,
@@ -296,7 +296,7 @@
     "assists": 9,
     "flash_assists": 0,
     "headshot_kills": 13,
-    "headshot_pct": 65.0,
+    "headshot_pct": 65,
     "opening_kills": 2,
     "opening_deaths": 2,
     "traded_deaths": 7,

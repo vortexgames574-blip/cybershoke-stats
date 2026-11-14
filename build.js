@@ -125,11 +125,13 @@ async function fetchSteamAvatars(steamIds) {
   return result;
 }
 
-function getRank(elo) {
-  if (elo < 1000) return { name: 'Silver', color: '#8b96a5', icon: 'shield' };
-  if (elo < 1100) return { name: 'Green', color: '#10b981', icon: 'shield-check' };
-  if (elo < 1200) return { name: 'Blue', color: '#4d6bfe', icon: 'shield-plus' };
-  if (elo < 1300) return { name: 'Purple', color: '#a855f7', icon: 'gem' };
+// Ранги привязаны к среднему Рейтингу (HLTV)
+function getRank(avgRating) {
+  if (avgRating === null) return { name: 'Silver', color: '#8b96a5', icon: 'shield' };
+  if (avgRating < 0.9) return { name: 'Silver', color: '#8b96a5', icon: 'shield' };
+  if (avgRating < 1.05) return { name: 'Green', color: '#10b981', icon: 'shield-check' };
+  if (avgRating < 1.15) return { name: 'Blue', color: '#4d6bfe', icon: 'shield-plus' };
+  if (avgRating < 1.3) return { name: 'Purple', color: '#a855f7', icon: 'gem' };
   return { name: 'GEIMERI', color: '#ef4444', icon: 'crown' };
 }
 
@@ -175,7 +177,7 @@ function calculateStats(matches, steamAvatars) {
             id: pid, name: p.name, lastPlayed: match.date,
             matches: 0, kills: 0, deaths: 0, assists: 0,
             adrSum: 0, adrCount: 0, kastSum: 0, kastCount: 0, ratingSum: 0, ratingCount: 0,
-            history: [], matchHistory: [], elo: 1000
+            history: [], matchHistory: []
           });
         }
         const st = playerMap.get(pid);
@@ -203,14 +205,6 @@ function calculateStats(matches, steamAvatars) {
         }
         if (perf !== null) perf = +(Number(perf).toFixed(2));
 
-        let eloChange = 0;
-        if (perf !== null) {
-          const K = Math.max(5, 32 - (st.matches * 1.5));
-          eloChange = Math.round(K * (perf - 1.0) * 1.5);
-          eloChange = Math.max(-35, Math.min(35, eloChange));
-          st.elo += eloChange;
-        }
-
         if (k <= 50 && k > records.maxKills.value) records.maxKills = { value: k, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
         if (d <= 50 && d > records.maxDeaths.value) records.maxDeaths = { value: d, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
         if (adrVal !== null && adrVal <= 250 && adrVal > records.maxAdr.value) records.maxAdr = { value: adrVal, player: p.name, playerId: pid, map: mapName, date: match.date, matchId: match.matchId };
@@ -237,7 +231,7 @@ function calculateStats(matches, steamAvatars) {
         st.matchHistory.push({
           date: match.date, matchId: match.matchId, map: mapData.map,
           kills: k, deaths: d, assists: a,
-          adr: adrVal, kast: kastVal, rating: perf, eloChange
+          adr: adrVal, kast: kastVal, rating: perf
         });
       }
     }
@@ -249,12 +243,13 @@ function calculateStats(matches, steamAvatars) {
 
   const players = Array.from(playerMap.values()).map(p => {
     const kd = p.deaths > 0 ? +(p.kills / p.deaths).toFixed(2) : p.kills;
-    const rank = getRank(p.elo);
+    const avgRating = p.ratingCount > 0 ? +(p.ratingSum / p.ratingCount).toFixed(2) : null;
+    const rank = getRank(avgRating);
     return {
       ...p,
       avatar: getAvatar(p.id, p.name),
       kd,
-      avgRating: p.ratingCount > 0 ? +(p.ratingSum / p.ratingCount).toFixed(2) : null,
+      avgRating,
       avgAdr: p.adrCount > 0 ? +(p.adrSum / p.adrCount).toFixed(1) : null,
       avgKast: p.kastCount > 0 ? +(p.kastSum / p.kastCount).toFixed(1) : null,
       rankName: rank.name,
@@ -273,7 +268,8 @@ function calculateStats(matches, steamAvatars) {
     if (rec && rec.playerId && displayNameById.has(rec.playerId)) rec.player = displayNameById.get(rec.playerId);
   }
 
-  players.sort((a, b) => b.elo - a.elo);
+  // СОРТИРОВКА ПО РЕЙТИНГУ
+  players.sort((a, b) => (b.avgRating || 0) - (a.avgRating || 0));
 
   const formattedMapStats = Object.entries(mapStatsRaw).map(([map, data]) => {
     const topPlayers = Array.from(data.playersMap.values()).map(pl => ({
@@ -358,9 +354,7 @@ async function main() {
 
   log('info', `Всего матчей: ${allMatches.length}`);
 
-  // =========================================================================
-  // НОВАЯ ЛОГИКА: СКЛЕЙКА ИГРОКОВ ПО НИКНЕЙМУ (с очисткой тегов команд)
-  // =========================================================================
+  // СКЛЕЙКА ИГРОКОВ ПО НИКНЕЙМУ
   const normalizeName = (name) => {
     if (!name) return '';
     let clean = name.trim().toLowerCase();
@@ -374,10 +368,9 @@ async function main() {
     return clean;
   };
 
-  const nameToBestId = new Map(); // Очищенный ник -> Лучший ID
-  const bestDisplayNames = new Map(); // Очищенный ник -> Самый короткий оригинальный ник
+  const nameToBestId = new Map(); 
+  const bestDisplayNames = new Map(); 
 
-  // 1. Собираем данные
   for (const match of allMatches) {
     for (const map of match.maps || []) {
       for (const p of map.players || []) {
@@ -388,12 +381,10 @@ async function main() {
         const currentId = String(p.id || p.name);
         const existingId = nameToBestId.get(cleanName);
         
-        // Выбираем самый длинный ID (SteamID > короткий ID сайта)
         if (!existingId || currentId.length > existingId.length) {
           nameToBestId.set(cleanName, currentId);
         }
 
-        // Выбираем самый короткий ник для отображения (без тегов)
         const currentDisplay = bestDisplayNames.get(cleanName);
         if (!currentDisplay || p.name.length < currentDisplay.length) {
           bestDisplayNames.set(cleanName, p.name);
@@ -402,7 +393,6 @@ async function main() {
     }
   }
 
-  // 2. Применяем лучшие ID и ники ко всем матчам
   for (const match of allMatches) {
     for (const map of match.maps || []) {
       for (const p of map.players || []) {
@@ -415,7 +405,6 @@ async function main() {
     }
   }
 
-  // 3. Собираем реальные Steam ID для аватарок
   for (const match of allMatches) {
     for (const map of match.maps || []) {
       for (const p of map.players || []) {
@@ -425,9 +414,7 @@ async function main() {
       }
     }
   }
-  // =========================================================================
 
-  // ПОДСТАВЛЯЕМ ПРОКСИ-РЕЙТИНГ В СЫРЫЕ МАТЧИ (если демки не было)
   for (const match of allMatches) {
     if (!match.maps) continue;
     for (const map of match.maps) {

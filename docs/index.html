@@ -60,7 +60,7 @@
         <div class="grid-2col">
           <div class="col-left">
             <section class="glass-card interactive-card" data-aos="fade-up">
-              <div class="card-header"><h2>Пьедестал</h2><span class="header-hint">Топ-3 по ELO</span></div>
+              <div class="card-header"><h2>Пьедестал</h2><span class="header-hint">Топ-3 по Рейтингу</span></div>
               <div class="podium-grid" id="podium-container">
                 <div class="podium-card podium-2 skeleton"></div>
                 <div class="podium-card podium-1 skeleton"></div>
@@ -111,7 +111,6 @@
                 <div class="controls">
                   <input type="text" id="filter-name" class="input-search" placeholder="Поиск...">
                   <select id="sort-by" class="select-sort">
-                    <option value="elo">По ELO</option>
                     <option value="rating">По рейтингу</option>
                     <option value="kd">По K/D</option>
                     <option value="adr">По ADR</option>
@@ -121,7 +120,7 @@
               </div>
               <div class="table-container">
                 <table class="stats-table" id="players-table">
-                  <thead><tr><th>Игрок</th><th>ELO</th><th>Карты</th><th>K/D</th><th>Рейтинг</th></tr></thead>
+                  <thead><tr><th>Игрок</th><th>Рейтинг</th><th>Карты</th><th>K/D</th><th>ADR</th></tr></thead>
                   <tbody></tbody>
                 </table>
               </div>
@@ -208,9 +207,9 @@
 
           <div class="faq-list">
             <details class="faq-item">
-              <summary>Что такое ELO и как оно считается?</summary>
+              <summary>Как считается Рейтинг?</summary>
               <div class="faq-content">
-                ELO — это твой глобальный рейтинг. Ты начинаешь с 1000 очков. Если твой личный рейтинг за игру (Rating) выше 1.0 — ты забираешь ELO (до +35 за матч). Если ниже — теряешь. Со временем (после 30+ матчей) коэффициент уменьшается, чтобы топ не улетал в космос, а новички могли догнать.
+                Мы используем профессиональный рейтинг (HLTV 2.0). Он учитывает не только убийства и смерти, но и нанесенный урон (ADR), полезные действия (KAST), а также импакт — важность убийств (открытие раунда, клатчи). Это самый честный показатель игры.
               </div>
             </details>
 
@@ -231,14 +230,7 @@
             <details class="faq-item">
               <summary>Почему у меня в профиле 0 ассистов?</summary>
               <div class="faq-content">
-                Старый парсер брал ассисты из API, где их часто не было. Мы это починили — теперь парсер берёт K/D/A прямо из HTML-страницы матча (как ты видишь их на сайте). Если у тебя старые матчи с нулями — удали соответствующие JSON в <code>data/matches/</code> и запусти <code>npm run update</code>.
-              </div>
-            </details>
-
-            <details class="faq-item">
-              <summary>Почему в рекордах странные цифры?</summary>
-              <div class="faq-content">
-                Мы добавили <code>validateMap()</code>: если карта имеет абсурдные значения (суммарно > 500 смертей, у кого-то > 60 фрагов и т.п.), она полностью пропускается и не попадает в статистику. Если рекорд всё ещё выглядит странно — пиши в «Связь», перекачаем тот конкретный матч.
+                Старый парсер брал ассисты из API, где их часто не было. Мы это починили — теперь парсер берёт K/D/A прямо из HTML-страницы матча. Если у тебя старые матчи с нулями — удали соответствующие JSON в <code>data/matches/</code> и запусти <code>npm run update</code>.
               </div>
             </details>
 
@@ -278,14 +270,15 @@
       </div>
       <div class="profile-stats-grid">
         <div class="p-stat"><span>Карты</span><strong id="prof-matches">0</strong></div>
-        <div class="p-stat"><span>K/D</span><strong id="prof-kd">0</strong></div>
         <div class="p-stat"><span>Рейтинг</span><strong id="prof-rating">0</strong></div>
+        <div class="p-stat"><span>K/D</span><strong id="prof-kd">0</strong></div>
         <div class="p-stat"><span>ADR</span><strong id="prof-adr">0</strong></div>
         <div class="p-stat"><span>KAST</span><strong id="prof-kast">0</strong></div>
       </div>
-      <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+      <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
         <button id="share-btn" class="btn-primary" style="flex: 1;">Поделиться</button>
-        <button id="compare-btn" class="btn-primary" style="background: #10b981; flex: 1;">Сравнить с...</button>
+        <button id="compare-btn" class="btn-primary" style="background: #10b981; flex: 1;">Сравнить</button>
+        <button id="steam-btn" class="btn-primary" style="background: #171a21; flex: 1; border: 1px solid #2a3f5a;">Steam</button>
         <button id="faceit-btn" class="btn-primary" style="background: #ff5500; flex: 1;">FACEIT</button>
       </div>
 
@@ -298,7 +291,7 @@
       <div class="profile-history">
         <h3>История матчей</h3>
         <div class="table-container" style="max-height: 300px; overflow-y: auto;">
-          <table class="stats-table"><thead><tr><th>Дата</th><th>Карта</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Рейтинг</th><th>ELO</th></tr></thead><tbody id="prof-match-history"></tbody></table>
+          <table class="stats-table"><thead><tr><th>Дата</th><th>Карта</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Рейтинг</th></tr></thead><tbody id="prof-match-history"></tbody></table>
         </div>
       </div>
     </div>
@@ -398,27 +391,17 @@
   <script>
     if ('serviceWorker' in navigator) {
       let refreshing = false;
-
-      // Слушаем смену контроллера (когда новый SW активировался)
       navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (refreshing) return; // Защита от цикла перезагрузок
+        if (refreshing) return;
         refreshing = true;
-        window.location.reload(); // Автоматически перезагружаем страницу
+        window.location.reload();
       });
-
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
           .then((registration) => {
-            console.log('Service Worker успешно зарегистрирован:', registration.scope);
-            
-            // Проверяем обновления на сервере каждые 5 минут
-            setInterval(() => {
-              registration.update().catch(err => console.log('Ошибка проверки обновлений SW:', err));
-            }, 5 * 60 * 1000);
+            setInterval(() => { registration.update().catch(() => {}); }, 5 * 60 * 1000);
           })
-          .catch((error) => {
-            console.log('Ошибка регистрации Service Worker:', error);
-          });
+          .catch(() => {});
       });
     }
   </script>

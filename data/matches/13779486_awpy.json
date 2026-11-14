@@ -1,6 +1,6 @@
 [
   {
-    "steamid": 76561198053530322,
+    "steamid": 76561198053530320,
     "name": "ZAZA_",
     "rounds_played": 20,
     "kills": 25,
@@ -8,7 +8,7 @@
     "assists": 3,
     "flash_assists": 2,
     "headshot_kills": 10,
-    "headshot_pct": 40.0,
+    "headshot_pct": 40,
     "opening_kills": 6,
     "opening_deaths": 0,
     "traded_deaths": 2,
@@ -16,8 +16,8 @@
     "multikill_3k": 2,
     "multikill_4k": 1,
     "multikill_5k": 0,
-    "kast": 85.0,
-    "adr": 113.0,
+    "kast": 85,
+    "adr": 113,
     "clutches_played": 5,
     "clutches_won": 1,
     "clutch_1v1": 0,
@@ -32,7 +32,7 @@
     "map_name": "de_dust2"
   },
   {
-    "steamid": 76561199109745015,
+    "steamid": 76561199109745010,
     "name": "q1nce_",
     "rounds_played": 20,
     "kills": 22,
@@ -48,7 +48,7 @@
     "multikill_3k": 1,
     "multikill_4k": 0,
     "multikill_5k": 1,
-    "kast": 70.0,
+    "kast": 70,
     "adr": 105.94999694824219,
     "clutches_played": 1,
     "clutches_won": 1,
@@ -64,7 +64,7 @@
     "map_name": "de_dust2"
   },
   {
-    "steamid": 76561198394184895,
+    "steamid": 76561198394184900,
     "name": "muts1",
     "rounds_played": 20,
     "kills": 15,
@@ -80,8 +80,8 @@
     "multikill_3k": 0,
     "multikill_4k": 1,
     "multikill_5k": 0,
-    "kast": 70.0,
-    "adr": 88.0,
+    "kast": 70,
+    "adr": 88,
     "clutches_played": 2,
     "clutches_won": 0,
     "clutch_1v1": 0,
@@ -96,7 +96,7 @@
     "map_name": "de_dust2"
   },
   {
-    "steamid": 76561198843347969,
+    "steamid": 76561198843347970,
     "name": "sandor",
     "rounds_played": 20,
     "kills": 15,
@@ -112,7 +112,7 @@
     "multikill_3k": 2,
     "multikill_4k": 0,
     "multikill_5k": 0,
-    "kast": 70.0,
+    "kast": 70,
     "adr": 95.19999694824219,
     "clutches_played": 2,
     "clutches_won": 1,
@@ -128,7 +128,7 @@
     "map_name": "de_dust2"
   },
   {
-    "steamid": 76561198283381727,
+    "steamid": 76561198283381730,
     "name": "LITE | St1gmat",
     "rounds_played": 20,
     "kills": 14,
@@ -144,7 +144,7 @@
     "multikill_3k": 3,
     "multikill_4k": 0,
     "multikill_5k": 0,
-    "kast": 50.0,
+    "kast": 50,
     "adr": 61.70000076293945,
     "clutches_played": 2,
     "clutches_won": 0,
@@ -160,7 +160,7 @@
     "map_name": "de_dust2"
   },
   {
-    "steamid": 76561198054507577,
+    "steamid": 76561198054507580,
     "name": "kvsmstr",
     "rounds_played": 20,
     "kills": 12,
@@ -176,7 +176,7 @@
     "multikill_3k": 0,
     "multikill_4k": 0,
     "multikill_5k": 0,
-    "kast": 80.0,
+    "kast": 80,
     "adr": 87.94999694824219,
     "clutches_played": 5,
     "clutches_won": 0,
@@ -192,7 +192,7 @@
     "map_name": "de_dust2"
   },
   {
-    "steamid": 76561198197222927,
+    "steamid": 76561198197222930,
     "name": "goodipAN",
     "rounds_played": 20,
     "kills": 11,
@@ -208,7 +208,7 @@
     "multikill_3k": 0,
     "multikill_4k": 0,
     "multikill_5k": 0,
-    "kast": 65.0,
+    "kast": 65,
     "adr": 62.70000076293945,
     "clutches_played": 3,
     "clutches_won": 0,
@@ -240,7 +240,7 @@
     "multikill_3k": 1,
     "multikill_4k": 0,
     "multikill_5k": 0,
-    "kast": 50.0,
+    "kast": 50,
     "adr": 66.6500015258789,
     "clutches_played": 2,
     "clutches_won": 0,
@@ -256,7 +256,7 @@
     "map_name": "de_dust2"
   },
   {
-    "steamid": 76561198983961745,
+    "steamid": 76561198983961740,
     "name": "Адмирал Борщенко",
     "rounds_played": 20,
     "kills": 11,
@@ -272,7 +272,7 @@
     "multikill_3k": 0,
     "multikill_4k": 0,
     "multikill_5k": 0,
-    "kast": 85.0,
+    "kast": 85,
     "adr": 60.75,
     "clutches_played": 1,
     "clutches_won": 0,
@@ -288,7 +288,7 @@
     "map_name": "de_dust2"
   },
   {
-    "steamid": 76561198587515885,
+    "steamid": 76561198587515890,
     "name": "LITE | RJ",
     "rounds_played": 20,
     "kills": 8,
@@ -296,7 +296,7 @@
     "assists": 5,
     "flash_assists": 0,
     "headshot_kills": 4,
-    "headshot_pct": 50.0,
+    "headshot_pct": 50,
     "opening_kills": 1,
     "opening_deaths": 3,
     "traded_deaths": 1,
@@ -304,7 +304,7 @@
     "multikill_3k": 0,
     "multikill_4k": 0,
     "multikill_5k": 0,
-    "kast": 65.0,
+    "kast": 65,
     "adr": 52.79999923706055,
     "clutches_played": 0,
     "clutches_won": 0,

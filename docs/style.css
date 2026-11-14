@@ -125,7 +125,42 @@ h2 { font-size: 1.1rem; font-weight: 600; color: #fff; }
 .recent-match-item:hover { border-color: var(--accent); transform: translateX(4px); box-shadow: 0 4px 12px rgba(77, 107, 254, 0.15); }
 .recent-match-left { display: flex; flex-direction: column; gap: 4px; }
 .recent-match-date { font-size: 0.75rem; color: var(--text-muted); }
-.recent-match-maps { font-size: 0.9rem; font-weight: 600; color: #fff; }
+
+/* НОВЫЕ СТИЛИ ДЛЯ КАРТ В ПОСЛЕДНИХ МАТЧАХ */
+.recent-match-maps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.map-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 4px 8px 4px 4px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  transition: border-color 0.2s;
+}
+
+.recent-match-item:hover .map-badge {
+  border-color: var(--accent);
+}
+
+.map-badge img {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  object-fit: cover;
+  background: #000; /* Заглушка, пока картинка грузится */
+}
+/* --------------------------------------------------- */
+
 .recent-match-right { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--accent); }
 
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); overflow-y: auto; backdrop-filter: blur(5px); }

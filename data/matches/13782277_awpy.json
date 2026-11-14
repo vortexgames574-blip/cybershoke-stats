@@ -1,6 +1,6 @@
 [
   {
-    "steamid": 76561198283381727,
+    "steamid": 76561198283381730,
     "name": "LITE | St1gmat",
     "rounds_played": 21,
     "kills": 24,
@@ -8,7 +8,7 @@
     "assists": 8,
     "flash_assists": 0,
     "headshot_kills": 12,
-    "headshot_pct": 50.0,
+    "headshot_pct": 50,
     "opening_kills": 2,
     "opening_deaths": 1,
     "traded_deaths": 3,
@@ -32,7 +32,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561198843347969,
+    "steamid": 76561198843347970,
     "name": "sandor",
     "rounds_played": 21,
     "kills": 20,
@@ -64,7 +64,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561198015424675,
+    "steamid": 76561198015424670,
     "name": "tolya800x600",
     "rounds_played": 21,
     "kills": 19,
@@ -96,7 +96,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561199022192304,
+    "steamid": 76561199022192300,
     "name": "LITE | Pizdets_tip",
     "rounds_played": 21,
     "kills": 18,
@@ -124,11 +124,11 @@
     "utility_damage": 0,
     "flashes_thrown": 2,
     "enemies_flashed": 0,
-    "flash_duration_dealt": 0.0,
+    "flash_duration_dealt": 0,
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561198054507577,
+    "steamid": 76561198054507580,
     "name": "kvsmstr",
     "rounds_played": 21,
     "kills": 17,
@@ -160,7 +160,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561198849641921,
+    "steamid": 76561198849641920,
     "name": "suffixx",
     "rounds_played": 21,
     "kills": 13,
@@ -192,7 +192,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561198197222927,
+    "steamid": 76561198197222930,
     "name": "goodipAN",
     "rounds_played": 21,
     "kills": 11,
@@ -224,7 +224,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561199144510024,
+    "steamid": 76561199144510020,
     "name": "LITE | 63dealer",
     "rounds_played": 21,
     "kills": 11,
@@ -256,7 +256,7 @@
     "map_name": "de_inferno"
   },
   {
-    "steamid": 76561198158360502,
+    "steamid": 76561198158360500,
     "name": "✪ AlikD*ck ✪",
     "rounds_played": 21,
     "kills": 9,
@@ -305,7 +305,7 @@
     "multikill_4k": 0,
     "multikill_5k": 0,
     "kast": 61.904762268066406,
-    "adr": 54.0,
+    "adr": 54,
     "clutches_played": 3,
     "clutches_won": 1,
     "clutch_1v1": 1,

@@ -1,6 +1,6 @@
 [
   {
-    "steamid": 76561198872139873,
+    "steamid": 76561198872139870,
     "name": "LITE | 1lpk",
     "rounds_played": 22,
     "kills": 21,
@@ -32,7 +32,7 @@
     "map_name": "de_anubis"
   },
   {
-    "steamid": 76561199542530681,
+    "steamid": 76561199542530690,
     "name": "LITE | AuraTeam",
     "rounds_played": 22,
     "kills": 21,
@@ -49,7 +49,7 @@
     "multikill_4k": 0,
     "multikill_5k": 0,
     "kast": 77.2727279663086,
-    "adr": 122.0,
+    "adr": 122,
     "clutches_played": 0,
     "clutches_won": 0,
     "clutch_1v1": 0,
@@ -64,7 +64,7 @@
     "map_name": "de_anubis"
   },
   {
-    "steamid": 76561198090688036,
+    "steamid": 76561198090688030,
     "name": "Kara7evich",
     "rounds_played": 22,
     "kills": 19,
@@ -96,7 +96,7 @@
     "map_name": "de_anubis"
   },
   {
-    "steamid": 76561198849641921,
+    "steamid": 76561198849641920,
     "name": "suffixx",
     "rounds_played": 22,
     "kills": 17,
@@ -128,7 +128,7 @@
     "map_name": "de_anubis"
   },
   {
-    "steamid": 76561198158360502,
+    "steamid": 76561198158360500,
     "name": "✪ AlikD*ck ✪",
     "rounds_played": 22,
     "kills": 16,
@@ -160,7 +160,7 @@
     "map_name": "de_anubis"
   },
   {
-    "steamid": 76561198015424675,
+    "steamid": 76561198015424670,
     "name": "tolya800x600",
     "rounds_played": 22,
     "kills": 13,
@@ -188,11 +188,11 @@
     "utility_damage": 150,
     "flashes_thrown": 3,
     "enemies_flashed": 0,
-    "flash_duration_dealt": 0.0,
+    "flash_duration_dealt": 0,
     "map_name": "de_anubis"
   },
   {
-    "steamid": 76561199144510024,
+    "steamid": 76561199144510020,
     "name": "LITE | 63dealer",
     "rounds_played": 22,
     "kills": 13,
@@ -256,7 +256,7 @@
     "map_name": "de_anubis"
   },
   {
-    "steamid": 76561198042805941,
+    "steamid": 76561198042805940,
     "name": "PRADA_CODE",
     "rounds_played": 22,
     "kills": 11,
@@ -288,7 +288,7 @@
     "map_name": "de_anubis"
   },
   {
-    "steamid": 76561199022192304,
+    "steamid": 76561199022192300,
     "name": "LITE | Pizdets_tip",
     "rounds_played": 22,
     "kills": 9,
