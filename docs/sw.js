@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = 'geimeri-stats-v30'; // <--- ПОДНЯЛИ ВЕРСИЮ
+const CACHE_NAME = 'geimeri-stats-v40'; // <--- ПОДНЯЛИ ВЕРСИЮ
 const ASSETS = [
   './',
   './index.html',
