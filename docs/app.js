@@ -95,6 +95,8 @@ function initTabs() {
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = document.querySelectorAll('.tab-content');
 
+  if (!tabs.length || !contents.length) return;
+
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const target = tab.dataset.tab;
@@ -167,14 +169,9 @@ async function loadData(retry = 2) {
 
 function renderAll() {
   try {
-<<<<<<< HEAD
-    document.getElementById('meta-info').innerHTML =
-      `Матчей: <b>${currentStats.recentMatches ? currentStats.recentMatches.length : 0}</b>`;
-=======
     const matchCount = currentStats.totalMatches !== undefined ? currentStats.totalMatches : (currentStats.recentMatches ? currentStats.recentMatches.length : 0);
     document.getElementById('meta-info').innerHTML = `Матчей: <b>${matchCount}</b>`;
 
->>>>>>> parent of 9c1f963 (123)
     if (currentStats.funStats) {
       document.getElementById('stat-kills').innerText = currentStats.funStats.totalKills || 0;
       document.getElementById('stat-deaths').innerText = currentStats.funStats.totalDeaths || 0;
@@ -221,7 +218,7 @@ function renderPodium() {
   }).join('');
 }
 
-// ===== ПОСЛЕДНИЕ МАТЧИ (модалка) =====
+// ===== ПОСЛЕДНИЕ МАТЧИ =====
 function renderRecentMatches() {
   const container = document.getElementById('recent-matches-container');
   if (!container || !currentStats.recentMatches) return;
@@ -334,20 +331,14 @@ function renderPlayersTable() {
       if (sortKey === 'rating') return (b.avgRating ?? 0) - (a.avgRating ?? 0);
       return (b.elo ?? 1000) - (a.elo ?? 1000);
     });
+    
     tbody.innerHTML = players.map((p) => {
-      let formText = '';
-      if (p.form === 'hot') formText = '<span style="color:#10b981;">В форме</span>';
-      else if (p.form === 'cold') formText = '<span style="color:#ef4444;">Спад</span>';
-      else if (p.form === 'new') formText = '<span style="color:#f59e0b;">Мало данных</span>';
-      else formText = '<span style="color:var(--text-muted);">Стабильно</span>';
-
       return `<tr>
         <td><div class="player-cell">
           <img src="${escapeHtml(p.avatar)}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
           <div><strong class="player-link" onclick="openProfile('${escapeHtml(p.id)}')">${escapeHtml(displayName(p))}</strong></div>
         </div></td>
         <td><span style="color:${escapeHtml(p.rankColor || 'var(--accent)')}; font-weight:bold;">${p.elo ?? 1000}</span></td>
-        <td>${formText}</td>
         <td>${p.matches}</td>
         <td><strong>${escapeHtml(p.kd)}</strong></td>
         <td style="color:var(--accent); font-weight:600;">${escapeHtml(p.avgRating ?? '—')}</td>
@@ -575,7 +566,6 @@ function openProfile(playerId) {
     </tr>`;
   }).join('');
 
-  // Line chart
   const canvas = document.getElementById('prof-chart');
   if (profChart) { profChart.destroy(); profChart = null; }
   if (p.history && p.history.length > 1) {
@@ -603,7 +593,6 @@ function openProfile(playerId) {
     });
   }
 
-  // Radar
   const radarCanvas = document.getElementById('prof-radar-chart');
   if (radarCanvas) {
     if (profRadarChart) { profRadarChart.destroy(); profRadarChart = null; }
@@ -741,9 +730,6 @@ function mapPlayerCompositeScore(player, mapEntry, w) {
 function getPlaystyle(p) {
   if (!p || p.matches < 3) return 'Универсал';
   const adr = p.avgAdr || 0;
-<<<<<<< HEAD
-  const kd = p.kd || 0
-=======
   const kd = p.kd || 0;
   const kast = p.avgKast || 0;
   if (adr >= 85 && kd >= 1.1) return 'Фраггер';
@@ -1539,4 +1525,3 @@ document.addEventListener('DOMContentLoaded', () => {
   initBalancer();
   initBeginnerMode();
 });
->>>>>>> parent of 9c1f963 (123)

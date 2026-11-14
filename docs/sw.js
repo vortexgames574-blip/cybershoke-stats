@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-// Service worker — офлайн-кэш основных ресурсов
-const CACHE_NAME = 'geimeri-stats-v28';
-=======
 // sw.js
 const CACHE_NAME = 'geimeri-stats-v30'; // <--- ПОДНЯЛИ ВЕРСИЮ
->>>>>>> parent of 9c1f963 (123)
 const ASSETS = [
   './',
   './index.html',
@@ -36,27 +31,19 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
 
-<<<<<<< HEAD
-=======
   // НЕ КЭШИРУЕМ ЧУЖИЕ САЙТЫ (CDN скрипты, шрифты, аватарки Steam)
   if (!e.request.url.startsWith(self.location.origin)) return;
 
->>>>>>> parent of 9c1f963 (123)
   // Стата — сначала сеть, потом кэш
   if (e.request.url.includes('/data/stats.json')) {
     e.respondWith(
       fetch(e.request)
         .then(res => {
-<<<<<<< HEAD
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-=======
           if (!res || !res.ok) return res;
           try {
             const clone = res.clone();
             caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
           } catch (err) {}
->>>>>>> parent of 9c1f963 (123)
           return res;
         })
         .catch(() => caches.match(e.request))
@@ -64,19 +51,6 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-<<<<<<< HEAD
-  // Остальное — cache-first
-  e.respondWith(
-    caches.match(e.request).then(cached =>
-      cached || fetch(e.request).then(res => {
-        if (res.ok) {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-        }
-        return res;
-      })
-    )
-=======
   // Остальное (свои файлы) — cache-first
   e.respondWith(
     caches.match(e.request).then(cached => {
@@ -91,6 +65,5 @@ self.addEventListener('fetch', (e) => {
         return res;
       });
     })
->>>>>>> parent of 9c1f963 (123)
   );
 });
