@@ -19,256 +19,267 @@
 <body>
   <div class="bg-animation"></div>
 
-  <div class="app-container">
-    <header class="header">
-      <div class="logo">
+  <div class="app-layout">
+    <!-- БОКОВОЕ МЕНЮ (ДЛЯ ПК) -->
+    <aside class="sidebar">
+      <div class="logo sidebar-logo">
         <span class="logo-text">GEIMERI</span>
         <span class="logo-badge">CS2</span>
       </div>
-      <div class="header-controls">
-        <select id="tournament-select" class="select-tournament"></select>
-        <div id="meta-info" class="meta-info">Загрузка...</div>
-        <button id="feedback-btn" class="btn-outline" title="Обратная связь">
-          <i data-lucide="message-square" style="width:16px; height:16px;"></i> Связь
-        </button>
-        <button id="beginner-toggle" class="btn-outline" title="Гид">
-          <i data-lucide="help-circle" style="width:16px; height:16px;"></i> Гид
-        </button>
+      
+      <nav class="tabs-nav">
+        <button class="tab-btn active" data-tab="home"><i data-lucide="home"></i> Главная</button>
+        <button class="tab-btn" data-tab="overview"><i data-lucide="layout-dashboard"></i> Обзор</button>
+        <button class="tab-btn" data-tab="players"><i data-lucide="users"></i> Игроки</button>
+        <button class="tab-btn" data-tab="maps"><i data-lucide="map"></i> Карты</button>
+        <button class="tab-btn" data-tab="balancer"><i data-lucide="git-merge"></i> Балансировщик</button>
+        <button class="tab-btn" data-tab="draft"><i data-lucide="users"></i> Драфт 4х</button>
+        <button class="tab-btn" data-tab="faq"><i data-lucide="help-circle"></i> FAQ</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="feedback-btn" class="btn-outline" style="width: 100%;"><i data-lucide="message-square"></i> Обратная связь</button>
       </div>
-    </header>
+    </aside>
 
-    <nav class="tabs-nav">
-      <button class="tab-btn active" data-tab="home"><i data-lucide="home"></i> Главная</button>
-      <button class="tab-btn" data-tab="overview"><i data-lucide="layout-dashboard"></i> Обзор</button>
-      <button class="tab-btn" data-tab="players"><i data-lucide="users"></i> Игроки</button>
-      <button class="tab-btn" data-tab="maps"><i data-lucide="map"></i> Карты</button>
-      <button class="tab-btn" data-tab="balancer"><i data-lucide="git-merge"></i> Балансировщик 5х5</button>
-      <button class="tab-btn" data-tab="draft"><i data-lucide="users"></i> Драфт 4х</button>
-      <button class="tab-btn" data-tab="faq"><i data-lucide="help-circle"></i> FAQ</button>
-    </nav>
-
-    <main class="main-content">
-      <!-- ГЛАВНАЯ -->
-      <div class="tab-content active" id="tab-home">
-        <section class="glass-card interactive-card">
-          <div id="home-winners-root"></div>
-        </section>
-      </div>
-
-      <!-- ОБЗОР -->
-      <div class="tab-content" id="tab-overview">
-        <div class="grid-2col">
-          <div class="col-left">
-            <section class="glass-card interactive-card" data-aos="fade-up">
-              <div class="card-header"><h2>Пьедестал</h2><span class="header-hint">Топ-3 по ELO</span></div>
-              <div class="podium-grid" id="podium-container">
-                <div class="podium-card podium-2 skeleton"></div>
-                <div class="podium-card podium-1 skeleton"></div>
-                <div class="podium-card podium-3 skeleton"></div>
-              </div>
-            </section>
-            <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="100">
-              <div class="card-header"><h2>Последние матчи</h2></div>
-              <div id="recent-matches-container" class="recent-matches-list">
-                <div class="skeleton-line"></div>
-                <div class="skeleton-line"></div>
-                <div class="skeleton-line"></div>
-              </div>
-            </section>
-            <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="200">
-              <div class="card-header"><h2>Рекорды за карту</h2><span class="header-hint">Нажми на карточку</span></div>
-              <div class="fun-stats-grid">
-                <div class="fun-stat-box record-card interactive-box" id="card-rec-kills"><div class="fun-val" id="rec-max-kills">—</div><div class="fun-desc" id="rec-max-kills-desc">Нет данных</div><div class="record-hint">Макс. убийств</div></div>
-                <div class="fun-stat-box record-card interactive-box" id="card-rec-deaths"><div class="fun-val" id="rec-max-deaths" style="color: #ef4444;">—</div><div class="fun-desc" id="rec-max-deaths-desc">Нет данных</div><div class="record-hint">Макс. смертей</div></div>
-                <div class="fun-stat-box record-card interactive-box" id="card-rec-adr"><div class="fun-val" id="rec-max-adr" style="color: #10b981;">—</div><div class="fun-desc" id="rec-max-adr-desc">Нет данных</div><div class="record-hint">Макс. ADR</div></div>
-              </div>
-            </section>
-            <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="300">
-              <div class="card-header"><h2>Интересные факты</h2></div>
-              <div class="fun-facts-grid" id="fun-facts-container"></div>
-            </section>
-          </div>
-          <div class="col-right">
-            <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="100">
-              <div class="card-header"><h2>Общая статистика</h2></div>
-              <div class="fun-stats-grid vertical">
-                <div class="fun-stat-box"><div class="fun-val" id="stat-kills">0</div><div class="fun-desc">Всего убийств</div></div>
-                <div class="fun-stat-box"><div class="fun-val" id="stat-deaths">0</div><div class="fun-desc">Всего смертей</div></div>
-                <div class="fun-stat-box"><div class="fun-val" id="stat-hours">0</div><div class="fun-desc">Часов в игре</div></div>
-              </div>
-            </section>
-          </div>
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <div class="content-wrapper">
+      <header class="header">
+        <div class="header-controls">
+          <select id="tournament-select" class="select-tournament"></select>
+          <div id="meta-info" class="meta-info">Загрузка...</div>
+          <button id="beginner-toggle" class="btn-outline hide-mobile" title="Гид" style="margin-left: auto;">
+            <i data-lucide="help-circle" style="width:16px; height:16px;"></i> Гид
+          </button>
         </div>
-      </div>
+      </header>
 
-      <!-- ИГРОКИ -->
-      <div class="tab-content" id="tab-players">
-        <div class="grid-2col">
-          <div class="col-left">
-            <section class="glass-card interactive-card">
-              <div class="card-header">
-                <h2>Сводная статистика</h2>
-                <div class="controls">
-                  <input type="text" id="filter-name" class="input-search" placeholder="Поиск...">
-                  <select id="sort-by" class="select-sort">
-                    <option value="elo">По ELO</option>
-                    <option value="rating">По рейтингу</option>
-                    <option value="kd">По K/D</option>
-                    <option value="adr">По ADR</option>
-                    <option value="deaths">По смертям</option>
-                  </select>
+      <main class="main-content">
+        <!-- ГЛАВНАЯ -->
+        <div class="tab-content active" id="tab-home">
+          <section class="glass-card interactive-card" style="padding: 0; overflow: hidden;">
+            <div id="home-winners-root"></div>
+          </section>
+        </div>
+
+        <!-- ОБЗОР -->
+        <div class="tab-content" id="tab-overview">
+          <div class="grid-2col">
+            <div class="col-left">
+              <section class="glass-card interactive-card" data-aos="fade-up">
+                <div class="card-header"><h2>Пьедестал</h2><span class="header-hint">Топ-3 по ELO</span></div>
+                <div class="podium-grid" id="podium-container">
+                  <div class="podium-card podium-2 skeleton"></div>
+                  <div class="podium-card podium-1 skeleton"></div>
+                  <div class="podium-card podium-3 skeleton"></div>
                 </div>
-              </div>
-              <div class="table-container">
-                <table class="stats-table" id="players-table">
-                  <thead><tr><th>Игрок</th><th>ELO</th><th>Карты</th><th>K/D</th><th>Рейтинг</th></tr></thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </section>
-          </div>
-          <div class="col-right">
-            <section class="glass-card interactive-card" id="duel-section">
-              <div class="card-header"><h2>Сравнение игроков</h2></div>
-              <div class="duel-selects">
-                <select id="duel-p1" class="select-sort" style="width: 100%;"></select>
-                <div class="vs-text">VS</div>
-                <select id="duel-p2" class="select-sort" style="width: 100%;"></select>
-              </div>
-              <button id="duel-btn" class="btn-primary">Сравнить</button>
-              <div id="duel-result" class="duel-result"></div>
-            </section>
+              </section>
+              <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-header"><h2>Последние матчи</h2></div>
+                <div id="recent-matches-container" class="recent-matches-list">
+                  <div class="skeleton-line"></div>
+                  <div class="skeleton-line"></div>
+                  <div class="skeleton-line"></div>
+                </div>
+              </section>
+              <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-header"><h2>Рекорды за карту</h2><span class="header-hint">Нажми на карточку</span></div>
+                <div class="fun-stats-grid">
+                  <div class="fun-stat-box record-card interactive-box" id="card-rec-kills"><div class="fun-val" id="rec-max-kills">—</div><div class="fun-desc" id="rec-max-kills-desc">Нет данных</div><div class="record-hint">Макс. убийств</div></div>
+                  <div class="fun-stat-box record-card interactive-box" id="card-rec-deaths"><div class="fun-val" id="rec-max-deaths" style="color: #ef4444;">—</div><div class="fun-desc" id="rec-max-deaths-desc">Нет данных</div><div class="record-hint">Макс. смертей</div></div>
+                  <div class="fun-stat-box record-card interactive-box" id="card-rec-adr"><div class="fun-val" id="rec-max-adr" style="color: #10b981;">—</div><div class="fun-desc" id="rec-max-adr-desc">Нет данных</div><div class="record-hint">Макс. ADR</div></div>
+                </div>
+              </section>
+            </div>
+            <div class="col-right">
+              <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-header"><h2>Общая статистика</h2></div>
+                <div class="fun-stats-grid vertical">
+                  <div class="fun-stat-box"><div class="fun-val" id="stat-kills">0</div><div class="fun-desc">Всего убийств</div></div>
+                  <div class="fun-stat-box"><div class="fun-val" id="stat-deaths">0</div><div class="fun-desc">Всего смертей</div></div>
+                  <div class="fun-stat-box"><div class="fun-val" id="stat-hours">0</div><div class="fun-desc">Часов в игре</div></div>
+                </div>
+              </section>
+              <section class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-header"><h2>Интересные факты</h2></div>
+                <div class="fun-facts-grid" id="fun-facts-container"></div>
+              </section>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- КАРТЫ -->
-      <div class="tab-content" id="tab-maps">
-        <section class="glass-card interactive-card">
-          <div class="card-header"><h2>Статистика карт</h2><span class="header-hint">Нажми на строку</span></div>
-          <div class="table-container">
-            <table class="stats-table" id="maps-table">
-              <thead><tr>
-                <th class="sortable" data-sort="map">Карта <span class="sort-arrow">⬍</span></th>
-                <th class="sortable" data-sort="matches">Игр <span class="sort-arrow">⬍</span></th>
-                <th class="sortable" data-sort="avgKd">Ср. K/D <span class="sort-arrow">⬍</span></th>
-                <th class="sortable" data-sort="avgRating">Ср. Рейтинг <span class="sort-arrow">⬍</span></th>
-              </tr></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </section>
-      </div>
-
-      <!-- БАЛАНСИРОВЩИК -->
-      <div class="tab-content" id="tab-balancer">
-        <section class="glass-card interactive-card">
-          <div class="card-header"><h2>Балансировщик 5х5</h2></div>
-          <p class="text-muted mb-10">Соберите 10 игроков для разделения на 2 команды.</p>
-          <button id="open-balancer-btn" class="btn-primary">Открыть балансировщик</button>
-        </section>
-      </div>
-
-      <!-- ДРАФТ -->
-      <div class="tab-content" id="tab-draft">
-        <section class="glass-card interactive-card" style="max-width: 900px; margin: 0 auto;">
-          <div class="card-header"><h2>Создать 4 команды</h2></div>
-          <p class="text-muted mb-10">Сначала добавьте участников на этот турнир (выбирая из базы или вписывая новые ники). Затем выберите капитанов и соберите команды.</p>
-
-          <div style="background: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-            <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-              <input type="text" id="draft-search" class="input-search" placeholder="Начни вводить ник из базы или впиши новый..." style="flex: 1;">
-              <button id="draft-add-btn" class="btn-primary" style="width: auto; padding: 0 20px;">Добавить</button>
+        <!-- ИГРОКИ -->
+        <div class="tab-content" id="tab-players">
+          <div class="grid-2col">
+            <div class="col-left">
+              <section class="glass-card interactive-card">
+                <div class="card-header">
+                  <h2>Сводная статистика</h2>
+                  <div class="controls">
+                    <input type="text" id="filter-name" class="input-search" placeholder="Поиск...">
+                    <select id="sort-by" class="select-sort">
+                      <option value="elo">По ELO</option>
+                      <option value="rating">По рейтингу</option>
+                      <option value="kd">По K/D</option>
+                      <option value="adr">По ADR</option>
+                      <option value="deaths">По смертям</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="table-container">
+                  <table class="stats-table" id="players-table">
+                    <thead><tr><th>Игрок</th><th>ELO</th><th>Карты</th><th>K/D</th><th>Рейтинг</th></tr></thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </section>
             </div>
-            <div id="draft-participants-list" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+            <div class="col-right">
+              <section class="glass-card interactive-card" id="duel-section">
+                <div class="card-header"><h2>Сравнение игроков</h2></div>
+                <div class="duel-selects">
+                  <select id="duel-p1" class="select-sort" style="width: 100%;"></select>
+                  <div class="vs-text">VS</div>
+                  <select id="duel-p2" class="select-sort" style="width: 100%;"></select>
+                </div>
+                <button id="duel-btn" class="btn-primary">Сравнить</button>
+                <div id="duel-result" class="duel-result"></div>
+              </section>
+            </div>
           </div>
+        </div>
 
-          <div class="draft-captain-grid">
-            <div class="draft-captain-slot"><label>Капитан 1</label><select id="cap-1" class="select-sort"></select></div>
-            <div class="draft-captain-slot"><label>Капитан 2</label><select id="cap-2" class="select-sort"></select></div>
-            <div class="draft-captain-slot"><label>Капитан 3</label><select id="cap-3" class="select-sort"></select></div>
-            <div class="draft-captain-slot"><label>Капитан 4</label><select id="cap-4" class="select-sort"></select></div>
-          </div>
+        <!-- КАРТЫ -->
+        <div class="tab-content" id="tab-maps">
+          <section class="glass-card interactive-card">
+            <div class="card-header"><h2>Статистика карт</h2><span class="header-hint">Нажми на строку</span></div>
+            <div class="table-container">
+              <table class="stats-table" id="maps-table">
+                <thead><tr>
+                  <th class="sortable" data-sort="map">Карта <span class="sort-arrow">⬍</span></th>
+                  <th class="sortable" data-sort="matches">Игр <span class="sort-arrow">⬍</span></th>
+                  <th class="sortable" data-sort="avgKd">Ср. K/D <span class="sort-arrow">⬍</span></th>
+                  <th class="sortable" data-sort="avgRating">Ср. Рейтинг <span class="sort-arrow">⬍</span></th>
+                </tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
 
-          <div class="draft-actions-row">
-            <button id="shuffle-teams-btn" class="btn-outline" style="flex: 1;">Перемешать</button>
-            <button id="build-teams-btn" class="btn-primary" style="flex: 2;">Собрать команды</button>
-          </div>
-          <button id="reset-teams-btn" class="btn-outline mt-20" style="width: 100%; display: none;">Сбросить</button>
+        <!-- БАЛАНСИРОВЩИК -->
+        <div class="tab-content" id="tab-balancer">
+          <section class="glass-card interactive-card">
+            <div class="card-header"><h2>Балансировщик 5х5</h2></div>
+            <p class="text-muted mb-10">Соберите 10 игроков для разделения на 2 команды.</p>
+            <button id="open-balancer-btn" class="btn-primary">Открыть балансировщик</button>
+          </section>
+        </div>
 
-          <div id="draft-result" class="draft-result-grid" style="display: none; margin-top: 20px;"></div>
-        </section>
-      </div>
+        <!-- ДРАФТ -->
+        <div class="tab-content" id="tab-draft">
+          <section class="glass-card interactive-card" style="max-width: 900px; margin: 0 auto;">
+            <div class="card-header"><h2>Создать 4 команды</h2></div>
+            <p class="text-muted mb-10">Сначала добавьте участников на этот турнир. Затем выберите капитанов и соберите команды.</p>
 
-      <!-- FAQ -->
-      <div class="tab-content" id="tab-faq">
-        <section class="glass-card interactive-card" style="max-width: 900px; margin: 0 auto;">
-          <div class="card-header"><h2>Часто задаваемые вопросы (FAQ)</h2></div>
-          <p class="text-muted mb-10">Найди ответ на свой вопрос. Если что-то сломалось — жми «Связь» в шапке сайта.</p>
-
-          <div class="faq-list">
-            <details class="faq-item">
-              <summary>Что такое ELO и как оно считается?</summary>
-              <div class="faq-content">
-                ELO — это твой глобальный рейтинг. Ты начинаешь с 1000 очков. Если твой личный рейтинг за игру (Rating) выше 1.0 — ты забираешь ELO (до +35 за матч). Если ниже — теряешь. Со временем (после 30+ матчей) коэффициент уменьшается, чтобы топ не улетал в космос, а новички могли догнать.
+            <div style="background: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+              <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+                <input type="text" id="draft-search" class="input-search" placeholder="Начни вводить ник из базы или впиши новый..." style="flex: 1; min-width: 200px;">
+                <button id="draft-add-btn" class="btn-primary" style="width: auto; padding: 0 20px;">Добавить</button>
               </div>
-            </details>
+              <div id="draft-participants-list" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+            </div>
 
-            <details class="faq-item">
-              <summary>Как работает Балансировщик 5х5?</summary>
-              <div class="faq-content">
-                Ты выбираешь 10 игроков. Алгоритм перебирает 252 варианта разделения и ищет тот, где суммарная сила (композитный скор) команд максимально равна. Также учитываются роли (снайперы, саппорты, фраггеры), чтобы в каждой команде был баланс.
-              </div>
-            </details>
+            <div class="draft-captain-grid">
+              <div class="draft-captain-slot"><label>Капитан 1</label><select id="cap-1" class="select-sort"></select></div>
+              <div class="draft-captain-slot"><label>Капитан 2</label><select id="cap-2" class="select-sort"></select></div>
+              <div class="draft-captain-slot"><label>Капитан 3</label><select id="cap-3" class="select-sort"></select></div>
+              <div class="draft-captain-slot"><label>Капитан 4</label><select id="cap-4" class="select-sort"></select></div>
+            </div>
 
-            <details class="faq-item">
-              <summary>Как работает Драфт 4х с Лобби?</summary>
-              <div class="faq-content">
-                В Драфте 4х есть поле для добавления участников. Вы вписываете ники тех, кто играет именно сейчас. Если игрока нет в базе статистики (новичок), система создаст его профиль со средними показателями. Для 4 команд по 5 человек нужно добавить минимум 20 игроков.
-              </div>
-            </details>
+            <div class="draft-actions-row">
+              <button id="shuffle-teams-btn" class="btn-outline" style="flex: 1;">Перемешать</button>
+              <button id="build-teams-btn" class="btn-primary" style="flex: 2;">Собрать команды</button>
+            </div>
+            <button id="reset-teams-btn" class="btn-outline mt-20" style="width: 100%; display: none;">Сбросить</button>
 
-            <details class="faq-item">
-              <summary>Почему у меня в профиле 0 ассистов?</summary>
-              <div class="faq-content">
-                Старый парсер брал ассисты из API, где их часто не было. Мы это починили — теперь парсер берёт K/D/A прямо из HTML-страницы матча (как ты видишь их на сайте). Если у тебя старые матчи с нулями — удали соответствующие JSON в <code>data/matches/</code> и запусти <code>npm run update</code>.
-              </div>
-            </details>
+            <div id="draft-result" class="draft-result-grid" style="display: none; margin-top: 20px;"></div>
+          </section>
+        </div>
 
-            <details class="faq-item">
-              <summary>Почему в рекордах странные цифры?</summary>
-              <div class="faq-content">
-                Мы добавили <code>validateMap()</code>: если карта имеет абсурдные значения (суммарно > 500 смертей, у кого-то > 60 фрагов и т.п.), она полностью пропускается и не попадает в статистику. Если рекорд всё ещё выглядит странно — пиши в «Связь», перекачаем тот конкретный матч.
-              </div>
-            </details>
+        <!-- FAQ -->
+        <div class="tab-content" id="tab-faq">
+          <section class="glass-card interactive-card" style="max-width: 900px; margin: 0 auto;">
+            <div class="card-header"><h2>Часто задаваемые вопросы (FAQ)</h2></div>
+            <p class="text-muted mb-10">Найди ответ на свой вопрос. Если что-то сломалось — жми «Связь» в шапке сайта.</p>
 
-            <details class="faq-item">
-              <summary>Что такое KAST и почему он важен?</summary>
-              <div class="faq-content">
-                KAST — это процент раундов, в которых ты либо сделал килл (K), либо отдал ассист (A), либо выжил (S), либо был разменян (T - traded). 70%+ — это хороший показатель. Он показывает, приносишь ли ты пользу команде, даже если не набиваешь много фрагов.
-              </div>
-            </details>
+            <div class="faq-list">
+              <details class="faq-item">
+                <summary>Что такое ELO и как оно считается?</summary>
+                <div class="faq-content">
+                  ELO — это твой глобальный рейтинг. Ты начинаешь с 1000 очков. Если твой личный рейтинг за игру (Rating) выше 1.0 — ты забираешь ELO (до +40 за матч). Если ниже — теряешь. Со временем коэффициент уменьшается, чтобы новички могли догнать топ.
+                </div>
+              </details>
 
-            <details class="faq-item">
-              <summary>Как часто обновляется статистика?</summary>
-              <div class="faq-content">
-                Новые матчи добавляются вручную админом (собираются скриптом). Обычно раз в день или после вечерних каток. Если матч сыгран, но его нет на сайте — не паникуй, скоро появится.
-              </div>
-            </details>
+              <details class="faq-item">
+                <summary>Как работает Балансировщик 5х5?</summary>
+                <div class="faq-content">
+                  Ты выбираешь 10 игроков. Алгоритм перебирает 252 варианта разделения и ищет тот, где суммарная сила (композитный скор) команд максимально равна. Также учитываются роли (снайперы, саппорты, фраггеры), чтобы в каждой команде был баланс.
+                </div>
+              </details>
 
-            <details class="faq-item">
-              <summary>Можно ли установить сайт как приложение на телефон?</summary>
-              <div class="faq-content">
-                Да! Открой сайт в браузере на телефоне (Chrome или Safari). Нажми на меню браузера и выбери «Добавить на главный экран» (или «Установить приложение»). Сайт будет работать как нативное приложение, даже если интернет пропадет.
-              </div>
-            </details>
-          </div>
-        </section>
-      </div>
-    </main>
+              <details class="faq-item">
+                <summary>Как работает Драфт 4х с Лобби?</summary>
+                <div class="faq-content">
+                  В Драфте 4х есть поле для добавления участников. Вы вписываете ники тех, кто играет именно сейчас. Если игрока нет в базе статистики (новичок), система создаст его профиль со средними показателями. Для 4 команд по 5 человек нужно добавить минимум 20 игроков.
+                </div>
+              </details>
+
+              <details class="faq-item">
+                <summary>Почему у меня в профиле 0 ассистов?</summary>
+                <div class="faq-content">
+                  Старый парсер брал ассисты из API, где их часто не было. Мы это починили — теперь парсер берёт K/D/A прямо из HTML-страницы матча (как ты видишь их на сайте). Если у тебя старые матчи с нулями — удали соответствующие JSON в <code>data/matches/</code> и запусти <code>npm run update</code>.
+                </div>
+              </details>
+
+              <details class="faq-item">
+                <summary>Почему в рекордах странные цифры?</summary>
+                <div class="faq-content">
+                  Мы добавили <code>validateMap()</code>: если карта имеет абсурдные значения (суммарно > 500 смертей, у кого-то > 60 фрагов и т.п.), она полностью пропускается и не попадает в статистику. Если рекорд всё ещё выглядит странно — пиши в «Связь».
+                </div>
+              </details>
+
+              <details class="faq-item">
+                <summary>Как часто обновляется статистика?</summary>
+                <div class="faq-content">
+                  Новые матчи добавляются вручную админом (собираются скриптом). Обычно раз в день или после вечерних каток. Если матч сыгран, но его нет на сайте — не паникуй, скоро появится.
+                </div>
+              </details>
+
+              <details class="faq-item">
+                <summary>Можно ли установить сайт как приложение на телефон?</summary>
+                <div class="faq-content">
+                  Да! Открой сайт в браузере на телефоне (Chrome или Safari). Нажми на меню браузера и выбери «Добавить на главный экран» (или «Установить приложение»). Сайт будет работать как нативное приложение, даже если интернет пропадет.
+                </div>
+              </details>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
   </div>
 
-  <!-- МОДАЛКА ПРОФИЛЯ -->
+  <!-- НИЖНЕЕ МЕНЮ (ДЛЯ ТЕЛЕФОНА) -->
+  <nav class="mobile-bottom-nav">
+    <button class="mobile-nav-btn active" data-tab="home"><i data-lucide="home"></i><span>Главная</span></button>
+    <button class="mobile-nav-btn" data-tab="overview"><i data-lucide="layout-dashboard"></i><span>Обзор</span></button>
+    <button class="mobile-nav-btn" data-tab="players"><i data-lucide="users"></i><span>Игроки</span></button>
+    <button class="mobile-nav-btn" data-tab="maps"><i data-lucide="map"></i><span>Карты</span></button>
+    <button class="mobile-nav-btn" data-tab="balancer"><i data-lucide="git-merge"></i><span>Баланс</span></button>
+    <button class="mobile-nav-btn" data-tab="faq"><i data-lucide="help-circle"></i><span>FAQ</span></button>
+  </nav>
+
+  <!-- МОДАЛКИ (Остались без изменений, только скопированы сюда) -->
   <div id="profile-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeProfile()">&times;</span>
@@ -283,10 +294,10 @@
         <div class="p-stat"><span>ADR</span><strong id="prof-adr">0</strong></div>
         <div class="p-stat"><span>KAST</span><strong id="prof-kast">0</strong></div>
       </div>
-      <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-        <button id="share-btn" class="btn-primary" style="flex: 1;">Поделиться</button>
-        <button id="compare-btn" class="btn-primary" style="background: #10b981; flex: 1;">Сравнить с...</button>
-        <button id="faceit-btn" class="btn-primary" style="background: #ff5500; flex: 1;">FACEIT</button>
+      <div class="profile-actions">
+        <button id="share-btn" class="btn-primary">Поделиться</button>
+        <button id="compare-btn" class="btn-primary" style="background: #10b981;">Сравнить</button>
+        <button id="faceit-btn" class="btn-primary" style="background: #ff5500;">FACEIT</button>
       </div>
 
       <div class="profile-chart-container"><canvas id="prof-chart"></canvas></div>
@@ -304,7 +315,6 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА КАРТЫ -->
   <div id="map-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeMapDetails()">&times;</span>
@@ -320,7 +330,6 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА МАТЧА -->
   <div id="match-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeMatchDetails()">&times;</span>
@@ -331,7 +340,6 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА РЕКОРДА -->
   <div id="record-modal" class="modal">
     <div class="modal-content glass-card" style="max-width: 500px;">
       <span class="close-btn" onclick="closeRecordDetails()">&times;</span>
@@ -340,7 +348,6 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА БАЛАНСИРОВЩИКА -->
   <div id="balancer-modal" class="modal">
     <div class="modal-content glass-card balancer-modal-content">
       <span class="close-btn" onclick="closeBalancer()">&times;</span>
@@ -378,7 +385,6 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА ОБРАТНОЙ СВЯЗИ -->
   <div id="feedback-modal" class="modal">
     <div class="modal-content glass-card" style="max-width: 500px;">
       <span class="close-btn" onclick="closeFeedback()">&times;</span>
@@ -390,7 +396,38 @@
     </div>
   </div>
 
+  <!-- СКРИПТЫ -->
   <script src="app.js"></script>
+  <script>
+    // МАЛЕНЬКИЙ СКРИПТ ДЛЯ СИНХРОНИЗАЦИИ КНОПОК БОКОВОГО И НИЖНЕГО МЕНЮ
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebarBtns = document.querySelectorAll('.sidebar .tab-btn');
+      const mobileBtns = document.querySelectorAll('.mobile-bottom-nav .mobile-nav-btn');
+      
+      function syncTabs(targetTab) {
+        // Сайдбар
+        sidebarBtns.forEach(b => {
+          if (b.dataset.tab === targetTab) b.classList.add('active');
+          else b.classList.remove('active');
+        });
+        // Мобильное меню
+        mobileBtns.forEach(b => {
+          if (b.dataset.tab === targetTab) b.classList.add('active');
+          else b.classList.remove('active');
+        });
+      }
+
+      // Вешаем клики на нижнее меню
+      mobileBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.tab;
+          // Вызываем клик по кнопке в сайдбаре, чтобы сработал старый код app.js
+          const sidebarBtn = document.querySelector(`.sidebar .tab-btn[data-tab="${target}"]`);
+          if (sidebarBtn) sidebarBtn.click();
+        });
+      });
+    });
+  </script>
   <script src="winners.js" defer></script>
   <script src="winners-admin.js" defer></script>
 </body>

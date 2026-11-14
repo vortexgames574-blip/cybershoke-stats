@@ -17,6 +17,7 @@ let profRadarChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 let draftParticipants = [];
+let previousTabBeforeFaq = 'overview'; // ИСПРАВЛЕНО: Храним вкладку для кнопки "Гид"
 
 // ===== УТИЛИТЫ =====
 function escapeHtml(str) {
@@ -100,6 +101,15 @@ function initTabs() {
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const target = tab.dataset.tab;
+      
+      // ИСПРАВЛЕНО: Запоминаем вкладку перед переходом в FAQ
+      if (target !== 'faq') {
+        const currentActive = document.querySelector('.tab-btn.active');
+        if (currentActive && currentActive.dataset.tab !== 'faq') {
+          previousTabBeforeFaq = currentActive.dataset.tab;
+        }
+      }
+
       tabs.forEach(t => t.classList.remove('active'));
       contents.forEach(c => c.classList.remove('active'));
       tab.classList.add('active');
@@ -129,15 +139,21 @@ async function loadData(retry = 2) {
     if (!statsData.tournaments) throw new Error('Нет поля tournaments');
 
     const select = document.getElementById('tournament-select');
-    const keys = Object.keys(statsData.tournaments);
+    let keys = Object.keys(statsData.tournaments);
+    
+    // ИСПРАВЛЕНО: Убираем "Все матчи" из выпадающего списка, если есть другие турниры
+    if (keys.length > 1 && keys.includes('Все матчи')) {
+      keys = keys.filter(k => k !== 'Все матчи');
+    }
+    
     select.innerHTML = keys.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
 
     const savedT = getFilter('tournament');
-    if (savedT && statsData.tournaments[savedT]) {
+    if (savedT && statsData.tournaments[savedT] && keys.includes(savedT)) {
       select.value = savedT;
       currentStats = statsData.tournaments[savedT];
     } else {
-      currentStats = statsData.tournaments['Все матчи'];
+      currentStats = statsData.tournaments[keys[0]];
     }
 
     select.addEventListener('change', (e) => {
@@ -429,7 +445,8 @@ function openMatchDetails(matchId) {
               ${players.map(p => {
                 const playerObj = currentStats.players.find(sp => sp.id === p.id) || p;
                 const ava = playerObj.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff`;
-                return `<tr>
+                // ИСПРАВЛЕНО: Добавлен onclick для перехода в профиль при клике на строку
+                return `<tr style="cursor:pointer;" onclick="closeMatchDetails(); openProfile('${escapeHtml(p.id)}');">
                   <td><div class="player-cell"><img src="${escapeHtml(ava)}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'"><strong>${escapeHtml(displayName(p))}</strong></div></td>
                   <td>${p.kills}</td><td>${p.deaths}</td><td>${p.assists}</td>
                   <td>${escapeHtml(p.adr ?? '—')}</td><td>${escapeHtml(p.kast ?? '—')}</td><td style="color:#10b981; font-weight:600;">${escapeHtml(p.rating ?? '—')}</td>
@@ -680,6 +697,7 @@ window.onclick = function (event) {
 };
 
 // ===== БАЛАНСИРОВЩИК =====
+// (Оставил без изменений, логика работает)
 function getSavedKey() {
   const sel = document.getElementById('tournament-select');
   return `savedTeams_${sel ? sel.value : 'default'}`;
@@ -1315,29 +1333,36 @@ function initDraft() {
     renderParticipants();
   };
 
+  // ИСПРАВЛЕНО: Поддержка ввода через запятую или перенос строки
   const addParticipant = () => {
     const rawName = searchInput.value.trim();
     if (!rawName) return;
 
-    const existing = currentStats.players.find(p =>
-      p.name.toLowerCase() === rawName.toLowerCase() ||
-      displayName(p).toLowerCase() === rawName.toLowerCase()
-    );
+    const names = rawName.split(/[,;\n]+/).map(n => n.trim()).filter(Boolean);
+    
+    names.forEach(name => {
+      const existing = currentStats.players.find(p =>
+        p.name.toLowerCase() === name.toLowerCase() ||
+        displayName(p).toLowerCase() === name.toLowerCase()
+      );
 
-    if (existing) {
-      if (draftParticipants.find(p => p.id === existing.id)) return showToast('Этот игрок уже в списке', 'error');
-      draftParticipants.push(existing);
-    } else {
-      const guestId = 'guest_' + Date.now();
-      draftParticipants.push({
-        id: guestId,
-        name: rawName,
-        displayName: rawName,
-        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(rawName)}&background=4d6bfe&color=fff&rounded=true`,
-        avgRating: 1.0, kd: 1.0, avgAdr: 75, avgKast: 70,
-        isGuest: true
-      });
-    }
+      if (existing) {
+        if (!draftParticipants.find(p => p.id === existing.id)) {
+          draftParticipants.push(existing);
+        }
+      } else {
+        const guestId = 'guest_' + Date.now() + Math.random().toString(36).substr(2, 5);
+        draftParticipants.push({
+          id: guestId,
+          name: name,
+          displayName: name,
+          avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4d6bfe&color=fff&rounded=true`,
+          avgRating: 1.0, kd: 1.0, avgAdr: 75, avgKast: 70,
+          isGuest: true
+        });
+      }
+    });
+
     searchInput.value = '';
     renderParticipants();
   };
@@ -1507,12 +1532,22 @@ document.getElementById('send-feedback-btn').onclick = async () => {
 };
 
 // ===== ГИД → FAQ =====
+// ИСПРАВЛЕНО: Возврат на предыдущую вкладку
 function initBeginnerMode() {
   const btn = document.getElementById('beginner-toggle');
   if (!btn) return;
   btn.onclick = () => {
+    const currentActive = document.querySelector('.tab-btn.active');
     const faqTabBtn = document.querySelector('[data-tab="faq"]');
-    if (faqTabBtn) faqTabBtn.click();
+    
+    if (currentActive && currentActive.dataset.tab === 'faq') {
+      // Если мы в FAQ, возвращаемся на предыдущую вкладку
+      const prevTabBtn = document.querySelector(`[data-tab="${previousTabBeforeFaq}"]`);
+      if (prevTabBtn) prevTabBtn.click();
+    } else {
+      // Иначе идем в FAQ
+      if (faqTabBtn) faqTabBtn.click();
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 }
