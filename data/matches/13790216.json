@@ -2,7 +2,7 @@
   "matchId": "13790216",
   "url": "https://cybershoke.net/ru/match/13790216",
   "tournament": "13.11.2026",
-  "date": "2026-11-14T15:05:21.509Z",
+  "date": "2026-11-17T09:28:39.607Z",
   "maps": [
     {
       "map": "de_mirage",
@@ -59,8 +59,8 @@
         },
         {
           "id": "76561198283381730",
-          "name": "LITE | St1gmat",
-          "avatar": null,
+          "name": "St1gmat",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 10,
           "deaths": 8,
           "assists": 4,
@@ -144,8 +144,8 @@
         },
         {
           "id": "76561198283381730",
-          "name": "LITE | St1gmat",
-          "avatar": null,
+          "name": "St1gmat",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 17,
           "deaths": 15,
           "assists": 10,

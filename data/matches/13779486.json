@@ -2,7 +2,7 @@
   "matchId": "13779486",
   "url": "https://cybershoke.net/ru/match/13779486",
   "tournament": "13.11.2026",
-  "date": "2026-11-14T15:03:57.447Z",
+  "date": "2026-11-17T09:27:11.784Z",
   "maps": [
     {
       "map": "de_dust2",
@@ -49,8 +49,8 @@
         },
         {
           "id": "76561198283381730",
-          "name": "LITE | St1gmat",
-          "avatar": null,
+          "name": "St1gmat",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 14,
           "deaths": 15,
           "assists": 4,
