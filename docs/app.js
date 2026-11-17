@@ -396,7 +396,7 @@ function renderMapStats() {
     const key = currentMapSort.key;
     const dir = currentMapSort.dir === 'asc' ? 1 : -1;
     data.sort((a, b) => key === 'map' ? a.map.localeCompare(b.map) * dir : (a[key] - b[key]) * dir);
-    tbody.innerHTML = data.map(m => `<tr class="map-row" onclick="openMapDetails('${escapeHtml(m.map)}')"><td><strong>${escapeHtml(m.map)}</strong></td><td>${m.matches}</td><td>${escapeHtml(m.avgKd)}</td><td style="color:var(--accent); font-weight:600;">${escapeHtml(m.avgRating)}</td></tr>`).join('');
+    tbody.innerHTML = data.map((m, i) => `<tr class="map-row" onclick="openMapDetails('${escapeHtml(m.map)}')"><td style="text-align: center; color: var(--text-muted); font-weight: bold;">${i + 1}</td><td><strong>${escapeHtml(m.map)}</strong></td><td>${m.matches}</td><td>${escapeHtml(m.avgKd)}</td><td style="color:var(--accent); font-weight:600;">${escapeHtml(m.avgRating)}</td></tr>`).join('');
   }
   document.querySelectorAll('#maps-table .sortable').forEach(th => {
     if (th.dataset.listenerAttached) return;
@@ -426,17 +426,13 @@ function openMapDetails(mapName) {
   
   document.getElementById('map-modal-title').innerText = mapName;
   
-  // Сохраняем список игроков текущей карты в глобальную переменную
   currentMapPlayersData = mapData.topPlayers || [];
   
-  // Очищаем поиск при открытии новой карты
   const searchInput = document.getElementById('map-player-search');
   if (searchInput) searchInput.value = '';
   
-  // Первичная отрисовка списка
   renderMapPlayersList();
   
-  // Привязываем поиск (используем oninput, чтобы не плодить слушатели)
   if (searchInput) {
     searchInput.oninput = () => {
       renderMapPlayersList();
@@ -452,7 +448,6 @@ function renderMapPlayersList() {
 
   const query = (document.getElementById('map-player-search')?.value || '').toLowerCase().trim();
   
-  // Фильтруем игроков
   const filtered = currentMapPlayersData.filter(p => {
     if (!query) return true;
     const rawName = (p.name || '').toLowerCase();
@@ -485,7 +480,7 @@ function renderMapPlayersList() {
 
 function closeMapDetails() {
   document.getElementById('map-modal').style.display = 'none';
-  currentMapPlayersData = []; // Очищаем данные при закрытии
+  currentMapPlayersData = [];
 }
 
 // ===== МАТЧ =====
@@ -506,9 +501,14 @@ function openMatchDetails(matchId) {
         </div>
         <div class="table-container">
           <table class="stats-table">
-            <thead><tr><th>Игрок</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Rating</th></tr></thead>
+            <thead>
+              <tr>
+                <th style="width: 40px; text-align: center;">#</th>
+                <th>Игрок</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Rating</th>
+              </tr>
+            </thead>
             <tbody>
-              ${players.map(p => {
+              ${players.map((p, i) => {
                 const playerObj = currentStats.players.find(sp => 
                   String(sp.id) === String(p.id) || 
                   sp.name.toLowerCase() === p.name.toLowerCase()
@@ -526,6 +526,7 @@ function openMatchDetails(matchId) {
                 const ratingStr = p.rating ? Number(p.rating).toFixed(2) : '—';
 
                 return `<tr>
+                  <td style="text-align: center; color: var(--text-muted); font-weight: bold;">${i + 1}</td>
                   <td>
                     <div class="player-cell" style="${cursorStyle}" ${clickAction}>
                       <img src="${escapeHtml(ava)}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
@@ -667,13 +668,14 @@ function openProfile(playerId) {
   const tbody = document.getElementById('prof-match-history');
   const history = [...(p.matchHistory || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
   
-  tbody.innerHTML = history.map(h => {
+  tbody.innerHTML = history.map((h, i) => {
     const d = new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
     const adrStr = h.adr ? Number(h.adr).toFixed(1) : '—';
     const kastStr = h.kast ? Math.round(h.kast) : '—';
     const ratingStr = h.rating ? Number(h.rating).toFixed(2) : '—';
 
     return `<tr class="match-history-row" style="cursor:pointer;" onclick="openMatchDetails('${escapeHtml(h.matchId)}')">
+      <td style="text-align: center; color: var(--text-muted); font-weight: bold;">${i + 1}</td>
       <td>${escapeHtml(d)}</td>
       <td>${escapeHtml(h.map)}</td>
       <td>${h.kills}</td>

@@ -148,6 +148,7 @@
           <div class="table-container">
             <table class="stats-table" id="maps-table">
               <thead><tr>
+                <th style="width: 40px; text-align: center;">#</th>
                 <th class="sortable" data-sort="map">Карта <span class="sort-arrow">⬍</span></th>
                 <th class="sortable" data-sort="matches">Игр <span class="sort-arrow">⬍</span></th>
                 <th class="sortable" data-sort="avgKd">Ср. K/D <span class="sort-arrow">⬍</span></th>
@@ -291,13 +292,21 @@
       <div class="profile-history">
         <h3>История матчей</h3>
         <div class="table-container" style="max-height: 300px; overflow-y: auto;">
-          <table class="stats-table"><thead><tr><th>Дата</th><th>Карта</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Рейтинг</th></tr></thead><tbody id="prof-match-history"></tbody></table>
+          <table class="stats-table">
+            <thead>
+              <tr>
+                <th style="width: 40px; text-align: center;">#</th>
+                <th>Дата</th><th>Карта</th><th>K</th><th>D</th><th>A</th><th>ADR</th><th>KAST</th><th>Рейтинг</th>
+              </tr>
+            </thead>
+            <tbody id="prof-match-history"></tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- МОДАЛКА КАРТЫ (С ПОИСКОМ И НУМЕРАЦИЕЙ) -->
+  <!-- МОДАЛКА КАРТЫ -->
   <div id="map-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeMapDetails()">&times;</span>
@@ -305,7 +314,6 @@
         <div class="prof-info"><h2 id="map-modal-title">de_mirage</h2><span class="prof-title">Детальная статистика</span></div>
       </div>
       
-      <!-- Поле поиска по игрокам на карте -->
       <input type="text" id="map-player-search" class="input-search" placeholder="Поиск игрока на этой карте..." style="width: 100%; margin-bottom: 15px;">
 
       <div class="table-container" style="max-height: 400px; overflow-y: auto;">
