@@ -17,6 +17,7 @@ let profRadarChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 let draftParticipants = [];
+let currentMapPlayersData = []; // Для поиска внутри карты
 
 // ===== УТИЛИТЫ =====
 function escapeHtml(str) {
@@ -32,11 +33,9 @@ function escapeHtml(str) {
 // Функция для получения картинки карты
 function getMapImage(mapName) {
   if (!mapName) return '';
-  // Базовый URL с картинками карт CS2
   const baseUrl = 'https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/images/maps/';
   const normalized = mapName.toLowerCase().trim();
   
-  // Словарь для карт, у которых названия файлов отличаются
   const mapAliases = {
     'de_dust2': 'de_dust2.png',
     'de_mirage': 'de_mirage.png',
@@ -59,10 +58,12 @@ function showToast(message, type = 'info') {
   if (!container) {
     container = document.createElement('div');
     container.id = 'toast-container';
+    container.style.cssText = 'position:fixed; bottom:20px; right:20px; z-index:9999; display:flex; flex-direction:column; gap:10px;';
     document.body.appendChild(container);
   }
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
+  toast.style.cssText = `background:${type === 'error' ? '#ef4444' : '#10b981'}; color:#fff; padding:12px 20px; border-radius:8px; font-weight:600; box-shadow:0 4px 12px rgba(0,0,0,0.3);`;
   toast.innerText = message;
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
@@ -253,10 +254,8 @@ function renderRecentMatches() {
   }
   
   container.innerHTML = currentStats.recentMatches.map(m => {
-    // Оставляем только дату (без времени)
     const date = new Date(m.date).toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' });
     
-    // Генерируем HTML для каждой карты с картинкой
     const mapsHtml = (m.maps || []).map(mapName => {
       const imgUrl = getMapImage(mapName);
       return `
@@ -388,7 +387,7 @@ function renderPlayersTable() {
   draw();
 }
 
-// ===== КАРТЫ =====
+// ===== КАРТЫ (ТАБЛИЦА) =====
 function renderMapStats() {
   const tbody = document.querySelector('#maps-table tbody');
   if (!tbody || !currentStats.mapStats) return;
@@ -420,17 +419,61 @@ function renderMapStats() {
   draw();
 }
 
+// ===== КАРТЫ (МОДАЛКА С ПОИСКОМ) =====
 function openMapDetails(mapName) {
   const mapData = currentStats.mapStats.find(m => m.map === mapName);
   if (!mapData) return;
+  
   document.getElementById('map-modal-title').innerText = mapName;
+  
+  // Сохраняем список игроков текущей карты в глобальную переменную
+  currentMapPlayersData = mapData.topPlayers || [];
+  
+  // Очищаем поиск при открытии новой карты
+  const searchInput = document.getElementById('map-player-search');
+  if (searchInput) searchInput.value = '';
+  
+  // Первичная отрисовка списка
+  renderMapPlayersList();
+  
+  // Привязываем поиск (используем oninput, чтобы не плодить слушатели)
+  if (searchInput) {
+    searchInput.oninput = () => {
+      renderMapPlayersList();
+    };
+  }
+  
+  document.getElementById('map-modal').style.display = 'block';
+}
+
+function renderMapPlayersList() {
   const tbody = document.getElementById('map-players-list');
-  tbody.innerHTML = mapData.topPlayers.map((p) => `
+  if (!tbody) return;
+
+  const query = (document.getElementById('map-player-search')?.value || '').toLowerCase().trim();
+  
+  // Фильтруем игроков
+  const filtered = currentMapPlayersData.filter(p => {
+    if (!query) return true;
+    const rawName = (p.name || '').toLowerCase();
+    const dispName = String(displayName(p)).toLowerCase();
+    return rawName.includes(query) || dispName.includes(query);
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding: 20px;">Игроки не найдены</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((p, i) => `
     <tr>
-      <td><div class="player-cell" style="cursor:pointer;" onclick="openProfile('${escapeHtml(p.id)}')">
-        <img src="${escapeHtml(p.avatar)}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
-        <strong>${escapeHtml(displayName(p))}</strong>
-      </div></td>
+      <td style="text-align: center; color: var(--text-muted); font-weight: bold;">${i + 1}</td>
+      <td>
+        <div class="player-cell" style="cursor:pointer;" onclick="openProfile('${escapeHtml(p.id)}')">
+          <img src="${escapeHtml(p.avatar)}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
+          <strong>${escapeHtml(displayName(p))}</strong>
+        </div>
+      </td>
       <td>${p.matches}</td>
       <td>${p.kills}</td>
       <td>${p.deaths}</td>
@@ -438,10 +481,11 @@ function openMapDetails(mapName) {
       <td style="color:var(--accent); font-weight:600;">${escapeHtml(p.avgRating)}</td>
     </tr>
   `).join('');
-  document.getElementById('map-modal').style.display = 'block';
 }
+
 function closeMapDetails() {
   document.getElementById('map-modal').style.display = 'none';
+  currentMapPlayersData = []; // Очищаем данные при закрытии
 }
 
 // ===== МАТЧ =====
@@ -563,7 +607,7 @@ function openProfile(playerId) {
 
   const steamBtn = document.getElementById('steam-btn');
   if (steamBtn) {
-    if (p.id && String(p.id).length > 10) {
+    if (p.id && String(p.id).length > 10 && !String(p.id).startsWith('name_')) {
       steamBtn.style.display = 'inline-block';
       steamBtn.onclick = () => {
         window.open(`https://steamcommunity.com/profiles/${p.id}`, '_blank');
@@ -624,9 +668,7 @@ function openProfile(playerId) {
   const history = [...(p.matchHistory || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
   
   tbody.innerHTML = history.map(h => {
-    // В истории матчей в профиле тоже можно убрать время, оставив только дату
     const d = new Date(h.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    
     const adrStr = h.adr ? Number(h.adr).toFixed(1) : '—';
     const kastStr = h.kast ? Math.round(h.kast) : '—';
     const ratingStr = h.rating ? Number(h.rating).toFixed(2) : '—';
@@ -1148,10 +1190,10 @@ function initBalancer() {
       if (role === 'Снайпер') roleColor = '#f59e0b';
       if (role === 'Саппорт') roleColor = '#10b981';
 
-      return `<div class="player-card ${sel ? 'selected' : ''}" onclick="togglePlayer('${escapeHtml(p.id)}')">
-        <img src="${escapeHtml(p.avatar)}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
-        <div class="card-name">${escapeHtml(displayName(p))}</div>
-        <div class="card-rating">${escapeHtml(p.avgRating ?? p.kd)}</div>
+      return `<div class="player-card ${sel ? 'selected' : ''}" onclick="togglePlayer('${escapeHtml(p.id)}')" style="cursor:pointer; text-align:center; padding:10px; border:1px solid ${sel ? 'var(--accent)' : 'var(--border)'}; border-radius:8px; background:${sel ? 'rgba(77,107,254,0.1)' : 'var(--bg-main)'}; transition:0.2s;">
+        <img src="${escapeHtml(p.avatar)}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'" style="width:60px; height:60px; border-radius:50%; object-fit:cover; margin-bottom:8px;">
+        <div class="card-name" style="font-weight:600; font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(displayName(p))}</div>
+        <div class="card-rating" style="color:var(--accent); font-weight:700; font-size:1.1rem;">${escapeHtml(p.avgRating ?? p.kd)}</div>
         <div style="font-size:0.65rem; font-weight:bold; color:${roleColor}">${role}</div>
       </div>`;
     }).join('');

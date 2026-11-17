@@ -24,51 +24,38 @@ const pythonEnv = {
 // Ультимативная функция поиска даты (ищет в сыром HTML)
 async function extractMatchDate(page) {
   try {
-    // Ждем, пока страница полностью прогрузится (включая скрипты)
     await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForTimeout(2000);
-
     const content = await page.content();
 
-    // 1. Ищем ISO формат (обычно в скрытых JSON данных)
-    // Пример: "date":"2026-11-14T18:51:00"
     const isoMatch = content.match(/"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/);
     if (isoMatch && isoMatch[1]) {
       const d = new Date(isoMatch[1]);
       if (!isNaN(d.getTime())) return d.toISOString();
     }
 
-    // 2. Ищем формат "ГГГГ-ММ-ДД ЧЧ:ММ" или "ДД.ММ.ГГГГ ЧЧ:ММ" в тексте
-    // Пример: "2026-11-14 18:51" или "14.11.2026, 18:51"
     const textMatch = content.match(/(\d{4}-\d{2}-\d{2})[T\s](\d{2}:\d{2})/) || 
                       content.match(/(\d{2}\.\d{2}\.\d{4})[\s,]+(\d{2}:\d{2})/);
                       
     if (textMatch) {
       let datePart = textMatch[1];
       const timePart = textMatch[2];
-      
-      // Если дата в формате ДД.ММ.ГГГГ, конвертируем в ГГГГ-ММ-ДД для JS
       if (datePart.includes('.')) {
         const [d, m, y] = datePart.split('.');
         datePart = `${y}-${m}-${d}`;
       }
-      
       const d = new Date(`${datePart}T${timePart}:00`);
       if (!isNaN(d.getTime())) return d.toISOString();
     }
 
-    // 3. Ищем просто дату без времени (ставим полдень)
     const dateOnlyMatch = content.match(/"(\d{4}-\d{2}-\d{2})/);
     if (dateOnlyMatch && dateOnlyMatch[1]) {
        const d = new Date(`${dateOnlyMatch[1]}T12:00:00`);
        if (!isNaN(d.getTime())) return d.toISOString();
     }
-
   } catch (e) {
     console.error('  [!] Ошибка извлечения даты:', e.message);
   }
-  
-  // Если вообще ничего не нашли
   console.warn('  [!] Не удалось найти дату матча в HTML. Используется текущее время.');
   return new Date().toISOString();
 }
@@ -82,7 +69,6 @@ function extractDemoIfNeeded(filePath) {
   fs.readSync(fd, buffer, 0, 4, 0);
   fs.closeSync(fd);
 
-  // Проверка на ZIP (PK\x03\x04)
   if (buffer[0] === 0x50 && buffer[1] === 0x4B && buffer[2] === 0x03 && buffer[3] === 0x04) {
     console.log(`  [*] Файл является ZIP-архивом. Распаковываем...`);
     try {
@@ -142,7 +128,6 @@ async function main() {
 
     const outFile = path.join(MATCHES_DIR, `${matchId}.json`);
 
-    // Пропускаем, если уже есть JSON
     if (await fs.pathExists(outFile)) {
       console.log(`[${i + 1}/${lines.length}] Матч ${matchId} уже собран. Пропускаем.`);
       continue;
@@ -173,7 +158,6 @@ async function main() {
       else if (await fs.pathExists(localDemoZip)) demosToParse = extractDemoIfNeeded(localDemoZip);
       else if (await fs.pathExists(localDemoDem)) demosToParse = [localDemoDem];
 
-      // Если нашли демки локально
       if (demosToParse.length > 0) {
         console.log(`  Найдено демок для парсинга: ${demosToParse.length}`);
         let combinedAwpyData = [];
@@ -208,7 +192,6 @@ async function main() {
         }
 
       } else {
-        // Скачиваем с сайта
         await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await page.waitForTimeout(5000);
 
@@ -283,11 +266,9 @@ async function main() {
          await page.waitForTimeout(3000);
       }
 
-      // Извлекаем реальное время матча
       const matchDate = await extractMatchDate(page);
       console.log(`  [*] Время матча: ${new Date(matchDate).toLocaleString('ru-RU')}`);
 
-      // === ИСПРАВЛЕНИЕ ДУБЛИКАТОВ КАРТ ===
       let mapNames = [];
       if (awpyData && Array.isArray(awpyData) && awpyData.length > 0) {
         mapNames = [...new Set(awpyData.map(p => p.map_name).filter(Boolean))];
@@ -352,9 +333,14 @@ async function main() {
               p.name.toLowerCase().includes(cleanApName.toLowerCase())
             );
 
+            // ИСПРАВЛЕНИЕ: Безопасный fallback ID
             let finalId = apSteamId;
             if (!finalId || finalId === '0' || finalId === 'None') {
-              finalId = dp ? String(dp.id) : String(ap.name || 'Unknown');
+              if (dp && dp.id && String(dp.id).length > 10) {
+                finalId = String(dp.id);
+              } else {
+                finalId = `name_${(ap.name || 'Unknown').trim().toLowerCase()}`;
+              }
             }
 
             players.push({

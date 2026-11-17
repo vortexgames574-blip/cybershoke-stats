@@ -125,7 +125,6 @@ async function fetchSteamAvatars(steamIds) {
   return result;
 }
 
-// Ранги привязаны к среднему Рейтингу (HLTV)
 function getRank(avgRating) {
   if (avgRating === null) return { name: 'Silver', color: '#8b96a5', icon: 'shield' };
   if (avgRating < 0.9) return { name: 'Silver', color: '#8b96a5', icon: 'shield' };
@@ -170,12 +169,14 @@ function calculateStats(matches, steamAvatars) {
       mapStatsRaw[mapName].matches += 1;
 
       for (const p of mapData.players) {
-        const pid = p.id; 
+        // Защита от пустых ID
+        const pid = p.id && !String(p.id).startsWith('name_') ? String(p.id) : String(p.id || p.name);
 
         if (!playerMap.has(pid)) {
           playerMap.set(pid, {
             id: pid, name: p.name, lastPlayed: match.date,
-            matches: 0, kills: 0, deaths: 0, assists: 0,
+            matchIds: new Set(), // ИСПРАВЛЕНИЕ: Храним уникальные ID матчей
+            kills: 0, deaths: 0, assists: 0,
             adrSum: 0, adrCount: 0, kastSum: 0, kastCount: 0, ratingSum: 0, ratingCount: 0,
             history: [], matchHistory: []
           });
@@ -185,7 +186,10 @@ function calculateStats(matches, steamAvatars) {
           st.name = p.name; 
           st.lastPlayed = match.date;
         }
-        st.matches += 1;
+        
+        // ИСПРАВЛЕНИЕ: Считаем матчи, а не карты
+        st.matchIds.add(match.matchId); 
+
         const k = Math.round(Number(p.kills)) || 0;
         const d = Math.round(Number(p.deaths)) || 0;
         const a = Math.round(Number(p.assists)) || 0;
@@ -245,8 +249,11 @@ function calculateStats(matches, steamAvatars) {
     const kd = p.deaths > 0 ? +(p.kills / p.deaths).toFixed(2) : p.kills;
     const avgRating = p.ratingCount > 0 ? +(p.ratingSum / p.ratingCount).toFixed(2) : null;
     const rank = getRank(avgRating);
+    const realMatches = p.matchIds ? p.matchIds.size : 0; // ИСПРАВЛЕНИЕ
+    
     return {
       ...p,
+      matches: realMatches, // Записываем правильное кол-во матчей
       avatar: getAvatar(p.id, p.name),
       kd,
       avgRating,
@@ -260,6 +267,7 @@ function calculateStats(matches, steamAvatars) {
 
   players.forEach(p => {
     p.displayName = p.name;
+    delete p.matchIds; // Чистим мусор
   });
 
   const displayNameById = new Map(players.map(p => [p.id, p.displayName]));
@@ -268,7 +276,6 @@ function calculateStats(matches, steamAvatars) {
     if (rec && rec.playerId && displayNameById.has(rec.playerId)) rec.player = displayNameById.get(rec.playerId);
   }
 
-  // СОРТИРОВКА ПО РЕЙТИНГУ
   players.sort((a, b) => (b.avgRating || 0) - (a.avgRating || 0));
 
   const formattedMapStats = Object.entries(mapStatsRaw).map(([map, data]) => {
@@ -320,7 +327,7 @@ function calculateStats(matches, steamAvatars) {
   return {
     players, mapStats: formattedMapStats,
     recentMatches: recentMatches.slice(-10).reverse(),
-    totalMatches: matches.length,
+    totalMatches: matches.length, // Общее число серий
     records,
     funStats: { totalHours: Math.round(totalMapsPlayed * 40 / 60), totalKills: totalKillsAll, totalDeaths: totalDeathsAll },
     funFacts: { mostStable, highestPeak, lowestRating, favoriteMap }
@@ -354,60 +361,12 @@ async function main() {
 
   log('info', `Всего матчей: ${allMatches.length}`);
 
-  // СКЛЕЙКА ИГРОКОВ ПО НИКНЕЙМУ
-  const normalizeName = (name) => {
-    if (!name) return '';
-    let clean = name.trim().toLowerCase();
-    if (clean.includes('|')) {
-      const parts = clean.split('|');
-      clean = parts[parts.length - 1].trim(); 
-    } else if (clean.includes('/')) {
-      const parts = clean.split('/');
-      clean = parts[parts.length - 1].trim();
-    }
-    return clean;
-  };
-
-  const nameToBestId = new Map(); 
-  const bestDisplayNames = new Map(); 
+  // УДАЛЕН БЛОК СКЛЕЙКИ ПО НИКУ, так как он ломал ID.
 
   for (const match of allMatches) {
     for (const map of match.maps || []) {
       for (const p of map.players || []) {
-        if (!p.name) continue;
-        const cleanName = normalizeName(p.name);
-        if (!cleanName) continue;
-
-        const currentId = String(p.id || p.name);
-        const existingId = nameToBestId.get(cleanName);
-        
-        if (!existingId || currentId.length > existingId.length) {
-          nameToBestId.set(cleanName, currentId);
-        }
-
-        const currentDisplay = bestDisplayNames.get(cleanName);
-        if (!currentDisplay || p.name.length < currentDisplay.length) {
-          bestDisplayNames.set(cleanName, p.name);
-        }
-      }
-    }
-  }
-
-  for (const match of allMatches) {
-    for (const map of match.maps || []) {
-      for (const p of map.players || []) {
-        if (p.name) {
-          const cleanName = normalizeName(p.name);
-          p.id = nameToBestId.get(cleanName);
-          p.name = bestDisplayNames.get(cleanName);
-        }
-      }
-    }
-  }
-
-  for (const match of allMatches) {
-    for (const map of match.maps || []) {
-      for (const p of map.players || []) {
+        // Собираем только настоящие SteamID (длинные числа)
         if (p.id && String(p.id).length > 10 && !String(p.id).startsWith('name_')) {
           allSteamIds.add(String(p.id));
         }

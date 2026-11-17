@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = 'cs-stats-v2'; // Меняйте версию при каждом обновлении
+const CACHE_NAME = 'cs-stats-v3'; // Меняйте версию при каждом обновлении
 const urlsToCache = [
   './',
   './index.html',

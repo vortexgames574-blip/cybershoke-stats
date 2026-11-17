@@ -120,7 +120,7 @@
               </div>
               <div class="table-container">
                 <table class="stats-table" id="players-table">
-                  <thead><tr><th>Игрок</th><th>Рейтинг</th><th>Карты</th><th>K/D</th><th>ADR</th></tr></thead>
+                  <thead><tr><th>Игрок</th><th>Рейтинг</th><th>Матчи</th><th>K/D</th><th>ADR</th></tr></thead>
                   <tbody></tbody>
                 </table>
               </div>
@@ -269,7 +269,7 @@
         <div class="prof-info"><h2 id="prof-name">Name</h2><span class="prof-title">Игрок</span></div>
       </div>
       <div class="profile-stats-grid">
-        <div class="p-stat"><span>Карты</span><strong id="prof-matches">0</strong></div>
+        <div class="p-stat"><span>Матчи</span><strong id="prof-matches">0</strong></div>
         <div class="p-stat"><span>Рейтинг</span><strong id="prof-rating">0</strong></div>
         <div class="p-stat"><span>K/D</span><strong id="prof-kd">0</strong></div>
         <div class="p-stat"><span>ADR</span><strong id="prof-adr">0</strong></div>
@@ -297,16 +297,30 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА КАРТЫ -->
+  <!-- МОДАЛКА КАРТЫ (С ПОИСКОМ И НУМЕРАЦИЕЙ) -->
   <div id="map-modal" class="modal">
     <div class="modal-content glass-card">
       <span class="close-btn" onclick="closeMapDetails()">&times;</span>
       <div class="profile-header" style="margin-bottom: 15px; padding-bottom: 10px;">
         <div class="prof-info"><h2 id="map-modal-title">de_mirage</h2><span class="prof-title">Детальная статистика</span></div>
       </div>
+      
+      <!-- Поле поиска по игрокам на карте -->
+      <input type="text" id="map-player-search" class="input-search" placeholder="Поиск игрока на этой карте..." style="width: 100%; margin-bottom: 15px;">
+
       <div class="table-container" style="max-height: 400px; overflow-y: auto;">
         <table class="stats-table">
-          <thead><tr><th>Игрок</th><th>Игр</th><th>K</th><th>D</th><th>K/D</th><th>Рейтинг</th></tr></thead>
+          <thead>
+            <tr>
+              <th style="width: 40px; text-align: center;">#</th>
+              <th>Игрок</th>
+              <th>Игр</th>
+              <th>K</th>
+              <th>D</th>
+              <th>K/D</th>
+              <th>Рейтинг</th>
+            </tr>
+          </thead>
           <tbody id="map-players-list"></tbody>
         </table>
       </div>
@@ -315,57 +329,84 @@
 
   <!-- МОДАЛКА МАТЧА -->
   <div id="match-modal" class="modal">
-    <div class="modal-content glass-card">
+    <div class="modal-content glass-card" style="max-width: 900px; width: 95%;">
       <span class="close-btn" onclick="closeMatchDetails()">&times;</span>
       <div class="profile-header" style="margin-bottom: 15px; padding-bottom: 10px;">
-        <div class="prof-info"><h2 id="match-modal-title">Детали матча</h2><span class="prof-title">Статистика игроков</span></div>
+        <div class="prof-info"><h2 id="match-modal-title">Детали матча</h2></div>
       </div>
-      <div id="match-modal-content" style="max-height: 70vh; overflow-y: auto; padding-right: 5px;"></div>
+      <div id="match-modal-content"></div>
     </div>
   </div>
 
-  <!-- МОДАЛКА РЕКОРДА -->
+  <!-- МОДАЛКА РЕКОРДОВ -->
   <div id="record-modal" class="modal">
-    <div class="modal-content glass-card" style="max-width: 500px;">
+    <div class="modal-content glass-card" style="max-width: 400px;">
       <span class="close-btn" onclick="closeRecordDetails()">&times;</span>
-      <div class="card-header"><h2 id="record-title">Рекорд</h2></div>
+      <div class="profile-header" style="margin-bottom: 15px; padding-bottom: 10px;">
+        <div class="prof-info"><h2 id="record-title">Рекорд</h2></div>
+      </div>
       <div id="record-content"></div>
     </div>
   </div>
 
   <!-- МОДАЛКА БАЛАНСИРОВЩИКА -->
   <div id="balancer-modal" class="modal">
-    <div class="modal-content glass-card balancer-modal-content">
+    <div class="modal-content glass-card" style="max-width: 1000px; width: 95%;">
       <span class="close-btn" onclick="closeBalancer()">&times;</span>
-      <div class="card-header" style="margin-bottom: 15px;">
-        <h2>Балансировщик 5х5</h2>
-        <span id="selected-count" class="balance-counter">Выбрано: 0 / 10</span>
+      <div class="card-header"><h2>Балансировщик 5х5</h2></div>
+
+      <div class="balancer-controls">
+        <input type="text" id="player-search" class="input-search" placeholder="Поиск игрока...">
+        <span id="selected-count" style="font-weight: bold; color: var(--accent);">Выбрано: 0 / 10</span>
+        <button id="random-btn" class="btn-outline">Рандом 10</button>
+        <button id="clear-btn" class="btn-outline danger">Очистить</button>
       </div>
-      <div class="balancer-tools">
-        <input type="text" id="player-search" class="input-search" style="flex:1;" placeholder="Поиск...">
-        <button id="random-btn" class="btn-outline" title="Случайные 10">Рандом</button>
-        <button id="clear-btn" class="btn-outline" title="Очистить">Сброс</button>
-      </div>
-      <div class="balancer-weights">
-        <div class="weights-header">
-          <span>Веса метрик <span style="color: var(--text-muted); font-size: 0.75rem;">(пропорция нормализуется)</span></span>
-          <button id="reset-weights-btn" class="btn-outline" style="font-size: 0.75rem; padding: 4px 10px;">Сброс</button>
+
+      <div class="balancer-weights" style="background: var(--bg-main); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+          <h4 style="margin: 0;">Веса характеристик</h4>
+          <button id="reset-weights-btn" class="btn-outline" style="padding: 2px 8px; font-size: 0.75rem;">Сбросить</button>
         </div>
-        <div class="weight-slider-row"><label>Рейтинг <span id="weight-rating-val">50%</span></label><input type="range" id="weight-rating" min="0" max="1" step="0.05" value="0.5"></div>
-        <div class="weight-slider-row"><label>K/D <span id="weight-kd-val">20%</span></label><input type="range" id="weight-kd" min="0" max="1" step="0.05" value="0.2"></div>
-        <div class="weight-slider-row"><label>ADR <span id="weight-adr-val">20%</span></label><input type="range" id="weight-adr" min="0" max="1" step="0.05" value="0.2"></div>
-        <div class="weight-slider-row"><label>KAST <span id="weight-kast-val">10%</span></label><input type="range" id="weight-kast" min="0" max="1" step="0.05" value="0.1"></div>
+        <div class="weights-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Рейтинг: <span id="weight-rating-val">50%</span></label>
+            <input type="range" id="weight-rating" min="0" max="1" step="0.05" value="0.5" style="width: 100%;">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">K/D: <span id="weight-kd-val">20%</span></label>
+            <input type="range" id="weight-kd" min="0" max="1" step="0.05" value="0.2" style="width: 100%;">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">ADR: <span id="weight-adr-val">20%</span></label>
+            <input type="range" id="weight-adr" min="0" max="1" step="0.05" value="0.2" style="width: 100%;">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">KAST: <span id="weight-kast-val">10%</span></label>
+            <input type="range" id="weight-kast" min="0" max="1" step="0.05" value="0.1" style="width: 100%;">
+          </div>
+        </div>
       </div>
-      <div id="players-grid" class="players-grid"></div>
-      <button id="balance-btn" class="btn-primary mt-20" disabled>Разделить на команды</button>
+
+      <div id="players-grid" class="players-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 5px;"></div>
+
+      <button id="balance-btn" class="btn-primary mt-20" style="width: 100%; font-size: 1.1rem; padding: 15px;" disabled>Разделить на команды</button>
+
+      <div id="map-actions" class="map-actions" style="margin-top: 20px; display: none; text-align: center;">
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 10px;">Или подобрать оптимальную карту для этих игроков:</p>
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+          <button id="random-map-btn" class="btn-outline">Случайная карта</button>
+          <button id="balanced-map-btn" class="btn-outline">Сбалансированная карта</button>
+        </div>
+        <div id="map-result" style="margin-top: 15px;"></div>
+      </div>
+
       <div id="balance-result" class="balance-result-modal"></div>
-      <div id="map-actions" class="map-actions">
-        <button id="random-map-btn" class="btn-outline" style="flex:1;">Случайная карта</button>
-        <button id="balanced-map-btn" class="btn-primary" style="flex:1;">Балансная карта</button>
-      </div>
-      <div id="map-result" class="map-result-box"></div>
-      <div id="saved-teams-section" class="saved-teams-section">
-        <div class="saved-header"><h3>Сохранённые составы</h3><button id="clear-saved-btn" class="btn-outline" style="font-size: 0.75rem; padding: 4px 10px;">Удалить</button></div>
+
+      <div id="saved-teams-section" style="margin-top: 30px; display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <h3 style="margin: 0;">Последний сохраненный состав</h3>
+          <button id="clear-saved-btn" class="btn-outline danger" style="padding: 4px 8px; font-size: 0.75rem;">Удалить</button>
+        </div>
         <div id="saved-teams-content"></div>
       </div>
     </div>
@@ -376,34 +417,16 @@
     <div class="modal-content glass-card" style="max-width: 500px;">
       <span class="close-btn" onclick="closeFeedback()">&times;</span>
       <div class="card-header"><h2>Обратная связь</h2></div>
-      <p class="text-muted mb-10">Напиши, что сломалось или что можно улучшить. Сообщение прилетит админу на почту.</p>
-      <input type="text" id="feedback-name" class="input-search" style="width: 100%; margin-bottom: 10px;" placeholder="Твой ник (чтобы знал, кто пишет)">
-      <textarea id="feedback-text" class="input-search" style="width: 100%; height: 120px; resize: vertical; margin-bottom: 10px;" placeholder="Суть проблемы или предложения..."></textarea>
-      <button id="send-feedback-btn" class="btn-primary mt-20">Отправить</button>
+      <p class="text-muted mb-10">Нашли баг или есть предложение? Напишите нам!</p>
+      <input type="text" id="feedback-name" class="input-search mb-10" placeholder="Ваш ник (необязательно)" style="width: 100%;">
+      <textarea id="feedback-text" class="input-search mb-10" placeholder="Ваше сообщение..." rows="5" style="width: 100%; resize: vertical;"></textarea>
+      <button id="send-feedback-btn" class="btn-primary" style="width: 100%;">Отправить</button>
     </div>
   </div>
 
+  <!-- СКРИПТЫ -->
+  <script src="winners.js"></script>
+  <script src="winners-admin.js"></script>
   <script src="app.js"></script>
-  <script src="winners.js" defer></script>
-  <script src="winners-admin.js" defer></script>
-
-  <!-- СКРИПТ АВТООБНОВЛЕНИЯ САЙТА -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      let refreshing = false;
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (refreshing) return;
-        refreshing = true;
-        window.location.reload();
-      });
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then((registration) => {
-            setInterval(() => { registration.update().catch(() => {}); }, 5 * 60 * 1000);
-          })
-          .catch(() => {});
-      });
-    }
-  </script>
 </body>
 </html>
