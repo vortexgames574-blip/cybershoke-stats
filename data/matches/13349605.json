@@ -2,14 +2,14 @@
   "matchId": "13349605",
   "url": "https://cybershoke.net/ru/match/13349605",
   "tournament": "31.10.2026",
-  "date": "2026-11-17T10:11:14.760Z",
+  "date": "2026-11-17T10:21:01.799Z",
   "maps": [
     {
       "map": "de_anubis",
       "players": [
         {
-          "id": "76561198090688030",
-          "name": "BB-00",
+          "id": "76561198090688036",
+          "name": "Kara7evich",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 27,
           "deaths": 15,
@@ -18,7 +18,7 @@
           "kast": 83.33332824707031
         },
         {
-          "id": "76561198042805940",
+          "id": "76561198042805941",
           "name": "PRADA_CODE",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 23,
@@ -28,8 +28,8 @@
           "kast": 83.33332824707031
         },
         {
-          "id": "76561199109745010",
-          "name": "BB-00",
+          "id": "76561199109745015",
+          "name": "q1nce_",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 19,
           "deaths": 15,
@@ -38,7 +38,7 @@
           "kast": 70.83332824707031
         },
         {
-          "id": "76561198015424670",
+          "id": "76561198015424675",
           "name": "tolya800x600",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 18,
@@ -58,7 +58,7 @@
           "kast": 70.83332824707031
         },
         {
-          "id": "76561199022192300",
+          "id": "76561199022192304",
           "name": "Pizdets_tip",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 16,
@@ -68,7 +68,7 @@
           "kast": 79.16667175292969
         },
         {
-          "id": "76561198210127760",
+          "id": "76561198210127765",
           "name": "blackpolosa",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 15,
@@ -88,7 +88,7 @@
           "kast": 79.16667175292969
         },
         {
-          "id": "76561198818222400",
+          "id": "76561198818222401",
           "name": "Ilonmax8",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 11,
@@ -98,9 +98,9 @@
           "kast": 66.66667175292969
         },
         {
-          "id": "76561199482946690",
-          "name": "PREMIUM | BB-03",
-          "avatar": null,
+          "id": "76561199482946683",
+          "name": "Oleg123",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 7,
           "deaths": 19,
           "assists": 3,

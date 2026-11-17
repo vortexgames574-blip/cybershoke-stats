@@ -2,13 +2,13 @@
   "matchId": "13350180",
   "url": "https://cybershoke.net/ru/match/13350180",
   "tournament": "31.10.2026",
-  "date": "2026-11-17T10:12:08.079Z",
+  "date": "2026-11-17T10:21:54.595Z",
   "maps": [
     {
       "map": "de_nuke",
       "players": [
         {
-          "id": "76561198054507580",
+          "id": "76561198054507577",
           "name": "kvsmstr",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 17,
@@ -18,7 +18,7 @@
           "kast": 100
         },
         {
-          "id": "76561199467682500",
+          "id": "76561199467682493",
           "name": "Господин Босс",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 17,
@@ -28,7 +28,7 @@
           "kast": 80
         },
         {
-          "id": "76561199542530690",
+          "id": "76561199542530681",
           "name": "AuraTeam",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 17,
@@ -38,7 +38,7 @@
           "kast": 80
         },
         {
-          "id": "76561198283381730",
+          "id": "76561198283381727",
           "name": "St1gmat",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 14,
@@ -48,7 +48,7 @@
           "kast": 73.33333587646484
         },
         {
-          "id": "76561198872139870",
+          "id": "76561198872139873",
           "name": "1lpk",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 12,
@@ -58,7 +58,7 @@
           "kast": 73.33333587646484
         },
         {
-          "id": "76561199417613920",
+          "id": "76561199417613918",
           "name": "ЯнаЦист",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 12,
@@ -68,7 +68,7 @@
           "kast": 80
         },
         {
-          "id": "76561198681103730",
+          "id": "76561198681103731",
           "name": "Анальный бур",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 8,
@@ -78,7 +78,7 @@
           "kast": 86.66666412353516
         },
         {
-          "id": "76561198053530320",
+          "id": "76561198053530322",
           "name": "ZAZA_",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 7,
@@ -88,7 +88,7 @@
           "kast": 73.33333587646484
         },
         {
-          "id": "76561199210250160",
+          "id": "76561199210250164",
           "name": "s1slw",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 7,
@@ -98,7 +98,7 @@
           "kast": 53.333335876464844
         },
         {
-          "id": "76561198128494350",
+          "id": "76561198128494347",
           "name": "Игрок",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 5,

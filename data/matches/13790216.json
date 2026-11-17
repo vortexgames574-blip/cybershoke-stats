@@ -2,13 +2,13 @@
   "matchId": "13790216",
   "url": "https://cybershoke.net/ru/match/13790216",
   "tournament": "13.11.2026",
-  "date": "2026-11-17T10:14:31.638Z",
+  "date": "2026-11-17T10:24:19.447Z",
   "maps": [
     {
       "map": "de_mirage",
       "players": [
         {
-          "id": "76561198843347970",
+          "id": "76561198843347969",
           "name": "sandor",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 20,
@@ -28,7 +28,7 @@
           "kast": 88.23529815673828
         },
         {
-          "id": "76561198054507580",
+          "id": "76561198054507577",
           "name": "kvsmstr",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 15,
@@ -38,7 +38,7 @@
           "kast": 64.70588684082031
         },
         {
-          "id": "76561199542530690",
+          "id": "76561199542530681",
           "name": "AuraTeam",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 12,
@@ -48,7 +48,7 @@
           "kast": 70.5882339477539
         },
         {
-          "id": "76561198090688030",
+          "id": "76561198090688036",
           "name": "Kara7evich",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 11,
@@ -58,7 +58,7 @@
           "kast": 70.5882339477539
         },
         {
-          "id": "76561198283381730",
+          "id": "76561198283381727",
           "name": "St1gmat",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 10,
@@ -68,7 +68,7 @@
           "kast": 70.5882339477539
         },
         {
-          "id": "76561198872139870",
+          "id": "76561198872139873",
           "name": "1lpk",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 9,
@@ -78,7 +78,7 @@
           "kast": 52.94117736816406
         },
         {
-          "id": "76561198042805940",
+          "id": "76561198042805941",
           "name": "PRADA_CODE",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 8,
@@ -98,7 +98,7 @@
           "kast": 52.94117736816406
         },
         {
-          "id": "76561198197222930",
+          "id": "76561198197222927",
           "name": "goodipAN",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 7,
@@ -113,7 +113,7 @@
       "map": "de_anubis",
       "players": [
         {
-          "id": "76561198054507580",
+          "id": "76561198054507577",
           "name": "kvsmstr",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 25,
@@ -123,7 +123,7 @@
           "kast": 85.71428680419922
         },
         {
-          "id": "76561198843347970",
+          "id": "76561198843347969",
           "name": "sandor",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 20,
@@ -133,7 +133,7 @@
           "kast": 85.71428680419922
         },
         {
-          "id": "76561199542530690",
+          "id": "76561199542530681",
           "name": "AuraTeam",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 18,
@@ -143,7 +143,7 @@
           "kast": 71.42857360839844
         },
         {
-          "id": "76561198283381730",
+          "id": "76561198283381727",
           "name": "St1gmat",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 17,
@@ -153,7 +153,7 @@
           "kast": 80.95238494873047
         },
         {
-          "id": "76561198090688030",
+          "id": "76561198090688036",
           "name": "Kara7evich",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 16,
@@ -163,7 +163,7 @@
           "kast": 66.66667175292969
         },
         {
-          "id": "76561198872139870",
+          "id": "76561198872139873",
           "name": "1lpk",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 13,
@@ -183,7 +183,7 @@
           "kast": 52.38095474243164
         },
         {
-          "id": "76561198197222930",
+          "id": "76561198197222927",
           "name": "goodipAN",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 10,
@@ -193,7 +193,7 @@
           "kast": 71.42857360839844
         },
         {
-          "id": "76561198042805940",
+          "id": "76561198042805941",
           "name": "PRADA_CODE",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 9,

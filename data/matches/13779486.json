@@ -2,13 +2,13 @@
   "matchId": "13779486",
   "url": "https://cybershoke.net/ru/match/13779486",
   "tournament": "13.11.2026",
-  "date": "2026-11-17T10:13:09.394Z",
+  "date": "2026-11-17T10:22:55.387Z",
   "maps": [
     {
       "map": "de_dust2",
       "players": [
         {
-          "id": "76561198053530320",
+          "id": "76561198053530322",
           "name": "ZAZA_",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 25,
@@ -18,7 +18,7 @@
           "kast": 85
         },
         {
-          "id": "76561199109745010",
+          "id": "76561199109745015",
           "name": "q1nce_",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 22,
@@ -28,7 +28,7 @@
           "kast": 70
         },
         {
-          "id": "76561198394184900",
+          "id": "76561198394184895",
           "name": "muts1",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 15,
@@ -38,7 +38,7 @@
           "kast": 70
         },
         {
-          "id": "76561198843347970",
+          "id": "76561198843347969",
           "name": "sandor",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 15,
@@ -48,7 +48,7 @@
           "kast": 70
         },
         {
-          "id": "76561198283381730",
+          "id": "76561198283381727",
           "name": "St1gmat",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 14,
@@ -58,7 +58,7 @@
           "kast": 50
         },
         {
-          "id": "76561198054507580",
+          "id": "76561198054507577",
           "name": "kvsmstr",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 12,
@@ -68,7 +68,7 @@
           "kast": 80
         },
         {
-          "id": "76561198197222930",
+          "id": "76561198197222927",
           "name": "goodipAN",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 11,
@@ -88,7 +88,7 @@
           "kast": 50
         },
         {
-          "id": "76561198983961740",
+          "id": "76561198983961745",
           "name": "Адмирал Борщенко",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 11,
@@ -98,7 +98,7 @@
           "kast": 85
         },
         {
-          "id": "76561198587515890",
+          "id": "76561198587515885",
           "name": "RJ",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 8,

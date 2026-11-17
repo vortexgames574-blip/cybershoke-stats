@@ -2,13 +2,13 @@
   "matchId": "13354626",
   "url": "https://cybershoke.net/ru/match/13354626",
   "tournament": "31.10.2026",
-  "date": "2026-11-17T10:12:32.508Z",
+  "date": "2026-11-17T10:22:18.997Z",
   "maps": [
     {
       "map": "de_inferno",
       "players": [
         {
-          "id": "76561199542530690",
+          "id": "76561199542530681",
           "name": "AuraTeam",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 21,
@@ -18,7 +18,7 @@
           "kast": 88.23529815673828
         },
         {
-          "id": "76561199467682500",
+          "id": "76561199467682493",
           "name": "Господин Босс",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 16,
@@ -28,7 +28,7 @@
           "kast": 76.47058868408203
         },
         {
-          "id": "76561199417613920",
+          "id": "76561199417613918",
           "name": "ЯнаЦист",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 15,
@@ -38,7 +38,7 @@
           "kast": 88.23529815673828
         },
         {
-          "id": "76561198054507580",
+          "id": "76561198054507577",
           "name": "kvsmstr",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 13,
@@ -48,7 +48,7 @@
           "kast": 88.23529815673828
         },
         {
-          "id": "76561198015424670",
+          "id": "76561198015424675",
           "name": "tolya800x600",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 11,
@@ -68,7 +68,7 @@
           "kast": 52.94117736816406
         },
         {
-          "id": "76561198210127760",
+          "id": "76561198210127765",
           "name": "blackpolosa",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 10,
@@ -78,7 +78,7 @@
           "kast": 70.5882339477539
         },
         {
-          "id": "76561198681103730",
+          "id": "76561198681103731",
           "name": "Анальный бур",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 9,
@@ -88,7 +88,7 @@
           "kast": 82.35294342041016
         },
         {
-          "id": "76561198042805940",
+          "id": "76561198042805941",
           "name": "PRADA_CODE",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 8,
@@ -98,7 +98,7 @@
           "kast": 64.70588684082031
         },
         {
-          "id": "76561198818222400",
+          "id": "76561198818222401",
           "name": "Ilonmax8",
           "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
           "kills": 8,

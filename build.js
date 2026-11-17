@@ -169,13 +169,12 @@ function calculateStats(matches, steamAvatars) {
       mapStatsRaw[mapName].matches += 1;
 
       for (const p of mapData.players) {
-        // Защита от пустых ID
         const pid = p.id && !String(p.id).startsWith('name_') ? String(p.id) : String(p.id || p.name);
 
         if (!playerMap.has(pid)) {
           playerMap.set(pid, {
             id: pid, name: p.name, lastPlayed: match.date,
-            matchIds: new Set(), // ИСПРАВЛЕНИЕ: Храним уникальные ID матчей
+            matchIds: new Set(), // Храним уникальные ID матчей
             kills: 0, deaths: 0, assists: 0,
             adrSum: 0, adrCount: 0, kastSum: 0, kastCount: 0, ratingSum: 0, ratingCount: 0,
             history: [], matchHistory: []
@@ -187,7 +186,7 @@ function calculateStats(matches, steamAvatars) {
           st.lastPlayed = match.date;
         }
         
-        // ИСПРАВЛЕНИЕ: Считаем матчи, а не карты
+        // Считаем матчи, а не карты
         st.matchIds.add(match.matchId); 
 
         const k = Math.round(Number(p.kills)) || 0;
@@ -249,11 +248,11 @@ function calculateStats(matches, steamAvatars) {
     const kd = p.deaths > 0 ? +(p.kills / p.deaths).toFixed(2) : p.kills;
     const avgRating = p.ratingCount > 0 ? +(p.ratingSum / p.ratingCount).toFixed(2) : null;
     const rank = getRank(avgRating);
-    const realMatches = p.matchIds ? p.matchIds.size : 0; // ИСПРАВЛЕНИЕ
+    const realMatches = p.matchIds ? p.matchIds.size : 0;
     
     return {
       ...p,
-      matches: realMatches, // Записываем правильное кол-во матчей
+      matches: realMatches, 
       avatar: getAvatar(p.id, p.name),
       kd,
       avgRating,
@@ -267,7 +266,7 @@ function calculateStats(matches, steamAvatars) {
 
   players.forEach(p => {
     p.displayName = p.name;
-    delete p.matchIds; // Чистим мусор
+    delete p.matchIds;
   });
 
   const displayNameById = new Map(players.map(p => [p.id, p.displayName]));
@@ -327,7 +326,7 @@ function calculateStats(matches, steamAvatars) {
   return {
     players, mapStats: formattedMapStats,
     recentMatches: recentMatches.slice(-10).reverse(),
-    totalMatches: matches.length, // Общее число серий
+    totalMatches: matches.length, 
     records,
     funStats: { totalHours: Math.round(totalMapsPlayed * 40 / 60), totalKills: totalKillsAll, totalDeaths: totalDeathsAll },
     funFacts: { mostStable, highestPeak, lowestRating, favoriteMap }
@@ -361,12 +360,9 @@ async function main() {
 
   log('info', `Всего матчей: ${allMatches.length}`);
 
-  // УДАЛЕН БЛОК СКЛЕЙКИ ПО НИКУ, так как он ломал ID.
-
   for (const match of allMatches) {
     for (const map of match.maps || []) {
       for (const p of map.players || []) {
-        // Собираем только настоящие SteamID (длинные числа)
         if (p.id && String(p.id).length > 10 && !String(p.id).startsWith('name_')) {
           allSteamIds.add(String(p.id));
         }

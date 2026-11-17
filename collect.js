@@ -320,7 +320,10 @@ async function main() {
           }
 
           mapAwpyData.forEach(ap => {
-            const apSteamId = ap.steamid ? String(ap.steamid) : null;
+            // КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Очищаем ID от любого мусора
+            let apSteamId = ap.steamid ? String(ap.steamid).replace(/[^0-9]/g, '') : null;
+            if (apSteamId === '' || apSteamId === '0' || apSteamId === 'None') apSteamId = null;
+
             const cleanApName = ap.name ? String(ap.name).replace(/^.*\|\s*/, '').trim() : '';
 
             let dp = domPlayers.find(p => apSteamId && String(p.id) === apSteamId);
@@ -333,9 +336,8 @@ async function main() {
               p.name.toLowerCase().includes(cleanApName.toLowerCase())
             );
 
-            // ИСПРАВЛЕНИЕ: Безопасный fallback ID
             let finalId = apSteamId;
-            if (!finalId || finalId === '0' || finalId === 'None') {
+            if (!finalId) {
               if (dp && dp.id && String(dp.id).length > 10) {
                 finalId = String(dp.id);
               } else {
