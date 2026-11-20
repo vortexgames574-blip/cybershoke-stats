@@ -1,0 +1,113 @@
+{
+  "matchId": "13992332",
+  "url": "https://cybershoke.net/ru/match/13992332",
+  "tournament": "21.11.2026",
+  "date": "2026-11-20T22:43:19.393Z",
+  "maps": [
+    {
+      "map": "de_mirage",
+      "players": [
+        {
+          "id": "76561199109745015",
+          "name": "q1nce_",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 34,
+          "deaths": 7,
+          "assists": 4,
+          "adr": 158.5263214111328,
+          "kast": 89.47368621826172
+        },
+        {
+          "id": "76561199542530681",
+          "name": "AuraTeam",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 19,
+          "deaths": 11,
+          "assists": 3,
+          "adr": 89.78947448730469,
+          "kast": 73.68421173095703
+        },
+        {
+          "id": "76561198983961745",
+          "name": "Адмирал Борщенко",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 15,
+          "deaths": 16,
+          "assists": 5,
+          "adr": 80.63157653808594,
+          "kast": 78.94737243652344
+        },
+        {
+          "id": "76561198283381727",
+          "name": "St1gmat",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 14,
+          "deaths": 16,
+          "assists": 7,
+          "adr": 88.36842346191406,
+          "kast": 78.94737243652344
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 11,
+          "deaths": 16,
+          "assists": 3,
+          "adr": 67.10526275634766,
+          "kast": 57.894737243652344
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 10,
+          "deaths": 14,
+          "assists": 0,
+          "adr": 52.21052551269531,
+          "kast": 57.894737243652344
+        },
+        {
+          "id": "76561198681103731",
+          "name": "Анальный бур",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 10,
+          "deaths": 12,
+          "assists": 6,
+          "adr": 54.578948974609375,
+          "kast": 73.68421173095703
+        },
+        {
+          "id": "76561198130643805",
+          "name": "BRUN1WE",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 7,
+          "deaths": 16,
+          "assists": 1,
+          "adr": 46.6315803527832,
+          "kast": 57.894737243652344
+        },
+        {
+          "id": "76561198272167310",
+          "name": "Сережа.",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 7,
+          "deaths": 10,
+          "assists": 4,
+          "adr": 50.421051025390625,
+          "kast": 89.47368621826172
+        },
+        {
+          "id": "76561199144510024",
+          "name": "63dealer",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 7,
+          "deaths": 17,
+          "assists": 9,
+          "adr": 65.42105102539062,
+          "kast": 68.42105102539062
+        }
+      ]
+    }
+  ]
+}

@@ -174,7 +174,7 @@ function calculateStats(matches, steamAvatars) {
         if (!playerMap.has(pid)) {
           playerMap.set(pid, {
             id: pid, name: p.name, lastPlayed: match.date,
-            matchIds: new Set(), // Храним уникальные ID матчей
+            matchIds: new Set(),
             kills: 0, deaths: 0, assists: 0,
             adrSum: 0, adrCount: 0, kastSum: 0, kastCount: 0, ratingSum: 0, ratingCount: 0,
             history: [], matchHistory: []
@@ -186,7 +186,6 @@ function calculateStats(matches, steamAvatars) {
           st.lastPlayed = match.date;
         }
         
-        // Считаем матчи, а не карты
         st.matchIds.add(match.matchId); 
 
         const k = Math.round(Number(p.kills)) || 0;
@@ -242,12 +241,25 @@ function calculateStats(matches, steamAvatars) {
 
   if (skippedMaps > 0) log('warn', `Всего пропущено карт: ${skippedMaps}`);
 
+  // Вычисляем средний рейтинг по всем игрокам для приора
+  let totalSum = 0, totalCount = 0;
+  for (const p of playerMap.values()) {
+    totalSum += p.ratingSum;
+    totalCount += p.ratingCount;
+  }
+  const globalAvg = totalCount > 0 ? totalSum / totalCount : 1.0;
+  const C = 5; // Вес приора (эквивалент 5 матчей)
+
   const getAvatar = (id, name) => steamAvatars.get(String(id)) || `https://ui-avatars.com/api/?name=${encodeURIComponent(name || '?')}&background=4d6bfe&color=fff&size=128&bold=true&rounded=true`;
 
   const players = Array.from(playerMap.values()).map(p => {
     const kd = p.deaths > 0 ? +(p.kills / p.deaths).toFixed(2) : p.kills;
     const avgRating = p.ratingCount > 0 ? +(p.ratingSum / p.ratingCount).toFixed(2) : null;
-    const rank = getRank(avgRating);
+    
+    // Байесовское сглаживание (объективный рейтинг)
+    const adjustedRating = p.ratingCount > 0 ? +((C * globalAvg + p.ratingSum) / (C + p.ratingCount)).toFixed(2) : null;
+    
+    const rank = getRank(adjustedRating);
     const realMatches = p.matchIds ? p.matchIds.size : 0;
     
     return {
@@ -256,6 +268,7 @@ function calculateStats(matches, steamAvatars) {
       avatar: getAvatar(p.id, p.name),
       kd,
       avgRating,
+      adjustedRating, // Новое поле
       avgAdr: p.adrCount > 0 ? +(p.adrSum / p.adrCount).toFixed(1) : null,
       avgKast: p.kastCount > 0 ? +(p.kastSum / p.kastCount).toFixed(1) : null,
       rankName: rank.name,
@@ -266,7 +279,7 @@ function calculateStats(matches, steamAvatars) {
 
   players.forEach(p => {
     p.displayName = p.name;
-    delete p.matchIds;
+    delete p.matchIds; 
   });
 
   const displayNameById = new Map(players.map(p => [p.id, p.displayName]));
@@ -275,7 +288,8 @@ function calculateStats(matches, steamAvatars) {
     if (rec && rec.playerId && displayNameById.has(rec.playerId)) rec.player = displayNameById.get(rec.playerId);
   }
 
-  players.sort((a, b) => (b.avgRating || 0) - (a.avgRating || 0));
+  // Сортировка по объективному рейтингу
+  players.sort((a, b) => (b.adjustedRating || 0) - (a.adjustedRating || 0));
 
   const formattedMapStats = Object.entries(mapStatsRaw).map(([map, data]) => {
     const topPlayers = Array.from(data.playersMap.values()).map(pl => ({

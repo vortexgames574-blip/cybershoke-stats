@@ -110,5 +110,21 @@
   "76561199144510024": {
     "avatar": "https://avatars.akamai.steamstatic.com/85be17759cb6469ce6d26b8c549440f8fb44a105_medium.jpg",
     "updatedAt": 1794911086432
+  },
+  "76561198130643805": {
+    "avatar": "https://avatars.fastly.steamstatic.com/f9f49f18237747bc312ea35602aa88a189b5c6f9_medium.jpg",
+    "updatedAt": 1795214830593
+  },
+  "76561198984765872": {
+    "avatar": "https://avatars.fastly.steamstatic.com/1e017b8d5440b6c74cdb242febdd54efeaa71d7e_medium.jpg",
+    "updatedAt": 1795214831083
+  },
+  "76561198016993317": {
+    "avatar": "https://avatars.fastly.steamstatic.com/5be3f8524806f884ad421a298eb741393afb156c_medium.jpg",
+    "updatedAt": 1795214831567
+  },
+  "76561198059120185": {
+    "avatar": "https://avatars.fastly.steamstatic.com/9e643186c001949a850c9c720347bf22f5707061_medium.jpg",
+    "updatedAt": 1795214832052
   }
 }

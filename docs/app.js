@@ -17,7 +17,7 @@ let profRadarChart = null;
 let selectedPlayers = [];
 let currentMapSort = { key: 'matches', dir: 'desc' };
 let draftParticipants = [];
-let currentMapPlayersData = []; // Для поиска внутри карты
+let currentMapPlayersData = []; 
 
 // ===== УТИЛИТЫ =====
 function escapeHtml(str) {
@@ -30,7 +30,6 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
-// Функция для получения картинки карты
 function getMapImage(mapName) {
   if (!mapName) return '';
   const baseUrl = 'https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/images/maps/';
@@ -235,11 +234,12 @@ function renderPodium() {
     if (!p) return '';
     const avatar = escapeHtml(p.avatar || '');
     const safeName = escapeHtml(displayName(p));
+    const rating = p.adjustedRating ?? p.avgRating ?? '—';
     return `<div class="podium-card ${classes[i]}" onclick="openProfile('${escapeHtml(p.id)}')">
       <div class="podium-rank">${ranks[i]}</div>
       <img src="${avatar}" class="podium-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
       <div class="podium-name">${safeName}</div>
-      <div class="podium-rating" style="color:${escapeHtml(p.rankColor || 'var(--accent)')};">${p.avgRating ?? '—'} <span style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">Рейтинг</span></div>
+      <div class="podium-rating" style="color:${escapeHtml(p.rankColor || 'var(--accent)')};">${rating} <span style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">Рейтинг</span></div>
     </div>`;
   }).join('');
 }
@@ -365,16 +365,17 @@ function renderPlayersTable() {
       if (sortKey === 'deaths') return b.deaths - a.deaths;
       if (sortKey === 'kd') return b.kd - a.kd;
       if (sortKey === 'adr') return (b.avgAdr ?? 0) - (a.avgAdr ?? 0);
-      return (b.avgRating ?? 0) - (a.avgRating ?? 0);
+      return (b.adjustedRating ?? b.avgRating ?? 0) - (a.adjustedRating ?? a.avgRating ?? 0);
     });
     
     tbody.innerHTML = players.map((p) => {
+      const rating = p.adjustedRating ?? p.avgRating ?? '—';
       return `<tr>
         <td><div class="player-cell">
           <img src="${escapeHtml(p.avatar)}" class="player-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'">
           <div><strong class="player-link" onclick="openProfile('${escapeHtml(p.id)}')">${escapeHtml(displayName(p))}</strong></div>
         </div></td>
-        <td><span style="color:${escapeHtml(p.rankColor || 'var(--accent)')}; font-weight:bold;">${p.avgRating ?? '—'}</span></td>
+        <td><span style="color:${escapeHtml(p.rankColor || 'var(--accent)')}; font-weight:bold;">${rating}</span></td>
         <td>${p.matches}</td>
         <td><strong>${escapeHtml(p.kd)}</strong></td>
         <td style="color:var(--accent); font-weight:600;">${escapeHtml(p.avgAdr ?? '—')}</td>
@@ -570,15 +571,19 @@ function initDuel() {
     if (!p1 || !p2) return;
     if (p1.id === p2.id) return showToast('Выберите двух разных игроков', 'error');
     const compare = (v1, v2) => v1 === v2 ? ['', ''] : (v1 > v2 ? ['duel-winner', 'duel-loser'] : ['duel-loser', 'duel-winner']);
+    
+    const r1 = p1.adjustedRating ?? p1.avgRating ?? 0;
+    const r2 = p2.adjustedRating ?? p2.avgRating ?? 0;
+    
     const [kd1, kd2] = compare(p1.kd, p2.kd);
-    const [rat1, rat2] = compare(p1.avgRating ?? 0, p2.avgRating ?? 0);
+    const [rat1, rat2] = compare(r1, r2);
     const [adr1, adr2] = compare(p1.avgAdr ?? 0, p2.avgAdr ?? 0);
     const [kast1, kast2] = compare(p1.avgKast ?? 0, p2.avgKast ?? 0);
-    const winnerName = (p1.avgRating ?? p1.kd) > (p2.avgRating ?? p2.kd) ? displayName(p1) : displayName(p2);
+    const winnerName = r1 > r2 ? displayName(p1) : displayName(p2);
     resultDiv.style.display = 'block';
     resultDiv.innerHTML = `
       <div class="duel-row"><span class="${kd1}">${p1.kd} K/D</span><span style="font-weight:bold;color:var(--text-muted);">K/D</span><span class="${kd2}">${p2.kd} K/D</span></div>
-      <div class="duel-row"><span class="${rat1}">${p1.avgRating ?? '—'} Рейтинг</span><span style="font-weight:bold;color:var(--text-muted);">Рейтинг</span><span class="${rat2}">${p2.avgRating ?? '—'} Рейтинг</span></div>
+      <div class="duel-row"><span class="${rat1}">${r1 || '—'} Рейтинг</span><span style="font-weight:bold;color:var(--text-muted);">Рейтинг</span><span class="${rat2}">${r2 || '—'} Рейтинг</span></div>
       <div class="duel-row"><span class="${adr1}">${p1.avgAdr ?? '—'} ADR</span><span style="font-weight:bold;color:var(--text-muted);">ADR</span><span class="${adr2}">${p2.avgAdr ?? '—'} ADR</span></div>
       <div class="duel-row"><span class="${kast1}">${p1.avgKast ?? '—'} KAST</span><span style="font-weight:bold;color:var(--text-muted);">KAST</span><span class="${kast2}">${p2.avgKast ?? '—'} KAST</span></div>
       <div style="text-align:center; margin-top:15px; font-weight:bold; color:#fff;">Победитель: <span style="color:#10b981;">${escapeHtml(winnerName)}</span></div>
@@ -597,11 +602,15 @@ function openProfile(playerId) {
     this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true&size=128`;
   };
 
-  document.getElementById('prof-name').innerHTML = `${escapeHtml(displayName(p))}
-    <span style="font-size:0.8rem; padding:2px 6px; border-radius:4px; background:${escapeHtml(p.rankColor || '#4d6bfe')}33; color:${escapeHtml(p.rankColor || '#4d6bfe')}; border:1px solid ${escapeHtml(p.rankColor || '#4d6bfe')}; margin-left:8px; white-space:nowrap;">${p.avgRating ?? '—'} Рейтинг</span>`;
+  const displayRating = p.adjustedRating ?? p.avgRating ?? '—';
 
-  document.getElementById('prof-matches').innerText = p.matches;
-  document.getElementById('prof-rating').innerText = p.avgRating ?? '—';
+  document.getElementById('prof-name').innerHTML = `${escapeHtml(displayName(p))}
+    <span style="font-size:0.8rem; padding:2px 6px; border-radius:4px; background:${escapeHtml(p.rankColor || '#4d6bfe')}33; color:${escapeHtml(p.rankColor || '#4d6bfe')}; border:1px solid ${escapeHtml(p.rankColor || '#4d6bfe')}; margin-left:8px; white-space:nowrap;">${displayRating} Рейтинг</span>`;
+
+  // ИСПРАВЛЕНИЕ: Считаем карты, а не матчи-серии
+  document.getElementById('prof-matches').innerText = p.matchHistory ? p.matchHistory.length : 0;
+  
+  document.getElementById('prof-rating').innerText = displayRating;
   document.getElementById('prof-kd').innerText = p.kd;
   document.getElementById('prof-adr').innerText = p.avgAdr ?? '—';
   document.getElementById('prof-kast').innerText = p.avgKast ?? '—';
@@ -646,7 +655,7 @@ function openProfile(playerId) {
 
   const shareBtn = document.getElementById('share-btn');
   if (shareBtn) shareBtn.onclick = () => {
-    const text = encodeURIComponent(`Статистика: ${displayName(p)}\nРейтинг: ${p.avgRating || 0}\nK/D: ${p.kd}\nADR: ${p.avgAdr || 0}\nПодробнее:`);
+    const text = encodeURIComponent(`Статистика: ${displayName(p)}\nРейтинг: ${displayRating}\nK/D: ${p.kd}\nADR: ${p.avgAdr || 0}\nПодробнее:`);
     window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`, '_blank');
   };
 
@@ -721,7 +730,7 @@ function openProfile(playerId) {
       acc.kd += curr.kd || 0;
       acc.adr += curr.avgAdr || 0;
       acc.kast += curr.avgKast || 0;
-      acc.rating += curr.avgRating || 0;
+      acc.rating += (curr.adjustedRating ?? curr.avgRating) || 0;
       return acc;
     }, { kd: 0, adr: 0, kast: 0, rating: 0 });
     const count = currentStats.players.length || 1;
@@ -734,7 +743,7 @@ function openProfile(playerId) {
       normalize(p.kd || 0, maxKd),
       normalize(p.avgAdr || 0, maxAdr),
       normalize(p.avgKast || 0, maxKast),
-      normalize(p.avgRating || 0, maxRating)
+      normalize(p.adjustedRating ?? p.avgRating ?? 0, maxRating)
     ];
     const serverData = [
       normalize(serverAvg.kd, maxKd),
@@ -765,7 +774,7 @@ function openProfile(playerId) {
                 if (idx === 0) realVal = isPlayer ? (p.kd || 0) : serverAvg.kd;
                 if (idx === 1) realVal = isPlayer ? (p.avgAdr || 0) : serverAvg.adr;
                 if (idx === 2) realVal = isPlayer ? (p.avgKast || 0) : serverAvg.kast;
-                if (idx === 3) realVal = isPlayer ? (p.avgRating || 0) : serverAvg.rating;
+                if (idx === 3) realVal = isPlayer ? (p.adjustedRating ?? p.avgRating ?? 0) : serverAvg.rating;
                 return `${context.dataset.label}: ${realVal.toFixed(2)}`;
               }
             }
@@ -832,7 +841,7 @@ function saveBalancerWeights(w) {
 
 function playerCompositeScore(p, w) {
   const n = normalizeWeights(w);
-  const rNorm = p && p.avgRating != null ? p.avgRating : 1.0;
+  const rNorm = p && p.adjustedRating != null ? p.adjustedRating : (p && p.avgRating != null ? p.avgRating : 1.0);
   const kNorm = p && p.kd != null ? p.kd : 1.0;
   const aNorm = p && p.avgAdr != null ? p.avgAdr / 75 : 1.0;
   const sNorm = p && p.avgKast != null ? p.avgKast / 70 : 1.0;
@@ -841,7 +850,7 @@ function playerCompositeScore(p, w) {
 
 function mapPlayerCompositeScore(player, mapEntry, w) {
   const n = normalizeWeights(w);
-  const rVal = mapEntry && mapEntry.avgRating != null ? mapEntry.avgRating : (player.avgRating ?? 1.0);
+  const rVal = mapEntry && mapEntry.avgRating != null ? mapEntry.avgRating : ((player.adjustedRating ?? player.avgRating) ?? 1.0);
   const kVal = mapEntry && mapEntry.kd != null ? mapEntry.kd : (player.kd ?? 1.0);
   const aVal = player.avgAdr != null ? player.avgAdr / 75 : 1.0;
   const sVal = player.avgKast != null ? player.avgKast / 70 : 1.0;
@@ -1191,11 +1200,13 @@ function initBalancer() {
       if (role === 'Фраггер') roleColor = '#ef4444';
       if (role === 'Снайпер') roleColor = '#f59e0b';
       if (role === 'Саппорт') roleColor = '#10b981';
+      
+      const displayRating = p.adjustedRating ?? p.avgRating ?? p.kd;
 
       return `<div class="player-card ${sel ? 'selected' : ''}" onclick="togglePlayer('${escapeHtml(p.id)}')" style="cursor:pointer; text-align:center; padding:10px; border:1px solid ${sel ? 'var(--accent)' : 'var(--border)'}; border-radius:8px; background:${sel ? 'rgba(77,107,254,0.1)' : 'var(--bg-main)'}; transition:0.2s;">
         <img src="${escapeHtml(p.avatar)}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=4d6bfe&color=fff&rounded=true'" style="width:60px; height:60px; border-radius:50%; object-fit:cover; margin-bottom:8px;">
         <div class="card-name" style="font-weight:600; font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(displayName(p))}</div>
-        <div class="card-rating" style="color:var(--accent); font-weight:700; font-size:1.1rem;">${escapeHtml(p.avgRating ?? p.kd)}</div>
+        <div class="card-rating" style="color:var(--accent); font-weight:700; font-size:1.1rem;">${escapeHtml(displayRating)}</div>
         <div style="font-size:0.65rem; font-weight:bold; color:${roleColor}">${role}</div>
       </div>`;
     }).join('');
@@ -1408,19 +1419,24 @@ function initDraft() {
   const listDiv = document.getElementById('draft-participants-list');
 
   const renderParticipants = () => {
-    listDiv.innerHTML = draftParticipants.map(p => `
+    listDiv.innerHTML = draftParticipants.map(p => {
+      const displayRating = p.adjustedRating ?? p.avgRating ?? '—';
+      return `
       <div style="background:var(--bg-hover); border:1px solid var(--border); padding:4px 10px; border-radius:20px; display:flex; align-items:center; gap:8px; font-size:0.85rem;">
         <img src="${escapeHtml(p.avatar)}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
         <span>${escapeHtml(displayName(p))}</span>
-        <span style="color:var(--text-muted); font-size:0.7rem;">${p.isGuest ? 'Новичок' : escapeHtml(p.avgRating || '—')}</span>
+        <span style="color:var(--text-muted); font-size:0.7rem;">${p.isGuest ? 'Новичок' : escapeHtml(displayRating)}</span>
         <button onclick="removeDraftParticipant('${escapeHtml(p.id)}')" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold; font-size:1rem; line-height:1;">&times;</button>
       </div>
-    `).join('');
+    `}).join('');
 
     const opts = draftParticipants
       .slice()
-      .sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0))
-      .map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(displayName(p))} (${escapeHtml(p.avgRating ?? p.kd ?? '?')})</option>`)
+      .sort((a, b) => (b.adjustedRating ?? b.avgRating ?? 0) - (a.adjustedRating ?? a.avgRating ?? 0))
+      .map(p => {
+        const displayRating = p.adjustedRating ?? p.avgRating ?? p.kd ?? '?';
+        return `<option value="${escapeHtml(p.id)}">${escapeHtml(displayName(p))} (${escapeHtml(displayRating)})</option>`;
+      })
       .join('');
 
     [c1, c2, c3, c4].forEach((sel, i) => {
@@ -1455,7 +1471,7 @@ function initDraft() {
         name: rawName,
         displayName: rawName,
         avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(rawName)}&background=4d6bfe&color=fff&rounded=true`,
-        avgRating: 1.0, kd: 1.0, avgAdr: 75, avgKast: 70,
+        avgRating: 1.0, adjustedRating: 1.0, kd: 1.0, avgAdr: 75, avgKast: 70,
         isGuest: true
       });
     }

@@ -1,0 +1,113 @@
+{
+  "matchId": "13994713",
+  "url": "https://cybershoke.net/ru/match/13994713",
+  "tournament": "21.11.2026",
+  "date": "2026-11-20T22:44:12.551Z",
+  "maps": [
+    {
+      "map": "de_dust2",
+      "players": [
+        {
+          "id": "76561198283381727",
+          "name": "St1gmat",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 21,
+          "deaths": 13,
+          "assists": 5,
+          "adr": 122.15789794921875,
+          "kast": 78.94737243652344
+        },
+        {
+          "id": "76561198053530322",
+          "name": "ZAZA_",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 16,
+          "deaths": 8,
+          "assists": 3,
+          "adr": 74,
+          "kast": 78.94737243652344
+        },
+        {
+          "id": "76561198843347969",
+          "name": "sandor",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 16,
+          "deaths": 14,
+          "assists": 6,
+          "adr": 102.2631607055664,
+          "kast": 68.42105102539062
+        },
+        {
+          "id": "76561198983961745",
+          "name": "Адмирал Борщенко",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 14,
+          "deaths": 14,
+          "assists": 6,
+          "adr": 82.42105102539062,
+          "kast": 73.68421173095703
+        },
+        {
+          "id": "76561198130643805",
+          "name": "BRUN1WE",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 13,
+          "deaths": 11,
+          "assists": 4,
+          "adr": 75.89473724365234,
+          "kast": 78.94737243652344
+        },
+        {
+          "id": "76561198394184895",
+          "name": "muts1",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 13,
+          "deaths": 15,
+          "assists": 2,
+          "adr": 74.7368392944336,
+          "kast": 57.894737243652344
+        },
+        {
+          "id": "76561198587515885",
+          "name": "RJ",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 12,
+          "deaths": 13,
+          "assists": 2,
+          "adr": 68.36842346191406,
+          "kast": 57.894737243652344
+        },
+        {
+          "id": "76561198090688036",
+          "name": "Kara7evich",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 10,
+          "deaths": 16,
+          "assists": 2,
+          "adr": 60.73684310913086,
+          "kast": 47.36842346191406
+        },
+        {
+          "id": "76561198728309900",
+          "name": "BB-00",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 10,
+          "deaths": 13,
+          "assists": 7,
+          "adr": 56.578948974609375,
+          "kast": 68.42105102539062
+        },
+        {
+          "id": "76561198158360502",
+          "name": "✪ AlikD*ck ✪",
+          "avatar": "https://cloud.cybershoke.net/img/general/ping_green.svg",
+          "kills": 8,
+          "deaths": 16,
+          "assists": 7,
+          "adr": 57.21052551269531,
+          "kast": 78.94737243652344
+        }
+      ]
+    }
+  ]
+}
